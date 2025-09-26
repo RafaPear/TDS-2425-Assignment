@@ -1,6 +1,8 @@
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.2.0'
+    id 'org.jetbrains.dokka' version '2.0.0'
 }
+
 
 group = 'pt.isel'
 version = '1.0-SNAPSHOT'
@@ -10,9 +12,13 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
+subprojects {
+    apply plugin: 'org.jetbrains.dokka'
+}
+
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    implementation 'com.github.RafaPear:CLILib:1.4.3-Beta'
+    implementation 'com.github.RafaPear:CLIlib:master-SNAPSHOT'
 }
 
 test {
