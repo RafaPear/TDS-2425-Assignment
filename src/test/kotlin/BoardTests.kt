@@ -60,20 +60,20 @@ class BoardTests {
     @Test
     fun `get function with row outside range fails`() {
         assertFailsWith<IllegalArgumentException> {
-            Board(side = 8).get(row = -1, col = 1)
-            Board(side = 8).get(row = 0, col = 1)
-            Board(side = 8).get(row = 27, col = 1)
+            Board(side = 8)[-1, 1]
+            Board(side = 8)[0, 1]
+            Board(side = 8)[27, 1]
         }
     }
 
     @Test
     fun `get function with col outside range fails`() {
         assertFailsWith<IllegalArgumentException> {
-            Board(side = 8).get(row = 1, col = -1)
-            Board(side = 8).get(row = 1, col = 0)
-            Board(side = 8).get(row = 1, col = 27)
-            Board(side = 8).get(row = 1, col = '@')
-            Board(side = 8).get(row = 1, col = '[')
+            Board(side = 8)[1, -1]
+            Board(side = 8)[1, 0]
+            Board(side = 8)[1, 27]
+            Board(side = 8)[1, '@']
+            Board(side = 8)[1, '[']
         }
     }
 

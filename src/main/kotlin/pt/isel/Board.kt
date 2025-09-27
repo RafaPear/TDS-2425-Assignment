@@ -26,7 +26,20 @@ class Board(private val side: Int) {
     /**
      * Represents a piece on the board.
      */
-    data class Piece(val row: Int, val col: Int, var value: Char)
+    data class Piece(val row: Int, val col: Int, var value: Char) {
+        init {
+            val value = value.lowercase()[0]
+            require(row in 1..SIDEMAX) {
+                "Row must be between 1 and $SIDEMAX"
+            }
+            require(col in 1..SIDEMAX) {
+                "Column must be between 1 and $SIDEMAX"
+            }
+            require(value == 'b' || value == 'w') {
+                "Value must be 'b' or 'w'"
+            }
+        }
+    }
 
     /**
      * Gets the piece at the specified row and column.
