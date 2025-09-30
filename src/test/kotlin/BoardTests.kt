@@ -1,14 +1,10 @@
-import pt.isel.Board
 import kotlin.test.Test
-import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
 
 import org.junit.jupiter.api.Assertions.assertEquals
+import pt.isel.reversi.Board
 
 class BoardTests {
-
-    // Board tests
-
     @Test
     fun `Create Board with side outside range fails`() {
         assertFailsWith<IllegalArgumentException> {
