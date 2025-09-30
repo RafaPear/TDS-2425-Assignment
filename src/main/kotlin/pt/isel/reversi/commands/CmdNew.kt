@@ -4,9 +4,9 @@ import pt.isel.reversi.Board
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
-import pt.rafap.ktflag.cmd.CommandResult.NOT_IMPLEMENTED
-import pt.rafap.ktflag.cmd.CommandResult.INVALID_ARGS
-import pt.rafap.ktflag.cmd.CommandUtils.verifyArgsCount
+import pt.rafap.ktflag.cmd.CommandResult.*
+import pt.rafap.ktflag.style.Colors
+import pt.rafap.ktflag.style.Colors.colorText
 
 object CmdNew: CommandImpl<Board> {
     val pieceTypes = Board.PieceType.entries.joinToString("|") { it.symbol.toString() }
@@ -14,9 +14,9 @@ object CmdNew: CommandImpl<Board> {
     override val info: CommandInfo =
         CommandInfo(
             title = "New",
-            description = "Creates a new board with the specified number of rows and columns.",
+            description = "Creates a new game with the specified first player.",
             longDescription =
-            "Creates a new board with the specified first player. " +
+            "Creates a new board with the specified first player. \n" +
                     "If a name is provided, the board will be saved with that name.",
             aliases = listOf("n", "new"),
             usage = "new ($pieceTypes) [<name>]",
@@ -28,7 +28,13 @@ object CmdNew: CommandImpl<Board> {
         vararg arg: String,
         context: Board?
     ): CommandResult<Board> {
-        if (!this.verifyArgsCount(arg.size)) return INVALID_ARGS(info, arg.size)
+        if (!verifyArgsCount(arg.size)) return INVALID_ARGS(info, arg.size)
+
+        val firstPlayer = Board.PieceType.entries.find { it.symbol.toString() == arg[0] }
+            ?: return ERROR("First player must be one of: $pieceTypes")
+
+        println(colorText("First player: $firstPlayer", Colors.INFO_COLOR))
+
         return NOT_IMPLEMENTED("New game command is not implemented yet")
     }
 }

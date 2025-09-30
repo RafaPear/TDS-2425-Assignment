@@ -27,8 +27,7 @@ subprojects {
 
 dependencies {
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    implementation 'com.github.RafaPear:KtFlag:1.0.2'
-
+    implementation 'com.github.RafaPear:KtFlag:1.2.0'
 }
 
 test {
