@@ -1,0 +1,1 @@
+data class Piece(val row: Int, val col: Int, val value: PieceType)

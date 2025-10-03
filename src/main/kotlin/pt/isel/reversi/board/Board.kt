@@ -1,5 +1,9 @@
-package pt.isel.reversi
+package pt.isel.reversi.board
 
+import Piece
+import PieceType
+import kotlin.collections.find
+import kotlin.collections.map
 
 /**
  * Represents a board game grid.
@@ -7,17 +11,12 @@ package pt.isel.reversi
  * @property pieces The list of pieces on the board.
  * @property side The size of the board (side x side).
  */
-
-@ConsistentCopyVisibility
-data class Board private constructor(
-    private val side: Int,
-    private val pieces: List<Piece>
-) : Iterable<Board.PieceType> {
-
+data class Board(
+    val side: Int,
+    private val pieces: List<Piece> = emptyList()
+) : Iterable<Piece> {
     private val SIDE_MIN = 4
     private val SIDE_MAX = 26
-
-    constructor(side: Int) : this(side = side, emptyList())
 
     init {
         require(side in SIDE_MIN..SIDE_MAX) {
@@ -27,23 +26,6 @@ data class Board private constructor(
             "Side must be even"
         }
     }
-
-    /**
-     * Represents the type of piece on the board.
-     */
-    enum class PieceType(val symbol: Char) {
-        BLACK('#'),
-        WHITE('@');
-
-        fun swap(): PieceType = if (this == BLACK) WHITE else BLACK
-    }
-
-
-    /**
-     * Represents a piece on the board.
-     */
-    private data class Piece(val row: Int, val col: Int, val value: PieceType)
-
 
     fun Int.toCoordinates(): Pair<Int, Int> {
         require(this in 0 until side * side) {
@@ -205,9 +187,9 @@ data class Board private constructor(
     /**
      * Returns an iterator of the value of pieces on the board.
      */
-    override fun iterator(): Iterator<PieceType> = object : Iterator<PieceType> {
+    override fun iterator(): Iterator<Piece> = object : Iterator<Piece> {
         private val it = pieces.iterator()
         override fun hasNext() = it.hasNext()
-        override fun next() = it.next().value
+        override fun next() = it.next()
     }
 }
