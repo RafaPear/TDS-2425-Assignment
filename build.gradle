@@ -1,19 +1,14 @@
-import org.jetbrains.dokka.gradle.DokkaTask
-
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '2.1.20'
     id 'application'
-    id 'maven-publish'
-    id 'org.jetbrains.dokka' version '2.0.0'
+    id 'org.jetbrains.dokka' version '1.9.20'
 }
 
 group = 'pt.isel.reversi'
-def artifact = 'MainKt'
 version = '0.0.1'
-mainClassName = "$group.$artifact"
 
 application {
-    mainClass = mainClassName
+    mainClass = 'pt.isel.reversi.MainKt'
 }
 
 repositories {
@@ -21,106 +16,53 @@ repositories {
     maven { url 'https://jitpack.io' }
 }
 
-subprojects {
-    apply plugin: 'org.jetbrains.dokka'
-}
-
 dependencies {
+    implementation 'com.github.RafaPear:KtFlag:1.3.3'
     testImplementation 'org.jetbrains.kotlin:kotlin-test'
-    implementation 'com.github.RafaPear:KtFlag:1.3.1'
-}
-
-test {
-    useJUnitPlatform()
-}
-
-java {
-    withSourcesJar()
-    withJavadocJar()
-}
-
-// directoria para guardar o ficheiro version.properties gerado
-def generatedVersionDir = layout.buildDirectory.dir('generated-version').get().asFile.path
-
-sourceSets {
-    main {
-        output.dir(generatedVersionDir, builtBy: 'generateVersionProperties')
-    }
-}
-
-// gera ficheiro version.properties em tempo de build
-tasks.register('generateVersionProperties') {
-    doLast {
-        def propertiesFile = file("${generatedVersionDir}/version.properties")
-        propertiesFile.parentFile.mkdirs()
-        def properties = new Properties()
-        properties.setProperty('version', rootProject.version.toString())
-        propertiesFile.withWriter { properties.store(it, null) }
-    }
-}
-
-processResources.dependsOn tasks.named('generateVersionProperties')
-
-// evita falhas por ficheiros duplicados em todas as tasks do tipo Jar
-tasks.withType(Jar).configureEach {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
 }
 
 kotlin {
     jvmToolchain(21)
-
 }
+
+// --- Dokka Configuration ---
+import org.jetbrains.dokka.DokkaConfiguration
+import org.jetbrains.dokka.gradle.DokkaTask
+import org.jetbrains.dokka.Platform
 
 tasks.withType(DokkaTask).configureEach {
-    outputDirectory.set(layout.buildDirectory.dir("dokka/html"))
+    dokkaSourceSets.configureEach {
+        platform.set(Platform.jvm)
+        includes.from('Module.md')
+    }
 }
 
-// JAR executável (fat jar): inclui dependências e define o Main-Class
-tasks.named('jar') {
+// --- Fat Jar ---
+tasks.register('fatJar', Jar) {
+    group = 'build'
+    description = 'Creates a fat JAR with all dependencies'
+    archiveClassifier.set('all')
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
     manifest {
         attributes(
-                'Main-Class': mainClassName,
+                'Main-Class': application.mainClass.get(),
                 'Implementation-Title': project.name,
                 'Implementation-Version': project.version
         )
     }
-    from({
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    })
+
+    from {
+        configurations.runtimeClasspath.collect {
+            it.isDirectory() ? it : zipTree(it)
+        }
+    }
+
+    with(tasks.jar)
 }
 
-project.afterEvaluate {
-    def dokkaTaskCandidate = tasks.named('dokkaJavadoc')
-    if (dokkaTaskCandidate == null) dokkaTaskCandidate = tasks.named('dokkaGenerate')
-    if (dokkaTaskCandidate == null) dokkaTaskCandidate = tasks.find { it.name?.startsWith('dokka') }
-
-    def dokkaGenerateTask = tasks.named('dokkaGenerate')
-    if (dokkaGenerateTask != null) {
-        tasks.named('javadocJar') {
-            dependsOn dokkaGenerateTask
-            from(layout.buildDirectory.dir('dokka/html'))
-        }
-        tasks.named('jar') {
-            dependsOn dokkaGenerateTask
-            from(layout.buildDirectory.dir('dokka/html')) {
-                into('docs')
-            }
-        }
-    }
-
-    tasks.named('javadocJar') {
-        dependsOn dokkaTaskCandidate
-        if (dokkaTaskCandidate.hasProperty('outputDirectory')) {
-            from(dokkaTaskCandidate.outputDirectory)
-        }
-    }
-
-    tasks.named('jar') {
-        dependsOn dokkaTaskCandidate
-        if (dokkaTaskCandidate.hasProperty('outputDirectory')) {
-            from(dokkaTaskCandidate.outputDirectory) {
-                into('docs')
-            }
-        }
-    }
+// --- Build Configuration ---
+tasks.named('build') {
+    dependsOn('fatJar')
+    finalizedBy('dokkaHtml')  // Gera Javadoc em HTML com hierarquia
 }

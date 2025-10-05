@@ -1,4 +1,4 @@
-package pt.isel.reversi.board
+package pt.isel.reversi.core.board
 
 /**
  * Represents a piece on the board.

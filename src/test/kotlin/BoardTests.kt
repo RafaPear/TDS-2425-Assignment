@@ -1,6 +1,6 @@
-import pt.isel.reversi.board.Board
-import pt.isel.reversi.board.Coordinate
-import pt.isel.reversi.board.PieceType
+import pt.isel.reversi.core.board.Board
+import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.board.PieceType
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 

@@ -1,11 +1,14 @@
-package pt.isel.reversi.commands
+package pt.isel.reversi.cli.commands
 
-import pt.isel.reversi.board.Board
+import pt.isel.reversi.core.board.Board
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
 import kotlin.system.exitProcess
 
+/**
+ * Command to exit the application.
+ */
 object ExitCmd: CommandImpl<Board>() {
     override val info = CommandInfo(
         title = "Exit",

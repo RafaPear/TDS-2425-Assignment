@@ -1,4 +1,4 @@
-package pt.isel.reversi.board
+package pt.isel.reversi.core.board
 
 import kotlin.collections.find
 import kotlin.collections.map

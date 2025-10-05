@@ -1,7 +1,7 @@
-package pt.isel.reversi.commands
+package pt.isel.reversi.cli.commands
 
-import pt.isel.reversi.board.Board
-import pt.isel.reversi.board.PieceType
+import pt.isel.reversi.core.board.Board
+import pt.isel.reversi.core.board.PieceType
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
@@ -9,8 +9,12 @@ import pt.rafap.ktflag.cmd.CommandResult.*
 import pt.rafap.ktflag.style.Colors
 import pt.rafap.ktflag.style.Colors.colorText
 
+/**
+ * Command to create a new game with the specified first player.
+ */
 object NewCmd: CommandImpl<Board>() {
-    val pieceTypes = PieceType.entries.joinToString("|") { it.symbol.toString() }
+
+    private val pieceTypes = PieceType.entries.joinToString("|") { it.symbol.toString() }
 
     override val info: CommandInfo =
         CommandInfo(
@@ -29,8 +33,8 @@ object NewCmd: CommandImpl<Board>() {
         vararg arg: String,
         context: Board?
     ): CommandResult<Board> {
-        val firstPlayer = PieceType.entries.find { it.symbol.toString() == arg[0] }
-                          ?: return ERROR("First player must be one of: $pieceTypes")
+        val firstPlayer = PieceType.entries.find { it.symbol.toString() == arg[0] } ?:
+        return ERROR("First player must be one of: $pieceTypes")
 
         println(colorText("First player: $firstPlayer", Colors.INFO_COLOR))
 
