@@ -25,9 +25,12 @@ fun runCli() {
         val result = parser.parseInputToResult(input, board)
 
         if (result == null) {
-            println(colorText(
-                "[ERROR] Unknown command",
-                Colors.RED))
+            println(
+                colorText(
+                    "[ERROR] Unknown command",
+                    Colors.RED
+                )
+            )
             continue
         }
 

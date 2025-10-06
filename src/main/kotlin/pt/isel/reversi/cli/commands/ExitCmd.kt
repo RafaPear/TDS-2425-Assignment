@@ -9,7 +9,7 @@ import kotlin.system.exitProcess
 /**
  * Command to exit the application.
  */
-object ExitCmd: CommandImpl<Board>() {
+object ExitCmd : CommandImpl<Board>() {
     override val info = CommandInfo(
         title = "Exit",
         description = "Exits the application.",

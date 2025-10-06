@@ -2,21 +2,27 @@ package pt.isel.reversi.core.game
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.game.data.GDAImpl
 
 /**
  * Interface for the main game operations and state in Reversi.
  */
 interface GameImpl {
     /** Data access layer for game persistence. */
-    val dataAccess: GameDataAccessImpl
+    val dataAccess: GDAImpl
+
     /** List of players in the game. */
     val players: List<Player>
+
     /** The current game name, if any. */
     val currGameName: String?
+
     /** The current board state. */
     val board: Board
+
     /** Indicates if target mode is enabled. */
     val target: Boolean
+
     /** Indicates if the game is local. */
     val isLocal: Boolean
 

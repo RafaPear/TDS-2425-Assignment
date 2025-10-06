@@ -2,36 +2,39 @@
 
 This module implements the Reversi game with a focus on modularity, clarity, and extensibility. The architecture is divided into distinct packages to separate responsibilities, facilitating maintenance, testing, and project evolution.
 
-The module includes:
-- Core game logic, including rules, turn alternation, and victory conditions.
-- Efficient board representation, with support for different sizes and variants.
-- Intuitive command-line interface, allowing direct interaction with the game.
-- Extensible command system to facilitate new functionalities.
-- Structure designed for future integration with graphical or web interfaces.
+It provides a clean core domain (board, players, game state & logic), an extensible CLI layer, and a simple file‑based persistence component. Each package below is declared with a #package marker consumed by Dokka, immediately followed by a concise Markdown heading (title without the fully qualified name) and a narrative description (no code examples) to support conceptual navigation in generated documentation.
 
-This project can be used as a foundation for studying object-oriented programming, modular design, and game development in Kotlin. The documentation details each component, facilitating understanding and collaboration.
-
-#Package pt.isel.reversi.core.board
+#package pt.isel.reversi.core.board
 # Board
+Models the reversible grid state and immutable operations over it. The board exposes safe value semantics (data class) and transformation methods that either yield a new board or throw when preconditions are violated. Responsibilities include:
+- Coordinate normalization and validation (1-based rows, alpha or numeric columns)
+- Piece placement and color flipping with invariant checks (even side, bounds, uniqueness)
+- Deriving initial setup (standard four center pieces) without embedding game turn logic
 
-This package is responsible for the internal representation of the Reversi board, including structures for cells and pieces, and algorithms for move validation and board state updates. It allows adaptation for different sizes and rule variants, with optimized methods for board manipulation.
-
-#Package pt.isel.reversi.core.game
+#package pt.isel.reversi.core.game
 # Game
+Defines the high‑level game abstraction (composition of board, players, and access layer) plus extension points for logic strategies. It coordinates player actions, target/assist modes and refresh/pass mechanics while remaining UI‑agnostic and persistence‑agnostic. Lifecycle concerns (start, join, play, pass) are modeled to allow future remote or AI player integrations.
 
-Manages the Reversi game lifecycle, turn alternation, verification of victory or draw conditions, and coordination between board and players. Provides abstractions for different player types and facilitates integration with external interfaces.
+#package pt.isel.reversi.core.game.data
+# Data Access
+Encapsulates persistence contracts and a lightweight local file implementation using a line‑oriented plain text format. It standardizes outcome reporting with typed result codes and colored CLI formatting while remaining decoupled from the core game rules. Responsibilities include translating domain state to/from a canonical textual representation and validating structural integrity (headers, piece chronology, turn alternation hints).
 
-#Package pt.isel.reversi.cli
+#package pt.isel.reversi.cli
 # CLI
+Hosts the command‑line presentation & interaction layer: parsing user intent, rendering board snapshots, and routing validated commands into the game abstraction. It focuses on progressive disclosure of information (e.g., optional target hints) and aims to remain scriptable and testable without side‑effects beyond standard IO.
 
-Implements the command-line interface, managing board presentation, reading and validating user commands, and displaying messages. Supports customization of the game experience and different interaction modes.
+#package pt.isel.reversi.cli.commands
+# Commands
+Groups discrete user operations (start, join, move, pass, help, quit) under cohesive command objects. Emphasizes clear feedback, argument validation, and future extensibility (adding commands without modifying existing logic). Avoids embedding persistence or rendering concerns directly.
 
-#Package pt.isel.reversi.cli.commands
-# CLI Commands
+#package pt.isel.reversi
+# Core Entry
+Provides the application bootstrap: wiring dependencies, selecting configured implementations (e.g., local data access), and delegating control to the CLI loop. Serves as the integration point for embedding this module into alternate front‑ends (GUI, web service) or automated test harnesses.
 
-Organizes and defines the commands available in the command-line interface, such as starting a game, making a move, showing help, and ending a match. Facilitates extension for new commands and ensures validation of user actions.
+---
 
-#Package pt.isel.reversi
-# Main
-
-Entry point of the Reversi application, responsible for initializing the main components, environment configuration, and launching the command-line interface. Integrates all packages, ensuring correct game flow and enabling future integrations.
+## Design Notes
+- Immutability: Core structures (Board, Piece) return new instances, simplifying reasoning and potential concurrency.
+- Small Surface: Interfaces (GameImpl, GameLogicImpl, GameDataAccessImpl) concentrate on intent, enabling alternative implementations (AI strategies, remote persistence) without refactoring callers.
+- Explicit Outcomes: Data access uses structured result codes rather than exceptions for expected domain states (missing data, invalid format), aiding CLI feedback & tooling.
+- Progressive Enhancement: The current feature set is a foundation; logic expansion (legal move generation, scoring, endgame detection) is intentionally modular.
