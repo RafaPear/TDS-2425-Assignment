@@ -35,7 +35,7 @@ interface GDAImpl {
     fun getAvailablePieces(fileName: String): GDAResult<List<PieceType>>
 
     /** Obtain the last placed piece (chronologically) recorded in [fileName], if any. */
-    fun getLatestPiece(fileName: String): GDAResult<Piece?>
+    fun getLatestPiece(fileName: String): GDAResult<Piece>
 
     // TODO ESTRUTURA FICHEIRO PARA IMPL COM FILES
 

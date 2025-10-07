@@ -193,7 +193,7 @@ class LocalGDA : GDAImpl {
      * Returns the last serialized piece (chronological order). Returns SUCCESS(null) if no piece
      * lines exist. BOARD_ERROR is returned only if the final matching line cannot be parsed.
      */
-    override fun getLatestPiece(fileName: String): GDAResult<Piece?> {
+    override fun getLatestPiece(fileName: String): GDAResult<Piece> {
         val lines = getLines(fileName).data ?: return GDACodes.DATA_NOT_FOUND(
             LocalGDAMessages.fileEmpty(fileName),
             null
