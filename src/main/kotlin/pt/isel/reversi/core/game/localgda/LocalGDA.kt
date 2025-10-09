@@ -52,7 +52,7 @@ class LocalGDA : GDAImpl {
         val isNewFile = !file.exists() || file.length() == 0L
 
         if (isNewFile) {
-            file.createNewFile() // may throw IOException, let caller handle as IO_ERROR}
+            file.createNewFile() // may throw IOException, let caller handle as IO_ERROR
             val players = game.players.map { it.type }
             val availablePieces = PieceType.entries.filter { it !in players }
             GameFileAccess.writeGame(file, availablePieces, game)
