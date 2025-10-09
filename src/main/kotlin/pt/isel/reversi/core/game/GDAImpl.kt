@@ -90,5 +90,4 @@ interface GDAImpl {
      */
     fun getLatestPlayType(fileName: String): PieceType
 
-    // TODO: define file layout used by file-based implementations
 }

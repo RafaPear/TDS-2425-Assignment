@@ -136,7 +136,7 @@ class LocalGDATests {
             gda.postGame(file.absolutePath, game)
 
             val available = gda.getAvailablePieces(file.absolutePath)
-            assertEquals(emptyList<PieceType>(), available)
+            assertEquals(emptyList(), available)
         } finally {
             file.delete()
         }
