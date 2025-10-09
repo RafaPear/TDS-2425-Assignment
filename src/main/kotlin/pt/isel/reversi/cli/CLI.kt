@@ -25,7 +25,7 @@ class CLI private constructor(
     ) = CLI(debug, extraCommands, welcomeMessage)
 
     fun setDebug(): CLI {
-        return setDebug()
+        return setDebug(true)
     }
 
     fun setDebug(state: Boolean): CLI {
