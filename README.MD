@@ -11,14 +11,18 @@ A modular, test-friendly implementation of the Reversi board game written in Kot
 - Unit tests (board + data access layer)
 - Generated documentation (Dokka) with curated package overviews
 
+## Structure Image
+![Module Structure](UML_Structure.drawio.png)
+
 ## Quick Start
 ```bash
 # Build (includes fat JAR and docs)
 ./gradlew build
 
 # Run (fat jar contains dependencies)
-java -jar build/libs/Reversi-0.0.1-all.jar
+java -jar build/libs/Reversi-0.0.1-all.jar --cli
 ```
+
 On Windows (cmd):
 ```cmd
 gradlew.bat build
@@ -26,13 +30,13 @@ java -jar build\libs\Reversi-0.0.1-all.jar
 ```
 
 ## Architecture Overview
-| Package | Responsibility |
-|---------|----------------|
-| `pt.isel.reversi.core.board` | Board, coordinates, piece types & safe transformation operations |
-| `pt.isel.reversi.core.game` | Game interfaces, player representation, logic contracts |
-| `pt.isel.reversi.core.game.localgda` | Concrete local text-file persistence (`LocalGDA`) |
-| `pt.isel.reversi.cli` | CLI loop & rendering utilities |
-| `pt.isel.reversi.cli.commands` | Discrete command handlers for user actions |
+| Package                              | Responsibility                                                   |
+|--------------------------------------|------------------------------------------------------------------|
+| `pt.isel.reversi.core.board`         | Board, coordinates, piece types & safe transformation operations |
+| `pt.isel.reversi.core.game`          | Game interfaces, player representation, logic contracts          |
+| `pt.isel.reversi.core.game.localgda` | Concrete local text-file persistence (`LocalGDA`)                |
+| `pt.isel.reversi.cli`                | CLI loop & rendering utilities                                   |
+| `pt.isel.reversi.cli.commands`       | Discrete command handlers for user actions                       |
 
 For in-depth narrative descriptions see `Module.md` (also surfaced in generated Dokka docs).
 
@@ -124,7 +128,7 @@ Output: `build/dokka/html/index.html`
 4. Create PR summarizing motivation & approach
 
 ## License
-(Choose a license and place it in a `LICENSE` file—currently unspecified.)
+Choose and specify a license by placing it in a `LICENSE` file (currently unspecified).
 
 ---
 Happy hacking! Explore `LocalGDA` for a clear example of how to integrate alternative persistence layers without touching core game logic.

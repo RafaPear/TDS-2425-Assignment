@@ -1,33 +1,33 @@
-#package pt.isel.reversi
+# Module Reversi
 
-## Descrição
-Este módulo contém toda a implementação do jogo Reversi, organizado de forma modular e limpa. Inclui lógica de jogo, interface de linha de comando e integração com bibliotecas externas.
+This module implements the Reversi game with a focus on modularity, clarity, and extensibility. The architecture is divided into distinct packages to separate responsibilities, facilitating maintenance, testing, and project evolution.
 
-## Pacotes Principais
+It provides a clean core domain (board, players, game state & logic), an extensible CLI layer, and a simple file‑based persistence component. Each package below is declared with a #package marker consumed by Dokka, immediately followed by a concise Markdown heading (title without the fully qualified name) and a narrative description (no code examples) to support conceptual navigation in generated documentation.
 
-- **pt.isel.reversi.core**  
-  Lógica principal do jogo, regras e manipulação do tabuleiro.
+#package pt.isel.reversi.core.board
+# Board
+Models the reversible grid state and immutable operations over it. The board exposes safe value semantics (data class) and transformation methods that either yield a new board or throw when preconditions are violated. Responsibilities include:
+- Coordinate normalization and validation (1-based rows, alpha or numeric columns)
+- Piece placement and color flipping with invariant checks (even side, bounds, uniqueness)
+- Deriving initial setup (standard four center pieces) without embedding game turn logic
 
-- **pt.isel.reversi.cli**  
-  Interface de linha de comando para interação com o utilizador.
+#package pt.isel.reversi.core.game
+# Game
+Defines the high‑level game abstraction (composition of board, players, and access layer) plus extension points for logic strategies. It coordinates player actions, target/assist modes and refresh/pass mechanics while remaining UI‑agnostic and persistence‑agnostic. Lifecycle concerns (start, join, play, pass) are modeled to allow future remote or AI player integrations.
 
-- **pt.isel.reversi.utils**  
-  Utilitários e helpers usados em todo o projeto.
+#package pt.isel.reversi.core.game.data
+# Data Access
+Encapsulates persistence contracts and a lightweight local file implementation using a line‑oriented plain text format. It standardizes outcome reporting with typed result codes and colored CLI formatting while remaining decoupled from the core game rules. Responsibilities include translating domain state to/from a canonical textual representation and validating structural integrity (headers, piece chronology, turn alternation hints).
 
-## Como executar
+#package pt.isel.reversi.core.game.localgda
+# Local GDA
+Implements the concrete local filesystem persistence (text file format) for the generic data access abstraction. Complements the `pt.isel.reversi.core.game.data` contracts by providing a human‑readable, append‑oriented storage strategy used by the CLI and tests. Suitable for development and teaching; replaceable by alternative implementations (network / database) without touching domain logic.
 
-Para executar o projeto via linha de comando:
-```sh
-java -jar reversi-fat.jar
-```
+#package pt.isel.reversi.cli
+# CLI
+Hosts the command‑line presentation & interaction layer: parsing user intent, rendering board snapshots, and routing validated commands into the game abstraction. It focuses on progressive disclosure of information (e.g., optional target hints) and aims to remain scriptable and testable without side‑effects beyond standard IO.
 
-## Documentação
-
-A documentação gerada por Dokka encontra-se no diretório `build/dokka/html` ou pode ser distribuída via o artefacto `javadoc.jar`.
-
-## Autores
-
-Grupo 1 - TDS 2025
+#package pt.isel.reversi.cli.commands
 # Commands
 Groups discrete user operations (start, join, move, pass, help, quit) under cohesive command objects. Emphasizes clear feedback, argument validation, and future extensibility (adding commands without modifying existing logic). Avoids embedding persistence or rendering concerns directly.
 
