@@ -385,8 +385,10 @@ class GameLogicTests {
 
 
         assertFailsWith<InvalidPlay> {
-            val uut = GameLogic().play(board, Piece(Coordinates(3, 3), WHITE))
-            val uut2 = GameLogic().play(board, Piece(Coordinates(1, 4), BLACK))
+            GameLogic().play(board, Piece(Coordinates(3, 3), WHITE))
+        }
+        assertFailsWith<InvalidPlay> {
+            GameLogic().play(board, Piece(Coordinates(1, 4), BLACK))
         }
     }
 
