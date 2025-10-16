@@ -129,6 +129,22 @@ class GameLogicTests {
             GameLogic().getCapturablePieces(board, Piece(Coordinates(0, 5), BLACK), Coordinates(0, 1))
         }
     }
+
+    @Test
+    fun `getCapturablePieces when my piece is at the edge and direction is out of bounds`() {
+        var board = Board(4).addPiece(Coordinates(1, 1), BLACK)
+        board = board.addPiece(Coordinates(1, 2), WHITE)
+        board = board.addPiece(Coordinates(2, 2), WHITE)
+        board = board.addPiece(Coordinates(3, 3), WHITE)
+        board = board.addPiece(Coordinates(4, 4), BLACK)
+
+        val uut = GameLogic().getCapturablePieces(
+            board,
+            Piece(Coordinates(1, 1), BLACK),
+            Coordinates(-1, -1)
+        )
+        assert(uut.isEmpty())
+    }
     @Test
     /*
           1 2 3 4

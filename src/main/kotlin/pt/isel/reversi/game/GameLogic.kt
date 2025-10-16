@@ -158,17 +158,22 @@ class GameLogic: GameLogicImpl {
         direction: Coordinates
     ): List<Coordinates> {
         board.checkPosition(myPiece.coordinate)
+        var newCord =
+            if ((myPiece.coordinate + direction).isValid(board.side))
+                myPiece.coordinate + direction
+            else return emptyList()
+
         // Start checking from the next piece in the specified direction
         var nextPiece = Piece(
-            myPiece.coordinate + direction,
-            board[myPiece.coordinate + direction] ?: return emptyList()
+            newCord,
+            board[newCord] ?: return emptyList()
         )
         val capturablePieces = mutableListOf<Coordinates>()
 
         // Continue in the direction while the pieces are of the opposite type
         while (nextPiece.value == myPiece.value.swap() ) {
             capturablePieces += nextPiece.coordinate
-            val newCord = nextPiece.coordinate + direction
+            newCord = nextPiece.coordinate + direction
 
             //return empty if out of bounds
             if (!newCord.isValid(board.side)) return emptyList()
