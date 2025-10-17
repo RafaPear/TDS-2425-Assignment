@@ -1,5 +1,6 @@
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
@@ -199,6 +200,50 @@ class BoardTests {
             uut2 = uut.addPiece(5, PieceType.BLACK)
             var uut3 = Board(4).addPiece(Coordinate(4, 2), PieceType.WHITE)
             uut3 = uut.addPiece(Coordinate(4, 2), PieceType.BLACK)
+        }
+    }
+
+    @Test
+    fun `Last Piece added is at the end of the Piece list succeeds`() {
+        val lastPieceExpected = Piece(Coordinate(3, 'c'), PieceType.BLACK)
+        val uut = Board(4)
+            .addPiece(Coordinate(1, 'a'), PieceType.WHITE)
+            .addPiece(lastPieceExpected)
+        assert(lastPieceExpected == uut.last())
+    }
+
+    @Test
+    fun `Sequence of Pieces on Board matches added Pieces succeeds`() {
+        val piece1 = Piece(Coordinate(1, 'a'), PieceType.WHITE)
+        val piece2 = Piece(Coordinate(2, 'b'), PieceType.BLACK)
+        val piece3 = Piece(Coordinate(3, 'c'), PieceType.WHITE)
+        val expectedPieces = listOf(piece1, piece2, piece3)
+        val uut = Board(4)
+            .addPiece(piece1)
+            .addPiece(piece2)
+            .addPiece(piece3)
+
+        uut.forEachIndexed { index, piece ->
+            assert(piece == expectedPieces[index])
+        }
+    }
+
+    @Test
+    fun `Sequence of Pieces on Board after changes matches expected Pieces succeeds`() {
+        val piece1 = Piece(Coordinate(1, 'a'), PieceType.WHITE)
+        val piece2 = Piece(Coordinate(2, 'b'), PieceType.BLACK)
+        val piece3 = Piece(Coordinate(3, 'c'), PieceType.WHITE)
+        val expectedPieces = listOf(piece1, piece2, piece3)
+
+        val uut = Board(4)
+            .addPiece(piece1)
+            .addPiece(piece2)
+            .addPiece(piece3)
+            .changePiece(Coordinate(2, 'b'))
+            .changePiece(Coordinate(3, 'c'))
+        uut.forEachIndexed { index, piece ->
+            if (index == 0) assert(piece == expectedPieces[index])
+            else assert(piece == expectedPieces[index].swap())
         }
     }
 }

@@ -64,6 +64,7 @@ data class Board(
         return pieces.find { it.coordinate == coordinate }?.value
     }
 
+
     /**
      * Changes the piece at the specified row and column from 'b' to 'w' or from 'w' to 'b'.
      * @return true if the piece was changed, false if there is no piece at the specified position.
@@ -111,6 +112,14 @@ data class Board(
         val coordinate = idx.toCoordinate()
         return addPiece(coordinate, value)
     }
+
+
+    /**
+     * Adds a piece to the board.
+     * @param piece The piece to add.
+     * @throws IllegalArgumentException if the row or column are out of bounds.
+     */
+    fun addPiece(piece: Piece): Board = addPiece(piece.coordinate, piece.value)
 
     /**
      * Starts the board with the initial pieces in the center.
