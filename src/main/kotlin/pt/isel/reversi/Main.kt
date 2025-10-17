@@ -1,24 +1,33 @@
 package pt.isel.reversi
 
-import pt.isel.reversi.board.Board
-import pt.isel.reversi.commands.ExitCmd
-import pt.isel.reversi.commands.NewCmd
-import pt.rafap.ktflag.CommandParser
+import pt.isel.reversi.cli.CLI
 import pt.rafap.ktflag.style.Colors
 import pt.rafap.ktflag.style.Colors.colorText
 
-fun main(){
-    var board = Board(8)
+fun printUsage() {
+    println("Usage: reversi [--cli] [--debug]")
+    println("  --cli     : Run the command line interface version of the game.")
+    println("  --debug   : Enable debug commands in the CLI.")
+    println("  --app     : Run the GUI application version of the game. (Not implemented yet)")
+}
 
-    val parser = CommandParser(NewCmd, ExitCmd)
+fun main(args: Array<String>) {
+    if (args.isEmpty())
+        return printUsage()
 
-    while (true){
-        val result = parser.readInputAndGetResult(board)
+    val debug = args.contains("--debug")
+    val runCli = args.contains("--cli")
+    val runApp = args.contains("--app")
 
-        when {
-            result == null -> println(colorText("[ERROR] Unknown command", Colors.RED))
-            result.isError -> result.printError()
-            result.result != null -> board = result.result!!
-        }
+    if (runCli && runApp) {
+        println(colorText("[ERROR]: You must specify either --cli or --app", Colors.RED))
+        return printUsage()
     }
+
+    if (runCli || !runApp) {
+        val cli = CLI().setDebug(debug)
+        cli.startLoop()
+    }
+    else
+        TODO("GUI application is not implemented yet")
 }

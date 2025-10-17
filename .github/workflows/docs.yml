@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - master
-      - Board
   release:
     types: [created]
 
@@ -35,7 +34,7 @@ jobs:
         run: ./gradlew build --no-daemon
 
       - name: Build Dokka docs
-        run: ./gradlew dokkaGeneratePublicationHtml
+        run: ./gradlew dokkaHtml
 
       - name: Debug Dokka output
         run: |
