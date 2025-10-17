@@ -1,11 +1,13 @@
-package pt.isel.reversi.game
-import pt.isel.reversi.board.Board
-import pt.isel.reversi.board.Coordinates
-import pt.isel.reversi.board.Piece
-import pt.isel.reversi.board.PieceType
-import kotlin.collections.filter
-import pt.isel.reversi.game.exceptions.InvalidPlay
-class GameLogic: GameLogicImpl {
+package pt.isel.reversi.core.game
+
+import pt.isel.reversi.core.board.Board
+import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.board.Piece
+import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.game.exceptions.InvalidPlay
+import kotlin.collections.forEach
+
+class GameLogic {
     /**
         * Plays a piece on the board and returns the new state of the board.
         * The play is valid if it captures at least one of the opponent's pieces.
@@ -15,7 +17,7 @@ class GameLogic: GameLogicImpl {
         * @throws IllegalArgumentException if the position is out of bounds
         * @throws InvalidPlay if the play is not valid (when no pieces are captured or position is occupied)
         */
-    override fun play(
+    fun play(
         board: Board,
         myPiece: Piece,
     ): Board {
@@ -29,7 +31,7 @@ class GameLogic: GameLogicImpl {
 
         //For each opponent piece, get the direction from myPiece to opponentPiece,
         //and get all capturable pieces in that direction or empty list if none
-        val capturablePieces = opponentPieces.flatMap { opponentPiece: Coordinates ->
+        val capturablePieces = opponentPieces.flatMap { opponentPiece: Coordinate ->
             val direction = opponentPiece - myPiece.coordinate
             getCapturablePieces(board, myPiece, direction)
         }
@@ -53,17 +55,17 @@ class GameLogic: GameLogicImpl {
      * @param myPieceType The type of piece for the player (e.g., BLACK or WHITE).
      * @return A list of coordinates where the player can place their piece.
      */
-    override fun getAvailablePlays(
+    fun getAvailablePlays(
         board: Board,
         myPieceType: PieceType,
-    ): List<Coordinates> {
+    ): List<Coordinate> {
         val opponentPieces = board.filter {it.value != myPieceType }
         return opponentPieces
             .flatMap { piece -> // For each opponent piece, find empty spaces around it
                 findAround(board, piece, null).filter {
                     getCapturablePieces( // Check if placing this piece would capture any opponent pieces
                         board,
-                        Piece(it,myPieceType),
+                        Piece(it, myPieceType),
                         piece.coordinate - it
                     ).isNotEmpty()
                 }
@@ -78,7 +80,7 @@ class GameLogic: GameLogicImpl {
      * @return True if the move is valid, false otherwise.
      * @throws IllegalArgumentException if the position is out of bounds
      */
-    override fun isValidMove(
+    fun isValidMove(
         board: Board,
         myPiece: Piece,
     ): Boolean {
@@ -108,23 +110,23 @@ class GameLogic: GameLogicImpl {
      * @return A list of coordinates where the specified type of piece is found around the given piece.
      * @throws IllegalArgumentException if the position is out of bounds
      */
-    override fun findAround(
+    fun findAround(
         board: Board,
         myPiece: Piece,
         findThis: PieceType?
-    ): List<Coordinates> {
+    ): List<Coordinate> {
 
         board.checkPosition(myPiece.coordinate)
         // Check all 8 directions
         val directions = listOf(
-            Coordinates(-1, -1), // Top-left
-            Coordinates(-1, 0), // Top
-            Coordinates(-1, 1), // Top-right
-            Coordinates(0, -1), // Left
-            Coordinates(0, 1), // Right
-            Coordinates(1, -1), // Bottom-left
-            Coordinates(1, 0), // Bottom
-            Coordinates(1, 1)  // Bottom-right
+            Coordinate(-1, -1), // Top-left
+            Coordinate(-1, 0), // Top
+            Coordinate(-1, 1), // Top-right
+            Coordinate(0, -1), // Left
+            Coordinate(0, 1), // Right
+            Coordinate(1, -1), // Bottom-left
+            Coordinate(1, 0), // Bottom
+            Coordinate(1, 1)  // Bottom-right
         )
         val coordinates = myPiece.coordinate
 
@@ -152,11 +154,11 @@ class GameLogic: GameLogicImpl {
      * @return A list of coordinates of capturable pieces in the specified direction.
      * @throws IllegalArgumentException if the position is out of bounds
      */
-    override fun getCapturablePieces (
+    fun getCapturablePieces (
         board: Board,
         myPiece: Piece,
-        direction: Coordinates
-    ): List<Coordinates> {
+        direction: Coordinate
+    ): List<Coordinate> {
         board.checkPosition(myPiece.coordinate)
         var newCord =
             if ((myPiece.coordinate + direction).isValid(board.side))
@@ -168,7 +170,7 @@ class GameLogic: GameLogicImpl {
             newCord,
             board[newCord] ?: return emptyList()
         )
-        val capturablePieces = mutableListOf<Coordinates>()
+        val capturablePieces = mutableListOf<Coordinate>()
 
         // Continue in the direction while the pieces are of the opposite type
         while (nextPiece.value == myPiece.value.swap() ) {
@@ -188,5 +190,3 @@ class GameLogic: GameLogicImpl {
         return capturablePieces
     }
 }
-
-

@@ -25,7 +25,7 @@ data class Board(
         }
     }
 
-    fun Int.toCoordinates(): Coordinate {
+    fun Int.toCoordinate(): Coordinate {
         require(this in 0 until side * side) {
             "Index must be between 0 and ${side * side - 1}"
         }
@@ -38,7 +38,7 @@ data class Board(
      * Checks if the specified row and column are within the bounds of the board.
      * @throws IllegalArgumentException if the row or column are out of bounds.
      */
-    fun checkPosition(coordinate: Coordinates) {
+    fun checkPosition(coordinate: Coordinate) {
         require(coordinate.isValid(side)) {
             "Position ($coordinate is out of bounds)"
         }
@@ -50,7 +50,7 @@ data class Board(
      * @throws IllegalArgumentException if the index is out of bounds.
      */
     operator fun get(idx: Int): PieceType? {
-        val coordinate = idx.toCoordinates()
+        val coordinate = idx.toCoordinate()
         return pieces.find { it.coordinate == coordinate }?.value
     }
 
@@ -84,7 +84,7 @@ data class Board(
      * @throws IllegalArgumentException if the index is out of bounds.
      */
     fun changePiece(idx: Int): Board {
-        val coordinate = idx.toCoordinates()
+        val coordinate = idx.toCoordinate()
         return changePiece(coordinate)
     }
 
@@ -108,7 +108,7 @@ data class Board(
      * @throws IllegalArgumentException if the row or column are out of bounds.
      */
     fun addPiece(idx: Int, value: PieceType): Board {
-        val coordinate = idx.toCoordinates()
+        val coordinate = idx.toCoordinate()
         return addPiece(coordinate, value)
     }
 
