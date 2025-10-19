@@ -1,6 +1,7 @@
 package pt.isel.reversi.core.game
 
 import pt.isel.reversi.core.board.Board
+import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 
 /**
@@ -21,7 +22,7 @@ open class MockGame(
     override val target: Boolean,
     override val isLocal: Boolean
 ) : GameImpl {
-    override fun play(row: Int, col: Int): GameImpl {
+    override fun play(coordinate: Coordinate): GameImpl {
         TODO("Not yet implemented")
     }
 
@@ -33,7 +34,11 @@ open class MockGame(
         TODO("Not yet implemented")
     }
 
-    override fun getAvailablePlays(): List<Pair<Int, Int>> {
+    override fun getAvailablePlays(): List<Coordinate> {
+        TODO("Not yet implemented")
+    }
+
+    override fun startNewGame() {
         TODO("Not yet implemented")
     }
 
