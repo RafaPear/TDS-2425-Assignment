@@ -1,8 +1,6 @@
 package pt.isel.reversi.core.board
 
-import kotlin.collections.filter
 import kotlin.collections.find
-
 /**
  * Represents a board game grid.
  *
@@ -11,7 +9,9 @@ import kotlin.collections.find
  */
 data class Board(
     val side: Int,
-    private val pieces: List<Piece> = emptyList()
+    private val pieces: List<Piece> = emptyList(),
+    val totalBlackPieces: Int = 0,
+    val totalWhitePieces: Int = 0,
 ) : Iterable<Piece> {
     private val sideMin = 4
     private val sideMax = 26
@@ -73,10 +73,22 @@ data class Board(
     fun changePiece(coordinate: Coordinate): Board {
         checkPosition(coordinate)
         val value = this[coordinate]?.swap() ?: throw IllegalArgumentException("No piece at position $coordinate")
-        return this.copy(pieces = pieces.map { piece ->
+
+        return this.copy(
+            pieces = pieces.map { piece ->
             if (piece.coordinate != coordinate) piece
             else Piece(coordinate, value)
-        })    }
+        },
+            totalBlackPieces =
+                if (value == PieceType.BLACK)
+                        totalBlackPieces + 1
+                else totalBlackPieces - 1,
+            totalWhitePieces =
+                if (value == PieceType.WHITE)
+                    totalWhitePieces + 1
+                else totalWhitePieces - 1
+        )
+    }
 
     /**
      * Changes the piece at the specified index like linear list from 'b' to 'w' or from 'w' to 'b'.
@@ -99,7 +111,17 @@ data class Board(
         require(this[coordinate] == null) {
             "There is already a piece at position $coordinate"
         }
-        return this.copy(pieces = pieces + Piece(coordinate, value))
+        return this.copy(
+            pieces = pieces + Piece(coordinate, value),
+            totalBlackPieces =
+                if (value == PieceType.BLACK)
+                    totalBlackPieces + 1
+                else totalBlackPieces,
+            totalWhitePieces =
+                if (value == PieceType.WHITE)
+                    totalWhitePieces + 1
+                else totalWhitePieces
+        )
     }
 
     /**
@@ -133,7 +155,9 @@ data class Board(
                 Piece(Coordinate(mid + 1, mid + 1), PieceType.WHITE),
                 Piece(Coordinate(mid, mid + 1), PieceType.BLACK),
                 Piece(Coordinate(mid + 1, mid), PieceType.BLACK)
-            )
+            ),
+            totalBlackPieces = 2,
+            totalWhitePieces = 2
         )
     }
 
