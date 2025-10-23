@@ -3,19 +3,23 @@ package pt.isel.reversi.core.board
 
 /**
  * Represents a board game grid.
- *
  * @property pieces The list of pieces on the board.
  * @property side The size of the board (side x side).
+ * @throws IllegalArgumentException if the side is not within the valid range or not even.
  */
 data class Board(
     val side: Int,
     private val pieces: List<Piece> = emptyList(),
 ) : Iterable<Piece> {
-    private val `totalBlackPieces()`: Int
+    private val totalBlackPieces: Int
     private val totalWhitePieces: Int
     private val sideMin = 4
     private val sideMax = 26
 
+    /**
+     * Initializes the board and validates its properties.
+     * Initializes the total number of black and white pieces on the board.
+     */
     init {
         require(side in sideMin..sideMax) {
             "Side must be between $sideMin and $sideMax"
@@ -34,16 +38,18 @@ data class Board(
                 countWhitePieces++
             }
         }
-        `totalBlackPieces()` = countBlackPieces
+        totalBlackPieces = countBlackPieces
         totalWhitePieces = countWhitePieces
     }
 
     /**
      * Gets the total number of black pieces on the board.
+     * @return The total number of black pieces.
      */
-    fun totalBlackPieces(): Int = `totalBlackPieces()`
+    fun totalBlackPieces(): Int = totalBlackPieces
     /**
      * Gets the total number of white pieces on the board.
+     * @return The total number of white pieces.
      */
     fun totalWhitePieces(): Int = totalWhitePieces
 
@@ -55,8 +61,6 @@ data class Board(
         require(this in 0 until side * side) {
             "Index must be between 0 and ${side * side - 1}"
         }
-
-
         val row = this / side + 1
         val col = this % side + 1
         return Coordinate(row, col)
@@ -126,6 +130,9 @@ data class Board(
 
     /**
      * Adds a piece to the board at the specified row and column.
+     * @param coordinate The (row, column) coordinate where the piece will be added.
+     * @param value The type of piece to add.
+     * @return A new board with the added piece.
      * @throws IllegalArgumentException if the row or column are out of bounds.
      */
     fun addPiece(coordinate: Coordinate, value: PieceType): Board {
@@ -142,6 +149,7 @@ data class Board(
      * Adds a piece to the board at the specified index like linear list.
      * @param idx The index where the piece will be added.
      * @param value The type of piece to add.
+     * @return A new board with the added piece.
      * @throws IllegalArgumentException if the row or column are out of bounds.
      */
     fun addPiece(idx: Int, value: PieceType): Board {
@@ -153,6 +161,7 @@ data class Board(
     /**
      * Adds a piece to the board.
      * @param piece The piece to add.
+     * @return A new board with the added piece.
      * @throws IllegalArgumentException if the row or column are out of bounds.
      */
     fun addPiece(piece: Piece): Board = addPiece(piece.coordinate, piece.value)
@@ -175,6 +184,7 @@ data class Board(
 
     /**
      * Returns an iterator of the value of pieces on the board.
+     * @return An iterator of Piece.
      */
     override fun iterator(): Iterator<Piece> = object : Iterator<Piece> {
         private val it = pieces.iterator()
