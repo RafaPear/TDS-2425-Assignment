@@ -1,7 +1,5 @@
 package pt.isel.reversi.cli
 
-import pt.isel.reversi.cli.commands.ExitCmd
-import pt.isel.reversi.cli.commands.NewCmd
 import pt.isel.reversi.core.Environment
 import pt.isel.reversi.core.Environment.firstPlayerTurn
 import pt.isel.reversi.core.board.Board
