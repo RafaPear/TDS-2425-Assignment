@@ -6,7 +6,7 @@ import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.GameImpl
 import pt.isel.reversi.core.game.Player
-import pt.isel.reversi.core.Environment.firstPlayerTurn
+import pt.isel.reversi.core.Environment.First_Player_TURN
 import pt.isel.reversi.core.game.localgda.LocalGDA
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
@@ -42,7 +42,7 @@ object NewCmd : CommandImpl<GameImpl>() {
             dataAccess = LocalGDA(),
             players = emptyList(),
             target = false,
-            playerTurn = firstPlayerTurn,
+            playerTurn = First_Player_TURN,
             board = Board(Environment.BOARD_SIDE),
             currGameName = null,
         )

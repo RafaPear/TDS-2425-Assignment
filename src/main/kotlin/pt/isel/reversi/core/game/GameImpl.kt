@@ -1,7 +1,7 @@
 package pt.isel.reversi.core.game
 
 import pt.isel.reversi.core.Environment.BOARD_SIDE
-import pt.isel.reversi.core.Environment.firstPlayerTurn
+import pt.isel.reversi.core.Environment.First_Player_TURN
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
@@ -27,6 +27,8 @@ interface GameImpl {
 
     /** Index of the next player's turn. */
     val playerTurn: PieceType
+
+    val countPass: Int
     /**
      * Plays a move at the specified row and column.
      * @param coordinate The (row, column) coordinate for the move.
@@ -59,7 +61,7 @@ interface GameImpl {
     fun startNewGame(
         side: Int = BOARD_SIDE,
         players: List<Player>,
-        firstTurn: PieceType = firstPlayerTurn,
+        firstTurn: PieceType = First_Player_TURN,
         currGameName: String? = null,
         ): GameImpl
 
@@ -87,5 +89,6 @@ interface GameImpl {
         playerTurn: PieceType = this.playerTurn,
         currGameName: String? = this.currGameName,
         board: Board? = this.board,
+        countPass: Int = this.countPass,
     ): GameImpl
 }

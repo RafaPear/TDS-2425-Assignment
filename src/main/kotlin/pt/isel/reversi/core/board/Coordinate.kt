@@ -33,14 +33,6 @@ data class Coordinate(val row: Int, val col: Int) {
     }
 
     /**
-     * Checks if this coordinate is equal to another.
-     * @param other The other coordinate to compare.
-     * @return True if both row and column are equal.
-     */
-    fun equals(other: Coordinate): Boolean =
-        this.row == other.row && this.col == other.col
-
-    /**
      * Adds two coordinates together.
      * @param other The coordinate to add.
      * @return The resulting coordinate.

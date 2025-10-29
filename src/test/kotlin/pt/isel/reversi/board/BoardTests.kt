@@ -27,7 +27,10 @@ class BoardTests {
         val indexes = listOf(0, 63)
         val expected = listOf(Coordinate(1,1), Coordinate(8,8))
 
-        assertContentEquals(expected, indexes.map { Board(8).run{ it.toCoordinate() } })
+        assertContentEquals(
+            expected,
+            indexes.map { Board(8).run{ it.toCoordinate() } }
+        )
     }
 
     @Test
