@@ -1,3 +1,11 @@
+plugins {
+    id("org.jetbrains.dokka")
+}
+
+repositories {
+    mavenCentral()
+}
+
 dependencies {
     // kotlin-stdlib
     implementation(kotlin("stdlib"))
