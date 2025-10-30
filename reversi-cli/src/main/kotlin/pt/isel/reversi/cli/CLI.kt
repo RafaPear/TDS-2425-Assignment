@@ -1,7 +1,7 @@
 package pt.isel.reversi.cli
 
 import pt.isel.reversi.core.Environment
-import pt.isel.reversi.core.Environment.firstPlayerTurn
+import pt.isel.reversi.core.Environment.First_Player_TURN
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.GameImpl
@@ -34,7 +34,7 @@ class CLI(
             dataAccess = LocalGDA(),
             players = emptyList(),
             target = false,
-            playerTurn = firstPlayerTurn,
+            playerTurn = First_Player_TURN,
             board = Board(Environment.BOARD_SIDE),
             currGameName = null,
         )

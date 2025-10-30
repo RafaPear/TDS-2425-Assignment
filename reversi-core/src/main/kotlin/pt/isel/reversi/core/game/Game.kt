@@ -1,6 +1,7 @@
 package pt.isel.reversi.core.game
 
-import pt.isel.reversi.core.Environment.firstPlayerTurn
+import pt.isel.reversi.core.Environment.DATA_ACCESS
+import pt.isel.reversi.core.Environment.First_Player_TURN
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
@@ -22,10 +23,24 @@ open class Game(
     override val dataAccess: GDAImpl,
     override val players: List<Player>,
     override val target: Boolean,
-    override val playerTurn: PieceType = firstPlayerTurn,
+    override val playerTurn: PieceType = First_Player_TURN,
     override val currGameName: String?,
-    override val board: Board?
+    override val board: Board?,
+    override val countPass: Int = 0,
 ) : GameImpl {
+
+    constructor() : this(
+        dataAccess = DATA_ACCESS,
+        players = emptyList(),
+        target = false,
+        playerTurn = First_Player_TURN,
+        currGameName = null,
+        board = null,
+    )
+
+    fun isStarted(): Boolean =
+        board != null && players.isNotEmpty()
+
     /**
      * Plays a move at the specified coordinate.
      * Saves the piece to data access if the game is not local.
@@ -37,37 +52,40 @@ open class Game(
      * @throws InvalidGameException if the game is not started yet (board is null).
      */
     override fun play(coordinate: Coordinate): GameImpl {
-        var newBoard = board ?: throw InvalidGameException(
-            message = "Game is not started yet (board is null)."
-        )
+        var newBoard = if (!isStarted()) throw InvalidGameException(
+            "Game is not started yet (board is null or players are empty)."
+        ) else board as Board
 
-        //if it is not a local game, and it is not the player's turn
+
+        //if it has only one player and is not his turn
         if (players.size == 1 && players[0].type != playerTurn) {
-            throw InvalidPlayException(
-                message = "It's not your turn"
-            )
+            throw InvalidPlayException("It's not your turn")
         }
 
         val piece = Piece(coordinate, playerTurn)
 
         newBoard = GameLogic().play(newBoard, myPiece = piece)
 
-        val newPlayers = players.map {
-            if (it.type == playerTurn) it.refresh(newBoard) else it
-        }
+        val newPlayers = players.map { it.refresh(newBoard) }
+
         val nextPlayerTurn = playerTurn.swap()
 
         // save the piece to the data access if game is not local
         val tempCurrGameName = currGameName
 
+
         if (tempCurrGameName != null) {
             dataAccess.postPiece(tempCurrGameName, piece)
+            if (countPass != 0) {
+                TODO("reset count pass in data access")
+            }
         }
 
         return this.copy(
             board = newBoard,
             players = newPlayers,
-            playerTurn = nextPlayerTurn
+            playerTurn = nextPlayerTurn,
+            countPass = 0
         )
     }
 
@@ -78,10 +96,14 @@ open class Game(
      * @throws java.io.IOException if there is an error accessing the data.
      */
     override fun pieceOptions(): List<PieceType> {
-        val tempCurrGameName = currGameName ?: return emptyList()
-        return dataAccess.getAvailablePieces(tempCurrGameName)
+        val tempCurrGameName = currGameName
+        return when {
+            tempCurrGameName != null -> dataAccess.getAvailablePieces(tempCurrGameName)
+            players.size == 1 -> players.map { it.type.swap() }
+            players.isEmpty() -> PieceType.entries
+            else -> emptyList()
+        }
     }
-
     /**
      * Sets the target mode for the game.
      * @param target True to enable target mode.
@@ -96,15 +118,17 @@ open class Game(
      * @throws InvalidGameException if the game is not started yet (board is null).
      */
     override fun getAvailablePlays(): List<Coordinate> {
+        if (!isStarted()) throw InvalidGameException(
+            message = "Game is not started yet (board is null)."
+        )
+
         // if it is not a local game, and it is not the player's turn
         if (players.size == 1 && players[0].type != playerTurn) {
             return emptyList()
         }
 
         return GameLogic().getAvailablePlays(
-            board = board ?: throw InvalidGameException(
-                message = "Game is not started yet (board is null)."
-            ),
+            board = board as Board,
             myPieceType = playerTurn
         )
     }
@@ -133,6 +157,10 @@ open class Game(
     }
 
     override fun pass(): GameImpl {
+        if (!isStarted()) throw InvalidGameException(
+            message = "Game is not started yet (board is null or players are empty)."
+        )
+
         if (players.size == 1 && players[0].type != playerTurn) {
             throw InvalidPlayException(
                 message = "It's not your turn"
@@ -144,8 +172,10 @@ open class Game(
         if (tempCurrGameName != null) {
             dataAccess.postPass(tempCurrGameName, playerTurn)
         }
+
         return this.copy(
-            playerTurn = playerTurn.swap()
+            playerTurn = playerTurn.swap(),
+            countPass = countPass + 1
         )
     }
 
@@ -154,8 +184,23 @@ open class Game(
         TODO("Not yet implemented")
     }
 
-    override fun poopBoard(): Board = TODO("Board is public, use the property directly")
+    override fun poopBoard(): Board {
+        if (currGameName == null) {
+            return board ?: throw InvalidGameException(
+                "Game is not started yet (board is null)."
+            )
+        }
+        TODO("Not yet implemented when game is not local")
+    }
 
+    fun equals(other: GameImpl): Boolean {
+        return this.players == other.players &&
+                this.target == other.target &&
+                this.playerTurn == other.playerTurn &&
+                this.currGameName == other.currGameName &&
+                this.board == other.board &&
+                this.countPass == other.countPass
+    }
 
     /**
      * Convenience copy function to mutate selected fields for tests.
@@ -167,6 +212,7 @@ open class Game(
         playerTurn: PieceType,
         currGameName: String?,
         board: Board?,
+        countPass: Int
     ): GameImpl =
         Game(
             dataAccess = dataAccess,
@@ -175,6 +221,7 @@ open class Game(
             board = board,
             target = target,
             playerTurn = playerTurn,
+            countPass = countPass
         )
 
     /**
@@ -186,7 +233,7 @@ open class Game(
         currGameName = path,
         board = Board(8),
         target = false,
-        playerTurn = firstPlayerTurn,
+        playerTurn = First_Player_TURN,
     )
 
     /**
@@ -194,11 +241,11 @@ open class Game(
      */
     class OnePlayer(dataAccess: GDAImpl, path: String) : Game(
         dataAccess = dataAccess,
-        players = listOf(Player(PieceType.BLACK, 0, 32)),
+        players = listOf(Player(PieceType.BLACK, 0)),
         currGameName = path,
         board = Board(8),
         target = false,
-        playerTurn = firstPlayerTurn,
+        playerTurn = First_Player_TURN,
     )
 
     /**
@@ -206,10 +253,10 @@ open class Game(
      */
     class TwoPlayers(dataAccess: GDAImpl, path: String) : Game(
         dataAccess = dataAccess,
-        players = listOf(Player(PieceType.BLACK, 0, 32), Player(PieceType.WHITE, 0, 32)),
+        players = listOf(Player(PieceType.BLACK, 0), Player(PieceType.WHITE, 0)),
         currGameName = path,
         board = Board(8),
         target = false,
-        playerTurn = firstPlayerTurn,
+        playerTurn = First_Player_TURN,
     )
 }
