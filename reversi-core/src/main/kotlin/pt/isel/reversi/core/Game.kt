@@ -1,16 +1,16 @@
 package pt.isel.reversi.core
 
-import pt.isel.reversi.core.Environment.DATA_ACCESS
-import pt.isel.reversi.core.Environment.First_Player_TURN
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.InvalidGameException
 import pt.isel.reversi.core.exceptions.InvalidPlayException
+import pt.isel.reversi.core.storage.GameState
+import pt.isel.reversi.storage.Storage
 
 /**
- * Lightweight test/dummy implementation of [GameImpl] used for data access and integration tests.
+ * Lightweight test/dummy implementation of [Game] used for data access and integration tests.
  *
  * Only acts as a structural carrier for required properties; behavioural methods are left as TODOs
  * so they surface if accidentally invoked in logic outside targeted tests. Use the nested helper
@@ -18,18 +18,18 @@ import pt.isel.reversi.core.exceptions.InvalidPlayException
  *
  * Note: This class is intentionally minimal and not suitable for exercising game logic.
  */
-open class Game(
-    override val dataAccess: GDAImpl,
-    override val players: List<Player>,
-    override val target: Boolean,
-    override val playerTurn: PieceType = First_Player_TURN,
-    override val currGameName: String?,
-    override val board: Board?,
-    override val countPass: Int = 0,
-) : GameImpl {
+data class Game(
+    val dataAccess: Storage<String, GameState, String>,
+    val players: List<Player>,
+    val target: Boolean,
+    val playerTurn: PieceType = First_Player_TURN,
+    val currGameName: String?,
+    val board: Board?,
+    val countPass: Int = 0,
+) {
 
     constructor() : this(
-        dataAccess = DATA_ACCESS,
+        dataAccess = FILE_DATA_ACCESS,
         players = emptyList(),
         target = false,
         playerTurn = First_Player_TURN,
@@ -50,7 +50,7 @@ open class Game(
      * @throws IllegalArgumentException if the position is out of bounds.
      * @throws InvalidGameException if the game is not started yet (board is null).
      */
-    override fun play(coordinate: Coordinate): GameImpl {
+    fun play(coordinate: Coordinate): Game {
         var newBoard = if (!isStarted()) throw InvalidGameException(
             "Game is not started yet (board is null or players are empty)."
         ) else board as Board
@@ -73,7 +73,8 @@ open class Game(
 
 
         if (tempCurrGameName != null) {
-            dataAccess.postPiece(tempCurrGameName, piece)
+            TODO("https://github.com/RafaPear/Reversi-Grupo1/issues/30")
+            //dataAccess.postPiece(tempCurrGameName, piece)
             if (countPass != 0) {
                 TODO("reset count pass in data access")
             }
@@ -93,14 +94,15 @@ open class Game(
      * @return List of available piece types.
      * @throws java.io.IOException if there is an error accessing the data.
      */
-    override fun pieceOptions(): List<PieceType> {
-        val tempCurrGameName = currGameName
-        return when {
-            tempCurrGameName != null -> dataAccess.getAvailablePieces(tempCurrGameName)
-            players.size == 1        -> players.map { it.type.swap() }
-            players.isEmpty()        -> PieceType.entries
-            else                     -> emptyList()
-        }
+    fun pieceOptions(): List<PieceType> {
+        TODO("https://github.com/RafaPear/Reversi-Grupo1/issues/30")
+        // val tempCurrGameName = currGameName
+        // return when {
+        //     tempCurrGameName != null -> dataAccess.getAvailablePieces(tempCurrGameName)
+        //     players.size == 1        -> players.map { it.type.swap() }
+        //     players.isEmpty()        -> PieceType.entries
+        //     else                     -> emptyList()
+        // }
     }
 
     /**
@@ -108,7 +110,7 @@ open class Game(
      * @param target True to enable target mode.
      * @return The updated game state.
      */
-    override fun setTargetMode(target: Boolean): GameImpl =
+    fun setTargetMode(target: Boolean): Game =
         this.copy(target = target)
 
     /** Gets the available plays for the current player.
@@ -116,7 +118,7 @@ open class Game(
      * @return List of available plays.
      * @throws InvalidGameException if the game is not started yet (board is null).
      */
-    override fun getAvailablePlays(): List<Coordinate> {
+    fun getAvailablePlays(): List<Coordinate> {
         if (!isStarted()) throw InvalidGameException(
             message = "Game is not started yet (board is null)."
         )
@@ -140,12 +142,12 @@ open class Game(
      * @param currGameName The current game name.
      * @return The new game state.
      */
-    override fun startNewGame(
-        side: Int,
-        players: List<Player>,
-        firstTurn: PieceType,
-        currGameName: String?,
-    ): GameImpl {
+    fun startNewGame(
+        side: Int = BOARD_SIDE,
+        players: List<Player> = emptyList(),
+        firstTurn: PieceType = First_Player_TURN,
+        currGameName: String? = null,
+    ): Game {
         val board = Board(side).startPieces()
         return this.copy(
             board = board,
@@ -155,7 +157,7 @@ open class Game(
         )
     }
 
-    override fun pass(): GameImpl {
+    fun pass(): Game {
         if (!isStarted()) throw InvalidGameException(
             message = "Game is not started yet (board is null or players are empty)."
         )
@@ -169,7 +171,8 @@ open class Game(
         val tempCurrGameName = currGameName
 
         if (tempCurrGameName != null) {
-            dataAccess.postPass(tempCurrGameName, playerTurn)
+            TODO("https://github.com/RafaPear/Reversi-Grupo1/issues/30")
+            //dataAccess.postPass(tempCurrGameName, playerTurn)
         }
 
         return this.copy(
@@ -178,11 +181,11 @@ open class Game(
         )
     }
 
-    override fun refresh(): GameImpl {
+    fun refresh(): Game {
         TODO("Not yet implemented")
     }
 
-    override fun poopBoard(): Board {
+    fun poopBoard(): Board {
         if (currGameName == null) {
             return board ?: throw InvalidGameException(
                 "Game is not started yet (board is null)."
@@ -191,7 +194,7 @@ open class Game(
         TODO("Not yet implemented when game is not local")
     }
 
-    fun equals(other: GameImpl): Boolean {
+    fun equals(other: Game): Boolean {
         return this.players == other.players &&
                this.target == other.target &&
                this.playerTurn == other.playerTurn &&
@@ -199,62 +202,4 @@ open class Game(
                this.board == other.board &&
                this.countPass == other.countPass
     }
-
-    /**
-     * Convenience copy function to mutate selected fields for tests.
-     */
-    override fun copy(
-        dataAccess: GDAImpl,
-        players: List<Player>,
-        target: Boolean,
-        playerTurn: PieceType,
-        currGameName: String?,
-        board: Board?,
-        countPass: Int
-    ): GameImpl =
-        Game(
-            dataAccess = dataAccess,
-            players = players,
-            currGameName = currGameName,
-            board = board,
-            target = target,
-            playerTurn = playerTurn,
-            countPass = countPass
-        )
-
-    /**
-     * Helper representing a game with no players — useful to test initial write semantics.
-     */
-    class EmptyPlayers(dataAccess: GDAImpl, path: String) : Game(
-        dataAccess = dataAccess,
-        players = emptyList(),
-        currGameName = path,
-        board = Board(8),
-        target = false,
-        playerTurn = First_Player_TURN,
-    )
-
-    /**
-     * Helper representing a game with a single black player.
-     */
-    class OnePlayer(dataAccess: GDAImpl, path: String) : Game(
-        dataAccess = dataAccess,
-        players = listOf(Player(PieceType.BLACK, 0)),
-        currGameName = path,
-        board = Board(8),
-        target = false,
-        playerTurn = First_Player_TURN,
-    )
-
-    /**
-     * Helper representing a game with two players (black and white).
-     */
-    class TwoPlayers(dataAccess: GDAImpl, path: String) : Game(
-        dataAccess = dataAccess,
-        players = listOf(Player(PieceType.BLACK, 0), Player(PieceType.WHITE, 0)),
-        currGameName = path,
-        board = Board(8),
-        target = false,
-        playerTurn = First_Player_TURN,
-    )
 }

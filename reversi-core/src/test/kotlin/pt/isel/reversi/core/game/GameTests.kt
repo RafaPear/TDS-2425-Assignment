@@ -1,5 +1,6 @@
 package pt.isel.reversi.core.game
 
+import pt.isel.reversi.core.FILE_DATA_ACCESS
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.Board
@@ -7,7 +8,6 @@ import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.InvalidGameException
 import pt.isel.reversi.core.exceptions.InvalidPlayException
-import pt.isel.reversi.core.storage.LocalGDA
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith
@@ -80,7 +80,7 @@ class GameTests {
             .changePiece(Coordinate(2, 2))
 
         val expectedGame = Game(
-            dataAccess = LocalGDA(),
+            dataAccess = FILE_DATA_ACCESS,
             board = expectedBoard,
             target = false,
             players = listOf(

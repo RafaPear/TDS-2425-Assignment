@@ -1,6 +1,6 @@
 package pt.isel.reversi.cli
 
-import pt.isel.reversi.core.GameImpl
+import pt.isel.reversi.core.Game
 import pt.rafap.ktflag.CommandParser
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandResultType
@@ -8,10 +8,10 @@ import pt.rafap.ktflag.style.Colors
 import pt.rafap.ktflag.style.Colors.colorText
 
 class CLI(
-    val commands: Array<CommandImpl<GameImpl>>,
+    val commands: Array<CommandImpl<Game>>,
     val debug: Boolean = false,
     val welcomeMessage: String = "Welcome to Reversi CLI!",
-    val debugCommands: Array<CommandImpl<GameImpl>> = arrayOf(),
+    val debugCommands: Array<CommandImpl<Game>> = arrayOf(),
 ) {
     private fun logDebug(message: String) {
         if (debug) println(colorText("[DEBUG] $message", Colors.YELLOW))
@@ -25,7 +25,7 @@ class CLI(
         /**
          * The current game board. Initialized with size 8.
          */
-        var game: GameImpl? = null
+        var game: Game? = null
 
         val commands = commands + debugCommands
 

@@ -22,7 +22,7 @@ action (e.g., start, move, pass, show). Utilizes KtFlag to streamline argument p
 ## Example of a command
 
 ```kotlin
-object ExampleCmd : CommandImpl<GameImpl>() {
+object ExampleCmd : CommandImpl<Game>() {
     override val info: CommandInfo = CommandInfo(
         title = "Example Command",
         description = "An example command that demonstrates structure.",
@@ -35,8 +35,8 @@ object ExampleCmd : CommandImpl<GameImpl>() {
 
     override fun execute(
         vararg args: String,
-        context: GameImpl?
-    ): CommandResult<GameImpl> {
+        context: Game?
+    ): CommandResult<Game> {
         println("Executing example command...")
 
         return CommandResult.SUCCESS("Example command executed successfully", context)

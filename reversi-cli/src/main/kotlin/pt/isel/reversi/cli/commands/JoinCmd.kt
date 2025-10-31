@@ -1,7 +1,8 @@
 package pt.isel.reversi.cli.commands
 
+import pt.isel.reversi.core.First_Player_TURN
+import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.GameImpl
 import pt.isel.reversi.core.Player
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
@@ -11,7 +12,7 @@ import pt.rafap.ktflag.cmd.CommandResult.ERROR
 /**
  * Command to join a game.
  */
-object JoinCmd : CommandImpl<GameImpl>() {
+object JoinCmd : CommandImpl<Game>() {
     override val info: CommandInfo = CommandInfo(
         title = "Join",
         description = "Joins a game with the specified first player.",
@@ -22,15 +23,17 @@ object JoinCmd : CommandImpl<GameImpl>() {
         maxArgs = 1
     )
 
-    override fun execute(vararg args: String, context: GameImpl?): CommandResult<GameImpl> {
+    override fun execute(vararg args: String, context: Game?): CommandResult<Game> {
         val name: String = args[0]
         if (context == null) {
             return ERROR("Game is not defined. Cannot join a game.")
         }
 
         try {
-            var game: GameImpl = context.copy(
+            val firstPlayerTurn = context.players.firstOrNull()?.type ?: First_Player_TURN
+            var game: Game = context.startNewGame(
                 currGameName = name,
+                firstTurn = firstPlayerTurn
             )
 
             val pieces = game.pieceOptions()
@@ -50,7 +53,7 @@ object JoinCmd : CommandImpl<GameImpl>() {
                     selectedPiece
                 } else pieces.first()
 
-            game = game.copy(players = listOf(Player(piece))).refresh()
+            game = game.startNewGame(players = listOf(Player(piece))).refresh()
 
             return CommandResult.SUCCESS("Game created Successfully", game)
         } catch (e: Exception) {

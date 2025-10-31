@@ -2,7 +2,6 @@ package pt.isel.reversi.cli.commands
 
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.GameImpl
 import pt.isel.reversi.core.Player
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
@@ -12,7 +11,7 @@ import pt.rafap.ktflag.cmd.CommandResult.ERROR
 /**
  * Command to create a new game with the specified first player.
  */
-object NewCmd : CommandImpl<GameImpl>() {
+object NewCmd : CommandImpl<Game>() {
 
     private val pieceTypes = PieceType.entries.joinToString("|") { it.symbol.toString() }
 
@@ -26,14 +25,14 @@ object NewCmd : CommandImpl<GameImpl>() {
         maxArgs = 2
     )
 
-    override fun execute(vararg args: String, context: GameImpl?): CommandResult<GameImpl> {
+    override fun execute(vararg args: String, context: Game?): CommandResult<Game> {
         val playerType = PieceType.entries.find { it.symbol.toString() == args[0] } ?:
         return ERROR("First player must be one of: $pieceTypes")
         val player = Player(playerType)
 
         val name: String? = if (args.size == 2) args[1] else null
 
-        val game: GameImpl =
+        val game: Game =
             if (name != null) {
                 return ERROR("Local Multi-player (multi process) are not yet supported.")
                 Game().startNewGame(players = listOf(player))

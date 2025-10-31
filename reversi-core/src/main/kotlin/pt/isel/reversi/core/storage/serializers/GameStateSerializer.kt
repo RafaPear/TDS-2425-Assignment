@@ -1,15 +1,13 @@
 package pt.isel.reversi.core.storage.serializers
 
-import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.GameImpl
-import pt.isel.reversi.core.storage.GameFile
+import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.storage.Serializer
 
-class GameFileSerializer: Serializer<GameFile, String> {
+class GameStateSerializer: Serializer<GameState, String> {
     private val pieceSerializer = PieceSerializer()
     private val pieceTypeSerializer = PieceTypeSerializer()
 
-    override fun serialize(obj: GameFile): String {
+    override fun serialize(obj: GameState): String {
         require(obj.lastPlayer != null) { "Cannot serialize a game with no last player." }
 
         val sb = StringBuilder()
@@ -24,7 +22,7 @@ class GameFileSerializer: Serializer<GameFile, String> {
         return sb.toString()
     }
 
-    override fun deserialize(obj: String): GameFile {
+    override fun deserialize(obj: String): GameState {
         var parts = obj.split("\n")
 
         val lastPlayer = pieceTypeSerializer.deserialize(parts[0].first())
@@ -32,6 +30,6 @@ class GameFileSerializer: Serializer<GameFile, String> {
 
         val pieces = parts.map { pieceSerializer.deserialize(it) }
 
-        return GameFile(lastPlayer, pieces)
+        return GameState(lastPlayer, pieces)
     }
 }

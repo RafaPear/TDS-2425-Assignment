@@ -1,6 +1,6 @@
 package pt.isel.reversi.cli.commands
 
-import pt.isel.reversi.core.GameImpl
+import pt.isel.reversi.core.Game
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
@@ -9,7 +9,7 @@ import pt.rafap.ktflag.cmd.CommandResult.ERROR
 /**
  * Command to do a pass in a game.
  */
-object PassCmd : CommandImpl<GameImpl>() {
+object PassCmd : CommandImpl<Game>() {
     override val info: CommandInfo = CommandInfo(
         title = "Pass",
         description = "Passes the current player's turn.",
@@ -20,7 +20,7 @@ object PassCmd : CommandImpl<GameImpl>() {
         maxArgs = 0
     )
 
-    override fun execute(vararg args: String, context: GameImpl?): CommandResult<GameImpl> {
+    override fun execute(vararg args: String, context: Game?): CommandResult<Game> {
         if (context == null) {
             return ERROR("Game is not defined. Cannot join a game.")
         }

@@ -1,12 +1,12 @@
 package pt.isel.reversi.cli.commands
 
+import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
-import pt.isel.reversi.core.GameImpl
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
 
-object ShowCmd : CommandImpl<GameImpl>() {
+object ShowCmd : CommandImpl<Game>() {
     override val info: CommandInfo = CommandInfo(
         title = "Show",
         description = "Shows the current game state.",
@@ -19,8 +19,8 @@ object ShowCmd : CommandImpl<GameImpl>() {
 
     override fun execute(
         vararg args: String,
-        context: GameImpl?
-    ): CommandResult<GameImpl> {
+        context: Game?
+    ): CommandResult<Game> {
         if (context == null)
             return CommandResult.ERROR("Game is not defined. Cannot show game state.")
 

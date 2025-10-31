@@ -110,7 +110,7 @@
             <mxPoint x="6" y="1" as="offset" />
           </mxGeometry>
         </mxCell>
-        <mxCell id="h26antcdEFqVnhBKVUjH-1" value="&lt;div&gt;«interface»&lt;b&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;GameImpl&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
+        <mxCell id="h26antcdEFqVnhBKVUjH-1" value="&lt;div&gt;«interface»&lt;b&gt;&lt;/b&gt;&lt;/div&gt;&lt;b&gt;Game&lt;/b&gt;" style="html=1;whiteSpace=wrap;fillColor=#e1d5e7;strokeColor=#9673a6;movable=1;resizable=1;rotatable=1;deletable=1;editable=1;locked=0;connectable=1;" parent="1" vertex="1">
           <mxGeometry x="1090" y="740" width="120" height="40" as="geometry" />
         </mxCell>
         <mxCell id="_7LamVgD2aGZSVK6VavG-78" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;exitX=1;exitY=0.5;exitDx=0;exitDy=0;endArrow=none;endFill=0;movable=0;resizable=0;rotatable=0;deletable=0;editable=0;locked=1;connectable=0;" parent="1" source="h26antcdEFqVnhBKVUjH-2" edge="1">
