@@ -80,7 +80,7 @@ class GameTests {
             .changePiece(Coordinate(2, 2))
 
         val expectedGame = Game(
-            dataAccess = FILE_DATA_ACCESS,
+            storage = FILE_DATA_ACCESS,
             board = expectedBoard,
             target = false,
             players = listOf(

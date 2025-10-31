@@ -34,8 +34,7 @@ object NewCmd : CommandImpl<Game>() {
 
         val game: Game =
             if (name != null) {
-                return ERROR("Local Multi-player (multi process) are not yet supported.")
-                Game().startNewGame(players = listOf(player))
+                Game().startNewGame(players = listOf(player), currGameName = name)
             } else {
                 Game().startNewGame(players = listOf(player, player.swap()))
             }

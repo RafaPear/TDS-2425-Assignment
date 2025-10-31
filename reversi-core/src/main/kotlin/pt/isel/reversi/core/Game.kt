@@ -19,7 +19,7 @@ import pt.isel.reversi.storage.Storage
  * Note: This class is intentionally minimal and not suitable for exercising game logic.
  */
 data class Game(
-    val dataAccess: Storage<String, GameState, String>,
+    val storage: Storage<String, GameState, String>,
     val players: List<Player>,
     val target: Boolean,
     val playerTurn: PieceType = First_Player_TURN,
@@ -29,7 +29,7 @@ data class Game(
 ) {
 
     constructor() : this(
-        dataAccess = FILE_DATA_ACCESS,
+        storage = FILE_DATA_ACCESS,
         players = emptyList(),
         target = false,
         playerTurn = First_Player_TURN,
@@ -149,6 +149,7 @@ data class Game(
         currGameName: String? = null,
     ): Game {
         val board = Board(side).startPieces()
+        TODO("Verify if the name is null, if not run the new game from the storage function")
         return this.copy(
             board = board,
             players = players.map { it.refresh(board) },
@@ -183,23 +184,5 @@ data class Game(
 
     fun refresh(): Game {
         TODO("Not yet implemented")
-    }
-
-    fun poopBoard(): Board {
-        if (currGameName == null) {
-            return board ?: throw InvalidGameException(
-                "Game is not started yet (board is null)."
-            )
-        }
-        TODO("Not yet implemented when game is not local")
-    }
-
-    fun equals(other: Game): Boolean {
-        return this.players == other.players &&
-               this.target == other.target &&
-               this.playerTurn == other.playerTurn &&
-               this.currGameName == other.currGameName &&
-               this.board == other.board &&
-               this.countPass == other.countPass
     }
 }
