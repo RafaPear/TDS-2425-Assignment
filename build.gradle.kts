@@ -47,7 +47,10 @@ tasks.dokkaHtmlMultiModule {
     includes.from("README.md")
     pluginConfiguration<DokkaBase, DokkaBaseConfiguration> {
         footerMessage = "(c) 2025 ISEL"
-        customAssets = listOf(file("UML_Structure.drawio.png"))
+        // Add all images png from the docs/assets folder to the final documentation
+        customAssets += fileTree("images") {
+            include("**/*.png")
+        }
         separateInheritedMembers = false
         mergeImplicitExpectActualDeclarations = true
     }

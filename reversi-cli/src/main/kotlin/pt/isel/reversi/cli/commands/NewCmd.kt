@@ -1,13 +1,9 @@
 package pt.isel.reversi.cli.commands
 
-import pt.isel.reversi.core.Environment
-import pt.isel.reversi.core.Environment.First_Player_TURN
-import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.game.Game
-import pt.isel.reversi.core.game.GameImpl
-import pt.isel.reversi.core.game.Player
-import pt.isel.reversi.core.game.localgda.LocalGDA
+import pt.isel.reversi.core.Game
+import pt.isel.reversi.core.GameImpl
+import pt.isel.reversi.core.Player
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
@@ -31,29 +27,18 @@ object NewCmd : CommandImpl<GameImpl>() {
     )
 
     override fun execute(vararg args: String, context: GameImpl?): CommandResult<GameImpl> {
-        val firstPlayer = PieceType
-                              .entries
-                              .find { it.symbol.toString() == args[0] }
-                          ?: return ERROR("First player must be one of: $pieceTypes")
+        val playerType = PieceType.entries.find { it.symbol.toString() == args[0] } ?:
+        return ERROR("First player must be one of: $pieceTypes")
+        val player = Player(playerType)
 
         val name: String? = if (args.size == 2) args[1] else null
 
-        val baseGame = Game(
-            dataAccess = LocalGDA(),
-            players = emptyList(),
-            target = false,
-            playerTurn = First_Player_TURN,
-            board = Board(Environment.BOARD_SIDE),
-            currGameName = null,
-        )
-
         val game: GameImpl =
             if (name != null) {
-                baseGame.copy(currGameName = name)
+                return ERROR("Local Multi-player (multi process) are not yet supported.")
+                Game().startNewGame(players = listOf(player))
             } else {
-                baseGame.copy(
-                    players = baseGame.players + Player(firstPlayer.swap()),
-                )
+                Game().startNewGame(players = listOf(player, player.swap()))
             }
 
         return CommandResult.SUCCESS("Game created Successfully", game)

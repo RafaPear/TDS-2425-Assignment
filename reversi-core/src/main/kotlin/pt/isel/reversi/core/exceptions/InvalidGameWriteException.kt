@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game.exceptions
+package pt.isel.reversi.core.exceptions
 
 /**
  * Thrown when an attempt is made to write a game snapshot over an existing persisted file
@@ -10,7 +10,7 @@ package pt.isel.reversi.core.game.exceptions
  * Consumers should treat this as a precondition failure and surface a clear error to the user
  * (for example: request a fresh game file or confirm overwrite with side conversion).
  *
- * @see pt.isel.reversi.core.game.localgda.LocalGDA
+ * @see pt.isel.reversi.core.storage.LocalGDA
  */
 class InvalidGameWriteException(
     override val message: String = "The game write is invalid"

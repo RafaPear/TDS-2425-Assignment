@@ -1,7 +1,7 @@
 package pt.isel.reversi.cli.commands
 
 import pt.isel.reversi.core.board.Coordinate
-import pt.isel.reversi.core.game.GameImpl
+import pt.isel.reversi.core.GameImpl
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult

@@ -1,4 +1,4 @@
-Module CLI
+Module reversi-cli
 
 This module implements the core domain logic and persistence contracts.
 

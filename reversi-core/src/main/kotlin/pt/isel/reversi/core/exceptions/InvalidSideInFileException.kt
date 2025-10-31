@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game.exceptions
+package pt.isel.reversi.core.exceptions
 
 /**
  * Thrown when the persisted game file contains an invalid or missing `side:` header.
@@ -10,7 +10,7 @@ package pt.isel.reversi.core.game.exceptions
  * This is a domain-level error signalling that the file cannot be used to
  * reconstruct a [pt.isel.reversi.core.board.Board].
  *
- * @see pt.isel.reversi.core.game.localgda.GameFileAccess
+ * @see pt.isel.reversi.core.storage.GameFileAccess
  */
 class InvalidSideInFileException(
     override val message: String = "The side in the file is invalid"

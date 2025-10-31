@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game
+package pt.isel.reversi.core
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Piece
@@ -52,9 +52,9 @@ interface GDAImpl {
      * @param fileName path or identifier of the game resource
      * @return the reconstructed [Board]
      * @throws java.io.IOException on underlying I/O errors from the persistence layer
-     * @throws pt.isel.reversi.core.game.exceptions.InvalidSideInFileException if the persisted
+     * @throws pt.isel.reversi.core.exceptions.InvalidSideInFileException if the persisted
      *         side header is missing/invalid
-     * @throws pt.isel.reversi.core.game.exceptions.InvalidPieceInFileException if a persisted
+     * @throws pt.isel.reversi.core.exceptions.InvalidPieceInFileException if a persisted
      *         piece line is malformed
      */
     fun getBoard(fileName: String): Board

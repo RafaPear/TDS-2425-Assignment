@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game
+package pt.isel.reversi.core
 
 import pt.isel.reversi.core.Environment.DATA_ACCESS
 import pt.isel.reversi.core.Environment.First_Player_TURN
@@ -6,8 +6,8 @@ import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.game.exceptions.InvalidGameException
-import pt.isel.reversi.core.game.exceptions.InvalidPlayException
+import pt.isel.reversi.core.exceptions.InvalidGameException
+import pt.isel.reversi.core.exceptions.InvalidPlayException
 
 /**
  * Lightweight test/dummy implementation of [GameImpl] used for data access and integration tests.
@@ -18,7 +18,6 @@ import pt.isel.reversi.core.game.exceptions.InvalidPlayException
  *
  * Note: This class is intentionally minimal and not suitable for exercising game logic.
  */
-@Suppress("unused")
 open class Game(
     override val dataAccess: GDAImpl,
     override val players: List<Player>,

@@ -1,7 +1,5 @@
-import pt.isel.reversi.core.board.Board
-import pt.isel.reversi.core.board.Coordinate
-import pt.isel.reversi.core.board.Piece
-import pt.isel.reversi.core.board.PieceType
+package pt.isel.reversi.core.board
+
 import kotlin.test.Test
 import kotlin.test.assertContentEquals
 import kotlin.test.assertEquals

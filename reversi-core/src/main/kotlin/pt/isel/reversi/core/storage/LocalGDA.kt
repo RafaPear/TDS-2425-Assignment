@@ -1,11 +1,11 @@
-package pt.isel.reversi.core.game.localgda
+package pt.isel.reversi.core.storage
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.game.GDAImpl
-import pt.isel.reversi.core.game.GameImpl
-import pt.isel.reversi.core.game.exceptions.InvalidGameWriteException
+import pt.isel.reversi.core.GDAImpl
+import pt.isel.reversi.core.GameImpl
+import pt.isel.reversi.core.exceptions.InvalidGameWriteException
 import java.io.File
 
 /**
@@ -88,9 +88,9 @@ class LocalGDA : GDAImpl {
      * @param fileName target game file path or identifier
      * @return reconstructed [Board]
      * @throws java.io.IOException when the underlying file I/O fails
-     * @throws pt.isel.reversi.core.game.exceptions.InvalidSideInFileException when the side header
+     * @throws pt.isel.reversi.core.exceptions.InvalidSideInFileException when the side header
      *         is missing or invalid
-     * @throws pt.isel.reversi.core.game.exceptions.InvalidPieceInFileException when a piece line is malformed
+     * @throws pt.isel.reversi.core.exceptions.InvalidPieceInFileException when a piece line is malformed
      */
     override fun getBoard(fileName: String): Board = GameFileAccess.readBoard(File(fileName))
 

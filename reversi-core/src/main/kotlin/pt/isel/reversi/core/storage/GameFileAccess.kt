@@ -1,13 +1,13 @@
-package pt.isel.reversi.core.game.localgda
+package pt.isel.reversi.core.storage
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.game.GameImpl
-import pt.isel.reversi.core.game.exceptions.InvalidAvailablePiecesInFileException
-import pt.isel.reversi.core.game.exceptions.InvalidPieceInFileException
-import pt.isel.reversi.core.game.exceptions.InvalidSideInFileException
+import pt.isel.reversi.core.GameImpl
+import pt.isel.reversi.core.exceptions.InvalidAvailablePiecesInFileException
+import pt.isel.reversi.core.exceptions.InvalidPieceInFileException
+import pt.isel.reversi.core.exceptions.InvalidSideInFileException
 import java.io.File
 
 /**

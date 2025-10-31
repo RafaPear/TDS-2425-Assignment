@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game.exceptions
+package pt.isel.reversi.core.exceptions
 
 /**
  * Thrown when the persisted game file contains an invalid or missing `availablePieces:` header.
@@ -10,7 +10,7 @@ package pt.isel.reversi.core.game.exceptions
  * Consumers should treat this as a recoverable file-format error and present a clear
  * message to the user or offer to recreate the game file.
  *
- * @see pt.isel.reversi.core.game.localgda.GameFileAccess
+ * @see pt.isel.reversi.core.storage.GameFileAccess
  */
 class InvalidAvailablePiecesInFileException(
     override val message: String = "The availablePieces in the file is invalid"

@@ -1,11 +1,13 @@
 package pt.isel.reversi.core.game
 
+import pt.isel.reversi.core.Game
+import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.game.exceptions.InvalidGameException
-import pt.isel.reversi.core.game.exceptions.InvalidPlayException
-import pt.isel.reversi.core.game.localgda.LocalGDA
+import pt.isel.reversi.core.exceptions.InvalidGameException
+import pt.isel.reversi.core.exceptions.InvalidPlayException
+import pt.isel.reversi.core.storage.LocalGDA
 import kotlin.test.Test
 import kotlin.test.assertEquals
 import kotlin.test.assertFailsWith

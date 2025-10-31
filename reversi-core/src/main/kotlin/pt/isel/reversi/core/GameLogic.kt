@@ -1,10 +1,10 @@
-package pt.isel.reversi.core.game
+package pt.isel.reversi.core
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.game.exceptions.InvalidPlayException
+import pt.isel.reversi.core.exceptions.InvalidPlayException
 
 class GameLogic {
     /**

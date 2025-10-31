@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game
+package pt.isel.reversi.core
 
 import pt.isel.reversi.core.Environment.BOARD_SIDE
 import pt.isel.reversi.core.Environment.First_Player_TURN

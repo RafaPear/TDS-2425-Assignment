@@ -1,11 +1,12 @@
 package pt.isel.reversi.core.game
 
+import pt.isel.reversi.core.GameLogic
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType.BLACK
 import pt.isel.reversi.core.board.PieceType.WHITE
-import pt.isel.reversi.core.game.exceptions.InvalidPlayException
+import pt.isel.reversi.core.exceptions.InvalidPlayException
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 

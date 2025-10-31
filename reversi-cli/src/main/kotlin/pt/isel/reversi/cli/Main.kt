@@ -22,7 +22,7 @@ fun main(args: Array<String>) {
     val debug = parsed[debugArg] != null
 
     val cli = CLI(
-        arrayOf(PlayCmd, PassCmd, NewCmd, JoinCmd, ExitCmd),
+        arrayOf(PlayCmd, PassCmd, NewCmd, JoinCmd, ExitCmd, ShowCmd),
         debug
     )
     cli.startLoop()

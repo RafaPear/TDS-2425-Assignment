@@ -1,3 +1,3 @@
-package pt.isel.reversi.core.game.exceptions
+package pt.isel.reversi.core.exceptions
 
 class InvalidPlayException(message: String) : Exception(message)

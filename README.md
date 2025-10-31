@@ -10,12 +10,12 @@ separation of concerns, explicit domain modeling, and pluggable persistence.
 - Local filesystem persistence (text format) via `LocalGDA`
 - CLI shell with commands (start, join, move, pass, help, quit)
 - Structured result codes for persistence feedback
-- Unit tests (board + data access layer)
+- Unit tests (board and data access layer)
 - Generated documentation (Dokka) with curated package overviews
 
-## Structure Image
+## Project Structure
 
-![Module Structure](UML_Structure.drawio.png)
+![Project Structure](images/UML_Structure.drawio.png)
 
 ## Quick Start
 
@@ -44,6 +44,8 @@ java -jar build\libs\Reversi-0.0.1-all.jar
 | `pt.isel.reversi.cli`                | CLI loop & rendering utilities                                   |
 | `pt.isel.reversi.cli.commands`       | Discrete command handlers for user actions                       |
 
+![Module Structure](images/Module_Structure.drawio.png)
+
 For in-depth narrative descriptions see `Module.md` (also surfaced in generated Dokka docs).
 
 ## Local Persistence (LocalGDA)
@@ -54,7 +56,7 @@ line-oriented and intentionally simple so it can be inspected and edited by hand
 Supported line kinds (order is flexible for headers; moves/passes are chronological):
 
 ```
-availablePieces: SYMBOL(|SYMBOL)*   # available piece symbols separated by '|', e.g. "#|@"
+availablePieces: SYMBOL(|SYMBOL)*    # available piece symbols separated by '|', e.g. "#|@"
 side: N                              # integer board side (even, e.g. 8)
 player: SYMBOL points playsLeft      # optional player lines
 piece: row col SYMBOL                # a played piece; row and col are integers

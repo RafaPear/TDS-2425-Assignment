@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game
+package pt.isel.reversi.core
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType

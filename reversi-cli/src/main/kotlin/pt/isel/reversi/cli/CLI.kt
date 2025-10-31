@@ -1,11 +1,6 @@
 package pt.isel.reversi.cli
 
-import pt.isel.reversi.core.Environment
-import pt.isel.reversi.core.Environment.First_Player_TURN
-import pt.isel.reversi.core.board.Board
-import pt.isel.reversi.core.game.Game
-import pt.isel.reversi.core.game.GameImpl
-import pt.isel.reversi.core.game.localgda.LocalGDA
+import pt.isel.reversi.core.GameImpl
 import pt.rafap.ktflag.CommandParser
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandResultType
@@ -30,14 +25,7 @@ class CLI(
         /**
          * The current game board. Initialized with size 8.
          */
-        var game: GameImpl = Game(
-            dataAccess = LocalGDA(),
-            players = emptyList(),
-            target = false,
-            playerTurn = First_Player_TURN,
-            board = Board(Environment.BOARD_SIDE),
-            currGameName = null,
-        )
+        var game: GameImpl? = null
 
         val commands = commands + debugCommands
 

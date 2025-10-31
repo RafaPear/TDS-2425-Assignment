@@ -1,4 +1,4 @@
-package pt.isel.reversi.core.game
+package pt.isel.reversi.core
 
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
@@ -20,5 +20,17 @@ data class Player(
                 PieceType.WHITE -> board.totalWhitePieces()
             },
         )
+    }
+
+    /**
+     * Swaps the player's piece type.
+     * @return A new Player instance with the swapped piece type.
+     */
+    fun swap(): Player {
+        val swappedType = when (type) {
+            PieceType.BLACK -> PieceType.WHITE
+            PieceType.WHITE -> PieceType.BLACK
+        }
+        return Player(type = swappedType)
     }
 }
