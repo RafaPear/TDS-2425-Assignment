@@ -1,5 +1,6 @@
 package pt.isel.reversi.core.storage
 
+import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
 
@@ -9,6 +10,7 @@ import pt.isel.reversi.core.board.PieceType
  * @property board The current state of the game board, or null if the board is not initialized.
  */
 data class GameState(
+    val players: List<Player>,
     val lastPlayer: PieceType,
     val board: Board
 )

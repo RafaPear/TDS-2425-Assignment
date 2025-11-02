@@ -11,6 +11,10 @@ class GameStateFileStorageTest {
     val storage = FILE_DATA_ACCESS.copy(folder = "test-saves")
 
     val defaultGameState = GameState(
+        players = listOf(
+            Player(PieceType.BLACK),
+            Player(PieceType.WHITE)
+        ),
         lastPlayer = PieceType.BLACK,
         board = Board(8).startPieces()
     )
@@ -66,10 +70,7 @@ class GameStateFileStorageTest {
     fun `Run new, save and load works`() {
         cleanup {
             val gs1 = storage.new(1.toString()) {
-                GameState(
-                    PieceType.WHITE,
-                    Board(8).startPieces()
-                )
+                defaultGameState
             }.copy(lastPlayer = PieceType.BLACK)
 
             storage.save(1.toString(), gs1)

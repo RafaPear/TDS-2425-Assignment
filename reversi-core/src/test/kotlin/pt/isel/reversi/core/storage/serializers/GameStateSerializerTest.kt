@@ -1,6 +1,7 @@
 package pt.isel.reversi.core.storage.serializers
 
 import org.junit.Test
+import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
@@ -22,7 +23,11 @@ class GameStateSerializerTest {
             }
             val board = Board(side, pieces)
             val currentPlayer = PieceType.entries.random()
-            val gameState = GameState(currentPlayer, board)
+            val players = listOf(
+                Player(PieceType.BLACK),
+                Player(PieceType.WHITE)
+            )
+            val gameState = GameState(players, currentPlayer, board)
             list += gameState
         }
         list
