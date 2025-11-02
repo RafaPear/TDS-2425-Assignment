@@ -5,21 +5,21 @@ import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.storage.Serializer
 
+/**
+ * Serializer for the GameState class, converting it to and from a String representation.
+ */
 class GameStateSerializer : Serializer<GameState, String> {
     private val pieceTypeSerializer = PieceTypeSerializer()
     private val boardSerializer = BoardSerializer()
 
     override fun serialize(obj: GameState): String {
-        // requireNotNull(obj.lastPlayer) { "lastPlayer cannot be null" }
-        // requireNotNull(obj.board) { "board cannot be null" }
+        requireNotNull(obj.lastPlayer) { "lastPlayer cannot be null" }
+        requireNotNull(obj.board) { "board cannot be null" }
 
         val sb = StringBuilder()
 
-        if (obj.lastPlayer == null) sb.appendLine()
-        else sb.appendLine(pieceTypeSerializer.serialize(obj.lastPlayer))
-
-        if (obj.board == null) sb.appendLine()
-        else sb.appendLine(boardSerializer.serialize(obj.board))
+        sb.appendLine(pieceTypeSerializer.serialize(obj.lastPlayer))
+        sb.appendLine(boardSerializer.serialize(obj.board))
 
         return sb.toString()
     }
@@ -43,6 +43,10 @@ class GameStateSerializer : Serializer<GameState, String> {
 
         val lastPlayer = getLastPlayerPart(parts)
         val board = getBoardPart(parts)
+
+        require(lastPlayer != null) { "Corrupted Game Save: LastPlayer does not exist" }
+        require(board != null) { "Corrupted Game Save: Board does not exist" }
+
         return GameState(
             lastPlayer = lastPlayer,
             board = board

@@ -6,6 +6,10 @@ import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.InvalidPlayException
 
+/**
+ * Contains the core game logic for Reversi, including methods to play a piece,
+ * check for valid moves, and find capturable pieces.
+ */
 class GameLogic {
     /**
      * Plays a piece on the board and returns the new state of the board.

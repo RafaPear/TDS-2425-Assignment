@@ -10,6 +10,11 @@ import kotlin.test.assertFails
 class GameStateFileStorageTest {
     val storage = FILE_DATA_ACCESS.copy(folder = "test-saves")
 
+    val defaultGameState = GameState(
+        lastPlayer = PieceType.BLACK,
+        board = Board(8).startPieces()
+    )
+
     fun cleanup(func: () -> Unit) {
         File("test-saves").deleteRecursively()
         func()
@@ -21,10 +26,10 @@ class GameStateFileStorageTest {
         cleanup {
             assertFails {
                 storage.new(1.toString()) {
-                    GameState()
+                    defaultGameState
                 }
                 storage.new(1.toString()) {
-                    GameState()
+                    defaultGameState
                 }
             }
         }
@@ -34,7 +39,7 @@ class GameStateFileStorageTest {
     fun `Run save at a non existing id fails`() {
         cleanup {
             assertFails {
-                storage.save(1.toString(), GameState())
+                storage.save(1.toString(), defaultGameState)
             }
         }
     }
@@ -50,7 +55,7 @@ class GameStateFileStorageTest {
     @Test
     fun `Run new and load works`() {
         cleanup {
-            val gs1 = storage.new(1.toString()) { GameState() }
+            val gs1 = storage.new(1.toString()) { defaultGameState }
             val gs2 = storage.load(1.toString())
 
             assert(gs1 == gs2)
@@ -78,7 +83,7 @@ class GameStateFileStorageTest {
     @Test
     fun `Run new, delete and load returns null`() {
         cleanup {
-            storage.new(1.toString()) { GameState() }
+            storage.new(1.toString()) { defaultGameState }
             storage.delete(1.toString())
             val gs = storage.load(1.toString())
 
@@ -92,66 +97,6 @@ class GameStateFileStorageTest {
             assertFails {
                 storage.delete(1.toString())
             }
-        }
-    }
-
-    @Test
-    fun `Run new with null fields and load works`() {
-        cleanup {
-            val gs1 = storage.new(1.toString()) { GameState(null, null) }
-            val gs2 = storage.load(1.toString())
-
-            assert(gs1 == gs2)
-        }
-    }
-
-    @Test
-    fun `Run new with only lastPlayer null and load works`() {
-        cleanup {
-            val gs1 = storage.new(1.toString()) {
-                GameState(
-                    null,
-                    Board(8).startPieces()
-                )
-            }
-            val gs2 = storage.load(1.toString())
-
-            assert(gs1 == gs2)
-        }
-    }
-
-    @Test
-    fun `Run new with only board null and load works`() {
-        cleanup {
-            val gs1 = storage.new(1.toString()) {
-                GameState(
-                    PieceType.BLACK,
-                    null
-                )
-            }
-            val gs2 = storage.load(1.toString())
-
-            assert(gs1 == gs2)
-        }
-    }
-
-    @Test
-    fun `Run new, save with null fields and load works`() {
-        cleanup {
-            val gs1 = storage.new(1.toString()) {
-                GameState(
-                    PieceType.WHITE,
-                    Board(8).startPieces()
-                )
-            }
-
-            val gs2 = gs1.copy(lastPlayer = null, board = null)
-
-            storage.save(1.toString(), gs2)
-
-            val gs3 = storage.load(1.toString())
-
-            assert(gs2 == gs3)
         }
     }
 }

@@ -7,6 +7,7 @@ import pt.rafap.ktflag.cmd.CommandResultType
 import pt.rafap.ktflag.style.Colors
 import pt.rafap.ktflag.style.Colors.colorText
 
+
 class CLI(
     val commands: Array<CommandImpl<Game>>,
     val debug: Boolean = false,

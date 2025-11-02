@@ -4,6 +4,9 @@ import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.storage.Serializer
 
+/**
+ * Serializer for the Board class, converting it to and from a String representation.
+ */
 class BoardSerializer: Serializer<Board, String> {
     private val pieceSerializer = PieceSerializer()
 
