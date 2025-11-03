@@ -1,7 +1,6 @@
 package pt.isel.reversi.cli.commands
 
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.board.Board
 import pt.rafap.ktflag.cmd.CommandResultType
 import kotlin.test.Test
 
