@@ -4,6 +4,9 @@ import pt.isel.reversi.cli.commands.*
 import pt.rafap.ktflag.cmd.args.CommandArg
 import pt.rafap.ktflag.cmd.args.CommandArgsParser
 
+/**
+ * Command-line arguments: debug flag enables internal debug commands and extra diagnostics.
+ */
 private val debugArg = CommandArg(
     name = "Debug",
     description = "Enables debug mode with additional commands.",
@@ -12,6 +15,19 @@ private val debugArg = CommandArg(
     returnsValue = false,
 )
 
+val allCommands = arrayOf(
+    PlayCmd,
+    PassCmd,
+    NewCmd,
+    JoinCmd,
+    ExitCmd,
+    ShowCmd
+)
+
+/**
+ * Main entry point for the Reversi CLI application. It configures the available commands
+ * and starts the interactive loop.
+ */
 fun main(args: Array<String>) {
     val parser = CommandArgsParser(
         debugArg
@@ -22,7 +38,7 @@ fun main(args: Array<String>) {
     val debug = parsed[debugArg] != null
 
     val cli = CLI(
-        arrayOf(PlayCmd, PassCmd, NewCmd, JoinCmd, ExitCmd, ShowCmd),
+        allCommands,
         debug
     )
     cli.startLoop()

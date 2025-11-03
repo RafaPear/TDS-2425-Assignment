@@ -1,71 +1,61 @@
-Module Core
+Module reversi-core
 
-This module defines the core domain logic and interfaces. It is agnostic to the UI and persistence layers.
+This module contains the immutable core domain model and game logic for the Reversi game. It is UI‑agnostic and
+persistence‑agnostic and exposes plain Kotlin data types and pure functions that implement the rules of the game.
+
+![Reversi Core Architecture](../images/UML_Structure_core.png)
+
+#Package pt.isel.reversi.core
+
+## Overview
+
+Provides the main game types and coordination layer. The module contains small, focused components that model the
+board, pieces, players and the game orchestration. It is intentionally free of any I/O concerns so it can be used by
+CLI, GUI or test code without modification.
+
+### Key classes
+- Game — lightweight, immutable carrier for a game session. Orchestrates moves, passes and state transitions.
+- GameLogic — pure logic that validates moves, computes captures and available plays.
+- Player — represents a player and provides helper methods to refresh points and swap piece type.
+
+### Responsibilities
+- Representing the board, pieces, coordinates and piece types as immutable data types
+- Enforcing move validation and piece capture rules (Reversi)
+- Providing deterministic, testable transformations that return new board/game instances
+- Defining small storage-friendly DTOs (GameState) used by the storage module
 
 #Package pt.isel.reversi.core.board
 
 ## Overview
 
-Models the board (grid), coordinates, and piece placement rules. Provides operations to evaluate and apply moves, flip
-affected pieces, and derive the initial setup according to standard Reversi. Validation ensures moves are within bounds
-and conform to the game rules.
+Contains the board model and related primitives used to represent the game grid and pieces.
+
+### Notable types
+- Board — immutable board representation with safe transformation methods (add/change pieces, iterate pieces)
+- Coordinate — row/column pair with helper arithmetic and boundary checks
+- Piece / PieceType — piece value and utilities (symbols, swaps)
 
 ### Responsibilities
-
 - Coordinate and bounds validation
-- Legal move evaluation and piece flipping
-- Producing updated board states from moves
-- Getting the initial board setup
+- Legal move evaluation and piece flipping helpers (used by GameLogic)
+- Producing the initial board setup and iterating existing pieces
 
-#Package pt.isel.reversi.core.game
-
-## Overview
-
-Defines the high‑level game orchestration (turns, move validation, pass, termination) and the composition of core
-elements (board, players). Remains UI‑agnostic and persistence‑agnostic, exposing a small set of operations to control
-the game flow.
-
-### Responsibilities
-
-- Tracking current player and turn alternation
-- Applying moves or passes and updating the state
-- Detecting end of game and computing scores
-- Exposing game snapshots for presentation
-
-#Package pt.isel.reversi.core.game.data
+#Package pt.isel.reversi.core.storage
 
 ## Overview
 
-Encapsulates contracts for persistence and data transfer. Specifies how game state and events are
-serialized/deserialized and how operations report outcomes using typed results suitable for user feedback and tooling.
+Lightweight DTO used to persist/restore games produced by the core module. Serializers living under
+`core.storage.serializers` convert core types to/from a compact text format used by the storage module.
 
-### Responsibilities
-
-- Data contracts for storing/loading game state
-- Mapping between domain objects and serialized forms
-- Validating data shape and reporting structured results
-
-#Package pt.isel.reversi.core.game.localgda
+#Package pt.isel.reversi.core.exceptions
 
 ## Overview
 
-Provides a concrete local filesystem implementation for the data access contracts, using a simple, human‑readable text
-format. Intended for development and testing; replaceable by alternative implementations without changing domain logic.
-
-### Responsibilities
-
-- Reading/writing game data from/to text files
-- Validating file structure and contents during I/O
-- Reporting operation results and error details
-
-#Package pt.isel.reversi.core.game.exceptions
-
-## Overview
-
-Defines domain‑specific exceptions to signal rule violations or invalid operations in a controlled manner, keeping error
-handling separate from the normal flow.
+Domain-specific exceptions that signal invalid operations or corrupted persisted files (for example: malformed
+board or piece entries). These exceptions are thrown by the core logic or by the serializers when encountering
+invalid data.
 
 ### Examples
-
-- Invalid move or pass attempts
-- Attempts to load or operate on unavailable game data
+- InvalidPlayException — thrown when attempting to play an invalid move
+- InvalidGameException — thrown when game operations are invoked on an unstarted game
+- InvalidPieceInFileException / InvalidSideInFileException — thrown when a persisted file is malformed

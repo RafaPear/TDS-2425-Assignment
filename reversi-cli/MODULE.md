@@ -1,6 +1,7 @@
 Module reversi-cli
 
-This module is responsible for the command‑line interface of the Reversi game. It handles user input parsing, game state rendering, and command routing to the core game services. This design is based on the library [KtFlag](https://github.com/rafapear/KtFlag) for command parsing. THis library removes a lot of boilerplate code and allows us to focus on the core logic of the CLI. In the bellows sections, we detail the main packages.
+This module provides a small, scriptable command-line interface to play the Reversi game using the core model and the
+local storage implementation. It depends on `pt.rafap.ktflag` to implement a compact, testable command framework.
 
 ![Cli Architecture](../images/UML_Structure_CLI.png)
 
@@ -8,43 +9,28 @@ This module is responsible for the command‑line interface of the Reversi game.
 
 ## Overview
 
-Hosts the command‑line interface: parses user input, renders board snapshots, and routes validated commands to the game
-services. Designed to be scriptable and testable using standard IO.
-
+Hosts the CLI loop, command parsing and rendering utilities. The CLI is designed to be minimal and driven by plain
+standard input/output which makes it easy to script and test.
 
 #Package pt.isel.reversi.cli.commands
 
 ## Overview
 
-Defines the command structure, parsing logic, and validation for user inputs. Each command corresponds to a specific game
-action (e.g., start, move, pass, show). Utilizes KtFlag to streamline argument parsing and error handling.
+Contains concrete command handlers used by the CLI. Each command is implemented as an object extending the
+`CommandImpl<Game>` contract provided by `KtFlag`.
 
-## Example of a command
+### Commands implemented
+- NewCmd — create a new game (specify first player and optional name)
+- JoinCmd — join an existing named game
+- PlayCmd — play a move at (row, col)
+- PassCmd — pass the current turn
+- ShowCmd — render the current board and scores
+- ExitCmd — terminate the application
 
-```kotlin
-object ExampleCmd : CommandImpl<Game>() {
-    override val info: CommandInfo = CommandInfo(
-        title = "Example Command",
-        description = "An example command that demonstrates structure.",
-        longDescription = "This command serves as a template for creating new commands.",
-        aliases = listOf("ex", "example"),
-        usage = "example",
-        minArgs = 0,
-        maxArgs = 0
-    )
+## Example command structure
 
-    override fun execute(
-        vararg args: String,
-        context: Game?
-    ): CommandResult<Game> {
-        println("Executing example command...")
+The command objects define `CommandInfo` and implement an `execute` method that receives the parsed arguments and a
+`Game?` context. New commands can be added by defining an object and registering it with the `CLI` parser in
+`Main.kt`.
 
-        return CommandResult.SUCCESS("Example command executed successfully", context)
-    }
-
-}
-```
-
-This structure allows for easy addition of new commands by defining their info and execution logic.
-
-> ⚠️ **Note:** If you want to better explore `KtFlag`, check the [KtFlag repository](https://github.com/rafapear/KtFlag)
+> Note: The CLI uses `KtFlag` (https://github.com/rafapear/KtFlag) to reduce boilerplate for argument parsing.

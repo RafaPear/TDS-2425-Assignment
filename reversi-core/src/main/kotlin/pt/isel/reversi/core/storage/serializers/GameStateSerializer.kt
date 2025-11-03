@@ -3,6 +3,7 @@ package pt.isel.reversi.core.storage.serializers
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.exceptions.InvalidGameStateInFileException
 import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.storage.Serializer
 
@@ -35,7 +36,7 @@ class GameStateSerializer : Serializer<GameState, String> {
         }
 
         sb.appendLine(pieceTypeSerializer.serialize(obj.lastPlayer))
-        sb.appendLine(boardSerializer.serialize(obj.board))
+        sb.append(boardSerializer.serialize(obj.board))
 
         return sb.toString()
     }
@@ -56,34 +57,31 @@ class GameStateSerializer : Serializer<GameState, String> {
         return players
     }
 
-    private fun getLastPlayerPart(parts: List<String>): PieceType? {
-        if (parts.size + 1 < lastPlayerLine) return null
+    private fun getLastPlayerPart(parts: List<String>): PieceType {
         val firstLine = parts[lastPlayerLine]
-        if (firstLine.isBlank() || firstLine.first().isWhitespace()) return null
         return pieceTypeSerializer.deserialize(firstLine.first())
     }
 
-    private fun getBoardPart(parts: List<String>): Board? {
-        if (parts.size + 1 < boardStartLine) return null
-        if (parts[boardStartLine].isBlank() || parts[boardStartLine].first().isWhitespace()) return null
+    private fun getBoardPart(parts: List<String>): Board {
         val boardPart = parts.drop(boardStartLine).joinToString("\n")
         return boardSerializer.deserialize(boardPart)
     }
 
     override fun deserialize(obj: String): GameState {
-        val parts = obj.split("\n")
+        try {
+            val parts = obj.split("\n")
 
-        val players = getPlayers(parts)
-        val lastPlayer = getLastPlayerPart(parts)
-        val board = getBoardPart(parts)
+            val players = getPlayers(parts)
+            val lastPlayer = getLastPlayerPart(parts)
+            val board = getBoardPart(parts)
 
-        require(lastPlayer != null) { "Corrupted Game Save: LastPlayer does not exist" }
-        require(board != null) { "Corrupted Game Save: Board does not exist" }
-
-        return GameState(
-            players = players,
-            lastPlayer = lastPlayer,
-            board = board
-        )
+            return GameState(
+                players = players,
+                lastPlayer = lastPlayer,
+                board = board
+            )
+        } catch (e: Exception) {
+            throw InvalidGameStateInFileException("Invalid game state data. Error: ${e.message}")
+        }
     }
 }

@@ -6,6 +6,10 @@ import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
 
+/**
+ * ShowCmd prints the current game state: board layout and player scores.
+ * It expects a `Game` context and returns an error when the game or board is not initialized.
+ */
 object ShowCmd : CommandImpl<Game>() {
     override val info: CommandInfo = CommandInfo(
         title = "Show",

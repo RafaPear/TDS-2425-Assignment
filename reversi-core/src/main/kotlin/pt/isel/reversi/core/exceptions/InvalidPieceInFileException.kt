@@ -1,7 +1,7 @@
 package pt.isel.reversi.core.exceptions
 
 /**
- * Thrown when a `piece:` line in the persisted game file is malformed or contains
+ * Thrown when a piece line in the persisted game file is malformed or contains
  * values that cannot be converted into a valid [pt.isel.reversi.core.board.Piece].
  *
  * Typical causes:
@@ -9,7 +9,6 @@ package pt.isel.reversi.core.exceptions
  * - Non-integer row/column values
  * - Unknown piece symbol
  *
- * @see pt.isel.reversi.core.storage.GameFileAccess
  */
 class InvalidPieceInFileException(
     override val message: String = "The piece in the file is invalid"

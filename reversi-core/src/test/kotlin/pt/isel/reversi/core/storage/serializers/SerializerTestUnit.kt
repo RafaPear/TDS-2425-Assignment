@@ -10,9 +10,9 @@ import pt.isel.reversi.storage.Serializer
  */
 class SerializerTestUnit<U, K>(
     val serializer: Serializer<U, K>,
-    val testData: () -> List<U>,
+    val testingData: () -> List<U>
 ) {
-    fun verify(testData: U) {
+    private fun verifyPasses(testData: U) {
         serializer.run {
             assert(testData == deserialize(serialize(testData))) {
                 "Failed for: $testData"
@@ -21,8 +21,6 @@ class SerializerTestUnit<U, K>(
     }
 
     fun runTest() {
-        for (data in testData()) {
-            verify(data)
-        }
+        for (data in testingData()) verifyPasses(data)
     }
 }
