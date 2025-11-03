@@ -17,9 +17,9 @@ import kotlin.test.assertFailsWith
 class GameTests {
 
     fun cleanup(func: () -> Unit) {
-        File("saves").deleteRecursively()
+        File(SAVES_FOLDER).deleteRecursively()
         func()
-        File("saves").deleteRecursively()
+        File(SAVES_FOLDER).deleteRecursively()
     }
 
     @Test

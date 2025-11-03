@@ -1,8 +1,8 @@
 package pt.isel.reversi.core
 
 import pt.isel.reversi.core.storage.serializers.GameStateSerializer
-import pt.isel.reversi.utils.CORE_CONFIG_FILE
 import pt.isel.reversi.storage.FileStorage
+import pt.isel.reversi.utils.CORE_CONFIG_FILE
 import pt.isel.reversi.utils.ConfigLoader
 
 private val CONFIG: CoreConfig = ConfigLoader(CORE_CONFIG_FILE) { CoreConfig(it) }.loadConfig()

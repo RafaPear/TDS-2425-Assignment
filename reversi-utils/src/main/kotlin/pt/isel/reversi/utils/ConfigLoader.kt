@@ -24,10 +24,15 @@ class ConfigLoader<U: Config>(
             val entries = factory(emptyMap()).getDefaultConfigFileEntries()
             for (entry in entries)
                 props.setProperty(entry.key, entry.value)
-            props.store(file.outputStream(), "Configuration file created at ${file.absolutePath}")
+
+            file.outputStream().use { output ->
+                props.store(output, "Configuration file created at ${file.absolutePath}")
+            }
         }
 
-        props.load(file.inputStream())
+        file.inputStream().use { input ->
+            props.load(input)
+        }
 
         val configMap = props.entries.associate { it.key.toString() to it.value.toString() }
 

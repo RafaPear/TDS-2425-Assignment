@@ -10,15 +10,20 @@ import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.storage.Storage
 
 /**
- * Lightweight test/dummy implementation of [Game] used for data access and integration tests.
+ * Represents a Reversi game, managing the game state, player turns, and interactions with storage.
+ * The game has two modes: local and not local.
  *
- * Only acts as a structural carrier for required properties; behavioural methods are left as TODOs
- * so they surface if accidentally invoked in logic outside targeted tests. Use the nested helper
- * subclasses to build simple game states for tests (empty, one player or two players).
+ * #### Local Game
+ * In a local game, both players are managed within the same game instance. No storage operations are performed.
  *
- * Note: This class is intentionally minimal and not suitable for exercising game logic.
+ * #### Not Local Game
+ * In a not local game, only one player is managed within the game instance. The game state is saved and loaded
+ *
+ * @property target Indicates if the game is in target mode.
+ * @property currGameName The name of the current game for storage purposes.
+ * @property gameState The current state of the game, including the board and players.
+ * @property countPass The number of consecutive passes made by players.
  */
-@Suppress("unused")
 data class Game(
     val target: Boolean,
     val currGameName: String?,

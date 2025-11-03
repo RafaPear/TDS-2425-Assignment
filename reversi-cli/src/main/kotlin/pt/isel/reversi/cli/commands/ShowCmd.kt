@@ -1,6 +1,8 @@
 package pt.isel.reversi.cli.commands
 
 import pt.isel.reversi.core.Game
+import pt.isel.reversi.core.Player
+import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.stringifyBoard
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
@@ -30,21 +32,25 @@ object ShowCmd : CommandImpl<Game>() {
 
         val gs = context.gameState ?: return CommandResult.ERROR("Game is not initialized.")
 
-        val players = gs.players
+        val board = gs.board
+        val players = listOf(
+            Player(PieceType.WHITE, board.totalWhitePieces),
+            Player(PieceType.BLACK, board.totalBlackPieces)
+        )
         val lastPLayer = gs.lastPlayer
         val name = context.currGameName
-        val myPiece = players.firstOrNull()?.type?.symbol
+        val myPiece = gs.players.firstOrNull()?.type?.symbol
 
         val builder = StringBuilder()
         if (myPiece != null && name != null) {
-            builder.appendLine("You are playing as '$myPiece' at game '$name'")
+            builder.appendLine("You are playing as '$myPiece'")
             builder.appendLine("-------------------------")
         }
         builder.appendLine("Current Game State:")
         builder.appendLine(context.stringifyBoard())
         builder.appendLine("Player Scores:")
         players.forEach { player ->
-            builder.appendLine("Player ${player.type.symbol}: ${player.points} points")
+            builder.appendLine(" - Player ${player.type.symbol}: ${player.points} points")
         }
         builder.appendLine("Player turn: ${lastPLayer.swap().symbol}")
 

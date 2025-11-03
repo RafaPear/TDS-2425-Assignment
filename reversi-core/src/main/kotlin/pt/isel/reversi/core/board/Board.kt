@@ -16,7 +16,6 @@ data class Board(
     val totalBlackPieces: Int
     val totalWhitePieces: Int
 
-
     /**
      * Initializes the board and validates its properties.
      * Initializes the total number of black and white pieces on the board.
