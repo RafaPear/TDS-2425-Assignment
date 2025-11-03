@@ -19,6 +19,7 @@ class ConfigLoader<U: Config>(
         val file = File(path)
 
         if (!file.exists()) {
+            file.parentFile?.mkdirs()
             file.createNewFile()
             val entries = factory(emptyMap()).getDefaultConfigFileEntries()
             for (entry in entries)

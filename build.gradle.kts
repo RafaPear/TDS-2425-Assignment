@@ -20,6 +20,12 @@ group = "pt.isel.reversi"
 version = "v0.1.0"
 
 allprojects {
+    repositories {
+        mavenCentral()
+        gradlePluginPortal()
+        maven(url = "https://jitpack.io")
+    }
+
     apply(plugin = "org.jetbrains.kotlin.jvm")
     apply(plugin = "org.jetbrains.dokka")
     apply(plugin = "com.github.johnrengelman.shadow")

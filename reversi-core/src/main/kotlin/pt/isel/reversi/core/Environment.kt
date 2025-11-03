@@ -1,10 +1,11 @@
 package pt.isel.reversi.core
 
 import pt.isel.reversi.core.storage.serializers.GameStateSerializer
+import pt.isel.reversi.utils.CORE_CONFIG_FILE
 import pt.isel.reversi.storage.FileStorage
 import pt.isel.reversi.utils.ConfigLoader
 
-private val CONFIG: CoreConfig = ConfigLoader("reversi-core.properties") { CoreConfig(it) }.loadConfig()
+private val CONFIG: CoreConfig = ConfigLoader(CORE_CONFIG_FILE) { CoreConfig(it) }.loadConfig()
 
 val BOARD_SIDE: Int = CONFIG.BOARD_SIDE
 val TARGET_CHAR: Char = CONFIG.TARGET_CHAR

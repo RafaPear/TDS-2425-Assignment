@@ -1,8 +1,9 @@
 package pt.isel.reversi.cli
 
+import pt.isel.reversi.utils.CLI_CONFIG_FILE
 import pt.isel.reversi.utils.ConfigLoader
 
-val CONFIG: CliConfig = ConfigLoader("reversi-cli.properties") { CliConfig(it) }.loadConfig()
+val CONFIG: CliConfig = ConfigLoader(CLI_CONFIG_FILE) { CliConfig(it) }.loadConfig()
 
 val WELCOME_MESSAGE = CONFIG.WELCOME_MESSAGE
 val PROMPT = CONFIG.PROMPT
