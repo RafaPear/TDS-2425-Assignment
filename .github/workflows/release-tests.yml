@@ -1,9 +1,11 @@
 name: Release Tests
 
 on:
+  push:
+    branches:
+      - master
   release:
-    types: [published, prereleased]
-  workflow_dispatch:
+    types: [ created ]
 
 permissions:
   contents: read
