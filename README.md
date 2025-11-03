@@ -20,29 +20,19 @@ A full HTML version of the generated documentation is available online:
 
 ## Quick Start
 
-On Unix / macOS:
+For the CLI version Run:
 
 ```bash
-./gradlew build
+./gradlew reversiCliJar
 ```
 
-On Windows (cmd.exe):
+Then, run the produced module jar (paths vary depending on build):
 
-```cmd
-gradlew.bat build
+```bash
+java -jar build/libs/reversi-cli-v*.*.*.jar
 ```
 
-Run the CLI (from repository root):
-
-```cmd
-gradlew.bat :reversi-cli:run --args="--cli"
-```
-
-Or run the produced module jar (paths vary depending on build):
-
-```cmd
-java -jar reversi-cli/build/libs/reversi-cli.jar
-```
+> Note: change `v*.*.*` to the actual version number.
 
 ## Project Structure
 
