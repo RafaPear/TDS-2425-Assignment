@@ -16,8 +16,8 @@ data class Player(
         return Player(
             type = type,
             points = when (type) {
-                PieceType.BLACK -> board.totalBlackPieces()
-                PieceType.WHITE -> board.totalWhitePieces()
+                PieceType.BLACK -> board.totalBlackPieces
+                PieceType.WHITE -> board.totalWhitePieces
             },
         )
     }
