@@ -335,13 +335,20 @@ fun startNewGame(
  */
 fun loadGame(
     gameName: String,
-    myPieceType: PieceType,
     storage: Storage<String, GameState, String> = FILE_DATA_ACCESS,
 ): Game {
     val loadedState = storage.load(gameName)
         ?: throw InvalidFileException(
             message = "Failed to load game state from storage: $gameName"
         )
+
+    val myPieceType =
+        if (loadedState.players.isNotEmpty())
+            loadedState.players[0].type
+        else
+            throw InvalidPieceInFileException(
+                message = "No players available in the loaded game: $gameName.",
+            )
 
     val gs = loadedState.copy(
         players = loadedState.players.find { it.type == myPieceType }?.let {

@@ -238,7 +238,7 @@ class GameTests {
                 )
             ).saveGame()
 
-            var uut2 = loadGame("testGame", PieceType.WHITE)
+            var uut2 = loadGame("testGame")
 
             uut.pass()
             uut2 = uut2.refresh()
@@ -263,8 +263,7 @@ class GameTests {
         )
 
         loadGame(
-            gameName = "existingGame",
-            myPieceType = PieceType.WHITE
+            gameName = "existingGame"
         )
 
         val loadedGame = FILE_DATA_ACCESS.load("existingGame")?.let {
@@ -334,8 +333,7 @@ class GameTests {
         cleanup {
             assertFailsWith<InvalidFileException> {
                 loadGame(
-                    gameName = "nonExistingGame",
-                    myPieceType = PieceType.BLACK
+                    gameName = "nonExistingGame"
                 )
             }
         }
@@ -355,7 +353,7 @@ class GameTests {
             currGameName = "testGame",
         )
 
-        val uut = loadGame("testGame", PieceType.WHITE)
+        val uut = loadGame("testGame")
 
         assertFailsWith<InvalidPlayException> {
             uut.play(Coordinate(1, 2))
@@ -376,7 +374,7 @@ class GameTests {
             currGameName = "testGame",
         )
 
-        val uut = loadGame("testGame", PieceType.BLACK)
+        val uut = loadGame("testGame")
 
         val expectedBoard = Board(4).startPieces()
             .addPiece(Coordinate(1, 2), PieceType.BLACK)
@@ -430,7 +428,7 @@ class GameTests {
             currGameName = "testGame",
         )
 
-        var uutW = loadGame("testGame", PieceType.WHITE)
+        var uutW = loadGame("testGame")
 
         uutB = uutB.play(Coordinate(3, 4))
 
