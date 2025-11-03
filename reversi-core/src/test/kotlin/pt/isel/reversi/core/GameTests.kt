@@ -89,7 +89,6 @@ class GameTests {
             .changePiece(Coordinate(2, 2))
 
         val expectedGame = Game(
-            storage = STORAGE,
             gameState = GameState(
                 lastPlayer = PieceType.BLACK,
                 board = expectedBoard,
@@ -142,7 +141,6 @@ class GameTests {
     @Test
     fun `play with players empty fails`() {
         val uut = Game(
-            storage = STORAGE,
             target = false,
             gameState = GameState(
                 players = emptyList(),
@@ -160,7 +158,6 @@ class GameTests {
     @Test
     fun `pass in localGame when no availablePlays succeeds`() {
         val uut = Game(
-            storage = STORAGE,
             target = false,
             gameState = GameState(
                 players = listOf(
@@ -197,7 +194,6 @@ class GameTests {
     @Test
     fun `pass with players empty fails`() {
         val uut = Game(
-            storage = STORAGE,
             target = false,
             gameState = GameState(
                 players = emptyList(),
@@ -221,7 +217,6 @@ class GameTests {
                 ),
                 currGameName = "testGame"
             ).copy(
-                storage = STORAGE,
                 gameState = GameState(
                     players = listOf(
                         Player(PieceType.BLACK)
@@ -271,7 +266,6 @@ class GameTests {
 
             val loadedGame = STORAGE.load("existingGame")?.let {
                 Game(
-                    storage = STORAGE,
                     target = false,
                     gameState = it,
                     currGameName = "existingGame",

@@ -1,8 +1,14 @@
 package pt.isel.reversi.cli.commands
 
+import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.Player
+import pt.isel.reversi.core.STORAGE
+import pt.isel.reversi.core.board.Board
+import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.GameState
 import pt.rafap.ktflag.cmd.CommandResultType
 import kotlin.test.Test
 
@@ -11,7 +17,19 @@ class PassCmdTest {
     @Test
     fun `Test PassCmd execution`() {
         val result = PassCmd.executeWrapper(
-            context = startNewGame(players = listOf(Player(PieceType.BLACK)))
+            context = Game(
+                target = false,
+                gameState = GameState(
+                    players = listOf(
+                        Player(PieceType.BLACK),
+                    ),
+                    board = Board(4)
+                        .addPiece(Piece(Coordinate(1, 1), PieceType.BLACK))
+                        .addPiece(Piece(Coordinate(1, 2), PieceType.BLACK)),
+                    lastPlayer = PieceType.WHITE,
+                ),
+                currGameName = null,
+            )
         )
         assert(result.type == CommandResultType.SUCCESS) {
             "Expected SUCCESS but got ${result.type} with message: ${result.message}"
