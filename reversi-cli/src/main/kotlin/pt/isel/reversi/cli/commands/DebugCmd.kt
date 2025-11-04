@@ -47,57 +47,77 @@ object DebugCmd : CommandImpl<Game>() {
         if (context != null) {
             sb.append(title("Game State"))
             if (state == null) {
-                sb.appendLine(colorText("\tState: Not initialized", Colors.RED))
+                sb.appendLine(colorText("    State: Not initialized", Colors.RED))
             } else {
-                sb.appendLine(colorText("\tState: Initialized", Colors.GREEN))
-                sb.appendLine("\tLast play: ${state.lastPlayer.symbol}")
-                sb.appendLine("\tPlayers:")
+                sb.appendLine(colorText("    State: Initialized", Colors.GREEN))
+                sb.appendLine("    Last play: ${state.lastPlayer.symbol}")
+                sb.appendLine("    Players:")
                 state.players.forEach { player ->
-                    sb.appendLine("\t\t - Player ${player.type.symbol}: ${player.points} points")
+                    sb.appendLine("         - Player ${player.type.symbol}: ${player.points} points")
                 }
 
                 sb.appendLine()
 
                 val board = state.board
-                sb.appendLine("\tBoard: ")
-                sb.appendLine("\t\t - Side: ${board.side}")
-                sb.appendLine("\t\t - Total of Pieces on board: ${board.count()}")
-                sb.appendLine("\t\t - Board Representation:")
+                sb.appendLine("    Board: ")
+                sb.appendLine("         - Side: ${board.side}")
+                sb.appendLine("         - Total of Pieces on board: ${board.count()}")
+                sb.appendLine("         - Board Representation:")
                 sb.appendLine(context.stringifyBoard())
 
                 sb.appendLine()
 
-                sb.appendLine("\tTarget: $target")
-                sb.appendLine("\tCurrent Game Name: $name")
-                sb.appendLine("\tConsecutive Passes: $count")
+                sb.appendLine("    Target: $target")
+                sb.appendLine("    Current Game Name: $name")
+                sb.appendLine("    Consecutive Passes: $count")
             }
         }
-
+        sb.appendLine(Colors.BLUE)
         sb.appendLine(title("Core Configurations"))
+        sb.appendLine(
+            colorText(
+                "  Note: These configurations are set at compile-time and cannot be changed at runtime.",
+                Colors.YELLOW
+            )
+        )
         for ((key, value) in CORE_CONFIG.map)
-            sb.appendLine("\t - $key: $value")
+            if (key.contains("COLOR"))
+                sb.appendLine(colorText("     - $key", value))
+            else
+                sb.appendLine("     - $key: '$value'")
         sb.appendLine()
+
+        sb.appendLine(Colors.YELLOW)
 
         sb.appendLine(title("CLI Configurations"))
+        sb.appendLine(
+            colorText(
+                "  Note: These configurations are set at compile-time and cannot be changed at runtime.",
+                Colors.YELLOW
+            )
+        )
         for ((key, value) in CLI_CONFIG.map)
-            sb.appendLine("\t - $key: $value")
-        sb.appendLine()
+            if (key.contains("COLOR"))
+                sb.appendLine(colorText("     - $key", value))
+            else
+                sb.appendLine("     - $key: '$value'")
+        sb.appendLine(Colors.PURPLE)
 
         sb.appendLine(title("Saves Folder Contents"))
         val files = java.io.File(SAVES_FOLDER).listFiles()
         if (files.isNullOrEmpty()) {
-            sb.appendLine("\tNo saved games found.")
+            sb.appendLine("    No saved games found.")
         } else {
             for (file in files) {
                 if (file.name == name)
                     sb.appendLine(
                         colorText(
-                            "\t - ${file.name} (${file.length()} bytes) <- (Current Game)",
+                            "     - ${file.name} (${file.length()} bytes) <- (Current Game)",
                             Colors.GREEN
                         )
                     )
                 else
-                    sb.appendLine("\t - ${file.name} (${file.length()} bytes)")
+                    sb.appendLine("     - ${file.name} (${file.length()} bytes)")
             }
         }
 
