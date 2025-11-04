@@ -42,7 +42,10 @@ object ShowCmd : CommandImpl<Game>() {
 
         val builder = StringBuilder()
         if (name != null) {
-            builder.appendLine(" $name ")
+            builder.appendLine("------------------------------")
+            builder.appendLine("Current Game Name: $name")
+            builder.appendLine("------------------------------")
+            builder.appendLine()
         }
         builder.appendLine(context.stringifyBoard())
         builder.appendLine("Player Scores:")

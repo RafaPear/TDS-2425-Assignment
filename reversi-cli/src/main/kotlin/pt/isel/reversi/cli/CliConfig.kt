@@ -3,7 +3,7 @@ package pt.isel.reversi.cli
 import pt.isel.reversi.utils.Config
 import pt.rafap.ktflag.style.Colors
 
-class CliConfig(map: Map<String, String>): Config {
+class CliConfig(override val map: Map<String, String>): Config {
 
     val WELCOME_MESSAGE = map["WELCOME_MESSAGE"] ?: "Welcome to Reversi!"
     val PROMPT = map["PROMPT"] ?: "> "

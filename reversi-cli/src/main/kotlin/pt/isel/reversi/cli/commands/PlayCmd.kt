@@ -54,6 +54,9 @@ object PlayCmd : CommandImpl<Game>() {
             val coordinate = parseCoordinateArgs(args.toList()) ?: return ERROR("Invalid coordinates provided.")
 
             val game: Game = context.play(coordinate)
+
+            println(ShowCmd.executeWrapper(context = game).message)
+
             return CommandResult.SUCCESS(
                 "Move played at (${coordinate.row}, ${coordinate.col})",
                 game
