@@ -92,7 +92,7 @@ fun loadGame(
         players = loadedState.players.find { it.type == myPieceType }?.let {
             listOf(it)
         } ?: throw InvalidPieceInFileException(
-            message = "Player with piece type $myPieceType is not available in the loaded game: $gameName.",
+            message = "Player with piece type ${myPieceType.symbol} is not available in the loaded game: $gameName.",
         ),
     )
 

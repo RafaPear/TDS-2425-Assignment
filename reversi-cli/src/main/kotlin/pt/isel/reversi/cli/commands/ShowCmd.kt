@@ -7,6 +7,8 @@ import pt.isel.reversi.core.stringifyBoard
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
+import pt.rafap.ktflag.style.Colors
+import pt.rafap.ktflag.style.Colors.colorText
 
 /**
  * ShowCmd prints the current game state: board layout and player scores.
@@ -24,33 +26,36 @@ object ShowCmd : CommandImpl<Game>() {
     )
 
     override fun execute(
-        vararg args: String,
-        context: Game?
+        vararg args: String, context: Game?
     ): CommandResult<Game> {
-        if (context == null)
-            return CommandResult.ERROR("Game is not defined. Cannot show game state.")
+        if (context == null) return CommandResult.ERROR("Game is not defined. Cannot show game state.")
 
         val gs = context.gameState ?: return CommandResult.ERROR("Game is not initialized.")
 
         val board = gs.board
         val players = listOf(
-            Player(PieceType.WHITE, board.totalWhitePieces),
-            Player(PieceType.BLACK, board.totalBlackPieces)
+            Player(PieceType.WHITE, board.totalWhitePieces), Player(PieceType.BLACK, board.totalBlackPieces)
         )
         val lastPLayer = gs.lastPlayer
         val name = context.currGameName
-        val myPiece = gs.players.firstOrNull()?.type?.symbol
+        val myPieceType = gs.players.firstOrNull()?.type
 
         val builder = StringBuilder()
-        if (myPiece != null && name != null) {
-            builder.appendLine("You are playing as '$myPiece'")
-            builder.appendLine("-------------------------")
+        if (name != null) {
+            builder.appendLine(" $name ")
         }
-        builder.appendLine("Current Game State:")
         builder.appendLine(context.stringifyBoard())
         builder.appendLine("Player Scores:")
         players.forEach { player ->
-            builder.appendLine(" - Player ${player.type.symbol}: ${player.points} points")
+            if ((player.type == myPieceType && name != null) || (lastPLayer.swap() == player.type && name == null)) {
+                builder.appendLine(
+                    colorText(
+                        " - Player ${player.type.symbol}: ${player.points} points <- (You)",
+                        Colors.GREEN,
+                        Colors.BOLD
+                    )
+                )
+            } else builder.appendLine(" - Player ${player.type.symbol}: ${player.points} points")
         }
         builder.appendLine("Player turn: ${lastPLayer.swap().symbol}")
 

@@ -21,6 +21,6 @@ enum class PieceType(val symbol: Char) {
          * @param symbol The character symbol representing the piece type.
          * @return The matching PieceType, or null if no match is found.
          */
-        fun fromSymbol(symbol: Char): PieceType? = entries.firstOrNull { it.symbol == symbol }
+        fun fromSymbol(symbol: Char?): PieceType? = entries.firstOrNull { it.symbol == symbol }
     }
 }

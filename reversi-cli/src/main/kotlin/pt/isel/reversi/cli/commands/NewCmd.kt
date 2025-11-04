@@ -26,6 +26,9 @@ object NewCmd : CommandImpl<Game>() {
     )
 
     override fun execute(vararg args: String, context: Game?): CommandResult<Game> {
+        if (context != null && context.currGameName != null)
+            context.saveGame()
+
         val playerType = PieceType.entries.find { it.symbol.toString() == args[0] } ?:
         return ERROR("First player must be one of: $pieceTypes")
         val player = Player(playerType)
@@ -38,6 +41,8 @@ object NewCmd : CommandImpl<Game>() {
             } else {
                 startNewGame(players = listOf(player, player.swap()), firstTurn = playerType)
             }
+
+        println(ShowCmd.executeWrapper(context = game).message)
 
         return CommandResult.SUCCESS("Game created Successfully", game)
     }
