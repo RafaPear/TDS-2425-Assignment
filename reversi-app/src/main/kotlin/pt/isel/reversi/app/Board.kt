@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Window
@@ -74,23 +75,13 @@ fun Board() {
             ),
             onClick = { target.value = if (target.value == "On") "Off" else "On" }
         ) {
-            BoxWithConstraints(
-                modifier = Modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center
-            ) {
-                val text = "Target ${target.value}"
-                val fontSizeHeight = maxHeight.value * 0.4f
-                val fontSizeWidth = (maxWidth.value / text.length) * 1.5f
-                val fontSize = ((fontSizeHeight + fontSizeWidth) / 2).sp
-
-                Text(
-                    text = text,
-                    textAlign = androidx.compose.ui.text.style.TextAlign.Center,
-                    maxLines = 1,
-                    fontSize = fontSize,
-                    autoSize = TextAutoSize.StepBased(minFontSize = 13.sp)
-                )
-            }
+            Text(
+                text = "Target ${target.value}",
+                maxLines = 1,
+                softWrap = false,
+                textAlign = TextAlign.Center,
+                autoSize = TextAutoSize.StepBased(minFontSize = 12.sp, maxFontSize = 40.sp)
+            )
 
         }
     }
