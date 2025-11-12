@@ -1,8 +1,6 @@
 package pt.isel.reversi.app
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
@@ -13,15 +11,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.*
 import org.jetbrains.compose.resources.painterResource
+import pt.isel.reversi.app.gamePage.GamePage
 import pt.isel.reversi.core.*
-import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 import reversi.reversi_app.generated.resources.Res
 import reversi.reversi_app.generated.resources.reversi
@@ -41,6 +37,8 @@ fun main() = application {
 
         val game = remember { mutableStateOf(Game()) }
         val page = remember { mutableStateOf(Page.MAIN_MENU) }
+
+        window.minimumSize = java.awt.Dimension(500, 500)
 
         MenuBar {
             Menu("Ficheiro") {
@@ -83,20 +81,20 @@ fun main() = application {
 
         when (page.value) {
             Page.MAIN_MENU -> MainMenu(page)
-            Page.GAME      -> GamePage(page, game)
-            Page.SETTINGS  -> SettingsPage(page)
-            Page.ABOUT     -> AboutPage(page)
+            Page.GAME -> GamePage(page, game)
+            Page.SETTINGS -> SettingsPage(page)
+            Page.ABOUT -> AboutPage(page)
             Page.JOIN_GAME -> JoinGamePage(page, game)
-            Page.NEW_GAME  -> NewGamePage(page, game)
+            Page.NEW_GAME -> NewGamePage(page, game)
             Page.SAVE_GAME -> SaveGamePage(page, game)
         }
     }
 }
 
 @Composable
-fun ErrorDialog(page: MutableState<Page>, errorMessage: String, newPage: Page, onOk : () -> Unit) {
+fun ErrorDialog(page: MutableState<Page>, errorMessage: String, newPage: Page, onOk: () -> Unit) {
     AlertDialog(
-        onDismissRequest = { page.value = newPage ; onOk()},
+        onDismissRequest = { page.value = newPage; onOk() },
         title = { Text("Erro") },
         text = { Text("Ocorreu um erro: $errorMessage") },
         confirmButton = {
@@ -166,130 +164,6 @@ fun SaveGamePage(page: MutableState<Page>, game: MutableState<Game>) {
     }
 }
 
-@Composable
-fun GamePage(page: MutableState<Page>, game: MutableState<Game>) {
-    val state = game.value.gameState
-    val isError = remember { mutableStateOf(false) }
-    val errorMessage = remember { mutableStateOf("") }
-
-    Row(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BOARD_BACKGROUND_COLOR)
-            .padding(20.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        // 🧩 Tabuleiro
-        Box(
-            modifier = Modifier
-                .weight(5f)
-        ) {
-            Board(game) { x, y ->
-                try {
-                    game.value = game.value.play(Coordinate(x, y))
-                } catch (e: Exception) {
-                    isError.value = true
-                    errorMessage.value = e.message ?: "Erro desconhecido"
-                }
-            }
-        }
-
-        // 🧑‍🤝‍🧑 Jogadores
-        Column(
-            modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight()
-                .padding(start = 20.dp),
-            verticalArrangement = Arrangement.Top,
-            horizontalAlignment = Alignment.Start
-        ) {
-            Text(
-                "Jogadores", fontWeight = FontWeight.Bold,
-                autoSize = TextAutoSize.StepBased(
-                    maxFontSize = 50.sp
-                ),
-                maxLines = 1,
-                softWrap = false,
-            )
-
-            Spacer(Modifier.height(16.dp))
-
-            if (state == null) {
-                Text(
-                    "Sem jogo ativo",
-                    fontStyle = FontStyle.Italic,
-                    autoSize = TextAutoSize.StepBased(
-                        maxFontSize = 50.sp
-                    ),
-                    maxLines = 1,
-                    softWrap = false,
-                )
-            } else {
-                val players = listOf(
-                    Player(PieceType.BLACK, state.board.totalBlackPieces),
-                    Player(PieceType.WHITE, state.board.totalWhitePieces)
-                )
-                players.forEach { player ->
-                    val symbol = when (player.type) {
-                        PieceType.BLACK -> "⚫"
-                        PieceType.WHITE -> "⚪"
-                    }
-                    val isTurn = player.type != state.lastPlayer
-                    val label = if (isTurn) " ← a jogar" else ""
-
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.SpaceEvenly,
-                        modifier = Modifier.padding(vertical = 4.dp)
-                    ) {
-                        Text(
-                            symbol,
-                            autoSize = TextAutoSize.StepBased(
-                                maxFontSize = 25.sp
-                            ),
-                            maxLines = 1,
-                            softWrap = false,
-                        )
-                        Text(
-                            "Peças: ${player.points}",
-                            fontSize = 16.sp,
-                            fontWeight = if (isTurn) FontWeight.Bold else FontWeight.Normal,
-                            autoSize = TextAutoSize.StepBased(
-                                maxFontSize = 25.sp
-                            ),
-                            maxLines = 1,
-                            softWrap = false,
-                        )
-                        Text(
-                            label,
-                            color = if (isTurn) Color.Green else Color.Unspecified,
-                            autoSize = TextAutoSize.StepBased(
-                                maxFontSize = 25.sp
-                            ),
-                            maxLines = 1,
-                            softWrap = false,
-                        )
-                    }
-                }
-
-                if (state.winner != null) {
-                    Text(
-                        text = "Vencedor: ${state.winner!!.type}",
-                        color = Color.Green,
-                        fontWeight = FontWeight.Bold,
-                        autoSize = TextAutoSize.StepBased()
-                    )
-                }
-            }
-        }
-        if (isError.value) {
-            ErrorDialog(page = page, errorMessage = errorMessage.value, newPage = Page.GAME) {
-                isError.value = false
-            }
-        }
-    }
-}
 
 @Composable
 fun MainMenu(page: MutableState<Page>) {
