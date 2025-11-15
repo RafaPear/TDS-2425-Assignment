@@ -407,7 +407,7 @@ class GameTests {
                 currGameName = "testGame",
             )
 
-            val otherUut = loadGame("testGame")
+            loadGame("testGame")
 
             val expectedBoard = Board(4).startPieces()
                 .addPiece(Coordinate(1, 2), PieceType.BLACK)

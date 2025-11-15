@@ -6,10 +6,9 @@ import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.utils.LOGGER
 
 /**
- * Launches a coroutine that periodically executes the given [refreshAction] at the specified [refreshIntervalMs].
+ * Launches a coroutine that periodically executes game.refresh at the specified [refreshIntervalMs].
  *
- * @param refreshIntervalMs The interval in milliseconds between each execution of the [refreshAction].
- * @param refreshAction The suspend function to be executed periodically.
+ * @param refreshIntervalMs The interval in milliseconds between each execution.
  * @return A [Job] representing the launched coroutine.
  */
 fun CoroutineScope.launchGameRefreshCoroutine(

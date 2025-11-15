@@ -76,9 +76,9 @@ fun loadGame(
     gameName: String,
     desiredType: PieceType? = null,
 ): Game {
-    var game = Game()
-    val storage = game.storage
-    var loadedState = storage.load(gameName)
+    val conf = loadCoreConfig()
+    val storage = conf.STORAGE_TYPE.storage(conf.SAVES_FOLDER)
+    val loadedState = storage.load(gameName)
         ?: throw InvalidFileException(
             message = "$gameName does not exist",
             type = ErrorType.ERROR
