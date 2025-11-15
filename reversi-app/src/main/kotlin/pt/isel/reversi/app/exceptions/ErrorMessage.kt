@@ -1,4 +1,4 @@
-package pt.isel.reversi.app
+package pt.isel.reversi.app.exceptions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box

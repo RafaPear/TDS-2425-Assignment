@@ -6,6 +6,7 @@ import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.InvalidFileException
 import pt.isel.reversi.core.exceptions.InvalidGameException
+import pt.isel.reversi.core.exceptions.InvalidNameAlreadyExists
 import pt.isel.reversi.core.exceptions.InvalidPieceInFileException
 import pt.isel.reversi.core.storage.GameState
 
@@ -47,12 +48,18 @@ fun startNewGame(
             players = listOf(gs.players[0].swap().refresh(board)),
         )
 
-
-        return Game(
-            target = false,
-            gameState = gs,
-            currGameName = currGameName,
-        ).also {  it.storage.new(currGameName) { newGS } }
+        try {
+            return Game(
+                target = false,
+                gameState = gs,
+                currGameName = currGameName,
+            ).also { it.storage.new(currGameName) { newGS } }
+        } catch (_: Exception) {
+            throw InvalidNameAlreadyExists(
+                message = "A game with the name '$currGameName' already exists.",
+                type = ErrorType.WARNING
+            )
+        }
     }
 
     return Game(

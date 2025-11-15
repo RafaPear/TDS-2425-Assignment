@@ -15,6 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.*
 import org.jetbrains.compose.resources.painterResource
+import pt.isel.reversi.app.exceptions.ErrorMessage
 import pt.isel.reversi.app.gamePage.GamePage
 import pt.isel.reversi.app.mainMenu.JoinGamePage
 import pt.isel.reversi.app.mainMenu.MainMenu
@@ -104,7 +105,8 @@ fun main(args: Array<String>) {
 
 @Composable
 fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
-    val gameName = remember { mutableStateOf<String?>(null) }
+    val game = appState.value.game
+    val gameName = game.currGameName
 
     Column(
         modifier = modifier
@@ -116,8 +118,8 @@ fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
         Text("Guardar Jogo", fontSize = 28.sp, fontWeight = FontWeight.Bold)
 
         OutlinedTextField(
-            value = gameName.value ?: "",
-            onValueChange = { gameName.value = it },
+            value = gameName ?: "",
+            onValueChange = { appState.value = setGame(appState,game.copy(currGameName = it)) },
             label = { Text("Nome do jogo") },
             singleLine = true
         )
