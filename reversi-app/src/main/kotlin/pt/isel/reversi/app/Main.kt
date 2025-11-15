@@ -18,14 +18,10 @@ import org.jetbrains.compose.resources.painterResource
 import pt.isel.reversi.app.gamePage.GamePage
 import pt.isel.reversi.app.mainMenu.JoinGamePage
 import pt.isel.reversi.app.mainMenu.MainMenu
+import pt.isel.reversi.app.mainMenu.NewGamePage
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.Player
-import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
 import pt.isel.reversi.core.exceptions.ReversiException
-import pt.isel.reversi.core.startNewGame
 import pt.isel.reversi.core.stringifyBoard
 import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.setLoggerFilePath
@@ -190,80 +186,6 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     }
 }
 
-
-@Composable
-fun NewGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
-    val gameNameState = remember { mutableStateOf<String?>(null) }
-    val firstTurnState = mutableStateOf(PieceType.BLACK)
-
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .padding(30.dp),
-        verticalArrangement = Arrangement.spacedBy(15.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
-        Text("Novo Jogo", fontSize = 28.sp, fontWeight = FontWeight.Bold)
-
-        OutlinedTextField(
-            value = gameNameState.value ?: "",
-            onValueChange = { gameNameState.value = it },
-            label = { Text("Nome do jogo (opcional)") },
-            singleLine = true
-        )
-
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(10.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text("Primeiro a jogar:")
-            Button(onClick = { firstTurnState.value = PieceType.BLACK }) { Text("Preto") }
-            Button(onClick = { firstTurnState.value = PieceType.WHITE }) { Text("Branco") }
-        }
-
-        Button(
-            onClick = {
-                try {
-                    appState.value = setGame(
-                        appState,
-                        game = if (gameNameState.value?.ifBlank { null } != null) {
-                            startNewGame(
-                                players = listOf(Player(firstTurnState.value)),
-                                firstTurn = firstTurnState.value,
-                                currGameName = gameNameState.value?.ifBlank { null }
-                            )
-                        } else {
-                            startNewGame(
-                                players = listOf(
-                                    Player(PieceType.BLACK),
-                                    Player(PieceType.WHITE)
-                                ),
-                                firstTurn = firstTurnState.value
-                            )
-                        }
-                    )
-                    LOGGER.info("Novo jogo '${gameNameState.value?.ifBlank { "(local)" } ?: "(local)"} ' iniciado.")
-                    appState.value = setPage(appState, Page.GAME)
-                } catch (e: ReversiException) {
-                    appState.value = setError(appState, error = e)
-                } catch (e: Exception) {
-                    appState.value = setError(
-                        appState,
-                        error = e.toReversiException(ErrorType.CRITICAL)
-                    )
-                }
-            }
-        ) {
-            Text("Começar Jogo")
-        }
-
-        Spacer(Modifier.height(10.dp))
-
-        Button(onClick = { appState.value = setPage(appState, Page.MAIN_MENU) }) {
-            Text("Voltar")
-        }
-    }
-}
 
 fun Game.printDebugState() {
     LOGGER.info("========== ESTADO ATUAL DO JOGO ==========")
