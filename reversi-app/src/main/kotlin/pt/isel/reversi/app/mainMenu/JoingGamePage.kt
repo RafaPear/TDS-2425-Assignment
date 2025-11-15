@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.mainMenu
 
-import pt.isel.reversi.core.exceptions.ReversiException
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
@@ -13,9 +12,11 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pt.isel.reversi.app.*
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.loadGame
+import pt.isel.reversi.utils.LOGGER
 
 @Composable
 fun JoinGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
@@ -65,7 +66,7 @@ fun JoinGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
                         gameName = game.currGameName!!.trim(),
                         desiredType = game.myPiece
                     )
-                    println("Ligado ao jogo '$game'.")
+                    LOGGER.info("Ligado ao jogo '$game'.")
                     appState.value = setAppState(appState, game, Page.GAME)
                 } catch (e: ReversiException) {
                     appState.value = setError(appState, e)

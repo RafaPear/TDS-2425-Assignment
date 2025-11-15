@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.gamePage
 
-import pt.isel.reversi.core.exceptions.ReversiException
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -8,19 +7,29 @@ import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pt.isel.reversi.app.AppState
-import pt.isel.reversi.app.setError
-import pt.isel.reversi.app.setGame
+import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
+import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.setError
+import pt.isel.reversi.app.state.setGame
 import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.exceptions.ReversiException
+import pt.isel.reversi.utils.LOGGER
 
 @Composable
 fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
+    val coroutineAppScope = rememberCoroutineScope()
+    // Launch the game refresh coroutine
+    coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
+
+    LOGGER.info("Rendering GamePage")
+
     Column(
         modifier = modifier
             .fillMaxSize()

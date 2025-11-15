@@ -22,7 +22,7 @@ import pt.isel.reversi.core.storage.GameState
  * @throws Exception if already exists a game with the same name in storage.
  */
 fun startNewGame(
-    side: Int = BOARD_SIDE,
+    side: Int = loadCoreConfig().BOARD_SIDE,
     players: List<Player>,
     firstTurn: PieceType,
     currGameName: String? = null,
@@ -47,13 +47,12 @@ fun startNewGame(
             players = listOf(gs.players[0].swap().refresh(board)),
         )
 
-        STORAGE.new(currGameName) { newGS }
 
         return Game(
             target = false,
             gameState = gs,
             currGameName = currGameName,
-        )
+        ).also {  it.storage.new(currGameName) { newGS } }
     }
 
     return Game(
@@ -77,8 +76,9 @@ fun loadGame(
     gameName: String,
     desiredType: PieceType? = null,
 ): Game {
-    val storage = STORAGE
-    val loadedState = storage.load(gameName)
+    var game = Game()
+    val storage = game.storage
+    var loadedState = storage.load(gameName)
         ?: throw InvalidFileException(
             message = "$gameName does not exist",
             type = ErrorType.ERROR
@@ -93,7 +93,7 @@ fun loadGame(
                 type = ErrorType.ERROR
             )
 
-    val gs = loadedState.copy(
+    val newState = loadedState.copy(
         players = loadedState.players.find { it.type == myPieceType }?.let {
             listOf(it)
         } ?: throw InvalidPieceInFileException(
@@ -102,17 +102,19 @@ fun loadGame(
         ),
     )
 
+    val opponents = loadedState.players.filter { it.type != myPieceType }
+
     storage.save(
         id = gameName,
-        obj = gs.copy(
-            players = loadedState.players - gs.players[0]
+        obj = newState.copy(
+            players = opponents
         )
     )
 
     return Game(
         target = false,
-        gameState = gs.copy(
-            players = gs.players.map { it.refresh(gs.board) }
+        gameState = newState.copy(
+            players = newState.players.map { it.refresh(newState.board) }
         ),
         currGameName = gameName,
     )
@@ -133,8 +135,8 @@ fun Game.stringifyBoard(): String {
                 col == 0 -> sb.append("$row ")
                 else -> sb.append(
                     when (useTarget && cords in availablePlays) {
-                        true -> "$TARGET_CHAR "
-                        false -> (board[cords]?.symbol ?: EMPTY_CHAR) + " "
+                        true -> "${this.config.TARGET_CHAR} "
+                        false -> (board[cords]?.symbol ?: this.config.EMPTY_CHAR) + " "
                     }
                 )
             }

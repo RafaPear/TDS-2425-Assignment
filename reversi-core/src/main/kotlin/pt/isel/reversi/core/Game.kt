@@ -3,11 +3,7 @@ package pt.isel.reversi.core
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.exceptions.EndGameException
-import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.exceptions.InvalidFileException
-import pt.isel.reversi.core.exceptions.InvalidGameException
-import pt.isel.reversi.core.exceptions.InvalidPlayException
+import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.storage.Storage
 
@@ -27,22 +23,38 @@ import pt.isel.reversi.storage.Storage
  * @property countPass The number of consecutive passes made by players.
  */
 data class Game(
-    val target: Boolean,
-    val currGameName: String?,
-    val gameState: GameState?,
+    val target: Boolean = false,
+    val currGameName: String? = null,
+    val gameState: GameState? = null,
     val countPass: Int = 0,
-    val myPiece: PieceType? = null
+    val myPiece: PieceType? = null,
+    val config: CoreConfig = loadCoreConfig()
 ) {
-    private val storage: Storage<String, GameState, String> = STORAGE
+    val storage: Storage<String, GameState, String> = config.STORAGE_TYPE.storage(config.SAVES_FOLDER)
 
     constructor() : this(
         target = false,
         currGameName = null,
         gameState = null,
+        countPass = 0,
+        myPiece = null
     )
 
-    fun changeMyPiece(newType: PieceType): Game = this.copy(myPiece = newType)
+    /**
+     * Reloads the core configuration.
+     * @return A new Game instance with the updated configuration.
+     */
+    fun reloadConfig(): Game =
+        this.copy(
+            config = loadCoreConfig()
+        )
 
+    /**
+     * Changes the player's piece type.
+     * @param newType The new piece type for the player.
+     * @return The updated game state with the new piece type.
+     */
+    fun changeMyPiece(newType: PieceType): Game = this.copy(myPiece = newType)
 
     /**
      * Ensures that the game has started by checking if the game state and players are initialized.
@@ -82,6 +94,16 @@ data class Game(
         }
     }
 
+    private fun hasAllPlayers(): Boolean {
+        val gs = requireStartedGame()
+        if (currGameName == null) return (gs.players.size == 2)
+        val loaded = storage.load(currGameName) ?: throw InvalidFileException(
+            message = "Failed to load game state from storage: $currGameName",
+            type = ErrorType.WARNING
+        )
+        return (loaded.players.isEmpty())
+    }
+
     /**
      * Plays a move at the specified coordinate.
      * Saves the piece to data access if the game is not local.
@@ -98,6 +120,12 @@ data class Game(
     fun play(coordinate: Coordinate): Game {
         val gs = requireStartedGame()
         gameEnded()
+        if (!hasAllPlayers()) {
+            throw InvalidPlayException(
+                message = "Cannot play until all players have joined the game.",
+                type = ErrorType.INFO
+            )
+        }
 
         checkTurnOnNotLocalGame(gs)
 

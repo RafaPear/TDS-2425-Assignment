@@ -14,7 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
+import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.setError
 import pt.isel.reversi.core.exceptions.ErrorType
+import pt.isel.reversi.utils.LOGGER
 
 /**
  * Composable that displays an error message based on the error type in the app state.
@@ -25,10 +28,22 @@ import pt.isel.reversi.core.exceptions.ErrorType
 fun ErrorMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     //TODO: Differentiate error types with different UI elements
     when (appState.value.error?.type) {
-        ErrorType.INFO -> ToastMessage(appState, modifier)
-        ErrorType.WARNING -> ToastMessage(appState, modifier)
-        ErrorType.ERROR -> ToastMessage(appState, modifier)
-        ErrorType.CRITICAL -> ToastMessage(appState, modifier)
+        ErrorType.INFO -> {
+            LOGGER.info("${appState.value.error?.message}")
+            ToastMessage(appState, modifier)
+        }
+        ErrorType.WARNING -> {
+            LOGGER.warning("${appState.value.error?.message}")
+            ToastMessage(appState, modifier)
+        }
+        ErrorType.ERROR -> {
+            LOGGER.severe("${appState.value.error?.message}")
+            ToastMessage(appState, modifier)
+        }
+        ErrorType.CRITICAL -> {
+            LOGGER.severe("Critical ${appState.value.error?.message}")
+            ToastMessage(appState, modifier)
+        }
         null -> return
     }
 }

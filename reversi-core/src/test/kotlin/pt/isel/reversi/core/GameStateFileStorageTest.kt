@@ -3,13 +3,14 @@ package pt.isel.reversi.core
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
+import pt.isel.reversi.core.storage.createFileStorage
 import pt.isel.reversi.utils.CONFIG_FOLDER
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertFails
 
 class GameStateFileStorageTest {
-    val storage = STORAGE.copy(folder = "test-saves")
+    val storage = createFileStorage(folder = "test-saves")
 
     val defaultGameState = GameState(
         players = listOf(

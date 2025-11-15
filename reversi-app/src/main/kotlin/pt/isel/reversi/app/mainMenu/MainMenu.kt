@@ -12,9 +12,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pt.isel.reversi.app.AppState
-import pt.isel.reversi.app.Page
-import pt.isel.reversi.app.setPage
+import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.Page
+import pt.isel.reversi.app.state.setPage
 
 val MAIN_MENU_PADDING = 20.dp
 

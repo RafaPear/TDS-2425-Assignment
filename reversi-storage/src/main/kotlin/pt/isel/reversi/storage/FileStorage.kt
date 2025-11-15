@@ -41,6 +41,9 @@ data class FileStorage<T>(
 
         if (!fs.exists(path(id))) return null
 
+        // check if file is not in use by another process
+        fs.metadata(path(id))
+
         val content = fs.read(path(id)) { readUtf8() }
 
         return serializer.deserialize(content)

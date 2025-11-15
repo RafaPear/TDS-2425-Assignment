@@ -1,8 +1,6 @@
 package pt.isel.reversi.app
 
-import pt.isel.reversi.core.exceptions.ReversiException
 import androidx.compose.foundation.layout.*
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
@@ -20,50 +18,44 @@ import org.jetbrains.compose.resources.painterResource
 import pt.isel.reversi.app.gamePage.GamePage
 import pt.isel.reversi.app.mainMenu.JoinGamePage
 import pt.isel.reversi.app.mainMenu.MainMenu
-import pt.isel.reversi.core.*
+import pt.isel.reversi.app.state.*
+import pt.isel.reversi.core.Game
+import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.exceptions.ErrorType
+import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
+import pt.isel.reversi.core.exceptions.ReversiException
+import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.stringifyBoard
+import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.setLoggerFilePath
+import pt.rafap.ktflag.cmd.args.CommandArg
+import pt.rafap.ktflag.cmd.args.CommandArgsParser
 import reversi.reversi_app.generated.resources.Res
 import reversi.reversi_app.generated.resources.reversi
 
-/**
- * State of the application.
- * @param game The current game state.
- * @param page The current page being displayed.
- * @param error The current error, for remove error on display set to null.
- */
-data class AppState(
-    val game: Game,
-    val page: Page,
-    val error: ReversiException?,
+
+val logArg = CommandArg(
+    name = "log",
+    aliases = arrayOf("-l"),
+    description = "If set, enables logging to a file named reversi-app.log",
+    returnsValue = false,
+    isRequired = false
 )
+val argsParser = CommandArgsParser(logArg)
 
-fun setGame(appState: MutableState<AppState>, game: Game) = appState.value.copy(game = game)
+fun main(args: Array<String>) {
 
+    application {
 
-fun setPage(appState: MutableState<AppState>, page: Page) = appState.value.copy(page = page)
+        val windowState = rememberWindowState(
+            placement = WindowPlacement.Floating,
+            position = WindowPosition.PlatformDefault
+        )
 
-
-fun setError(appState: MutableState<AppState>, error: ReversiException?) = appState.value.copy(error = error)
-
-fun setAppState(
-    appState: MutableState<AppState>,
-    game: Game = appState.value.game,
-    page: Page = appState.value.page,
-    error: ReversiException? = appState.value.error,
-) = AppState(game, page, error)
-
-
-fun main() = application {
-    val windowState = rememberWindowState(
-        placement = WindowPlacement.Floating,
-        position = WindowPosition.PlatformDefault
-    )
-    Window(
-        onCloseRequest = ::exitApplication,
-        title = "Reversi-DEV",
-        icon = painterResource(Res.drawable.reversi),
-        state = windowState
-    ) {
+        val parsedArgs = argsParser.parseArgs(*args)
+        val logToFileName = parsedArgs[logArg]
+        if (logToFileName != null) setLoggerFilePath()
 
         val appState = remember {
             mutableStateOf(
@@ -75,81 +67,43 @@ fun main() = application {
             )
         }
 
-        window.minimumSize = java.awt.Dimension(500, 500)
+        fun safeExitApplication() {
+            LOGGER.info("Exiting application...")
 
-
-        MenuBar {
-            Menu("Ficheiro") {
-                Item("Novo Jogo") {
-                    appState.value = setPage(appState, Page.NEW_GAME)
-                }
-                Item("Entrar em Jogo") {
-                    appState.value = setPage(appState, Page.JOIN_GAME)
-                }
-                Item("Guardar Jogo") {
-                    appState.value = setPage(appState, Page.SAVE_GAME)
-                }
-                Item("Definições") {
-                    appState.value = setPage(appState, Page.SETTINGS)
-                }
-                Item("Menu Principal") {
-                    appState.value = setPage(appState, Page.MAIN_MENU)
-                }
-                Item("Jogo Atual") {
-                    appState.value = setPage(appState, Page.GAME)
-                }
-                Separator()
-                Item("Sair") {
-                    exitApplication()
-                }
+            try {
+                appState.value.game.saveGame()
+            } catch (e: ReversiException) {
+                LOGGER.warning("Failed to save game on exit: ${e.message}")
             }
 
-            Menu("Dev") {
-                Item("Mostrar Estado do Jogo") {
-                    appState.value.game.printDebugState()
-                }
-            }
-
-            Menu("Ajuda") {
-                Item("Sobre") {
-                    appState.value = setPage(appState, Page.ABOUT)
-                }
-            }
+            exitApplication()
         }
 
-        when (appState.value.page) {
-            Page.MAIN_MENU -> MainMenu(appState)
-            Page.GAME -> GamePage(appState)
-            Page.SETTINGS -> SettingsPage(appState)
-            Page.ABOUT -> AboutPage(appState)
-            Page.JOIN_GAME -> JoinGamePage(appState)
-            Page.NEW_GAME -> NewGamePage(appState)
-            Page.SAVE_GAME -> SaveGamePage(appState)
-        }
+        Window(
+            onCloseRequest = ::safeExitApplication,
+            title = "Reversi-DEV",
+            icon = painterResource(Res.drawable.reversi),
+            state = windowState
+        ) {
 
-        // Show error dialog if there is an error
-        appState.value.error?.let { ErrorMessage(appState) }
+            window.minimumSize = java.awt.Dimension(500, 500)
+
+            MakeMenuBar(appState, ::safeExitApplication)
+
+            when (appState.value.page) {
+                Page.MAIN_MENU -> MainMenu(appState)
+                Page.GAME -> GamePage(appState)
+                Page.SETTINGS -> SettingsPage(appState)
+                Page.ABOUT -> AboutPage(appState)
+                Page.JOIN_GAME -> JoinGamePage(appState)
+                Page.NEW_GAME -> NewGamePage(appState)
+                Page.SAVE_GAME -> SaveGamePage(appState)
+            }
+
+            // Show error dialog if there is an error
+            appState.value.error?.let { ErrorMessage(appState) }
+        }
     }
-}
-
-
-@Composable
-fun ErrorDialog(appState: MutableState<AppState>, errorMessage: String, newPage: Page, onOk: () -> Unit) {
-    AlertDialog(
-        onDismissRequest = { appState.value = setPage(appState, newPage); onOk() },
-        title = { Text("Erro") },
-        text = { Text("Ocorreu um erro: $errorMessage") },
-        confirmButton = {
-            Button(
-                onClick = {
-                    appState.value = setPage(appState, newPage)
-                    onOk()
-                }
-            ) {
-                Text("OK")
-            }
-        }
-    )
 }
 
 @Composable
@@ -222,7 +176,10 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     ) {
         Text("Sobre", fontSize = 30.sp, fontWeight = FontWeight.Bold)
         Text("Projeto Reversi desenvolvido no ISEL.")
-        Text("Autores: Rafael Vermelho Pereira e equipa.")
+        Text("Autores: ")
+        Text(" - Rafael Pereira - NUMERO")
+        Text(" - Ian Frunze - NUMERO")
+        Text(" - Tito Silva - NUMERO")
         Text("Versão: DEV Build")
 
         Spacer(Modifier.height(20.dp))
@@ -237,7 +194,6 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
 @Composable
 fun NewGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     val gameNameState = remember { mutableStateOf<String?>(null) }
-    val side = BOARD_SIDE
     val firstTurnState = mutableStateOf(PieceType.BLACK)
 
     Column(
@@ -272,14 +228,12 @@ fun NewGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier)
                         appState,
                         game = if (gameNameState.value?.ifBlank { null } != null) {
                             startNewGame(
-                                side = side,
                                 players = listOf(Player(firstTurnState.value)),
                                 firstTurn = firstTurnState.value,
                                 currGameName = gameNameState.value?.ifBlank { null }
                             )
                         } else {
                             startNewGame(
-                                side = side,
                                 players = listOf(
                                     Player(PieceType.BLACK),
                                     Player(PieceType.WHITE)
@@ -288,10 +242,15 @@ fun NewGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier)
                             )
                         }
                     )
-                    println("Novo jogo '${gameNameState.value?.ifBlank { "(local)" } ?: "(local)"} ' iniciado.")
+                    LOGGER.info("Novo jogo '${gameNameState.value?.ifBlank { "(local)" } ?: "(local)"} ' iniciado.")
                     appState.value = setPage(appState, Page.GAME)
                 } catch (e: ReversiException) {
                     appState.value = setError(appState, error = e)
+                } catch (e: Exception) {
+                    appState.value = setError(
+                        appState,
+                        error = e.toReversiException(ErrorType.CRITICAL)
+                    )
                 }
             }
         ) {
@@ -307,33 +266,33 @@ fun NewGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier)
 }
 
 fun Game.printDebugState() {
-    println("========== ESTADO ATUAL DO JOGO ==========")
-    println("Nome do jogo: ${currGameName ?: "(local)"}")
-    println("Modo alvo (target): $target")
-    println("Contagem de passes: $countPass")
+    LOGGER.info("========== ESTADO ATUAL DO JOGO ==========")
+    LOGGER.info("Nome do jogo: ${currGameName ?: "(local)"}")
+    LOGGER.info("Modo alvo (target): $target")
+    LOGGER.info("Contagem de passes: $countPass")
 
     val state = gameState
     if (state == null) {
-        println("⚠️ Sem estado de jogo carregado.")
-        println("==========================================")
+        LOGGER.info("⚠️ Sem estado de jogo carregado.")
+        LOGGER.info("==========================================")
         return
     }
 
-    println("\n--- Jogadores ---")
+    LOGGER.info("\n--- Jogadores ---")
     state.players.forEachIndexed { i, player ->
-        println("Jogador ${i + 1}: ${player.type} (${player.points} pontos)")
+        LOGGER.info("Jogador ${i + 1}: ${player.type} (${player.points} pontos)")
     }
 
-    println("Último jogador: ${state.lastPlayer}")
-    println("Vencedor: ${state.winner?.type ?: "Nenhum"}")
+    LOGGER.info("Último jogador: ${state.lastPlayer}")
+    LOGGER.info("Vencedor: ${state.winner?.type ?: "Nenhum"}")
 
     val board = state.board
-    println("\n--- Tabuleiro ---")
-    println("Tamanho: ${board.side}x${board.side}")
-    println("Peças pretas: ${board.totalBlackPieces}, Peças brancas: ${board.totalWhitePieces}")
-    println("Representação:")
-    println(this.stringifyBoard())
+    LOGGER.info("\n--- Tabuleiro ---")
+    LOGGER.info("Tamanho: ${board.side}x${board.side}")
+    LOGGER.info("Peças pretas: ${board.totalBlackPieces}, Peças brancas: ${board.totalWhitePieces}")
+    LOGGER.info("Representação:")
+    LOGGER.info(this.stringifyBoard())
 
-    println("==========================================\n")
+    LOGGER.info("==========================================\n")
 }
 

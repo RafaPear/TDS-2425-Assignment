@@ -11,8 +11,6 @@ class CoreConfigTests {
         assert(cfg.BOARD_SIDE == 8)
         assert(cfg.TARGET_CHAR == '*')
         assert(cfg.EMPTY_CHAR == '.')
-        assert(cfg.SIDE_MIN == 4)
-        assert(cfg.SIDE_MAX == 26)
         assert(cfg.SAVES_FOLDER == "saves")
     }
 
@@ -31,8 +29,6 @@ class CoreConfigTests {
         assert(cfg.BOARD_SIDE == 10)
         assert(cfg.TARGET_CHAR == 'T')
         assert(cfg.EMPTY_CHAR == '_')
-        assert(cfg.SIDE_MIN == 6)
-        assert(cfg.SIDE_MAX == 20)
         assert(cfg.SAVES_FOLDER == "my_saves")
     }
 }

@@ -9,4 +9,5 @@ package pt.isel.reversi.core.exceptions
 abstract class ReversiException(
     message: String,
     val type: ErrorType
+
 ) : Exception(message)

@@ -27,5 +27,4 @@ interface Storage<K, T, U> {
 
     /** Deletes the entity identified by [id]. */
     fun delete(id: K)
-
 }

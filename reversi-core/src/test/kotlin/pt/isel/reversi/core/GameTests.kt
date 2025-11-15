@@ -16,9 +16,10 @@ import kotlin.test.assertFailsWith
 class GameTests {
 
     fun cleanup(func: () -> Unit) {
-        File(SAVES_FOLDER).deleteRecursively()
+        val conf = loadCoreConfig()
+        File(conf.SAVES_FOLDER).deleteRecursively()
         func()
-        File(SAVES_FOLDER).deleteRecursively()
+        File(conf.SAVES_FOLDER).deleteRecursively()
     }
 
     @Test
@@ -107,7 +108,7 @@ class GameTests {
             currGameName = null,
         ).play(Coordinate(1, 2))
 
-        assert(expectedGame == uut)
+        assert(expectedGame.gameState == uut.gameState)
     }
 
     @Test
@@ -267,11 +268,11 @@ class GameTests {
                 currGameName = "existingGame",
             )
 
-            loadGame(
+            val storage = loadGame(
                 gameName = "existingGame"
-            )
+            ).storage
 
-            val loadedGame = STORAGE.load("existingGame")?.let {
+            val loadedGame = storage.load("existingGame")?.let {
                 Game(
                     target = false,
                     gameState = it,
@@ -579,7 +580,7 @@ class GameTests {
 
             uut.saveGame()
 
-            val loadedGameState = STORAGE.load("testGame")
+            val loadedGameState = uut.storage.load("testGame")
 
             val expectedGameState = uut.gameState?.copy(
                 players = listOf(Player(PieceType.BLACK), Player(PieceType.WHITE)),
@@ -601,7 +602,7 @@ class GameTests {
 
             uut.saveGame()
 
-            val loadedGameState = STORAGE.load("testGame")
+            val loadedGameState = uut.storage.load("testGame")
 
             assertEquals(uut.gameState, loadedGameState)
         }

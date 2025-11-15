@@ -1,9 +1,7 @@
 package pt.isel.reversi.cli.commands
 
 import pt.isel.reversi.cli.CLI_CONFIG
-import pt.isel.reversi.core.CORE_CONFIG
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.SAVES_FOLDER
 import pt.isel.reversi.core.stringifyBoard
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
@@ -72,55 +70,55 @@ object DebugCmd : CommandImpl<Game>() {
                 sb.appendLine("    Current Game Name: $name")
                 sb.appendLine("    Consecutive Passes: $count")
             }
+            sb.appendLine(Colors.BLUE)
+            sb.appendLine(title("Core Configurations"))
+            sb.appendLine(
+                colorText(
+                    "  Note: These configurations are set at compile-time and cannot be changed at runtime.",
+                    Colors.YELLOW
+                )
+            )
+            for ((key, value) in context.config.map)
+                if (key.contains("COLOR"))
+                    sb.appendLine(colorText("     - $key", value))
+                else
+                    sb.appendLine("     - $key: '$value'")
+            sb.appendLine()
+
+            sb.appendLine(Colors.YELLOW)
+
+            sb.appendLine(title("CLI Configurations"))
+            sb.appendLine(
+                colorText(
+                    "  Note: These configurations are set at compile-time and cannot be changed at runtime.",
+                    Colors.YELLOW
+                )
+            )
+            sb.appendLine(title("Saves Folder Contents"))
+            val files = java.io.File(context.config.SAVES_FOLDER).listFiles()
+            if (files.isNullOrEmpty()) {
+                sb.appendLine("    No saved games found.")
+            } else {
+                for (file in files) {
+                    if (file.name == name)
+                        sb.appendLine(
+                            colorText(
+                                "     - ${file.name} (${file.length()} bytes) <- (Current Game)",
+                                Colors.GREEN
+                            )
+                        )
+                    else
+                        sb.appendLine("     - ${file.name} (${file.length()} bytes)")
+                }
+            }
         }
-        sb.appendLine(Colors.BLUE)
-        sb.appendLine(title("Core Configurations"))
-        sb.appendLine(
-            colorText(
-                "  Note: These configurations are set at compile-time and cannot be changed at runtime.",
-                Colors.YELLOW
-            )
-        )
-        for ((key, value) in CORE_CONFIG.map)
-            if (key.contains("COLOR"))
-                sb.appendLine(colorText("     - $key", value))
-            else
-                sb.appendLine("     - $key: '$value'")
-        sb.appendLine()
 
-        sb.appendLine(Colors.YELLOW)
-
-        sb.appendLine(title("CLI Configurations"))
-        sb.appendLine(
-            colorText(
-                "  Note: These configurations are set at compile-time and cannot be changed at runtime.",
-                Colors.YELLOW
-            )
-        )
         for ((key, value) in CLI_CONFIG.map)
             if (key.contains("COLOR"))
                 sb.appendLine(colorText("     - $key", value))
             else
                 sb.appendLine("     - $key: '$value'")
         sb.appendLine(Colors.PURPLE)
-
-        sb.appendLine(title("Saves Folder Contents"))
-        val files = java.io.File(SAVES_FOLDER).listFiles()
-        if (files.isNullOrEmpty()) {
-            sb.appendLine("    No saved games found.")
-        } else {
-            for (file in files) {
-                if (file.name == name)
-                    sb.appendLine(
-                        colorText(
-                            "     - ${file.name} (${file.length()} bytes) <- (Current Game)",
-                            Colors.GREEN
-                        )
-                    )
-                else
-                    sb.appendLine("     - ${file.name} (${file.length()} bytes)")
-            }
-        }
 
         return CommandResult.SUCCESS(sb.toString(), context)
     }

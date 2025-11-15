@@ -1,4 +1,4 @@
-package pt.isel.reversi.app
+package pt.isel.reversi.app.state
 
 enum class Page {
     MAIN_MENU,

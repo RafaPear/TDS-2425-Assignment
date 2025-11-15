@@ -15,13 +15,16 @@ class ConfigLoader<U : Config>(
      * Loads the configuration into a Map.
      */
     fun loadConfig(): U {
+        LOGGER.info("Loading configuration from $path")
         val props = Properties()
         val file = File(path)
+        val defaultEntries = factory(emptyMap()).getDefaultConfigFileEntries()
 
         if (!file.exists()) {
+            LOGGER.warning("Configuration file not found at $path. Creating default configuration file.")
             file.parentFile?.mkdirs()
             file.createNewFile()
-            val entries = factory(emptyMap()).getDefaultConfigFileEntries()
+            val entries = defaultEntries
             for (entry in entries)
                 props.setProperty(entry.key, entry.value)
 
@@ -35,7 +38,14 @@ class ConfigLoader<U : Config>(
         }
 
         val configMap = props.entries.associate { it.key.toString() to it.value.toString() }
+        val factoryResult = factory(configMap)
+        val newProps = Properties().also {
+            it.putAll(factoryResult.getDefaultConfigFileEntries())
+        }
 
-        return factory(configMap)
+        file.outputStream().use { output ->
+            newProps.store(output, "Configuration file created at ${file.absolutePath}")
+        }
+        return factoryResult
     }
 }

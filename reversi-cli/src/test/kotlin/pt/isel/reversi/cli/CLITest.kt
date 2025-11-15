@@ -15,10 +15,11 @@ class CLITest {
         cleanup {
             val cli = CLI(arrayOf(MockCommand)) // game is null
             val result = cli.parseInput("mock", null) // should execute MockCommand and game remains null
+            val newGame = startNewGame(
+                players = listOf(Player(PieceType.BLACK)), firstTurn = PieceType.BLACK
+            )
             assert(
-                result == startNewGame(
-                    players = listOf(Player(PieceType.BLACK)), firstTurn = PieceType.BLACK
-                )
+                result != null && result.gameState == newGame.gameState
             ) {
                 "Expected game context to be null, but got: $result"
             }
@@ -35,7 +36,11 @@ class CLITest {
             )
 
             val result = cli.parseInput("mock", initialGame) // should execute MockCommand and return new game context
-            assert(result != null && result != initialGame && result == expectedGame) {
+            assert(
+                result != null
+                        && result.gameState != initialGame.gameState
+                        && result.gameState == expectedGame.gameState
+            ) {
                 "Expected a new game context, but got: $result"
             }
         }

@@ -1,10 +1,10 @@
 package pt.isel.reversi.cli.commands
 
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.SAVES_FOLDER
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
+import pt.rafap.ktflag.cmd.CommandResultType
 import java.io.File
 
 object ListGamesCmd : CommandImpl<Game>() {
@@ -23,7 +23,10 @@ object ListGamesCmd : CommandImpl<Game>() {
         vararg args: String,
         context: Game?
     ): CommandResult<Game> {
-        val folder = File(SAVES_FOLDER)
+        if (context == null) {
+            return CommandResultType.ERROR("Game context is not available. No config is loaded.", context)
+        }
+        val folder = File(context.config.SAVES_FOLDER)
         if (!folder.exists() || !folder.isDirectory) {
             return CommandResult.SUCCESS("No saved games found.", context)
         }
