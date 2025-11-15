@@ -12,8 +12,10 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.reversi.app.exceptions.TextBoxIsEmpty
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.loadGame
 import pt.isel.reversi.utils.LOGGER
@@ -57,13 +59,20 @@ fun JoinGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
         Button(
             modifier = modifier,
             onClick = {
-                if (game.currGameName.isNullOrBlank()) {
-                    // appState.value = setError(appState, error = ) TODO implement error for empty game name
+                val currGameName = game.currGameName
+                if (currGameName.isNullOrBlank()) {
+                    appState.value = setError(
+                        appState,
+                        error = TextBoxIsEmpty(
+                            message = "Insira um nome do jogo.",
+                            type =  ErrorType.INFO
+                        )
+                    )
                     return@Button
                 }
                 try {
                     game = loadGame(
-                        gameName = game.currGameName!!.trim(),
+                        gameName = currGameName.trim(),
                         desiredType = game.myPiece
                     )
                     LOGGER.info("Ligado ao jogo '$game'.")
