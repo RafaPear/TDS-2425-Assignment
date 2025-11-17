@@ -37,7 +37,7 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
             .padding(10.dp),
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
         ) {
             if (appState.value.game.currGameName != null && !freeze)
@@ -57,60 +57,57 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
         Spacer(modifier = Modifier.height(padding))
 
         Row(
-            modifier = Modifier.fillMaxWidth()
+            modifier = modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
         ) {
             Box(
-                modifier = Modifier
-                    .aspectRatio(1f)
-                    .background(BOARD_SIDE_COLOR, shape = RoundedCornerShape(12.dp))
-                    .padding(10.dp),
+                modifier = modifier.weight(0.7f),
             ) {
-                DrawBoard(appState.value.game, freeze = freeze) { x, y ->
-                    try {
-                        appState.value = setGame(
-                            appState,
-                            game = appState.value.game.play(Coordinate(x, y))
-                        )
-                    } catch (e: ReversiException) {
-                        appState.value = setError(appState, error = e)
+                Box(
+                    modifier = modifier
+                        .aspectRatio(1f)
+                        .background(BOARD_SIDE_COLOR, shape = RoundedCornerShape(12.dp))
+                        .padding(10.dp)
+                ) {
+                    DrawBoard(appState.value.game, freeze = freeze) { x, y ->
+                        try {
+                            appState.value = setGame(
+                                appState,
+                                game = appState.value.game.play(Coordinate(x, y))
+                            )
+                        } catch (e: ReversiException) {
+                            appState.value = setError(appState, error = e)
+                        }
                     }
                 }
             }
 
             Spacer(modifier = Modifier.width(padding))
 
+            // Coluna dos jogadores e botões
             Column(
-                modifier = Modifier
-                    .fillMaxSize(),
+                modifier = modifier.weight(0.3f),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
+                TextPlayersScore(state = appState.value.game.gameState)
 
-                TextPlayersScore(
-                    state = appState.value.game.gameState,
-                )
-
-                Spacer(modifier = Modifier.height(padding))
+                Spacer(modifier = Modifier.height(padding*3))
 
                 val target = if (appState.value.game.target) "On" else "Off"
 
-                Column(
-                    modifier = Modifier.fillMaxSize(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {// Button to toggle the target state
-                    GameButton("Target $target", freeze = freeze) {
-                        appState.value = setGame(
-                            appState,
-                            game = appState.value.game.setTargetMode(!appState.value.game.target)
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(padding))
-
-                    // Main action button
-                    GameButton("Update", freeze = freeze) {
-                        appState.value = setGame(appState, appState.value.game.refresh())
-                    }
+                GameButton("Target $target", freeze = freeze) {
+                    appState.value = setGame(
+                        appState,
+                        game = appState.value.game.setTargetMode(!appState.value.game.target)
+                    )
                 }
+
+                Spacer(modifier = Modifier.height(padding))
+
+//                GameButton("Update", freeze = freeze) {
+//                    appState.value = setGame(appState, appState.value.game.refresh())
+//                }
+
             }
         }
     }
