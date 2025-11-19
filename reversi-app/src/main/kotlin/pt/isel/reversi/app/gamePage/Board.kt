@@ -12,6 +12,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.core.Game
@@ -35,13 +38,19 @@ val BUTTON_MAX_FONT_SIZE = 40.sp
 val BUTTON_TEXT_COLOR = TEXT_COLOR
 val BUTTON_MAIN_COLOR = Color(0xFF4CAF50)
 
-@Composable
-fun DrawBoard(game: Game, modifier: Modifier = Modifier,freeze: Boolean = false, onCellClick: (x: Int, y: Int) -> Unit) {
+val GHOST_PIECE_ALPHA = 0.3f
 
+@Composable
+fun DrawBoard(
+    game: Game,
+    modifier: Modifier = Modifier,
+    freeze: Boolean = false,
+    onCellClick: (coordinate: Coordinate) -> Unit
+) {
     val state = game.gameState
 
     if (state != null)
-        Grid(game, modifier, freeze) { x, y -> onCellClick(x, y) }
+        Grid(game, modifier, freeze) { coordinate -> onCellClick(coordinate) }
 }
 
 /** Composable that draws the board grid */
@@ -50,7 +59,7 @@ fun Grid(
     game: Game,
     modifier: Modifier = Modifier,
     freeze: Boolean = false,
-    onCellClick: (x: Int, y: Int) -> Unit
+    onCellClick: (coordinate: Coordinate) -> Unit
 ) {
     val board: Board = game.gameState?.board ?: return
     val side = board.side
@@ -63,6 +72,8 @@ fun Grid(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val availablePlays = game.getAvailablePlays()
+
         repeat(side) { y ->
             Row(
                 modifier = modifier
@@ -71,46 +82,13 @@ fun Grid(
                 horizontalArrangement = Arrangement.SpaceEvenly
             ) {
 
-                val availablePlays = game.getAvailablePlays()
-
                 repeat(side) { x ->
                     val coordinate = Coordinate(x + 1, y + 1)
                     val cellValue = board[coordinate]
-                    val isTargetCell = target && availablePlays.contains(coordinate)
-                    Box(
-                        modifier = modifier
-                            .weight(1f)
-                            .aspectRatio(1f)
-                            .padding(2.dp)
-                            .clip(RoundedCornerShape(6.dp))
-                            .background(BOARD_MAIN_COLOR)
-                            .clickable(enabled = (cellValue == null && !freeze)) { onCellClick(x + 1, y + 1) },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Canvas(
-                            modifier = modifier
-                                .fillMaxSize()
-                                .aspectRatio(1f)
-                        ) {
-                            val size = size
-                            val radius = size.minDimension / 2 * 0.7f
-                            val center = Offset(size.width / 2, size.height / 2)
+                    val ghostPiece = if (target && availablePlays.contains(coordinate)) playerTurn else null
 
-                            val color = when (cellValue) {
-                                PieceType.BLACK -> Color.Black
-                                PieceType.WHITE -> Color.White
-                                else -> null
-                            }
-                            if (color != null) {
-                                drawPiece(radius, center, color, drawScope = this)
-                            } else if (isTargetCell && playerTurn != null) {
-                                drawCircle(
-                                    color = (if (playerTurn == PieceType.BLACK) Color.Black else Color.White).copy(alpha = 0.3f),
-                                    radius = radius,
-                                    center = center,
-                                )
-                            }
-                        }
+                    cellView(coordinate, cellValue, ghostPiece, freeze, modifier = modifier.weight(1f)) {
+                        onCellClick(coordinate)
                     }
                 }
             }
@@ -118,8 +96,72 @@ fun Grid(
     }
 }
 
+fun getCellViewTestTag(coordinate: Coordinate) =
+    "cell_${coordinate.row},${coordinate.col}"
 
-fun drawPiece(
+fun getPieceTestTag(coordinate: Coordinate, type: PieceType?): String {
+    val value = when (type) {
+        PieceType.BLACK -> "BLACK"
+        PieceType.WHITE -> "WHITE"
+        null -> ""
+    }
+    return "Piece_${getCellViewTestTag(coordinate)}_${value}"
+}
+
+@Composable
+fun cellView(
+    coordinate: Coordinate,
+    cellValue: PieceType?,
+    ghostPiece: PieceType?,
+    freeze: Boolean = false,
+    modifier: Modifier = Modifier,
+    onClick: (coordinate: Coordinate) -> Unit
+) {
+    Box(
+        modifier = modifier
+            .aspectRatio(1f)
+            .padding(2.dp)
+            .clip(RoundedCornerShape(6.dp))
+            .background(BOARD_MAIN_COLOR)
+            .clickable(enabled = (cellValue == null && !freeze)) { onClick(coordinate) }
+            .testTag(getCellViewTestTag(coordinate)),
+        contentAlignment = Alignment.Center
+    ) {
+        if (cellValue != null || ghostPiece != null) {
+            Canvas(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .aspectRatio(1f)
+                    .semantics { testTag = getPieceTestTag(coordinate, cellValue ?: ghostPiece) }
+            ) {
+                val size = size
+                val radius = size.minDimension / 2 * 0.7f
+                val center = Offset(size.width / 2, size.height / 2)
+
+                if (cellValue != null) {
+                    val color = when (cellValue) {
+                        PieceType.BLACK -> Color.Black
+                        PieceType.WHITE -> Color.White
+                    }
+                    drawPiece(radius, center, color, drawScope = this)
+                } else if (ghostPiece != null) {
+                    val color = when (ghostPiece) {
+                        PieceType.BLACK -> Color.Black
+                        PieceType.WHITE -> Color.White
+                    }
+                    drawCircle(
+                        color = color.copy(alpha = GHOST_PIECE_ALPHA),
+                        radius = radius,
+                        center = center,
+                    )
+                }
+            }
+        }
+    }
+}
+
+
+private fun drawPiece(
     radius: Float,
     center: Offset,
     color: Color,

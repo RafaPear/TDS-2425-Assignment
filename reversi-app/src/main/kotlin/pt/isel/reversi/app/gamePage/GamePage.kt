@@ -18,7 +18,6 @@ import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.setError
 import pt.isel.reversi.app.state.setGame
-import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
 
@@ -69,11 +68,11 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
                         .background(BOARD_SIDE_COLOR, shape = RoundedCornerShape(12.dp))
                         .padding(10.dp)
                 ) {
-                    DrawBoard(appState.value.game, freeze = freeze) { x, y ->
+                    DrawBoard(appState.value.game, freeze = freeze) { coordinate ->
                         try {
                             appState.value = setGame(
                                 appState,
-                                game = appState.value.game.play(Coordinate(x, y))
+                                game = appState.value.game.play(coordinate)
                             )
                         } catch (e: ReversiException) {
                             appState.value = setError(appState, error = e)
@@ -91,7 +90,7 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
             ) {
                 TextPlayersScore(state = appState.value.game.gameState)
 
-                Spacer(modifier = Modifier.height(padding*3))
+                Spacer(modifier = Modifier.height(padding * 3))
 
                 val target = if (appState.value.game.target) "On" else "Off"
 
