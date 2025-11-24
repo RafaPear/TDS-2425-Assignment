@@ -329,17 +329,23 @@ data class Game(
             type = ErrorType.WARNING
         )
 
-        if (gs.players.size != 1)
-            throw InvalidGameException(
-                message = "Only a not local game can be saved (players size must be 1)",
-                type = ErrorType.WARNING
-            )
-
         if (currGameName == null)
             throw InvalidFileException(
                 message = "Name of the current game is null",
                 type = ErrorType.WARNING
             )
+
+        if (gameState.players.isNotEmpty()) {
+            try {
+                storage.new(id = currGameName) { gameState }
+                return
+            } catch (_: Exception) {
+                throw InvalidFileException(
+                    message = "Already exist",
+                    type = ErrorType.WARNING
+                )
+            }
+        }
 
         val ls = storage.load(currGameName) ?: throw InvalidFileException(
             message = "Failed to load game state from storage: $currGameName",
@@ -352,5 +358,10 @@ data class Game(
                 players = ls.players
             )
         )
+//        if (gs.players.size != 1)
+//            throw InvalidGameException(
+//                message = "Only a not local game can be saved (players size must be 1)",
+//                type = ErrorType.INFO
+//            )
     }
 }

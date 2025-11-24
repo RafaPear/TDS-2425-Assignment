@@ -5,12 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -147,7 +142,10 @@ fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
                     appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
                     appState.value = setPage(appState, Page.GAME)
                 } catch (e: ReversiException) {
-                    appState.value = setError(appState, error = e)
+                    appState.value = setAppState(
+                        appState, error = e,
+                        game = game.copy(currGameName = null)
+                    )
                 }
             }
         ) {

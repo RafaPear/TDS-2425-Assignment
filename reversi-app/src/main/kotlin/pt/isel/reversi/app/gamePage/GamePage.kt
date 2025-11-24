@@ -24,7 +24,10 @@ import pt.isel.reversi.utils.LOGGER
 fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, freeze: Boolean = false) {
     val coroutineAppScope = rememberCoroutineScope()
     // Launch the game refresh coroutine
-    coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
+    val game = appState.value.game
+    if ( game.currGameName != null && game.gameState?.players?.size != 2){
+        coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
+    }
 
     LOGGER.info("Rendering GamePage")
 
