@@ -1,5 +1,6 @@
 package pt.isel.reversi.core
 
+import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
@@ -27,7 +28,8 @@ fun startNewGame(
     players: List<Player>,
     firstTurn: PieceType,
     currGameName: String? = null,
-): Game {
+): Game = runBlocking {
+    var returnGame: Game
     if (players.isEmpty())
         throw InvalidGameException(
             "Need minimum one player to start the game",
@@ -49,7 +51,7 @@ fun startNewGame(
         )
 
         try {
-            return Game(
+            returnGame = Game(
                 target = false,
                 gameState = gs,
                 currGameName = currGameName,
@@ -61,12 +63,12 @@ fun startNewGame(
             )
         }
     }
-
-    return Game(
+    else returnGame = Game(
         target = false,
         gameState = gs,
         currGameName = currGameName,
     )
+    returnGame
 }
 
 /**
@@ -82,7 +84,7 @@ fun startNewGame(
 fun loadGame(
     gameName: String,
     desiredType: PieceType? = null,
-): Game {
+): Game = runBlocking {
     val conf = loadCoreConfig()
     val storage = conf.STORAGE_TYPE.storage(conf.SAVES_FOLDER)
     val loadedState = storage.load(gameName)
@@ -118,7 +120,7 @@ fun loadGame(
         )
     )
 
-    return Game(
+    Game(
         target = false,
         gameState = newState.copy(
             players = newState.players.map { it.refresh(newState.board) }

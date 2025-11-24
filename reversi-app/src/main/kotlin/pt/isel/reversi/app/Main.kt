@@ -10,6 +10,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +19,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.*
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.painterResource
 import pt.isel.reversi.app.exceptions.ErrorMessage
 import pt.isel.reversi.app.gamePage.GamePage
@@ -72,7 +75,7 @@ fun main(args: Array<String>) {
             LOGGER.info("Exiting application...")
 
             try {
-                appState.value.game.saveEndGame()
+                runBlocking{ appState.value.game.saveEndGame() }
             } catch (e: ReversiException) {
                 LOGGER.warning("Failed to save game on exit: ${e.message}")
             }
@@ -119,6 +122,7 @@ fun main(args: Array<String>) {
 fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     val game = appState.value.game
     var gameName by remember { mutableStateOf(game.currGameName) }
+    val coroutineAppScope = rememberCoroutineScope()
     GamePage(appState, freeze = true)
     Column(
         modifier = modifier
@@ -144,7 +148,9 @@ fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
                     game.copy(currGameName = gameName?.trim() ?: return@Button)
                 )
                 try {
-                    appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
+                    coroutineAppScope.launch {
+                        appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
+                    }
                     appState.value = setPage(appState, Page.GAME)
                 } catch (e: ReversiException) {
                     appState.value = setError(appState, error = e)

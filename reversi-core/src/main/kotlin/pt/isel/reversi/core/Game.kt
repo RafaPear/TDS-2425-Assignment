@@ -1,11 +1,12 @@
 package pt.isel.reversi.core
 
+import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
-import pt.isel.reversi.storage.Storage
+import pt.isel.reversi.storage.AsyncStorage
 
 /**
  * Represents a Reversi game, managing the game state, player turns, and interactions with storage.
@@ -31,7 +32,7 @@ data class Game(
     val myPiece: PieceType? = null,
     val config: CoreConfig = loadCoreConfig()
 ) {
-    val storage: Storage<String, GameState, String> = config.STORAGE_TYPE.storage(config.SAVES_FOLDER)
+    val storage: AsyncStorage<String, GameState, String> = config.STORAGE_TYPE.storage(config.SAVES_FOLDER)
 
     constructor() : this(
         target = false,
@@ -96,7 +97,7 @@ data class Game(
         }
     }
 
-    private fun hasAllPlayers(): Boolean {
+    private suspend fun hasAllPlayers(): Boolean {
         val gs = requireStartedGame()
         if (currGameName == null) return (gs.players.size == 2)
         val loaded = storage.load(currGameName) ?: throw InvalidFileException(
@@ -119,40 +120,42 @@ data class Game(
      * @throws InvalidFileException if there is an error saving the game state.
      * @throws EndGameException if the game has already ended.
      */
-    fun play(coordinate: Coordinate): Game {
-        val gs = requireStartedGame()
-        gameEnded()
-        if (!hasAllPlayers()) {
-            throw InvalidPlayException(
-                message = "Cannot play until all players have joined the game.",
-                type = ErrorType.INFO
+    fun play(coordinate: Coordinate): Game =
+        runBlocking {
+            val gs = requireStartedGame()
+            gameEnded()
+            if (!hasAllPlayers()) {
+                throw InvalidPlayException(
+                    message = "Cannot play until all players have joined the game.",
+                    type = ErrorType.INFO
+                )
+            }
+
+            checkTurnOnNotLocalGame(gs)
+
+            val piece = Piece(coordinate, gs.lastPlayer.swap())
+
+            val newBoard = GameLogic.play(gs.board, myPiece = piece)
+
+            val refreshPlayers = gs.players.map { it.refresh(newBoard) }
+
+            val newGameState = GameState(
+                lastPlayer = piece.value,
+                board = newBoard,
+                players = refreshPlayers,
+                winner = gs.winner
+            )
+
+            if (currGameName != null) {
+                saveOnlyBoard(newGameState)
+            }
+
+            copy(
+                gameState = newGameState,
+                countPass = 0
             )
         }
 
-        checkTurnOnNotLocalGame(gs)
-
-        val piece = Piece(coordinate, gs.lastPlayer.swap())
-
-        val newBoard = GameLogic.play(gs.board, myPiece = piece)
-
-        val refreshPlayers = gs.players.map { it.refresh(newBoard) }
-
-        val newGameState = GameState(
-            lastPlayer = piece.value,
-            board = newBoard,
-            players = refreshPlayers,
-            winner = gs.winner
-        )
-
-        if (currGameName != null) {
-            saveOnlyBoard(newGameState)
-        }
-
-        return this.copy(
-            gameState = newGameState,
-            countPass = 0
-        )
-    }
 
     /**
      * Sets the target mode for the game.
@@ -193,7 +196,7 @@ data class Game(
      * @throws InvalidPlayException if there are available plays and passing is not allowed.
      * @throws EndGameException if the game has already ended.
      */
-    fun pass(): Game {
+    fun pass(): Game = runBlocking {
         var gs = requireStartedGame()
         gameEnded()
 
@@ -214,7 +217,7 @@ data class Game(
                     gs.board.totalWhitePieces > gs.board.totalBlackPieces ->
                         Player(PieceType.WHITE, gs.board.totalWhitePieces)
 
-                    else -> throw EndGameException(
+                    else                                                  -> throw EndGameException(
                         message = "The game has ended in a draw.",
                         type = ErrorType.INFO
                     )
@@ -230,7 +233,7 @@ data class Game(
             saveOnlyBoard(gs)
         }
 
-        return this.copy(
+        copy(
             gameState = gs,
             countPass = countPass + 1
         )
@@ -244,7 +247,7 @@ data class Game(
      * @throws InvalidGameException if the game is not started yet (board or players are null,empty).
      * @throws InvalidFileException if there is an error loading the game state from storage.
      */
-    fun refresh(): Game {
+    suspend fun refresh(): Game {
         val gs = requireStartedGame()
 
         if (currGameName == null) return this
@@ -279,7 +282,7 @@ data class Game(
      * @throws InvalidGameException if the game is local or not started yet.
      * @throws InvalidFileException if the current game name is null.
      */
-    fun saveEndGame() {
+    suspend fun saveEndGame() {
         val gs = requireStartedGame()
 
         if (currGameName == null)
@@ -323,7 +326,7 @@ data class Game(
      * @throws InvalidGameException if the game is local or not started yet.
      * @throws InvalidFileException if the current game name is null or loading fails.
      */
-    fun saveOnlyBoard(gameState: GameState?) {
+    suspend fun saveOnlyBoard(gameState: GameState?) {
         val gs = gameState ?: throw InvalidGameException(
             message = "Game is not started yet.",
             type = ErrorType.WARNING
