@@ -14,6 +14,13 @@ abstract class FloatControlWrapper(clip: Clip, controlType: FloatControl.Type) {
     val maximumValue: Float = control.maximum
 
     /**
+     * Retrieves the current value of the control.
+     *
+     * @return The current value of the control.
+     */
+    fun getValue(): Float = control.value
+
+    /**
      * Updates the value of the control.
      *
      * @param value The new value to set for the control.

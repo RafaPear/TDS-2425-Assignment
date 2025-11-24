@@ -13,6 +13,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.reversi.app.BACKGROUND_MUSIC
+import pt.isel.reversi.app.MEGALOVANIA
 import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.getStateAudioPool
@@ -25,6 +27,12 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
     val coroutineAppScope = rememberCoroutineScope()
     // Launch the game refresh coroutine
     coroutineAppScope.launchGameRefreshCoroutine(250L, appState)
+
+    if (!getStateAudioPool(appState).isPlaying(MEGALOVANIA)) {
+        getStateAudioPool(appState).stop(BACKGROUND_MUSIC)
+        getStateAudioPool(appState).stop(MEGALOVANIA)
+        getStateAudioPool(appState).play(MEGALOVANIA)
+    }
 
     Column(
         modifier = modifier

@@ -15,6 +15,13 @@ abstract class BooleanControlWrapper(clip: Clip, controlType: BooleanControl.Typ
     private val defaultValue: Boolean = control.value
 
     /**
+     * Retrieves the current value of the control.
+     *
+     * @return The current boolean value of the control.
+     */
+    fun getValue(): Boolean = control.value
+
+    /**
      * Updates the value of the control.
      *
      * @param value The new value to set for the control.

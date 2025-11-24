@@ -179,7 +179,8 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
         Text("Opções futuras: som, tema, rede, etc.")
         var volume by remember { mutableStateOf(0f) }
 
-        val number = if (volume == 0f) " (Default)" else if (volume == -20f) " (disabled)" else "%.1f".format(volume)
+        // volume in percentage -20 (muted) to 0 (max)
+        val number = if (volume == 0f) " (Default)" else if (volume == -20f) " (disabled)" else " (${(volume + 20).toInt() * 5}%)"
 
         Text("Master Volume: $number",
              fontSize = 20.sp,

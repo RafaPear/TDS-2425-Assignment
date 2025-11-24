@@ -37,6 +37,7 @@ val MAIN_MENU_AUTO_SIZE_TITLE_TEXT = TextAutoSize.StepBased(
 fun MainMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     if (!getStateAudioPool(appState).isPlaying(BACKGROUND_MUSIC)) {
         LOGGER.info("Playing background music")
+        getStateAudioPool(appState).stopAll()
         getStateAudioPool(appState).play(BACKGROUND_MUSIC)
     }
     Column(
