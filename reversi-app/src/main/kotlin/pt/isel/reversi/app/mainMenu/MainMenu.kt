@@ -12,9 +12,12 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.reversi.app.BACKGROUND_MUSIC
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
+import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.app.state.setPage
+import pt.isel.reversi.utils.LOGGER
 
 val MAIN_MENU_PADDING = 20.dp
 
@@ -32,6 +35,10 @@ val MAIN_MENU_AUTO_SIZE_TITLE_TEXT = TextAutoSize.StepBased(
 
 @Composable
 fun MainMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
+    if (!getStateAudioPool(appState).isPlaying(BACKGROUND_MUSIC)) {
+        LOGGER.info("Playing background music")
+        getStateAudioPool(appState).play(BACKGROUND_MUSIC)
+    }
     Column(
         modifier = modifier
             .fillMaxSize()

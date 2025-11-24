@@ -16,21 +16,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
 import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.app.state.setError
 import pt.isel.reversi.app.state.setGame
 import pt.isel.reversi.core.exceptions.ReversiException
-import pt.isel.reversi.utils.LOGGER
 
 @Composable
 fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, freeze: Boolean = false) {
     val coroutineAppScope = rememberCoroutineScope()
     // Launch the game refresh coroutine
+    coroutineAppScope.launchGameRefreshCoroutine(250L, appState)
     val game = appState.value.game
     if (game.currGameName != null && game.gameState?.players?.size != 2) {
         coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
     }
-
-    LOGGER.info("Rendering GamePage")
 
     Column(
         modifier = modifier
@@ -74,6 +73,8 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
                             appState,
                             game = appState.value.game.play(coordinate)
                         )
+                        getStateAudioPool(appState).stop("putPiece")
+                        getStateAudioPool(appState).play("putPiece")
                     } catch (e: ReversiException) {
                         appState.value = setError(appState, error = e)
                     }

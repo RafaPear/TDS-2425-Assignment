@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.audio.AudioPool
 
 fun setGame(appState: MutableState<AppState>, game: Game): AppState {
     LOGGER.info("Set new game state")
@@ -26,7 +27,10 @@ fun setAppState(
     game: Game = appState.value.game,
     page: Page = appState.value.page,
     error: ReversiException? = appState.value.error,
-) = AppState(game, page, error, backPage = setBackPage(appState, newPage = page))
+    audioPool: AudioPool = appState.value.audioPool,
+) = AppState(game, page, error, backPage = setBackPage(appState, newPage = page), audioPool)
+
+fun getStateAudioPool(appState: MutableState<AppState>) = appState.value.audioPool
 
 private fun setBackPage(appState: MutableState<AppState>, newPage: Page): Page {
     val page = appState.value.page

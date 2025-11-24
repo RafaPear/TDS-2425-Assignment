@@ -22,3 +22,10 @@ fun setLoggerFilePath(){
     LOGGER.addHandler(logFileHandler)
     LOGGER.info("Logging to file '$name' enabled.")
 }
+
+fun loadResource(path: String): File {
+    val classloader = Thread.currentThread().getContextClassLoader()
+    val resource = classloader.getResource(path)
+        ?: throw IllegalArgumentException("Resource '$path' not found")
+    return File(resource.toURI())
+}
