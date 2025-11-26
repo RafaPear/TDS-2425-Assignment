@@ -43,7 +43,6 @@ val argsParser = CommandArgsParser(logArg)
 fun main(args: Array<String>) {
 
     application {
-
         val windowState = rememberWindowState(
             placement = WindowPlacement.Floating,
             position = WindowPosition.PlatformDefault
@@ -98,6 +97,11 @@ fun main(args: Array<String>) {
 
             // Show error dialog if there is an error
             appState.value.error?.let { ErrorMessage(appState) }
+            if (appState.value.page != Page.MAIN_MENU) {
+                GoBack {
+                    appState.value = setPage(appState, appState.value.backPage)
+                }
+            }
         }
     }
 }

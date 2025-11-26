@@ -14,4 +14,5 @@ data class AppState(
     val game: Game,
     val page: Page,
     val error: ReversiException?,
+    val backPage: Page = Page.MAIN_MENU,
 )

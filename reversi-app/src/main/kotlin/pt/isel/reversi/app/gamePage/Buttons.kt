@@ -24,8 +24,9 @@ fun TargetButton(target: Boolean, modifier: Modifier = Modifier,freeze: Boolean,
         onClick = onClick,
         shape = RoundedCornerShape(20.dp)
     ) {
+        val targetText = if (target) "ON" else "OFF"
         Text(
-            text = "Target $target",
+            text = "Target $targetText",
             maxLines = 1,
             softWrap = false,
             textAlign = TextAlign.Center,

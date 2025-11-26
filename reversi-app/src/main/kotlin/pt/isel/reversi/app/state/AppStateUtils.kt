@@ -12,7 +12,8 @@ fun setGame(appState: MutableState<AppState>, game: Game): AppState {
 
 fun setPage(appState: MutableState<AppState>, page: Page): AppState {
     LOGGER.info("Set page ${page.name}")
-    return appState.value.copy(page = page)
+    val backPage = setBackPage(appState, newPage = page)
+    return appState.value.copy(page = page, backPage = backPage)
 }
 
 fun setError(appState: MutableState<AppState>, error: ReversiException?): AppState {
@@ -25,4 +26,13 @@ fun setAppState(
     game: Game = appState.value.game,
     page: Page = appState.value.page,
     error: ReversiException? = appState.value.error,
-) = AppState(game, page, error)
+) = AppState(game, page, error, backPage = setBackPage(appState, newPage = page))
+
+private fun setBackPage(appState: MutableState<AppState>, newPage: Page): Page {
+    val page = appState.value.page
+    LOGGER.info("Set back page: ${page.name}")
+    return when (newPage) {
+        Page.GAME -> Page.MAIN_MENU
+        else -> page
+    }
+}
