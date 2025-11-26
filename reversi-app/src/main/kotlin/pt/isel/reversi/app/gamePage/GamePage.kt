@@ -26,7 +26,7 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
     val coroutineAppScope = rememberCoroutineScope()
     // Launch the game refresh coroutine
     val game = appState.value.game
-    if ( game.currGameName != null && game.gameState?.players?.size != 2){
+    if (game.currGameName != null && game.gameState?.players?.size != 2) {
         coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
     }
 
@@ -36,14 +36,15 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
         modifier = modifier
             .fillMaxSize()
             .background(BOARD_BACKGROUND_COLOR)
-            .padding(10.dp)
+            .padding(all = 10.dp)
+            .testTag(tag = testTagGamePage())
     ) {
+        val name = appState.value.game.currGameName
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().testTag(tag = testTagTitle(gameName = name)),
             horizontalArrangement = Arrangement.Center,
         ) {
-            val name = appState.value.game.currGameName
-            if (name != null && !freeze) {
+            if (name != null) {
                 Text(
                     text = "Game: $name",
                     color = TEXT_COLOR,
@@ -54,7 +55,6 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
                     ),
                     maxLines = 1,
                     softWrap = false,
-                    modifier = Modifier.testTag(tag = testTagTitle(gameName = name))
                 )
             }
         }
