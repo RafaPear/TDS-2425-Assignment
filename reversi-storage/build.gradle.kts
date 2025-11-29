@@ -1,5 +1,5 @@
 dependencies {
     implementation(libs.okio)
     testImplementation(kotlin("test"))
-    implementation(libs.corroutines)
+    implementation(libs.coroutines)
 }

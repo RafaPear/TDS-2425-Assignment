@@ -28,6 +28,8 @@ interface AsyncStorage<K, T, U> {
     /** Deletes the entity identified by [id]. */
     suspend fun delete(id: K)
 
-    /** Checks if there was an entity associated with [id]. */
+    /**
+     * Returns the last modification timestamp in milliseconds for the entity identified by [id], or null if not found.
+     */
     suspend fun lastModified(id: K): Long?
 }

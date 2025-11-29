@@ -1,14 +1,9 @@
 package pt.isel.reversi.core
 
-import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.exceptions.InvalidFileException
-import pt.isel.reversi.core.exceptions.InvalidGameException
-import pt.isel.reversi.core.exceptions.InvalidNameAlreadyExists
-import pt.isel.reversi.core.exceptions.InvalidPieceInFileException
+import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
 
 /**
@@ -23,12 +18,12 @@ import pt.isel.reversi.core.storage.GameState
  * @throws InvalidGameException if no players are provided.
  * @throws Exception if already exists a game with the same name in storage.
  */
-fun startNewGame(
+suspend fun startNewGame(
     side: Int = loadCoreConfig().BOARD_SIDE,
     players: List<Player>,
     firstTurn: PieceType,
     currGameName: String? = null,
-): Game = runBlocking {
+): Game {
     var returnGame: Game
     if (players.isEmpty())
         throw InvalidGameException(
@@ -68,7 +63,7 @@ fun startNewGame(
         gameState = gs,
         currGameName = currGameName,
     )
-    returnGame
+    return returnGame
 }
 
 /**
@@ -81,10 +76,10 @@ fun startNewGame(
  * @throws InvalidFileException if there is an error loading the game state.
  * @throws InvalidPieceInFileException if the specified piece type is not found in the loaded game.
  */
-fun loadGame(
+suspend fun loadGame(
     gameName: String,
     desiredType: PieceType? = null,
-): Game = runBlocking {
+): Game {
     val conf = loadCoreConfig()
     val storage = conf.STORAGE_TYPE.storage(conf.SAVES_FOLDER)
     val loadedState = storage.load(gameName)
@@ -120,7 +115,7 @@ fun loadGame(
         )
     )
 
-    Game(
+    return Game(
         target = false,
         gameState = newState.copy(
             players = newState.players.map { it.refresh(newState.board) }

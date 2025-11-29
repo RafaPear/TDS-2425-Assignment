@@ -75,7 +75,7 @@ fun main(args: Array<String>) {
             LOGGER.info("Exiting application...")
 
             try {
-                runBlocking{ appState.value.game.saveEndGame() }
+                runBlocking { appState.value.game.saveEndGame() }
             } catch (e: ReversiException) {
                 LOGGER.warning("Failed to save game on exit: ${e.message}")
             }
@@ -150,8 +150,8 @@ fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
                 try {
                     coroutineAppScope.launch {
                         appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
+                        appState.value = setPage(appState, Page.GAME)
                     }
-                    appState.value = setPage(appState, Page.GAME)
                 } catch (e: ReversiException) {
                     appState.value = setError(appState, error = e)
                 }

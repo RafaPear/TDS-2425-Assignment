@@ -1,6 +1,5 @@
 package pt.isel.reversi.core
 
-import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
@@ -120,8 +119,7 @@ data class Game(
      * @throws InvalidFileException if there is an error saving the game state.
      * @throws EndGameException if the game has already ended.
      */
-    fun play(coordinate: Coordinate): Game =
-        runBlocking {
+    suspend fun play(coordinate: Coordinate): Game {
             val gs = requireStartedGame()
             gameEnded()
             if (!hasAllPlayers()) {
@@ -150,7 +148,7 @@ data class Game(
                 saveOnlyBoard(newGameState)
             }
 
-            copy(
+            return copy(
                 gameState = newGameState,
                 countPass = 0
             )
@@ -196,7 +194,7 @@ data class Game(
      * @throws InvalidPlayException if there are available plays and passing is not allowed.
      * @throws EndGameException if the game has already ended.
      */
-    fun pass(): Game = runBlocking {
+    suspend fun pass(): Game {
         var gs = requireStartedGame()
         gameEnded()
 
@@ -233,7 +231,7 @@ data class Game(
             saveOnlyBoard(gs)
         }
 
-        copy(
+        return copy(
             gameState = gs,
             countPass = countPass + 1
         )

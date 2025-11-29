@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.launch
 import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.setError
@@ -61,12 +62,15 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
             Box(
                 modifier = modifier.weight(0.7f),
             ) {
+
                 DrawBoard(appState.value.game, freeze = freeze) { coordinate ->
                     try {
-                        appState.value = setGame(
-                            appState,
-                            game = appState.value.game.play(coordinate)
-                        )
+                        coroutineAppScope.launch {
+                            appState.value = setGame(
+                                appState,
+                                game = appState.value.game.play(coordinate)
+                            )
+                        }
                     } catch (e: ReversiException) {
                         appState.value = setError(appState, error = e)
                     }
