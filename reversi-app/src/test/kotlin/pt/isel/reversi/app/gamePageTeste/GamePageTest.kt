@@ -13,6 +13,7 @@ import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.utils.audio.AudioPool
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -32,7 +33,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game.copy(currGameName = name),
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -50,7 +52,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game.copy(currGameName = name),
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -67,7 +70,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game,
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -84,7 +88,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game,
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -100,7 +105,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game,
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -121,7 +127,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game.copy(gameState = null),
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         setContent {
@@ -137,7 +144,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game,
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -173,7 +181,8 @@ class GamePageTest {
         val expectedAppState = AppState(
             game = game,
             page = Page.GAME,
-            error = null
+            error = null,
+            audioPool = AudioPool(emptyList())
         )
 
         val appState = mutableStateOf(value = expectedAppState)

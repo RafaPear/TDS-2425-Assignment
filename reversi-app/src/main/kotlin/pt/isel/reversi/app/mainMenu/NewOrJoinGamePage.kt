@@ -13,6 +13,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
+import pt.isel.reversi.app.HIT_SOUND
 import pt.isel.reversi.app.exceptions.NoPieceSelected
 import pt.isel.reversi.app.exceptions.TextBoxIsEmpty
 import pt.isel.reversi.app.state.*
@@ -59,9 +60,9 @@ fun NewGamePage(
                     )
                 }
 
-                LOGGER.info("Novo jogo '${currGameName?.takeIf { it.isNotBlank() } ?: "(local)"}' iniciado.")
+                LOGGER.info("Novo jogo '${currGameName?.ifBlank { "(local)" } ?: "(local)"} ' iniciado.")
                 appState.value = setAppState(appState, newGame, Page.GAME)
-
+                getStateAudioPool(appState).play(HIT_SOUND)
             } catch (e: ReversiException) {
                 appState.value = setError(appState, e)
             }

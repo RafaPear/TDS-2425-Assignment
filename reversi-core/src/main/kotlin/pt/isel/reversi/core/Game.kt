@@ -197,8 +197,9 @@ data class Game(
                         gs.board.totalWhitePieces
                     )
 
-                    else                                                  -> throw EndGameException(
-                        message = "The game has ended in a draw.", type = ErrorType.INFO
+                    else -> throw EndGameException(
+                        message = "The game has ended in a draw.",
+                        type = ErrorType.INFO
                     )
                 }
             )
@@ -237,7 +238,6 @@ data class Game(
         val loadedState = storage.load(currGameName) ?: throw InvalidFileException(
             message = "Failed to load game state from storage: $currGameName", type = ErrorType.WARNING
         )
-
 
         return this.copy(
             gameState = loadedState.copy(players = gs.players.map { it.refresh(loadedState.board) }),
