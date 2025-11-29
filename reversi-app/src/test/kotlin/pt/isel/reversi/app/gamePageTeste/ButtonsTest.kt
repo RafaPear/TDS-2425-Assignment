@@ -8,7 +8,6 @@ import pt.isel.reversi.app.gamePage.TargetButton
 import pt.isel.reversi.app.gamePage.testTagTargetButtons
 import kotlin.test.Test
 
-
 @OptIn(ExperimentalTestApi::class)
 class ButtonsTest {
     @Test

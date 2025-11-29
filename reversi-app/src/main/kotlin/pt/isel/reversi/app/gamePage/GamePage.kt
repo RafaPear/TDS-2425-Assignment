@@ -10,19 +10,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
-import pt.isel.reversi.app.PreviousPage
-import pt.isel.reversi.app.ScaffoldView
-import androidx.compose.ui.unit.sp
-import pt.isel.reversi.app.BACKGROUND_MUSIC
-import pt.isel.reversi.app.MEGALOVANIA
-import pt.isel.reversi.app.PLACE_PIECE_SOUND
 import kotlinx.coroutines.launch
+import pt.isel.reversi.app.*
 import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
-import pt.isel.reversi.app.state.AppState
-import pt.isel.reversi.app.state.getStateAudioPool
-import pt.isel.reversi.app.state.setError
-import pt.isel.reversi.app.state.setGame
-import pt.isel.reversi.app.state.setPage
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.exceptions.ReversiException
 
 @Composable
@@ -33,7 +24,7 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
     LaunchedEffect(appState.value.page) {
         val game = appState.value.game
         if (game.currGameName != null && game.gameState?.players?.size != 2) {
-            launchGameRefreshCoroutine(250L, appState)
+            launchGameRefreshCoroutine(50L, appState)
         }
 
         val audioPool = getStateAudioPool(appState)
@@ -43,7 +34,6 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
             audioPool.play(MEGALOVANIA)
         }
     }
-
 
     val name = appState.value.game.currGameName?.let { "Game: $it" }
 

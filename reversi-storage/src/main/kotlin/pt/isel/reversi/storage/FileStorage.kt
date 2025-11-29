@@ -75,4 +75,15 @@ data class FileStorage<T>(
 
         return fs.metadata(path(id)).lastModifiedAtMillis
     }
+
+    override fun loadAllIds(): List<String> {
+        val fs = FileSystem.SYSTEM
+        val dirPath = folder.toPath()
+
+        if (!fs.exists(dirPath)) return emptyList()
+
+        return fs.list(dirPath)
+            .filter { fs.metadata(it).isRegularFile }
+            .map { it.name.removeSuffix(".txt") }
+    }
 }

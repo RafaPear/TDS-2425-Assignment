@@ -17,7 +17,8 @@ data class AsyncFileStorage<T>(
 ) : AsyncStorage<String, T, String> {
     private val fileStorage = FileStorage(folder, serializer)
 
-    override suspend fun new(id: String, factory: () -> T): T = withContext(Dispatchers.IO) { fileStorage.new(id, factory) }
+    override suspend fun new(id: String, factory: () -> T): T =
+        withContext(Dispatchers.IO) { fileStorage.new(id, factory) }
 
     override suspend fun load(id: String): T? = withContext(Dispatchers.IO) { fileStorage.load(id) }
 
@@ -26,4 +27,6 @@ data class AsyncFileStorage<T>(
     override suspend fun delete(id: String) = withContext(Dispatchers.IO) { fileStorage.delete(id) }
 
     override suspend fun lastModified(id: String): Long? = withContext(Dispatchers.IO) { fileStorage.lastModified(id) }
+
+    override suspend fun loadAllIds(): List<String> = withContext(Dispatchers.IO) { fileStorage.loadAllIds() }
 }

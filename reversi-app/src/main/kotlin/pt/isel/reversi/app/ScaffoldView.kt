@@ -13,7 +13,6 @@ import pt.isel.reversi.app.exceptions.ErrorMessage
 import pt.isel.reversi.app.gamePage.TEXT_COLOR
 import pt.isel.reversi.app.state.AppState
 
-
 //**
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)

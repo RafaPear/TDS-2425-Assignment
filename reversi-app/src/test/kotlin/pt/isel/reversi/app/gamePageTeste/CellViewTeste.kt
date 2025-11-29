@@ -10,7 +10,6 @@ import pt.isel.reversi.core.board.PieceType
 import kotlin.test.Test
 import kotlin.test.fail
 
-
 /**
  * Tests for the CellView composable function.
  * Have 3 possible states:
@@ -96,7 +95,6 @@ class CellViewTeste {
         onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
             .assertIsNotEnabled()
     }
-
 
     @Test
     fun `cellView with ghostPiece and freeze true expect not clickable`() = runComposeUiTest {

@@ -4,17 +4,7 @@ import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.widthIn
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Warning
@@ -51,17 +41,17 @@ import pt.isel.reversi.utils.LOGGER
 fun ErrorMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     //TODO: Differentiate error types with different UI elements
     when (appState.value.error?.type) {
-        ErrorType.INFO -> {
+        ErrorType.INFO     -> {
             LOGGER.info("${appState.value.error?.message}")
             ToastMessage(appState, modifier)
         }
 
-        ErrorType.WARNING -> {
+        ErrorType.WARNING  -> {
             LOGGER.warning("${appState.value.error?.message}")
             WarningMessage(appState, modifier)
         }
 
-        ErrorType.ERROR -> {
+        ErrorType.ERROR    -> {
             LOGGER.severe("${appState.value.error?.message}")
             ToastMessage(appState, modifier)
         }
@@ -71,7 +61,7 @@ fun ErrorMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             ToastMessage(appState, modifier)
         }
 
-        null -> return
+        null               -> return
     }
 }
 
@@ -136,6 +126,7 @@ fun WarningMessage(appState: MutableState<AppState>, modifier: Modifier = Modifi
         }
     }
 }
+
 /**
  * Composable that shows a toast message for errors.
  * The message is displayed for 2 seconds before being cleared.
@@ -147,7 +138,6 @@ fun ToastMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier
     val offsetY = remember { Animatable(-100f) }
     val error = appState.value.error
     val message = error?.message
-
 
     val slideDuration = 300
     val displayDuration = 2000L

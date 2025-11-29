@@ -24,7 +24,12 @@ object MockCommand : CommandImpl<Game>() {
         vararg args: String,
         context: Game?
     ): CommandResult<Game> {
-        val newContext = runBlocking { startNewGame(players = listOf(Player(PieceType.BLACK)), firstTurn = PieceType.BLACK) }
+        val newContext = runBlocking {
+            startNewGame(
+                players = listOf(Player(PieceType.BLACK)),
+                firstTurn = PieceType.BLACK
+            )
+        }
         return CommandResult.SUCCESS(
             result = newContext,
             message = "Mock command executed. New context: $newContext"

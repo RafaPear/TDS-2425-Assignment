@@ -4,6 +4,8 @@ import androidx.compose.runtime.MutableState
 import kotlinx.coroutines.*
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
+import pt.isel.reversi.core.exceptions.ErrorType
+import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
 import pt.isel.reversi.utils.LOGGER
 
 /**
@@ -29,7 +31,8 @@ fun CoroutineScope.launchGameRefreshCoroutine(
                         appState.value = appState.value.copy(game = newGame)
                 }
             } catch (e: Exception) {
-                LOGGER.warning("Auto-refreshing game state gave an error: ${e.message}")
+                val newE = e.toReversiException(ErrorType.CRITICAL)
+                LOGGER.warning("Auto-refreshing game state gave an error ${newE.message}")
             }
             delay(refreshIntervalMs)
         }

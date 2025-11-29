@@ -56,8 +56,7 @@ suspend fun startNewGame(
                 type = ErrorType.WARNING
             )
         }
-    }
-    else {
+    } else {
         Game(
             target = false,
             gameState = gs,

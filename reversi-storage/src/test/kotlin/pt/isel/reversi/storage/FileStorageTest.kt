@@ -154,4 +154,32 @@ class FileStorageTest {
             assert(lastModified == null)
         }
     }
+
+    @Test
+    fun `Test loadAllIds returns correct ids`() {
+        cleanup {
+            val idsBefore = fileStorage.loadAllIds()
+            assert(idsBefore.isEmpty())
+
+            fileStorage.new(1.toString()) { MockData(1, "Test1") }
+            fileStorage.new(2.toString()) { MockData(2, "Test2") }
+
+            val idsAfter = fileStorage.loadAllIds()
+            assert(idsAfter.size == 2)
+            assert(idsAfter.containsAll(listOf(1.toString(), 2.toString())))
+        }
+    }
+
+    @Test
+    fun `Test loadAllIds after deletions`() {
+        cleanup {
+            fileStorage.new(1.toString()) { MockData(1, "Test1") }
+            fileStorage.new(2.toString()) { MockData(2, "Test2") }
+            fileStorage.delete(1.toString())
+
+            val ids = fileStorage.loadAllIds()
+            assert(ids.size == 1)
+            assert(ids.contains(2.toString()))
+        }
+    }
 }

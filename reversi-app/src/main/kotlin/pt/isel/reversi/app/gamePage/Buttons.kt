@@ -13,7 +13,7 @@ import androidx.compose.ui.unit.dp
 
 /** Composable button with auto-sizing text */
 @Composable
-fun TargetButton(target: Boolean, modifier: Modifier = Modifier,freeze: Boolean, onClick: () -> Unit) {
+fun TargetButton(target: Boolean, modifier: Modifier = Modifier, freeze: Boolean, onClick: () -> Unit) {
     Button(
         modifier = modifier.testTag(tag = testTagTargetButtons(target)),
         colors = buttonColors(

@@ -1,11 +1,6 @@
 package pt.isel.reversi.app.gamePage
 
-import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.RepeatMode
-import androidx.compose.animation.core.animateFloat
-import androidx.compose.animation.core.infiniteRepeatable
-import androidx.compose.animation.core.rememberInfiniteTransition
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -29,8 +24,6 @@ import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
-
-val padding = 20.dp
 
 // Main Color Definitions
 val TEXT_COLOR = Color.Black           // Texto (pontuação)
@@ -198,7 +191,6 @@ fun cellView(
 
     }
 }
-
 
 private fun drawPiece(
     radius: Float,

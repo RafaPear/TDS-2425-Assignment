@@ -6,4 +6,4 @@ import pt.isel.reversi.core.exceptions.ReversiException
 class GameNotStartedYet(
     message: String = "The game has not started yet",
     type: ErrorType = ErrorType.WARNING,
-): ReversiException(message, type)
+) : ReversiException(message, type)

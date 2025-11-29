@@ -1,12 +1,11 @@
 package pt.isel.reversi.app.gamePageTeste
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.test.*
-import kotlinx.coroutines.runBlocking
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.app.gamePage.GamePage
 import pt.isel.reversi.app.gamePage.testTagCellView
 import pt.isel.reversi.app.gamePage.testTagGamePage

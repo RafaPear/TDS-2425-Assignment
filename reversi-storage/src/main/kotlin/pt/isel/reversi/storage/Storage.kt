@@ -30,4 +30,7 @@ interface Storage<K, T, U> {
 
     /** Checks if there was an entity associated with [id]. */
     fun lastModified(id: K): Long?
+
+    /** Loads all ids present in the storage. */
+    fun loadAllIds(): List<K>
 }

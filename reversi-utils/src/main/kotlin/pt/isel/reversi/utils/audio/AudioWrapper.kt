@@ -113,6 +113,7 @@ data class AudioWrapper(
             val decoded = AudioSystem.getAudioInputStream(decodedFormat, original)
 
             val clip = AudioSystem.getClip()
+
             val mixers = AudioSystem.getMixerInfo()
             if (mixers.isNotEmpty())
                 clip.open(decoded)

@@ -1,8 +1,6 @@
 package pt.isel.reversi.core.storage.serializers
 
 import pt.isel.reversi.core.Player
-import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.exceptions.InvalidPlayerInFileException
 import pt.isel.reversi.storage.Serializer
 
 /**
@@ -21,15 +19,8 @@ class PlayerSerializer : Serializer<Player, String> {
     }
 
     override fun deserialize(obj: String): Player {
-        try {
-            val (symbol, points) = obj.trim().split(",")
-            val type = pieceTypeSerializer.deserialize(symbol.first())
-            return Player(type, points.toInt())
-        } catch (e: Exception) {
-            throw InvalidPlayerInFileException(
-                message = "Invalid player line. Error: ${e.message}",
-                type = ErrorType.ERROR
-            )
-        }
+        val (symbol, points) = obj.trim().split(",")
+        val type = pieceTypeSerializer.deserialize(symbol.first())
+        return Player(type, points.toInt())
     }
 }

@@ -213,7 +213,6 @@ data class AudioPool(val pool: List<AudioWrapper>) {
         !it.isPlaying()
     }
 
-
     companion object {
         /**
          * Builds an AudioPool using the provided builder action.

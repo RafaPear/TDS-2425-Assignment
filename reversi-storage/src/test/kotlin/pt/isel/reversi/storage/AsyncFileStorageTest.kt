@@ -24,7 +24,6 @@ class AsyncFileStorageTest {
         serializer = TestSerializer()
     )
 
-
     fun cleanup(func: () -> Unit) {
         File("test-async-saves").deleteRecursively()
         func()
@@ -165,6 +164,31 @@ class AsyncFileStorageTest {
                 asyncFileStorage.delete(1.toString())
                 val lastMod = asyncFileStorage.lastModified(1.toString())
                 assert(lastMod == null)
+            }
+        }
+    }
+
+    @Test
+    fun `Run loadAllIds returns all stored ids`() {
+        cleanup {
+            runBlocking {
+                asyncFileStorage.new(1.toString()) { MockData(1, "Test1") }
+                asyncFileStorage.new(2.toString()) { MockData(2, "Test2") }
+                asyncFileStorage.new(3.toString()) { MockData(3, "Test3") }
+
+                val ids = asyncFileStorage.loadAllIds()
+                assert(ids.size == 3)
+                assert(ids.containsAll(listOf(1.toString(), 2.toString(), 3.toString())))
+            }
+        }
+    }
+
+    @Test
+    fun `Run loadAllIds when no ids stored returns empty list`() {
+        cleanup {
+            runBlocking {
+                val ids = asyncFileStorage.loadAllIds()
+                assert(ids.isEmpty())
             }
         }
     }

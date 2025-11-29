@@ -32,4 +32,7 @@ interface AsyncStorage<K, T, U> {
      * Returns the last modification timestamp in milliseconds for the entity identified by [id], or null if not found.
      */
     suspend fun lastModified(id: K): Long?
+
+    /** Loads all ids present in the storage. */
+    suspend fun loadAllIds(): List<K>
 }

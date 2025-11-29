@@ -78,11 +78,11 @@ fun main(args: Array<String>) {
 
             when (appState.value.page) {
                 Page.MAIN_MENU -> MainMenu(appState)
-                Page.GAME -> GamePage(appState)
-                Page.SETTINGS -> SettingsPage(appState)
-                Page.ABOUT -> AboutPage(appState)
+                Page.GAME      -> GamePage(appState)
+                Page.SETTINGS  -> SettingsPage(appState)
+                Page.ABOUT     -> AboutPage(appState)
                 Page.JOIN_GAME -> JoinGamePage(appState)
-                Page.NEW_GAME -> NewGamePage(appState)
+                Page.NEW_GAME  -> NewGamePage(appState)
                 Page.SAVE_GAME -> SaveGamePage(appState)
             }
         }
@@ -168,7 +168,6 @@ fun SaveGamePage(appState: MutableState<AppState>) {
     }
 }
 
-
 @Composable
 fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
 
@@ -189,9 +188,16 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             var volume by remember { mutableStateOf(currentMasterVolume ?: 0f) }
 
             // Convert volume in dB [-20, 0] to percentage [0, 100]
-            val number = if (volume == 0f) " (Default)" else if (volume == -20f) " (disabled)" else " (${volumeDbToPercent(volume, -20f, 0f)}%)"
+            val number = if (volume == 0f) " (Default)" else if (volume == -20f) " (disabled)" else " (${
+                volumeDbToPercent(
+                    volume,
+                    -20f,
+                    0f
+                )
+            }%)"
 
-            Text("Master Volume: $number",
+            Text(
+                "Master Volume: $number",
                 fontSize = 20.sp,
                 fontWeight = FontWeight.Medium
             )
@@ -248,7 +254,6 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
         }
     }
 }
-
 
 fun Game.printDebugState() {
     LOGGER.info("========== ESTADO ATUAL DO JOGO ==========")
