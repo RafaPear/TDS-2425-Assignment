@@ -29,4 +29,10 @@ fun setAppState(
     audioPool: AudioPool = appState.value.audioPool,
 ) = AppState(game, page, error, audioPool)
 
+/**
+ * Retrieves the [AudioPool] from the current [AppState].
+ *
+ * @param appState the mutable state holding the current [AppState]
+ * @return the [AudioPool] instance from the [AppState]
+ */
 fun getStateAudioPool(appState: MutableState<AppState>) = appState.value.audioPool

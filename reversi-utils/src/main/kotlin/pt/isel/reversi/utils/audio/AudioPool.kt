@@ -107,6 +107,10 @@ data class AudioPool(val pool: List<AudioWrapper>) {
         }
     }
 
+    /**
+     * Executes a suspend function while any audio track in the pool is still playing.
+     * @param func The suspend function to execute.
+     */
     suspend fun whileNotFinishedAsync(func: suspend () -> Unit) {
         while (pool.any { it.isPlaying() }) {
             func()
@@ -170,18 +174,12 @@ data class AudioPool(val pool: List<AudioWrapper>) {
      */
     fun getBalance(): Float? {
         // Check if all tracks have the same balance if not fixes the bad balance
-        var value = 0f
-        for (track in pool) {
-            val trackBalance = track.balanceControl.getValue()
-            if (value == 0f) {
-                value = trackBalance
-            } else if (value != trackBalance) {
-                LOGGER.warning("AudioPool has inconsistent balance values among tracks. Resetting to $value")
-                setBalance(value)
-                break
-            }
+        val firstBalance = pool.firstOrNull()?.balanceControl?.getValue() ?: return null
+        if (pool.any { it.balanceControl.getValue() != firstBalance }) {
+            LOGGER.warning("AudioPool has inconsistent balance values, fixing to $firstBalance")
+            setBalance(firstBalance)
         }
-        return value
+        return firstBalance
     }
 
     /**

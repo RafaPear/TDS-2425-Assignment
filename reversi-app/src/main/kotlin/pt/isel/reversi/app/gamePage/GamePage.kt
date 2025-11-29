@@ -27,11 +27,11 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
     val coroutineAppScope = rememberCoroutineScope()
     // Launch the game refresh coroutine
     coroutineAppScope.launchGameRefreshCoroutine(250L, appState)
-
-    if (!getStateAudioPool(appState).isPlaying(MEGALOVANIA)) {
-        getStateAudioPool(appState).stop(BACKGROUND_MUSIC)
-        getStateAudioPool(appState).stop(MEGALOVANIA)
-        getStateAudioPool(appState).play(MEGALOVANIA)
+    val audioPool = getStateAudioPool(appState)
+    if (!audioPool.isPlaying(MEGALOVANIA)) {
+        audioPool.stop(BACKGROUND_MUSIC)
+        audioPool.stop(MEGALOVANIA)
+        audioPool.play(MEGALOVANIA)
     }
 
     Column(
@@ -73,8 +73,9 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
                             appState,
                             game = appState.value.game.play(coordinate)
                         )
-                        getStateAudioPool(appState).stop("putPiece")
-                        getStateAudioPool(appState).play("putPiece")
+                        val audioPool = getStateAudioPool(appState)
+                        audioPool.stop("putPiece")
+                        audioPool.play("putPiece")
                     } catch (e: ReversiException) {
                         appState.value = setError(appState, error = e)
                     }

@@ -170,10 +170,12 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
         Text("Definições", fontSize = 30.sp, fontWeight = FontWeight.Bold)
 
         Text("Opções futuras: som, tema, rede, etc.")
-        var volume by remember { mutableStateOf(getStateAudioPool(appState).getMasterVolume() ?: 0f) }
+        val currentMasterVolume = getStateAudioPool(appState).getMasterVolume()
+        if (currentMasterVolume == null) LOGGER.warning("Master volume is null, using 0f as default")
+        var volume by remember { mutableStateOf(currentMasterVolume ?: 0f) }
 
         // Convert volume in dB [-20, 0] to percentage [0, 100]
-        val number = if (volume == 0f) " (Default)" else if (volume == -20f) " (disabled)" else " (${volumeDbToPercent(volume)}%)"
+        val number = if (volume == 0f) " (Default)" else if (volume == -20f) " (disabled)" else " (${volumeDbToPercent(volume, 20f, 0f)}%)"
 
         Text(
             "Master Volume: $number",
@@ -182,11 +184,12 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
         )
         Slider(value = volume, valueRange = -20f..0f, onValueChange = {
             volume = it
+            val audioPool = getStateAudioPool(appState)
             if (volume == -20f) {
-                getStateAudioPool(appState).mute(true)
+                audioPool.mute(true)
             } else {
-                getStateAudioPool(appState).mute(false)
-                getStateAudioPool(appState).setMasterVolume(volume)
+                audioPool.mute(false)
+                audioPool.setMasterVolume(volume)
             }
         })
 
@@ -198,9 +201,16 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
     }
 }
 
-private fun volumeDbToPercent(volume: Float): String {
-    val percent = ((volume + 20) / 20 * 100).toInt()
-    return percent.toString()
+/**
+ * Converts a volume in decibels to a percentage string.
+ * @param volume The volume in decibels.
+ * @param min The minimum volume in decibels (default -20f).
+ * @param max The maximum volume in decibels (default 0f).
+ * @return The volume as a percentage string.
+ */
+fun volumeDbToPercent(volume: Float, min: Float, max: Float): String {
+    val percent = ((volume - min) / (max - min)) * 100
+    return percent.toInt().toString()
 }
 
 @Composable
