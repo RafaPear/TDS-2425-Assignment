@@ -38,7 +38,16 @@ fun setAppState(
     page: Page = appState.value.page,
     error: ReversiException? = appState.value.error,
     audioPool: AudioPool = appState.value.audioPool,
-) = AppState(game, page, error, backPage = setBackPage(appState, newPage = page), audioPool)
+): AppState {
+    LOGGER.info("Set entire app state")
+    return AppState(
+        game,
+        page,
+        error,
+        backPage = setBackPage(appState, newPage = page),
+        audioPool
+    )
+}
 
 /**
  * Retrieves the [AudioPool] from the current [AppState].
@@ -47,15 +56,6 @@ fun setAppState(
  * @return the [AudioPool] instance from the [AppState]
  */
 fun getStateAudioPool(appState: MutableState<AppState>) = appState.value.audioPool
-    error: ReversiException? = appState.value.error
-): AppState {
-    LOGGER.info("Set entire app state")
-    return appState.value.copy(
-        game = setGame(appState, game).game,
-        page = setPage(appState, page).page,
-        error = setError(appState, error).error
-    )
-}
 
 fun setError(appState: MutableState<AppState>, error: ReversiException?): AppState {
     LOGGER.info("Set error: ${error?.message ?: "null"}")
@@ -67,6 +67,6 @@ private fun setBackPage(appState: MutableState<AppState>, newPage: Page): Page {
     LOGGER.info("Set back page: ${page.name}")
     return when (newPage) {
         Page.GAME -> Page.MAIN_MENU
-        else -> page
+        else      -> page
     }
 }
