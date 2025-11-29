@@ -87,17 +87,17 @@ fun JoinGamePage(
             )
             return@newOrJoinGamePage
         }
-        try {
-            coroutineAppScope.launch {
+        coroutineAppScope.launch {
+            try {
                 val loadedGame = loadGame(
                     gameName = currGameName.trim(),
                     desiredType = game.myPiece
                 )
                 LOGGER.info("Ligado ao jogo '$loadedGame'.")
                 appState.value = setAppState(appState, loadedGame, Page.GAME)
+            } catch (e: ReversiException) {
+                appState.value = setError(appState, e)
             }
-        } catch (e: ReversiException) {
-            appState.value = setError(appState, e)
         }
     }
 }

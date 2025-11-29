@@ -3,7 +3,11 @@ package pt.isel.reversi.core
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.exceptions.*
+import pt.isel.reversi.core.exceptions.ErrorType
+import pt.isel.reversi.core.exceptions.InvalidFileException
+import pt.isel.reversi.core.exceptions.InvalidGameException
+import pt.isel.reversi.core.exceptions.InvalidNameAlreadyExists
+import pt.isel.reversi.core.exceptions.InvalidPieceInFileException
 import pt.isel.reversi.core.storage.GameState
 
 /**
