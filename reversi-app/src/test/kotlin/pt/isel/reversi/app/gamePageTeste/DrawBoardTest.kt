@@ -2,8 +2,8 @@ package pt.isel.reversi.app.gamePageTeste
 
 import androidx.compose.ui.test.*
 import pt.isel.reversi.app.gamePage.DrawBoard
-import pt.isel.reversi.app.gamePage.getBoardTestTag
-import pt.isel.reversi.app.gamePage.getCellViewTestTag
+import pt.isel.reversi.app.gamePage.testTagBoard
+import pt.isel.reversi.app.gamePage.testTagCellView
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
@@ -28,7 +28,7 @@ class DrawBoardTest {
             )
         }
 
-        val boardTag = getBoardTestTag()
+        val boardTag = testTagBoard()
         onNodeWithTag(testTag = boardTag, useUnmergedTree = true)
             .onChildren()
             .assertCountEquals(expectedSide * expectedSide)
@@ -54,7 +54,7 @@ class DrawBoardTest {
             )
         }
 
-        val boardTag = getBoardTestTag()
+        val boardTag = testTagBoard()
         var countPieces = 0
 
         //On Board make list of children (cells),
@@ -92,7 +92,7 @@ class DrawBoardTest {
             )
         }
 
-        val cellTagToClick = getCellViewTestTag(coordinateToClick)
+        val cellTagToClick = testTagCellView(coordinateToClick)
 
         onNodeWithTag(testTag = cellTagToClick, useUnmergedTree = true).performClick()
 
@@ -125,7 +125,7 @@ class DrawBoardTest {
             )
         }
 
-        val cellTagToClick = getCellViewTestTag(coordinateToClick)
+        val cellTagToClick = testTagCellView(coordinateToClick)
 
         onNodeWithTag(testTag = cellTagToClick, useUnmergedTree = true).performClick()
 
@@ -158,7 +158,7 @@ class DrawBoardTest {
             )
         }
 
-        val cellTagToClick = getCellViewTestTag(coordinateToClick)
+        val cellTagToClick = testTagCellView(coordinateToClick)
 
         onNodeWithTag(testTag = cellTagToClick, useUnmergedTree = true).performClick()
 
@@ -188,7 +188,7 @@ class DrawBoardTest {
             )
         }
 
-        val boardTag = getBoardTestTag()
+        val boardTag = testTagBoard()
         var countPieces = 0
 
         //On Board make list of children (cells),

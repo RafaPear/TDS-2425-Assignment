@@ -5,13 +5,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -51,7 +45,6 @@ val argsParser = CommandArgsParser(logArg)
 fun main(args: Array<String>) {
 
     application {
-
         val windowState = rememberWindowState(
             placement = WindowPlacement.Floating,
             position = WindowPosition.PlatformDefault
@@ -94,18 +87,30 @@ fun main(args: Array<String>) {
 
             MakeMenuBar(appState, ::safeExitApplication)
 
-            when (appState.value.page) {
-                Page.MAIN_MENU -> MainMenu(appState)
-                Page.GAME -> GamePage(appState)
-                Page.SETTINGS -> SettingsPage(appState)
-                Page.ABOUT -> AboutPage(appState)
-                Page.JOIN_GAME -> JoinGamePage(appState)
-                Page.NEW_GAME -> NewGamePage(appState)
-                Page.SAVE_GAME -> SaveGamePage(appState)
-            }
+            Box(modifier = Modifier.fillMaxSize()) {
+                when (appState.value.page) {
+                    Page.MAIN_MENU -> MainMenu(appState)
+                    Page.GAME -> GamePage(appState)
+                    Page.SETTINGS -> SettingsPage(appState)
+                    Page.ABOUT -> AboutPage(appState)
+                    Page.JOIN_GAME -> JoinGamePage(appState)
+                    Page.NEW_GAME -> NewGamePage(appState)
+                    Page.SAVE_GAME -> SaveGamePage(appState)
+                }
 
-            // Show error dialog if there is an error
-            appState.value.error?.let { ErrorMessage(appState) }
+                // Show error dialog if there is an error
+                appState.value.error?.let { ErrorMessage(appState) }
+                Box (modifier = Modifier
+                    .padding(all = 24.dp)
+                    .align(Alignment.BottomEnd)
+                ) {
+                    if (appState.value.page != Page.MAIN_MENU) {
+                        PreviousPage {
+                            appState.value = setPage(appState, appState.value.backPage)
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -153,7 +158,10 @@ fun SaveGamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier
                         appState.value = setPage(appState, Page.GAME)
                     }
                 } catch (e: ReversiException) {
-                    appState.value = setError(appState, error = e)
+                    appState.value = setAppState(
+                        appState, error = e,
+                        game = game.copy(currGameName = null)
+                    )
                 }
             }
         ) {

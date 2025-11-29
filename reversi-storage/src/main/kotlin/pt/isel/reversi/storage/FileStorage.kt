@@ -71,6 +71,7 @@ data class FileStorage<T>(
 
     override fun lastModified(id: String): Long? {
         val fs = FileSystem.SYSTEM
+        if (!fs.exists(path(id))) return null
 
         return fs.metadata(path(id)).lastModifiedAtMillis
     }

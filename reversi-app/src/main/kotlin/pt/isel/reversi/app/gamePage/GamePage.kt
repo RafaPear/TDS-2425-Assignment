@@ -9,6 +9,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -25,7 +26,10 @@ import pt.isel.reversi.utils.LOGGER
 fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, freeze: Boolean = false) {
     val coroutineAppScope = rememberCoroutineScope()
     // Launch the game refresh coroutine
-    coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
+    val game = appState.value.game
+    if (game.currGameName != null && game.gameState?.players?.size != 2) {
+        coroutineAppScope.launchGameRefreshCoroutine(1000L, appState)
+    }
 
     LOGGER.info("Rendering GamePage")
 
@@ -33,15 +37,17 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
         modifier = modifier
             .fillMaxSize()
             .background(BOARD_BACKGROUND_COLOR)
-            .padding(10.dp),
+            .padding(all = 10.dp)
+            .testTag(tag = testTagGamePage())
     ) {
+        val name = appState.value.game.currGameName
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier = modifier.fillMaxWidth().testTag(tag = testTagTitle(gameName = name)),
             horizontalArrangement = Arrangement.Center,
         ) {
-            if (appState.value.game.currGameName != null && !freeze)
+            if (name != null) {
                 Text(
-                    text = "Game: ${appState.value.game.currGameName}",
+                    text = "Game: $name",
                     color = TEXT_COLOR,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center,
@@ -51,6 +57,7 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
                     maxLines = 1,
                     softWrap = false,
                 )
+            }
         }
 
         Spacer(modifier = Modifier.height(padding))
@@ -88,16 +95,16 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
 
                 Spacer(modifier = Modifier.height(padding * 3))
 
-                val target = if (appState.value.game.target) "On" else "Off"
+                val target = appState.value.game.target
 
-                GameButton("Target $target", freeze = freeze) {
+                TargetButton(target, freeze = freeze) {
                     appState.value = setGame(
                         appState,
                         game = appState.value.game.setTargetMode(!appState.value.game.target)
                     )
                 }
 
-                Spacer(modifier = Modifier.height(padding))
+                //Spacer(modifier = Modifier.height(padding))
 
 //                GameButton("Update", freeze = freeze) {
 //                    appState.value = setGame(appState, appState.value.game.refresh())

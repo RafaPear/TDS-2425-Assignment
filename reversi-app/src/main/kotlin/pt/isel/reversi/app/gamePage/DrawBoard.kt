@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.sp
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 
 val padding = 20.dp
@@ -47,8 +48,6 @@ val BUTTON_MAIN_COLOR = Color(0xFF4CAF50)
 
 const val GHOST_PIECE_ALPHA = 0.3f
 
-fun getBoardTestTag() = "ReversiBoard"
-
 @Composable
 fun DrawBoard(
     game: Game,
@@ -61,7 +60,7 @@ fun DrawBoard(
             .aspectRatio(1f)
             .background(BOARD_SIDE_COLOR, shape = RoundedCornerShape(12.dp))
             .padding(all = 10.dp)
-            .testTag(tag = getBoardTestTag())
+            .testTag(tag = testTagBoard())
     ) {
         val state = game.gameState
 
@@ -118,17 +117,26 @@ fun Grid(
 
                 repeat(side) { x ->
                     val coordinate = Coordinate(x + 1, y + 1)
-                    val cellValue = board[coordinate]
-                    val ghostPiece = if (target && availablePlays.contains(coordinate)) playerTurn else null
+                    val ghostPiece = target && availablePlays.contains(coordinate)
+                    val value = board[coordinate] ?: if (ghostPiece) playerTurn else null
+
+                    val piece: Piece? =
+                        if (value == null)
+                            null
+                        else
+                            Piece(
+                                coordinate = coordinate,
+                                value = value,
+                                isGhostPiece = ghostPiece
+                            )
 
                     cellView(
                         coordinate,
-                        cellValue,
-                        ghostPiece,
+                        piece = piece,
                         freeze,
                         modifier = modifier.weight(1f),
-                        radiusModifier = if (ghostPiece != null) sizeAnim else 1f,
-                        alphaModifier = if (ghostPiece != null) alphaAnim else 1f,
+                        radiusModifier = if (ghostPiece) sizeAnim else 1f,
+                        alphaModifier = if (ghostPiece) alphaAnim else 1f,
                     ) {
                         onCellClick(coordinate)
                     }
@@ -138,70 +146,56 @@ fun Grid(
     }
 }
 
-fun getCellViewTestTag(coordinate: Coordinate) =
-    "cell_${coordinate.row},${coordinate.col}"
-
-fun getPieceTestTag(coordinate: Coordinate, type: PieceType?): String {
-    val value = when (type) {
-        PieceType.BLACK -> "BLACK"
-        PieceType.WHITE -> "WHITE"
-        null -> ""
-    }
-    return "Piece_${getCellViewTestTag(coordinate)}_${value}"
-}
-
 @Composable
 fun cellView(
     coordinate: Coordinate,
-    cellValue: PieceType?,
-    ghostPiece: PieceType?,
+    piece: Piece?,
     freeze: Boolean = false,
     modifier: Modifier = Modifier,
     radiusModifier: Float = 1f,
     alphaModifier: Float = 1f,
     onClick: (coordinate: Coordinate) -> Unit
 ) {
+    val clickable = !freeze && (piece == null || piece.isGhostPiece)
     Box(
         modifier = modifier
             .aspectRatio(1f)
             .padding(2.dp)
             .clip(RoundedCornerShape(6.dp))
             .background(BOARD_MAIN_COLOR)
-            .clickable(enabled = (cellValue == null && !freeze)) { onClick(coordinate) }
-            .testTag(getCellViewTestTag(coordinate)),
+            .clickable(enabled = clickable) { onClick(coordinate) }
+            .testTag(testTagCellView(coordinate)),
         contentAlignment = Alignment.Center
     ) {
-        if (cellValue != null || ghostPiece != null) {
-            Canvas(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .aspectRatio(1f)
-                    .semantics { testTag = getPieceTestTag(coordinate, cellValue ?: ghostPiece) }
-            ) {
-                val size = size
-                val radius = size.minDimension / 2 * 0.7f
-                val center = Offset(size.width / 2, size.height / 2)
+        val type = piece?.value ?: return@Box
 
-                if (cellValue != null) {
-                    val color = when (cellValue) {
-                        PieceType.BLACK -> Color.Black
-                        PieceType.WHITE -> Color.White
-                    }
-                    drawPiece(radius, center, color, drawScope = this)
-                } else if (ghostPiece != null) {
-                    val color = when (ghostPiece) {
-                        PieceType.BLACK -> Color.Black
-                        PieceType.WHITE -> Color.White
-                    }
-                    drawCircle(
-                        color  = color.copy(alpha = GHOST_PIECE_ALPHA),
-                        radius = radius * radiusModifier,
-                        center = center,
-                        alpha  = alphaModifier,
-                    )
-                }
+        Canvas(
+            modifier = Modifier
+                .fillMaxSize()
+                .aspectRatio(1f)
+                .semantics { testTag = testTagPiece(coordinate, type = type) }
+        ) {
+            val size = size
+            val radius = size.minDimension / 2 * 0.7f
+            val center = Offset(size.width / 2, size.height / 2)
+
+            val color = when (type) {
+                PieceType.BLACK -> Color.Black
+                PieceType.WHITE -> Color.White
+            }
+
+            if (!piece.isGhostPiece) {
+                drawPiece(radius, center, color, drawScope = this)
+            } else {
+                drawCircle(
+                    color = color.copy(alpha = GHOST_PIECE_ALPHA),
+                    radius = radius * radiusModifier,
+                    center = center,
+                    alpha = alphaModifier,
+                )
             }
         }
+
     }
 }
 

@@ -33,15 +33,6 @@ data class Game(
 ) {
     val storage: AsyncStorage<String, GameState, String> = config.STORAGE_TYPE.storage(config.SAVES_FOLDER)
 
-    constructor() : this(
-        target = false,
-        currGameName = null,
-        lastModified = null,
-        gameState = null,
-        countPass = 0,
-        myPiece = null
-    )
-
     /**
      * Reloads the core configuration.
      * @return A new Game instance with the updated configuration.
@@ -98,9 +89,10 @@ data class Game(
 
     private suspend fun hasAllPlayers(): Boolean {
         val gs = requireStartedGame()
-        if (currGameName == null) return (gs.players.size == 2)
-        val loaded = storage.load(currGameName) ?: throw InvalidFileException(
-            message = "Failed to load game state from storage: $currGameName",
+        val name = currGameName ?: return (gs.players.size == 2)
+        if (gameState?.players?.size == 2) return (gs.players.size == 2)
+        val loaded = storage.load(name) ?: throw InvalidFileException(
+            message = "Failed to load game state from storage: $name",
             type = ErrorType.WARNING
         )
         return (loaded.players.isEmpty())
@@ -144,14 +136,8 @@ data class Game(
                 winner = gs.winner
             )
 
-            if (currGameName != null) {
-                saveOnlyBoard(newGameState)
-            }
-
-            return copy(
-                gameState = newGameState,
-                countPass = 0
-            )
+        if (currGameName != null && gameState?.players?.size == 1) {
+            saveOnlyBoard(newGameState)
         }
 
 
@@ -330,25 +316,32 @@ data class Game(
             type = ErrorType.WARNING
         )
 
-        if (gs.players.size != 1)
-            throw InvalidGameException(
-                message = "Only a not local game can be saved (players size must be 1)",
-                type = ErrorType.WARNING
-            )
+        val name = currGameName ?: throw InvalidFileException(
+            message = "Name of the current game is null",
+            type = ErrorType.WARNING
+        )
 
-        if (currGameName == null)
-            throw InvalidFileException(
-                message = "Name of the current game is null",
-                type = ErrorType.WARNING
-            )
+        storage.lastModified(id = name) ?: run {
+            try {
+                storage.new(id = name) {
+                    gameState.copy(players = emptyList())
+                }
+                return@saveOnlyBoard
+            } catch (_: Exception) {
+                throw InvalidFileException(
+                    message = "this name already exist",
+                    type = ErrorType.CRITICAL
+                )
+            }
+        }
 
-        val ls = storage.load(currGameName) ?: throw InvalidFileException(
-            message = "Failed to load game state from storage: $currGameName",
+        val ls = storage.load(id = name) ?: throw InvalidFileException(
+            message = "Failed to load game state from storage: $name",
             type = ErrorType.ERROR
         )
 
         storage.save(
-            id = currGameName,
+            id = name,
             obj = gs.copy(
                 players = ls.players
             )

@@ -2,9 +2,10 @@ package pt.isel.reversi.app.gamePageTeste
 
 import androidx.compose.ui.test.*
 import pt.isel.reversi.app.gamePage.cellView
-import pt.isel.reversi.app.gamePage.getCellViewTestTag
-import pt.isel.reversi.app.gamePage.getPieceTestTag
+import pt.isel.reversi.app.gamePage.testTagCellView
+import pt.isel.reversi.app.gamePage.testTagPiece
 import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import kotlin.test.Test
 import kotlin.test.fail
@@ -21,86 +22,62 @@ import kotlin.test.fail
 @OptIn(ExperimentalTestApi::class)
 class CellViewTeste {
     @Test
-    fun `cellView with cellValue null and ghostPiece null expect no piece view`() = runComposeUiTest {
+    fun `cellView with piece null expect no piece view`() = runComposeUiTest {
         val expectedCoordinates = Coordinate(1, 1)
 
         setContent {
             cellView(
                 coordinate = expectedCoordinates,
-                cellValue = null,
-                ghostPiece = null,
+                piece = null,
                 onClick = { fail("onClick should not be called") }
             )
         }
-        val cellViewTag = getCellViewTestTag(coordinate = expectedCoordinates)
+        val cellViewTag = testTagCellView(coordinate = expectedCoordinates)
         onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
             .onChildren()[0]
             .assertDoesNotExist()
     }
 
     @Test
-    fun `cellView with cellValue != null expect existing piece view and not clickable (Piece)`() = runComposeUiTest {
-        val expectedCoordinates = Coordinate(1, 1)
-        val expectedValue = PieceType.BLACK
-        setContent {
-            cellView(
-                coordinate = expectedCoordinates,
-                cellValue = expectedValue,
-                ghostPiece = null,
-                onClick = { fail("onClick should not be called") }
-            )
+    fun `cellView with piece != null and isGhostPiece false expect existing piece view and not clickable (Piece)`() =
+        runComposeUiTest {
+            val expectedCoordinates = Coordinate(1, 1)
+            val expectedValue = PieceType.BLACK
+            setContent {
+                cellView(
+                    coordinate = expectedCoordinates,
+                    piece = Piece(coordinate = expectedCoordinates, expectedValue, isGhostPiece = false),
+                    onClick = { fail("onClick should not be called") }
+                )
+            }
+
+            val pieceTag = testTagPiece(coordinate = expectedCoordinates, type = expectedValue)
+            onNodeWithTag(testTag = pieceTag, useUnmergedTree = true)
+                .assertExists()
+
+            val cellViewTag = testTagCellView(coordinate = expectedCoordinates)
+            onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
+                .assertIsNotEnabled()
         }
-
-        val pieceTag = getPieceTestTag(coordinate = expectedCoordinates, type = expectedValue)
-        onNodeWithTag(testTag = pieceTag, useUnmergedTree = true)
-            .assertExists()
-
-        val cellViewTag = getCellViewTestTag(coordinate = expectedCoordinates)
-        onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
-            .assertIsNotEnabled()
-    }
 
     @Test
-    fun `cellView with ghostPiece != null and pieceType null expect existing piece and clickable (ghostPiece)`() = runComposeUiTest {
+    fun `cellView with isGhostPiece true expect existing piece and clickable (ghostPiece)`() = runComposeUiTest {
         val expectedCoordinates = Coordinate(1, 1)
         val expectedValue = PieceType.BLACK
         setContent {
             cellView(
                 coordinate = expectedCoordinates,
-                cellValue = null,
-                ghostPiece = expectedValue,
+                piece = Piece(coordinate = expectedCoordinates, expectedValue, isGhostPiece = true),
                 onClick = { fail("onClick should not be called") }
             )
         }
-        val pieceTag = getPieceTestTag(coordinate = expectedCoordinates, type = expectedValue)
+        val pieceTag = testTagPiece(coordinate = expectedCoordinates, type = expectedValue)
         onNodeWithTag(testTag = pieceTag, useUnmergedTree = true)
             .assertExists()
 
-        val cellViewTag = getCellViewTestTag(coordinate = expectedCoordinates)
+        val cellViewTag = testTagCellView(coordinate = expectedCoordinates)
         onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
             .assertIsEnabled()
-    }
-
-    @Test
-    fun `cellView with both cellValue and ghostPiece not null expect existing piece and not clickable (Piece)`() = runComposeUiTest {
-        val expectedCoordinates = Coordinate(1, 1)
-        val cellValue = PieceType.WHITE
-        val ghostPiece = PieceType.BLACK
-        setContent {
-            cellView(
-                coordinate = expectedCoordinates,
-                cellValue = cellValue,
-                ghostPiece = ghostPiece,
-                onClick = { fail("onClick should not be called") }
-            )
-        }
-        val pieceTag = getPieceTestTag(coordinate = expectedCoordinates, type = cellValue)
-        onNodeWithTag(testTag = pieceTag, useUnmergedTree = true)
-            .assertExists()
-
-        val cellViewTag = getCellViewTestTag(coordinate = expectedCoordinates)
-        onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
-            .assertIsNotEnabled()
     }
 
     @Test
@@ -109,14 +86,13 @@ class CellViewTeste {
         setContent {
             cellView(
                 coordinate = expectedCoordinates,
-                cellValue = null,
-                ghostPiece = null,
+                piece = null,
                 freeze = true,
                 onClick = { fail("onClick should not be called") }
             )
         }
 
-        val cellViewTag = getCellViewTestTag(coordinate = expectedCoordinates)
+        val cellViewTag = testTagCellView(coordinate = expectedCoordinates)
         onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
             .assertIsNotEnabled()
     }
@@ -129,18 +105,17 @@ class CellViewTeste {
         setContent {
             cellView(
                 coordinate = expectedCoordinates,
-                cellValue = null,
-                ghostPiece = expectedValue,
+                piece = Piece(coordinate = expectedCoordinates, expectedValue, isGhostPiece = true),
                 freeze = true,
                 onClick = { fail("onClick should not be called") }
             )
         }
 
-        val pieceTag = getPieceTestTag(coordinate = expectedCoordinates, type = expectedValue)
+        val pieceTag = testTagPiece(coordinate = expectedCoordinates, type = expectedValue)
         onNodeWithTag(testTag = pieceTag, useUnmergedTree = true)
             .assertExists()
 
-        val cellViewTag = getCellViewTestTag(coordinate = expectedCoordinates)
+        val cellViewTag = testTagCellView(coordinate = expectedCoordinates)
         onNodeWithTag(testTag = cellViewTag, useUnmergedTree = true)
             .assertIsNotEnabled()
     }

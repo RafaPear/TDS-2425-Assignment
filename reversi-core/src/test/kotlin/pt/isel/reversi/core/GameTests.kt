@@ -628,4 +628,40 @@ class GameTests {
             assertEquals(uut.gameState, loadedGameState)
         }
     }
+
+    @Test
+    fun `saveOnlyBoard in local game and name != null succeeds`() {
+        cleanup {
+            var uut = startNewGame(
+                side = 4,
+                players = listOf(Player(PieceType.BLACK), Player(PieceType.WHITE)),
+                firstTurn = PieceType.BLACK,
+                currGameName = "testGame",
+            )
+
+            uut = uut.play(Coordinate(1, 2))
+
+            uut.saveOnlyBoard(uut.gameState)
+
+            val loadedGameState = uut.storage.load("testGame")
+
+            assertEquals(uut.gameState?.board, loadedGameState?.board)
+            assert(loadedGameState?.players?.isEmpty()!!)
+            assertEquals(uut.gameState?.lastPlayer, loadedGameState.lastPlayer)
+        }
+    }
+
+    @Test
+    fun `saveOnlyBoard in local game and name == null fails`() {
+        val uut = startNewGame(
+            side = 4,
+            players = listOf(Player(PieceType.BLACK), Player(PieceType.WHITE)),
+            firstTurn = PieceType.BLACK,
+            currGameName = null,
+        )
+
+        assertFailsWith<InvalidFileException> {
+            uut.saveOnlyBoard(uut.gameState)
+        }
+    }
 }
