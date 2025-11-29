@@ -17,6 +17,7 @@ import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.BACKGROUND_MUSIC
 import pt.isel.reversi.app.MEGALOVANIA
 import pt.isel.reversi.app.PLACE_PIECE_SOUND
+import kotlinx.coroutines.launch
 import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.getStateAudioPool
@@ -77,17 +78,20 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
             Box(
                 modifier = modifier.weight(0.7f),
             ) {
+
                 DrawBoard(appState.value.game, freeze = freeze) { coordinate ->
-                    try {
-                        appState.value = setGame(
-                            appState,
-                            game = appState.value.game.play(coordinate)
-                        )
-                        val audioPool = getStateAudioPool(appState)
-                        audioPool.stop(PLACE_PIECE_SOUND)
-                        audioPool.play(PLACE_PIECE_SOUND)
-                    } catch (e: ReversiException) {
-                        appState.value = setError(appState, error = e)
+                    coroutineAppScope.launch {
+                        try {
+                            appState.value = setGame(
+                                appState,
+                                game = appState.value.game.play(coordinate)
+                            )
+                            val audioPool = getStateAudioPool(appState)
+                            audioPool.stop(PLACE_PIECE_SOUND)
+                            audioPool.play(PLACE_PIECE_SOUND)
+                        } catch (e: ReversiException) {
+                            appState.value = setError(appState, error = e)
+                        }
                     }
                 }
             }

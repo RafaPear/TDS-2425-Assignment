@@ -1,5 +1,6 @@
 package pt.isel.reversi.core
 
+import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
@@ -9,7 +10,6 @@ import pt.isel.reversi.core.exceptions.InvalidGameException
 import pt.isel.reversi.core.exceptions.InvalidNameAlreadyExists
 import pt.isel.reversi.core.exceptions.InvalidPlayException
 import pt.isel.reversi.core.storage.GameState
-import pt.isel.reversi.utils.GAME_BASE_FOLDER
 import java.io.File
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -39,16 +39,16 @@ class GameTests {
         }
     }
 
-    fun cleanup(func: () -> Unit) {
-        File("$GAME_BASE_FOLDER/").deleteRecursively()
-        func()
-        File("$GAME_BASE_FOLDER/").deleteRecursively()
+    fun cleanup(func: suspend () -> Unit) {
+        val conf = loadCoreConfig()
+        File(conf.SAVES_FOLDER).deleteRecursively()
+        runBlocking { func() }
+        File(conf.SAVES_FOLDER).deleteRecursively()
     }
 
     @Test
     fun `play with game not started yet`() {
         cleanup {
-
             val game = Game()
 
             assertFailsWith<InvalidGameException> {
@@ -67,7 +67,6 @@ class GameTests {
     @Test
     fun `play with 1 player in local game and not his turn fails`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(Player(PieceType.WHITE)),
@@ -91,7 +90,6 @@ class GameTests {
     @Test
     fun `play with 1 player in local game fails`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(Player(PieceType.BLACK)),
@@ -113,7 +111,6 @@ class GameTests {
             */
     fun `play in local game with 2 players succeeds`() {
         cleanup {
-
             val expectedBoard = Board(4).startPieces()
                 .addPiece(Coordinate(1, 2), PieceType.BLACK)
                 .changePiece(Coordinate(2, 2))
@@ -152,7 +149,6 @@ class GameTests {
                */
     fun `play in local game verify players point update correctly and playerTurn after normal plays`() {
         cleanup {
-
             val expectedBlackPoints = 3
             val expectedWhitePoints = 3
             val expectedPlayerTurn = PieceType.WHITE
@@ -175,7 +171,6 @@ class GameTests {
     @Test
     fun `play with players empty fails`() {
         cleanup {
-
             val uut = Game(
                 target = false,
                 gameState = GameState(
@@ -195,7 +190,6 @@ class GameTests {
     @Test
     fun `pass in localGame when no availablePlays succeeds`() {
         cleanup {
-
             var uut = Game(
                 target = false,
                 gameState = GameState(
@@ -228,7 +222,6 @@ class GameTests {
 
     fun `pass with game not started yet fails`() {
         cleanup {
-
             val game = Game()
             assertFailsWith<InvalidGameException> {
                 game.pass()
@@ -239,7 +232,6 @@ class GameTests {
     @Test
     fun `pass with players empty fails`() {
         cleanup {
-
             val uut = Game(
                 target = false,
                 gameState = GameState(
@@ -335,7 +327,6 @@ class GameTests {
     @Test
     fun `startNewGame in local game with 2 players succeeds`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(Player(PieceType.BLACK), Player(PieceType.WHITE)),
@@ -356,7 +347,6 @@ class GameTests {
     @Test
     fun `startNewGame with empty players fails`() {
         cleanup {
-
             assertFailsWith<InvalidGameException> {
                 startNewGame(
                     side = 4,
@@ -371,7 +361,6 @@ class GameTests {
     @Test
     fun `startNewGame in local game with 1 player succeeds`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(Player(PieceType.BLACK)),
@@ -517,7 +506,6 @@ class GameTests {
     @Test
     fun `pass in local game with available plays fails`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(
@@ -567,7 +555,6 @@ class GameTests {
     @Test
     fun `refresh in local game returns same game`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(
@@ -608,7 +595,6 @@ class GameTests {
     @Test
     fun `saveEndGame with game not started yet fails`() {
         cleanup {
-
             val game = Game()
 
             assertFailsWith<InvalidGameException> {
@@ -620,7 +606,6 @@ class GameTests {
     @Test
     fun `saveEndGame with players empty fails`() {
         cleanup {
-
             val uut = Game(
                 target = false,
                 gameState = GameState(
@@ -702,7 +687,6 @@ class GameTests {
     @Test
     fun `saveOnlyBoard in local game and name == null fails`() {
         cleanup {
-
             val uut = startNewGame(
                 side = 4,
                 players = listOf(Player(PieceType.BLACK), Player(PieceType.WHITE)),
