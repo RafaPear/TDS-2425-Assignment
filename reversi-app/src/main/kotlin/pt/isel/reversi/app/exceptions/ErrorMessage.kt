@@ -151,7 +151,6 @@ fun ToastMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier
     val slideDuration = 300 // Tempo de deslize para entrar/sair
     val displayDuration = 2000L // Tempo de permanência na tela (aumentei para 2 segundos)
 
-    // Cores de Info (Azul)
     val infoBackgroundColor = Color(0xFFFF5722)
 
     val infoTextColor = Color.White.copy(alpha = 0.8f)
