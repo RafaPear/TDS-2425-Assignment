@@ -30,6 +30,12 @@ fun setAppState(
     audioPool: AudioPool = appState.value.audioPool,
 ) = AppState(game, page, error, backPage = setBackPage(appState, newPage = page), audioPool)
 
+/**
+ * Retrieves the [AudioPool] from the current [AppState].
+ *
+ * @param appState the mutable state holding the current [AppState]
+ * @return the [AudioPool] instance from the [AppState]
+ */
 fun getStateAudioPool(appState: MutableState<AppState>) = appState.value.audioPool
 
 private fun setBackPage(appState: MutableState<AppState>, newPage: Page): Page {
