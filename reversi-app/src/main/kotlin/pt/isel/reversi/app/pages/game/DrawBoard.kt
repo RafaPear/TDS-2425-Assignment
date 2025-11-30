@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.gamePage
+package pt.isel.reversi.app.pages.game
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
@@ -19,6 +19,8 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.reversi.app.BOARD_COLOR
+import pt.isel.reversi.app.PRIMARY
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
@@ -26,18 +28,17 @@ import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 
 // Main Color Definitions
-val TEXT_COLOR = Color.Black           // Texto (pontuação)
+val TEXT_COLOR = Color.White           // Texto (pontuação)
 
 val BOARD_BACKGROUND_COLOR = Color(0xFFB8860B)      // Fundo geral de madeira
-val BOARD_SIDE_COLOR = Color(0xFFD2A679)     // Painel superior
-val BOARD_MAIN_COLOR = Color(0xFF4CAF50)          // Verde principal do tabuleiro
+val BOARD_SIDE_COLOR = Color(0xFFD2A679)
 
 // Button configuration constants
 val BUTTON_CONTENT_COLOR = Color.White
 val BUTTON_MIN_FONT_SIZE = 12.sp
 val BUTTON_MAX_FONT_SIZE = 40.sp
 val BUTTON_TEXT_COLOR = TEXT_COLOR
-val BUTTON_MAIN_COLOR = Color(0xFF4CAF50)
+val BUTTON_MAIN_COLOR = PRIMARY
 
 const val GHOST_PIECE_ALPHA = 0.3f
 
@@ -155,7 +156,7 @@ fun cellView(
             .aspectRatio(1f)
             .padding(2.dp)
             .clip(RoundedCornerShape(6.dp))
-            .background(BOARD_MAIN_COLOR)
+            .background(BOARD_COLOR)
             .clickable(enabled = clickable) { onClick(coordinate) }
             .testTag(testTagCellView(coordinate)),
         contentAlignment = Alignment.Center

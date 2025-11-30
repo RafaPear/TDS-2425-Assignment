@@ -6,11 +6,9 @@ import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
 
-fun loadStorageFromConfig() =
-    loadCoreConfig().let { conf ->
-        conf.STORAGE_TYPE.storage(conf.SAVES_FOLDER)
-    }
-
+fun loadStorageFromConfig() = loadCoreConfig().let { conf ->
+    conf.STORAGE_TYPE.storage(conf.SAVES_FOLDER)
+}
 
 /**
  * Starts a new game.
@@ -30,19 +28,14 @@ suspend fun startNewGame(
     firstTurn: PieceType,
     currGameName: String? = null,
 ): Game {
-    if (players.isEmpty())
-        throw InvalidGameException(
-            "Need minimum one player to start the game",
-            ErrorType.WARNING
-        )
+    if (players.isEmpty()) throw InvalidGameException(
+        "Need minimum one player to start the game", ErrorType.WARNING
+    )
 
     val board = Board(side).startPieces()
 
     val gs = GameState(
-        board = board,
-        players = players.map { it.refresh(board) },
-        lastPlayer = firstTurn.swap(),
-        winner = null
+        board = board, players = players.map { it.refresh(board) }, lastPlayer = firstTurn.swap(), winner = null
     )
 
     return if (currGameName != null && gs.players.size == 1) {
@@ -58,8 +51,7 @@ suspend fun startNewGame(
             ).also { it.storage.new(currGameName) { newGS } }
         } catch (_: Exception) {
             throw InvalidNameAlreadyExists(
-                message = "A game with the name '$currGameName' already exists.",
-                type = ErrorType.WARNING
+                message = "A game with the name '$currGameName' already exists.", type = ErrorType.WARNING
             )
         }
     } else {
@@ -86,20 +78,14 @@ suspend fun loadGame(
     desiredType: PieceType? = null,
 ): Game {
     val storage = loadStorageFromConfig()
-    val loadedState = storage.load(gameName)
-                      ?: throw InvalidFileException(
-                          message = "$gameName does not exist",
-                          type = ErrorType.ERROR
-                      )
+    val loadedState = storage.load(gameName) ?: throw InvalidFileException(
+        message = "$gameName does not exist", type = ErrorType.ERROR
+    )
 
-    val myPieceType =
-        if (loadedState.players.isNotEmpty())
-            desiredType ?: loadedState.players[0].type
-        else
-            throw InvalidPieceInFileException(
-                message = "No players available in the loaded game: $gameName.",
-                type = ErrorType.ERROR
-            )
+    val myPieceType = if (loadedState.players.isNotEmpty()) desiredType ?: loadedState.players[0].type
+    else throw InvalidPieceInFileException(
+        message = "No players available in the loaded game: $gameName.", type = ErrorType.ERROR
+    )
 
     val newState = loadedState.copy(
         players = loadedState.players.find { it.type == myPieceType }?.let {
@@ -113,8 +99,7 @@ suspend fun loadGame(
     val opponents = loadedState.players.filter { it.type != myPieceType }
 
     storage.save(
-        id = gameName,
-        obj = newState.copy(
+        id = gameName, obj = newState.copy(
             players = opponents
         )
     )
@@ -122,8 +107,19 @@ suspend fun loadGame(
     return Game(
         target = false,
         gameState = newState.copy(
-            players = newState.players.map { it.refresh(newState.board) }
-        ),
+            players = newState.players.map { it.refresh(newState.board) }),
+        currGameName = gameName,
+    )
+}
+
+suspend fun readGame(gameName: String): Game? {
+    val storage = loadStorageFromConfig()
+    val loadedState = storage.load(gameName) ?: return null
+
+    return Game(
+        target = false,
+        gameState = loadedState.copy(
+            players = loadedState.players.map { it.refresh(loadedState.board) }),
         currGameName = gameName,
     )
 }
@@ -160,13 +156,8 @@ fun newGameForTest(
     lastPlayer: PieceType,
     currGameName: String? = null,
 ): Game = Game(
-    target = false,
-    currGameName = currGameName,
-    gameState = GameState(
-        board = board,
-        players = players,
-        lastPlayer = lastPlayer,
-        winner = null
+    target = false, currGameName = currGameName, gameState = GameState(
+        board = board, players = players, lastPlayer = lastPlayer, winner = null
     )
 )
 

@@ -59,6 +59,9 @@ fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, exitAction: (
                     appState.value = setError(appState, error = e)
                 }
             }
+            Item("Lobby Screen") {
+                appState.value = setPage(appState, Page.LOBBY)
+            }
         }
 
         Menu("Ajuda") {

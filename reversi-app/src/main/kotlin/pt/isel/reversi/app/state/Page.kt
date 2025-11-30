@@ -7,5 +7,6 @@ enum class Page {
     ABOUT,
     JOIN_GAME,
     NEW_GAME,
-    SAVE_GAME
+    SAVE_GAME,
+    LOBBY
 }

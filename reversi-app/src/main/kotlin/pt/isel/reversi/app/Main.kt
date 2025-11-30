@@ -18,10 +18,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.painterResource
 import pt.isel.reversi.app.exceptions.GameNotStartedYet
-import pt.isel.reversi.app.gamePage.GamePage
-import pt.isel.reversi.app.mainMenu.JoinGamePage
-import pt.isel.reversi.app.mainMenu.MainMenu
-import pt.isel.reversi.app.mainMenu.NewGamePage
+import pt.isel.reversi.app.pages.game.GamePage
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ErrorType
@@ -76,15 +73,7 @@ fun main(args: Array<String>) {
 
             MakeMenuBar(appState, ::safeExitApplication)
 
-            when (appState.value.page) {
-                Page.MAIN_MENU -> MainMenu(appState)
-                Page.GAME      -> GamePage(appState)
-                Page.SETTINGS  -> SettingsPage(appState)
-                Page.ABOUT     -> AboutPage(appState)
-                Page.JOIN_GAME -> JoinGamePage(appState)
-                Page.NEW_GAME  -> NewGamePage(appState)
-                Page.SAVE_GAME -> SaveGamePage(appState)
-            }
+            AppScreenSwitcher(appState)
         }
     }
 }
@@ -137,7 +126,7 @@ fun SaveGamePage(appState: MutableState<AppState>) {
                 value = gameName ?: "",
                 enabled = appState.value.game.currGameName == null,
                 onValueChange = { gameName = it },
-                label = { Text("Nome do jogo") },
+                label = { Text("Nome do jogo", color = TEXT_COLOR) },
                 singleLine = true
             )
 
@@ -160,9 +149,12 @@ fun SaveGamePage(appState: MutableState<AppState>) {
                             )
                         }
                     }
-                }
+                },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = PRIMARY
+                )
             ) {
-                Text("Guardar")
+                Text("Guardar", color = TEXT_COLOR)
             }
         }
     }
@@ -183,7 +175,7 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Opções futuras: som, tema, rede, etc.")
+            Text("Opções futuras: som, tema, rede, etc.", color = TEXT_COLOR)
             val currentMasterVolume = getStateAudioPool(appState).getMasterVolume()
             var volume by remember { mutableStateOf(currentMasterVolume ?: 0f) }
 
@@ -199,18 +191,25 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             Text(
                 "Master Volume: $number",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = TEXT_COLOR
             )
-            Slider(value = volume, valueRange = -20f..0f, onValueChange = {
-                volume = it
-                val audioPool = getStateAudioPool(appState)
-                if (volume == -20f) {
-                    audioPool.mute(true)
-                } else {
-                    audioPool.mute(false)
-                    audioPool.setMasterVolume(volume)
-                }
-            })
+            Slider(
+                value = volume, valueRange = -20f..0f, onValueChange = {
+                    volume = it
+                    val audioPool = getStateAudioPool(appState)
+                    if (volume == -20f) {
+                        audioPool.mute(true)
+                    } else {
+                        audioPool.mute(false)
+                        audioPool.setMasterVolume(volume)
+                    }
+                },
+                colors = androidx.compose.material3.SliderDefaults.colors(
+                    thumbColor = PRIMARY,
+                    activeTrackColor = PRIMARY
+                )
+            )
 
         }
     }
@@ -244,12 +243,12 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(height = 24.dp))
-            Text("Projeto Reversi desenvolvido no ISEL.")
-            Text("Autores: ")
-            Text(" - Rafael Pereira - NUMERO")
-            Text(" - Ian Frunze - NUMERO")
-            Text(" - Tito Silva - NUMERO")
-            Text("Versão: DEV Build")
+            Text("Projeto Reversi desenvolvido no ISEL.", color = TEXT_COLOR)
+            Text("Autores: ", color = TEXT_COLOR)
+            Text(" - Rafael Pereira - NUMERO", color = TEXT_COLOR)
+            Text(" - Ian Frunze - NUMERO", color = TEXT_COLOR)
+            Text(" - Tito Silva - NUMERO", color = TEXT_COLOR)
+            Text("Versão: DEV Build", color = TEXT_COLOR)
 
         }
     }

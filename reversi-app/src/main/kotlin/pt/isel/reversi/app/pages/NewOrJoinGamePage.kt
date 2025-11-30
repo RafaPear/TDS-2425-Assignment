@@ -1,10 +1,11 @@
-package pt.isel.reversi.app.mainMenu
+package pt.isel.reversi.app.pages
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -12,9 +13,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import pt.isel.reversi.app.HIT_SOUND
-import pt.isel.reversi.app.PreviousPage
-import pt.isel.reversi.app.ScaffoldView
+import pt.isel.reversi.app.*
 import pt.isel.reversi.app.exceptions.NoPieceSelected
 import pt.isel.reversi.app.exceptions.TextBoxIsEmpty
 import pt.isel.reversi.app.state.*
@@ -127,19 +126,32 @@ private fun newOrJoinGamePage(
         ) {
             Spacer(Modifier.height(24.dp))
 
+            //  colors: TextFieldColors =
             OutlinedTextField(
                 modifier = modifier,
                 value = game.currGameName ?: "",
                 onValueChange = { game = game.copy(currGameName = it) },
-                label = { Text("Nome do jogo") },
-                singleLine = true
+                label = { Text("Nome do jogo", color = TEXT_COLOR) },
+                singleLine = true,
+                colors = TextFieldDefaults.colors(
+                    focusedContainerColor = Color.Transparent,
+                    unfocusedContainerColor = Color.Transparent,
+                    focusedIndicatorColor = PRIMARY,
+                    unfocusedIndicatorColor = Color.White.copy(0.3f),
+                    cursorColor = PRIMARY,
+                    focusedTextColor = TEXT_COLOR,
+                    unfocusedTextColor = TEXT_COLOR,
+                    focusedLabelColor = PRIMARY,
+                    unfocusedLabelColor = TEXT_COLOR
+                )
+
             )
 
             Row(
                 horizontalArrangement = Arrangement.spacedBy(10.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text("Sou o jogador:")
+                Text("Sou o jogador:", color = TEXT_COLOR)
 
                 ButtonPieceType(PieceType.BLACK, game.myPiece) { selected ->
                     game = game.changeMyPiece(selected)
@@ -152,9 +164,12 @@ private fun newOrJoinGamePage(
 
             Button(
                 modifier = modifier,
-                onClick = { onClick(game) }
+                onClick = { onClick(game) },
+                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                    containerColor = PRIMARY
+                )
             ) {
-                Text("Entrar")
+                Text("Entrar", color = TEXT_COLOR)
             }
         }
     }
@@ -170,14 +185,17 @@ fun ButtonPieceType(
     Button(
         modifier = modifier,
         onClick = { onClick(piece) },
-        border = if (currentPiece == piece) BorderStroke(2.dp, Color.Green) else null
+        border = if (currentPiece == piece) BorderStroke(2.dp, Color.White) else null,
+        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            containerColor = PRIMARY
+        )
     ) {
         Text(
             text = when (piece) {
                 PieceType.BLACK -> "Preto"
                 PieceType.WHITE -> "Branco"
             },
-            color = if (currentPiece == piece) Color.Green else Color.White
+            color = TEXT_COLOR
         )
     }
 }
