@@ -31,6 +31,10 @@ fun setGame(appState: MutableState<AppState>, game: Game): AppState {
  * @return the updated [AppState] with the new page
  */
 fun setPage(appState: MutableState<AppState>, page: Page): AppState {
+    if (page == appState.value.page) {
+        LOGGER.info("Page is the same: ${page.name}, no changes made")
+        return appState.value
+    }
     val newAppState = checkAndClearInfoError(appState)
 
     val error = newAppState.error
