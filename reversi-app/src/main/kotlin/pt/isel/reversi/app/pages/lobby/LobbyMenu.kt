@@ -5,7 +5,11 @@ import androidx.compose.animation.core.CubicBezierEasing
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.spring
-import androidx.compose.foundation.*
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
@@ -14,21 +18,19 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBackIos
 import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.*
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
@@ -38,15 +40,9 @@ import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.app.HIT_SOUND
 import pt.isel.reversi.app.MAIN_BACKGROUND_COLOR
 import pt.isel.reversi.app.ScaffoldView
-import pt.isel.reversi.app.reversiFadeAnimation
-import pt.isel.reversi.app.state.AppState
-import pt.isel.reversi.app.state.Page
-import pt.isel.reversi.app.state.getStateAudioPool
-import pt.isel.reversi.app.state.setGame
-import pt.isel.reversi.app.state.setPage
+import pt.isel.reversi.app.exceptions.GameIsFull
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.board.Board
-import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.getAllGameNames
 import pt.isel.reversi.core.loadGame
@@ -54,64 +50,9 @@ import pt.isel.reversi.core.readGame
 import pt.isel.reversi.utils.LOGGER
 import kotlin.math.absoluteValue
 
-// Cores
-private val BOARD_COLOR = Color(0xFF2E7D32)
-private val BOARD_BORDER = Color(0xFF1B5E20)
+
 private val PRIMARY = Color(0xFF1976D2)
 private val BACKGROUND = Color(0xFF121212)
-private val CARD_BG = Color(0xFF1E1E1E)
-
-// =============================================================================
-// Preview do Tabuleiro
-// =============================================================================
-@Composable
-fun BoardPreview(board: Board, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.aspectRatio(1f).shadow(8.dp, RoundedCornerShape(12.dp))
-            .background(BOARD_COLOR, RoundedCornerShape(12.dp)).border(3.dp, BOARD_BORDER, RoundedCornerShape(12.dp))
-            .padding(6.dp)
-    ) {
-        Column(Modifier.fillMaxSize()) {
-            repeat(board.side) { y ->
-                Row(Modifier.weight(1f).fillMaxWidth()) {
-                    repeat(board.side) { x ->
-                        val piece = board[Coordinate(x + 1, y + 1)]
-                        Cell(piece, Modifier.weight(1f).fillMaxHeight())
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun Cell(piece: PieceType?, modifier: Modifier = Modifier) {
-    Box(
-        modifier = modifier.aspectRatio(1f).padding(0.5.dp).background(BOARD_COLOR), contentAlignment = Alignment.Center
-    ) {
-        if (piece != null) {
-            Canvas(Modifier.fillMaxSize().padding(3.dp)) {
-                val radius = size.minDimension / 2 * 0.7f
-                val center = Offset(size.width / 2, size.height / 2)
-                val color = if (piece == PieceType.BLACK) Color.Black else Color.White
-
-                // Sombra
-                drawCircle(Color.Black.copy(0.3f), radius * 1.1f, center + Offset(2f, 2f))
-                // Lateral 3D
-                val sideColor = if (color == Color.White) Color(0xFFCFD8DC) else Color(0xFF37474F)
-                drawCircle(sideColor, radius, center + Offset(1f, 1f))
-                // Peça
-                drawCircle(color, radius * 0.95f, center)
-                // Highlight
-                drawCircle(
-                    Color.White.copy(if (color == Color.White) 0.6f else 0.35f),
-                    radius * 0.25f,
-                    center - Offset(radius * 0.35f, radius * 0.35f)
-                )
-            }
-        }
-    }
-}
 
 enum class GameStatus(val text: String, val color: Color) {
     EMPTY("Vazio", Color.Green),
@@ -121,144 +62,9 @@ enum class GameStatus(val text: String, val color: Color) {
     CURRENT_GAME("Jogo Atual", Color.Cyan)
 }
 
-// =============================================================================
-// Card do Jogo
-// =============================================================================
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun GameCard(
-    game: Game, enabled: Boolean, statusData: GameStatus, onClick: () -> Unit
-) {
-    val name = game.currGameName ?: return
-    val state = game.gameState ?: return
-
-    // Lógica corrigida dos estados
-    val statusText = statusData.text
-    val statusColor = statusData.color
-
-    Card(
-        onClick = onClick,
-        enabled = enabled,
-        modifier = Modifier.fillMaxSize(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = CARD_BG),
-        border = BorderStroke(1.dp, Color.White.copy(0.1f))
-    ) {
-        Column(
-            modifier = Modifier.fillMaxSize().background(
-                Brush.verticalGradient(
-                    listOf(Color(0xFF1E1E1E), Color(0xFF2D2D2D))
-                )
-            ).padding(24.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.SpaceBetween
-        ) {
-            // Header
-            Row(
-                Modifier,
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = name,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
-                    color = Color.White,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    modifier = Modifier.weight(1f)
-                )
-                StatusBadge(statusText, statusColor)
-            }
-
-            Row(Modifier.weight(3f)) {
-
-                // Tabuleiro
-                BoardPreview(
-                    board = state.board, modifier = Modifier.padding(vertical = 12.dp)
-                )
-            }
-
-            Row(Modifier.fillMaxWidth().weight(2f)) {
-                // Placar - sempre mostra as pontuações
-                ScorePanel(state.board)
-            }
-
-            Row(Modifier.weight(1f)) {
-
-                if (state.players.isNotEmpty()) {// Botão
-                    Button(
-                        onClick = onClick,
-                        modifier = Modifier.fillMaxWidth(),
-                        colors = ButtonDefaults.buttonColors(containerColor = PRIMARY),
-                        shape = RoundedCornerShape(16.dp)
-                    ) {
-                        Icon(Icons.Filled.PlayArrow, null, Modifier.size(20.dp))
-                        Spacer(Modifier.width(8.dp))
-                        Text("Continuar", fontSize = 16.sp, fontWeight = FontWeight.SemiBold)
-                    }
-                }
-            }
-        }
-    }
-}
-
-@Composable
-fun StatusBadge(text: String, color: Color) {
-    Surface(
-        shape = RoundedCornerShape(10.dp), color = color.copy(0.2f)
-    ) {
-        Text(
-            text = text,
-            fontSize = 11.sp,
-            fontWeight = FontWeight.Bold,
-            color = color,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-        )
-    }
-}
-
-@Composable
-fun ScorePanel(board: Board) {
-    Row(
-        modifier = Modifier.fillMaxWidth().background(Color(0xFF2D2D2D), RoundedCornerShape(16.dp))
-            .border(1.dp, Color.White.copy(0.1f), RoundedCornerShape(16.dp)).padding(16.dp),
-        horizontalArrangement = Arrangement.SpaceEvenly
-    ) {
-        ScoreItem(PieceType.BLACK, board.totalBlackPieces)
-        ScoreItem(PieceType.WHITE, board.totalWhitePieces)
-    }
-}
-
-@Composable
-fun ScoreItem(type: PieceType, score: Int) {
-    Column(horizontalAlignment = Alignment.CenterHorizontally) {
-        Box(
-            Modifier.size(40.dp).background(
-                if (type == PieceType.BLACK) Color.Black else Color.White, CircleShape
-            ).border(
-                2.dp, if (type == PieceType.BLACK) Color.White.copy(0.3f) else Color.Black.copy(0.2f), CircleShape
-            )
-        )
-        Spacer(Modifier.height(8.dp))
-        Text(
-            text = score.toString(), fontSize = 24.sp, fontWeight = FontWeight.Bold, color = Color.White
-        )
-        Text(
-            text = if (type == PieceType.BLACK) "Preto" else "Branco", fontSize = 11.sp, color = Color.White.copy(0.7f)
-        )
-    }
-}
-
-// =============================================================================
-// Carrossel com HorizontalPager
-// =============================================================================
-// =============================================================================
-// Carrossel com HorizontalPager - CORRIGIDO
-// =============================================================================
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun GameCarousel(appState: MutableState<AppState>, games: List<Game>, onGameClick: (Game) -> Unit) {
+fun LobbyCarousel(appState: MutableState<AppState>, games: List<Game>, onGameClick: (Game) -> Unit) {
     val pagerState = rememberPagerState(pageCount = { games.size })
     val scope = rememberCoroutineScope()
 
@@ -268,10 +74,9 @@ fun GameCarousel(appState: MutableState<AppState>, games: List<Game>, onGameClic
 
         // 1. DEFINIR TAMANHOS MÁXIMOS DO CARTÃO PRIMEIRO (CORREÇÃO)
         val maxCardWidth = (availableWidth * 0.7f).coerceAtMost(450.dp)
-        val maxCardHeight = (availableHeight * 0.7f).coerceAtMost(650.dp)
+        val maxCardHeight = (availableHeight * 0.8f).coerceAtMost(950.dp)
 
-        // 2. CALCULAR PADDING USANDO O TAMANHO DEFINIDO
-        val minHorizontalPadding = 32.dp
+        val horizontalPadding = (availableWidth / 2 - maxCardWidth / 2)
 
         // Calcula o padding necessário para centralizar o cartão de largura maxCardWidth
         val horizontalPadding = (availableWidth / 2 - maxCardWidth / 2).coerceAtLeast(minHorizontalPadding)
@@ -353,7 +158,6 @@ fun GameCarousel(appState: MutableState<AppState>, games: List<Game>, onGameClic
             }
         }
 
-        // Navegação (mantida)
         if (games.size > 1) {
             if (pagerState.currentPage > 0) {
                 NavButton(
@@ -369,7 +173,7 @@ fun GameCarousel(appState: MutableState<AppState>, games: List<Game>, onGameClic
             }
         }
 
-        // Indicadores (mantidos)
+
         Column(
             Modifier.align(Alignment.TopCenter).padding(top = 24.dp), horizontalAlignment = Alignment.CenterHorizontally
         ) {
@@ -463,6 +267,7 @@ fun LobbyMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     }
 
     ScaffoldView(appState, title = "Lobby - Jogos Guardados") { padding ->
+        val selectedGame = remember { mutableStateOf<Game?>(null) }
         Box(
             Modifier.fillMaxSize().background(BACKGROUND).padding(padding)
         ) {
@@ -536,12 +341,73 @@ private fun lobbyLoadGame(appState: MutableState<AppState>, game: Game) {
     appState.setGame(joinedGame)
     appState.setPage(Page.GAME)
     appState.value = appState.value.copy(backPage = Page.LOBBY)
+                    val name = game.currGameName
+                    if (name == null) {
+                        LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
+                        return@LobbyCarousel
+                    }
+                    val appGame = appState.value.game
+                    scope.launch {
+                        try {
+                            appGame.saveEndGame()
+                        } catch (e: Exception) {
+                            LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
+                        }
+                    }
+
+                    if (appGame.currGameName == name) {
+                        appState.value = setGame(appState, appGame)
+                        appState.value = setPage(appState, Page.GAME)
+                        appState.value = appState.value.copy(backPage = Page.LOBBY)
+                        return@LobbyCarousel
+                    }
+                    selectedGame.value = game
+                }
+            }
+
+            selectedGame.value?.gameState?.let { gameState ->
+                val players = gameState.players.map { it.type }
+                PickAPiece(
+                    pieces = players,
+                    onPick = { pieceType ->
+                        val name = selectedGame.value?.currGameName ?: return@PickAPiece
+                        val appGame = selectedGame.value
+
+                        scope.launch {
+                            try {
+                                appGame?.saveEndGame()
+                            } catch (e: Exception) {
+                                LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
+                            }
+                        }
+
+                        val joinedGame = runBlocking { loadGame(name, pieceType) }
+
+                        selectedGame.value = null
+
+                        appState.value = setGame(appState, joinedGame)
+                        appState.value = setPage(appState, Page.GAME)
+                        appState.value = appState.value.copy(backPage = Page.LOBBY)
+                    },
+
+                    onDismiss = {
+                        selectedGame.value = null
+                        appState.value = setPage(appState, Page.LOBBY)
+                    }
+                )
+            }
+        }
+    }
 }
 
 @Composable
 fun Loading() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        CircularProgressIndicator(color = Color.White)
+        Column(horizontalAlignment = Alignment.CenterHorizontally) {
+            CircularProgressIndicator(color = PRIMARY, modifier = Modifier.size(56.dp))
+            Spacer(Modifier.height(16.dp))
+            Text("A carregar jogos...", color = Color.White, fontSize = 18.sp)
+        }
     }
 }
 
@@ -554,6 +420,58 @@ fun Empty() {
             Text("Nenhum jogo guardado", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.White)
             Spacer(Modifier.height(8.dp))
             Text("Comece um novo jogo", fontSize = 14.sp, color = Color.White.copy(0.6f), textAlign = TextAlign.Center)
+        }
+    }
+}
+
+
+@Composable
+fun PickAPiece(pieces: List<PieceType>, onPick: (PieceType) -> Unit, onDismiss: () -> Unit = {}) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.Black.copy(0.7f))
+            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) { onDismiss() },
+    ) {
+        Box(
+            modifier = Modifier
+                .align(Alignment.Center)
+                .background(Color(0xFF2D2D2D), RoundedCornerShape(16.dp))
+                .border(1.dp, Color.White.copy(0.2f), RoundedCornerShape(16.dp))
+                .padding(24.dp)
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = "Escolha a sua peça",
+                    fontSize = 20.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White,
+                )
+                Spacer(Modifier.height(16.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                ) {
+                    pieces.forEach { piece ->
+                        val color = when (piece) {
+                            PieceType.BLACK -> Color.Black
+                            PieceType.WHITE -> Color.White
+                        }
+                        val borderColor = when (piece) {
+                            PieceType.BLACK -> Color.White.copy(0.3f)
+                            PieceType.WHITE -> Color.Black.copy(0.2f)
+                        }
+                        IconButton(
+                            onClick = { onPick(piece) },
+                            modifier = Modifier
+                                .size(80.dp)
+                                .background(color, CircleShape)
+                                .border(2.dp, borderColor, CircleShape)
+                        ) {}
+                    }
+                }
+            }
         }
     }
 }

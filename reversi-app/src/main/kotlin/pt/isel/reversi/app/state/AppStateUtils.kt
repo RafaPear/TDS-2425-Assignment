@@ -62,8 +62,13 @@ fun MutableState<AppState>.setError(error: ReversiException?) {
     value = value.copy(error = error)
 }
 
-private fun MutableState<AppState>.setBackPage() {
+private fun MutableState<AppState>.setBackPage(newPage: Page) {
     val page = value.page
     LOGGER.info("Set back page: ${page.name}")
+    val backPage = when (newPage) {
+        Page.LOBBY -> Page.MAIN_MENU
+        Page.GAME -> Page.MAIN_MENU
+        else      -> page
+    }
     value = value.copy(backPage = page)
 }
