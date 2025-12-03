@@ -18,10 +18,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.pages.game.BOARD_BACKGROUND_COLOR
@@ -92,7 +90,10 @@ fun Cell(piece: PieceType?, modifier: Modifier = Modifier) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GameCard(
-    game: Game, enabled: Boolean, statusData: GameStatus, scale: Float, maxWidth: Dp, maxHeight: Dp, onClick: () -> Unit
+    game: Game,
+    enabled: Boolean,
+    statusData: GameStatus,
+    onClick: () -> Unit
 ) {
     val name = game.currGameName ?: return
     val state = game.gameState ?: return
@@ -104,11 +105,7 @@ fun GameCard(
     Card(
         onClick = onClick,
         enabled = enabled,
-        modifier = Modifier.width(maxWidth).height(maxHeight).graphicsLayer {
-            scaleX = scale
-            scaleY = scale
-            alpha = 0.4f + (scale - 0.85f) * 4f
-        }.shadow(16.dp, RoundedCornerShape(24.dp)),
+        modifier = Modifier.shadow(16.dp, RoundedCornerShape(24.dp)),
         shape = RoundedCornerShape(24.dp),
         colors = CardDefaults.cardColors(containerColor = CARD_BG),
         border = BorderStroke(1.dp, Color.White.copy(0.1f))

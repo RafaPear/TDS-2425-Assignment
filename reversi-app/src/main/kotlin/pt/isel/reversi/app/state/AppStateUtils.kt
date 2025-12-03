@@ -17,12 +17,12 @@ fun MutableState<AppState>.setPage(page: Page) {
     val error = value.error
 
     if (error != null) {
-        value = value.copy(error = error)
+        setError(error = error)
         return
     }
 
+    setBackPage(value.page)
     LOGGER.info("Set page ${page.name}")
-    setBackPage()
     value = value.copy(page = page, error = error)
 }
 
@@ -41,7 +41,7 @@ fun MutableState<AppState>.setAppState(
     audioPool: AudioPool = value.audioPool,
 ) {
     LOGGER.info("Set entire app state")
-    setBackPage()
+    setBackPage(value.page)
     value = AppState(
         game = game,
         page = page,
@@ -70,5 +70,5 @@ private fun MutableState<AppState>.setBackPage(newPage: Page) {
         Page.GAME -> Page.MAIN_MENU
         else      -> page
     }
-    value = value.copy(backPage = page)
+    value = value.copy(backPage = backPage)
 }

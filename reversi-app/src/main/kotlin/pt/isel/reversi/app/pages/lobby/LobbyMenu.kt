@@ -40,8 +40,12 @@ import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.app.HIT_SOUND
 import pt.isel.reversi.app.MAIN_BACKGROUND_COLOR
 import pt.isel.reversi.app.ScaffoldView
-import pt.isel.reversi.app.exceptions.GameIsFull
-import pt.isel.reversi.app.state.*
+import pt.isel.reversi.app.reversiFadeAnimation
+import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.Page
+import pt.isel.reversi.app.state.getStateAudioPool
+import pt.isel.reversi.app.state.setGame
+import pt.isel.reversi.app.state.setPage
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.getAllGameNames
@@ -49,7 +53,6 @@ import pt.isel.reversi.core.loadGame
 import pt.isel.reversi.core.readGame
 import pt.isel.reversi.utils.LOGGER
 import kotlin.math.absoluteValue
-
 
 private val PRIMARY = Color(0xFF1976D2)
 private val BACKGROUND = Color(0xFF121212)
@@ -64,7 +67,11 @@ enum class GameStatus(val text: String, val color: Color) {
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun LobbyCarousel(appState: MutableState<AppState>, games: List<Game>, onGameClick: (Game) -> Unit) {
+fun LobbyCarousel(
+    appState: MutableState<AppState>,
+    games: List<Game>,
+    onGameClick: (Game) -> Unit
+) {
     val pagerState = rememberPagerState(pageCount = { games.size })
     val scope = rememberCoroutineScope()
 
@@ -72,23 +79,20 @@ fun LobbyCarousel(appState: MutableState<AppState>, games: List<Game>, onGameCli
         val availableWidth = this.maxWidth
         val availableHeight = this.maxHeight
 
-        // 1. DEFINIR TAMANHOS MÁXIMOS DO CARTÃO PRIMEIRO (CORREÇÃO)
         val maxCardWidth = (availableWidth * 0.7f).coerceAtMost(450.dp)
         val maxCardHeight = (availableHeight * 0.8f).coerceAtMost(950.dp)
 
         val horizontalPadding = (availableWidth / 2 - maxCardWidth / 2)
 
-        // Calcula o padding necessário para centralizar o cartão de largura maxCardWidth
-        val horizontalPadding = (availableWidth / 2 - maxCardWidth / 2).coerceAtLeast(minHorizontalPadding)
-
-        // Pager
         Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             HorizontalPager(
-                state = pagerState, modifier = Modifier.fillMaxSize(),
-                // Usa o padding calculado
-                contentPadding = PaddingValues(horizontal = horizontalPadding), pageSpacing = 16.dp
+                state = pagerState,
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(horizontal = horizontalPadding),
+                pageSpacing = 16.dp
             ) { page ->
-                val pageOffset = (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
+                val pageOffset =
+                    (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
                 val distance = pageOffset.absoluteValue.coerceIn(0f, 1f)
 
                 val scale = 0.95f + (1f - distance) * 0.12f
@@ -103,54 +107,69 @@ fun LobbyCarousel(appState: MutableState<AppState>, games: List<Game>, onGameCli
                             this.scaleX = scale
                             this.scaleY = scale
                             this.alpha = alpha
-                            this.translationX = if (pageOffset < 0) translation.toPx() else -translation.toPx()
+                            this.translationX =
+                                if (pageOffset < 0) translation.toPx() else -translation.toPx()
                         },
                     contentAlignment = Alignment.Center
                 ) {
-                    val game = remember(games[page]) { mutableStateOf(games[page]) }
-                    val statusData = remember(game.value) { mutableStateOf(GameStatus.WAITING_FOR_PLAYERS) }
-                    val scope = rememberCoroutineScope()
+                    val gameState = remember { mutableStateOf(games[page]) }
+                    val statusState = remember { mutableStateOf(GameStatus.WAITING_FOR_PLAYERS) }
 
-                    scope.launch {
+                    LaunchedEffect(gameState.value.currGameName) {
                         while (isActive) {
                             try {
-                                game.value = game.value.hardRefresh()
-                                val state = game.value.gameState ?: throw Exception("Estado do jogo nulo")
-                                statusData.value = when {
-                                    appState.value.game.currGameName == game.value.currGameName -> GameStatus.CURRENT_GAME
-                                    state.players.size == 2                                     -> GameStatus.EMPTY
-                                    state.players.size == 1                                     -> GameStatus.WAITING_FOR_PLAYERS
-                                    state.players.isEmpty()                                     -> GameStatus.FULL
-                                    else                                                        -> GameStatus.CORRUPTED
+                                gameState.value = gameState.value.hardRefresh()
+                                val state =
+                                    gameState.value.gameState ?: throw Exception("Estado do jogo nulo")
+
+                                statusState.value = when {
+                                    appState.value.game.currGameName == gameState.value.currGameName ->
+                                        GameStatus.CURRENT_GAME
+
+                                    state.players.size == 2 -> GameStatus.EMPTY          // 2 lugares livres
+                                    state.players.size == 1 -> GameStatus.WAITING_FOR_PLAYERS // 1 lugar livre
+                                    state.players.isEmpty() -> GameStatus.FULL           // 0 lugares livres
+                                    else -> GameStatus.CORRUPTED
                                 }
                             } catch (e: Exception) {
-                                statusData.value = GameStatus.CORRUPTED
-                                LOGGER.warning("Erro ao atualizar jogo: ${game.value.currGameName} - ${e.message}")
+                                statusState.value = GameStatus.CORRUPTED
+                                LOGGER.warning(
+                                    "Erro ao atualizar jogo: ${gameState.value.currGameName} - ${e.message}"
+                                )
                             }
-                            val delay = when (statusData.value) {
-                                GameStatus.EMPTY         -> 100L
+
+                            val delayMillis = when (statusState.value) {
+                                GameStatus.EMPTY -> 100L
                                 GameStatus.WAITING_FOR_PLAYERS -> 500L
-                                GameStatus.FULL                -> 15000L
-                                GameStatus.CORRUPTED           -> 20000L
-                                GameStatus.CURRENT_GAME        -> 100L
+                                GameStatus.FULL -> 15_000L
+                                GameStatus.CORRUPTED -> 20_000L
+                                GameStatus.CURRENT_GAME -> 100L
                             }
-                            delay(delay)
+                            delay(delayMillis)
+
                         }
                     }
 
                     GameCard(
-                        game = game.value,
-                        statusData = statusData.value,
-                        enabled = statusData.value !in listOf(GameStatus.CORRUPTED, GameStatus.FULL),
+                        game = gameState.value,
+                        statusData = statusState.value,
+                        enabled = statusState.value !in listOf(
+                            GameStatus.CORRUPTED,
+                            GameStatus.FULL
+                        ),
                         onClick = {
                             scope.launch {
                                 if (page != pagerState.currentPage) {
                                     pagerState.animateScrollToPage(
-                                        page, animationSpec = spring(stiffness = 400f, dampingRatio = 0.75f)
+                                        page,
+                                        animationSpec = spring(
+                                            stiffness = 400f,
+                                            dampingRatio = 0.75f
+                                        )
                                     )
                                 }
-                                delay(150) // espera o bounce
-                                onGameClick(games[page])
+                                delay(150L)
+                                onGameClick(gameState.value)
                             }
                         }
                     )
@@ -163,26 +182,38 @@ fun LobbyCarousel(appState: MutableState<AppState>, games: List<Game>, onGameCli
                 NavButton(
                     icon = Icons.AutoMirrored.Rounded.ArrowBackIos,
                     alignment = Alignment.CenterStart,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(pagerState.currentPage - 1) } })
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        }
+                    }
+                )
             }
             if (pagerState.currentPage < games.size - 1) {
                 NavButton(
                     icon = Icons.AutoMirrored.Rounded.ArrowForwardIos,
                     alignment = Alignment.CenterEnd,
-                    onClick = { scope.launch { pagerState.animateScrollToPage(pagerState.currentPage + 1) } })
+                    onClick = {
+                        scope.launch {
+                            pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        }
+                    }
+                )
             }
         }
 
-
         Column(
-            Modifier.align(Alignment.TopCenter).padding(top = 24.dp), horizontalAlignment = Alignment.CenterHorizontally
+            Modifier
+                .align(Alignment.TopCenter)
+                .padding(top = 24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             PageIndicators(games.size, pagerState.currentPage)
             Spacer(Modifier.height(8.dp))
             Text(
                 text = "${pagerState.currentPage + 1} de ${games.size}",
                 fontSize = 14.sp,
-                color = Color.White.copy(0.6f)
+                color = Color.White.copy(alpha = 0.6f)
             )
         }
     }
@@ -190,15 +221,22 @@ fun LobbyCarousel(appState: MutableState<AppState>, games: List<Game>, onGameCli
 
 @Composable
 fun BoxScope.NavButton(
-    icon: androidx.compose.ui.graphics.vector.ImageVector, alignment: Alignment, onClick: () -> Unit
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    alignment: Alignment,
+    onClick: () -> Unit
 ) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier.align(alignment).padding(16.dp).size(50.dp)
-            .background(Color(0xFF2D2D2D).copy(0.9f), CircleShape).border(1.dp, Color.White.copy(0.2f), CircleShape)
+        modifier = Modifier
+            .align(alignment)
+            .padding(16.dp)
+            .size(50.dp)
+            .background(Color(0xFF2D2D2D).copy(alpha = 0.9f), CircleShape)
+            .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
     ) {
         val icons = listOf(
-            Icons.AutoMirrored.Rounded.ArrowBackIos, Icons.AutoMirrored.Rounded.ArrowForwardIos
+            Icons.AutoMirrored.Rounded.ArrowBackIos,
+            Icons.AutoMirrored.Rounded.ArrowForwardIos
         )
         Icon(
             icon,
@@ -214,41 +252,43 @@ fun PageIndicators(total: Int, current: Int) {
     Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
         repeat(total) { index ->
             val width by animateDpAsState(
-                if (index == current) 28.dp else 8.dp, spring(Spring.DampingRatioMediumBouncy), label = "indicator"
+                targetValue = if (index == current) 28.dp else 8.dp,
+                animationSpec = spring(Spring.DampingRatioMediumBouncy),
+                label = "indicator"
             )
             Box(
-                Modifier.width(width).height(8.dp).clip(RoundedCornerShape(4.dp))
-                    .background(Color.White.copy(if (index == current) 1f else 0.3f))
+                Modifier
+                    .width(width)
+                    .height(8.dp)
+                    .clip(RoundedCornerShape(4.dp))
+                    .background(
+                        Color.White.copy(
+                            alpha = if (index == current) 1f else 0.3f
+                        )
+                    )
             )
         }
     }
 }
 
 private enum class LobbyState {
-    LOADING,
-    EMPTY,
-    BACKGROUND_DRAW,
-    SHOW_GAMES
+    LOADING, EMPTY, BACKGROUND_DRAW, SHOW_GAMES
 }
 
-// =============================================================================
-// Menu Principal
-// =============================================================================
 @Composable
 fun LobbyMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     val games = remember { mutableStateListOf<Game>() }
-    var lobbyState by remember { mutableStateOf(LobbyState.EMPTY) }
-    val scope = rememberCoroutineScope()
+    val lobbyState = remember { mutableStateOf(LobbyState.EMPTY) }
+    var selectedGame by remember { mutableStateOf<Game?>(null) }
 
-    scope.launch {
+    LaunchedEffect(Unit) {
         while (isActive) {
             val ids = getAllGameNames()
-            val hasNewId =
-                ids.any { id -> id !in games.mapNotNull { game -> game.currGameName } }
-                || games.size != ids.size
+            val hasNewId = ids.any { id -> id !in games.mapNotNull { it.currGameName } } ||
+                           games.size != ids.size
 
             if (hasNewId) {
-                lobbyState = LobbyState.LOADING
+                lobbyState.value = LobbyState.LOADING
                 delay(100L)
                 val loaded = ids.mapNotNull { id ->
                     try {
@@ -260,144 +300,127 @@ fun LobbyMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
                 }
                 games.clear()
                 games.addAll(loaded)
-                lobbyState = if (games.isEmpty()) LobbyState.EMPTY else LobbyState.BACKGROUND_DRAW
+                lobbyState.value = if (games.isEmpty()) LobbyState.EMPTY else LobbyState.BACKGROUND_DRAW
             }
             delay(1000L)
         }
     }
 
     ScaffoldView(appState, title = "Lobby - Jogos Guardados") { padding ->
-        val selectedGame = remember { mutableStateOf<Game?>(null) }
         Box(
-            Modifier.fillMaxSize().background(BACKGROUND).padding(padding)
+            Modifier
+                .fillMaxSize()
+                .background(BACKGROUND)
+                .padding(padding)
         ) {
             AnimatedContent(
-                targetState = lobbyState,
+                targetState = lobbyState.value,
                 transitionSpec = {
                     val duration = 500
                     val iOSEasing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
                     reversiFadeAnimation(duration, iOSEasing)
                 },
-                modifier = Modifier.fillMaxSize().background(MAIN_BACKGROUND_COLOR),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(MAIN_BACKGROUND_COLOR),
                 label = "PageTransition"
             ) { page ->
                 when (page) {
                     LobbyState.LOADING         -> Loading()
                     LobbyState.EMPTY           -> Empty()
-                    LobbyState.BACKGROUND_DRAW -> {
-                        // Desenha o fundo antes de mostrar os jogos
-                        Box(Modifier.fillMaxSize().background(MAIN_BACKGROUND_COLOR)) {
-                            LaunchedEffect(Unit) {
-                                delay(100L)
-                                lobbyState = LobbyState.SHOW_GAMES
-                            }
-                        }
-                    }
-
-                    else                       -> GameCarousel(appState, games) { game ->
-                        lobbyLoadGame(appState, game)
+                    LobbyState.BACKGROUND_DRAW -> LobbyBackgroundLoad(lobbyState)
+                    LobbyState.SHOW_GAMES      -> LobbyCarousel(appState, games) { game ->
+                        selectedGame = game      // <-- só atualizamos estado
                     }
                 }
+            }
+
+            // Pop-up por cima de tudo, controlado por estado
+            selectedGame?.let { game ->
+                LobbyLoadGame(
+                    appState = appState,
+                    game = game,
+                    onClose = { selectedGame = null }
+                )
             }
         }
     }
 }
 
-private fun lobbyLoadGame(appState: MutableState<AppState>, game: Game) {
+@Composable
+private fun LobbyBackgroundLoad(lobbyState: MutableState<LobbyState>) {
+    Box(
+        Modifier
+            .fillMaxSize()
+            .background(MAIN_BACKGROUND_COLOR)
+    ) {
+        LaunchedEffect(Unit) {
+            delay(100L)
+            lobbyState.value = LobbyState.SHOW_GAMES
+        }
+    }
+}
+
+@Composable
+private fun LobbyLoadGame(
+    appState: MutableState<AppState>,
+    game: Game,
+    onClose: () -> Unit
+) {
     LOGGER.info("Jogo selecionado: ${game.currGameName}")
     val state = game.gameState
     if (state == null) {
         LOGGER.warning("Estado do jogo nulo para o jogo: ${game.currGameName}")
+        onClose()
         return
     }
     if (state.players.isEmpty()) {
         LOGGER.warning("Jogo cheio selecionado: ${game.currGameName}")
+        onClose()
         return
     }
 
     val name = game.currGameName
     if (name == null) {
         LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
+        onClose()
         return
     }
 
     if (name == appState.value.game.currGameName) {
         appState.setPage(Page.GAME)
         appState.value = appState.value.copy(backPage = Page.LOBBY)
+        onClose()
         return
     }
 
-    val appGame = appState.value.game
-    val joinedGame = runBlocking {
-        try {
-            appGame.saveEndGame()
-        } catch (e: Exception) {
-            LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
-        }
-        loadGame(name)
-    }
+    val players = state.players.map { it.type }
+    PickAPiece(
+        pieces = players,
+        onPick = { pieceType ->
+            val gameName = game.currGameName ?: return@PickAPiece
+            val appGame = appState.value.game
 
-    appState.getStateAudioPool().play(HIT_SOUND)
-    appState.setGame(joinedGame)
-    appState.setPage(Page.GAME)
-    appState.value = appState.value.copy(backPage = Page.LOBBY)
-                    val name = game.currGameName
-                    if (name == null) {
-                        LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
-                        return@LobbyCarousel
-                    }
-                    val appGame = appState.value.game
-                    scope.launch {
-                        try {
-                            appGame.saveEndGame()
-                        } catch (e: Exception) {
-                            LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
-                        }
-                    }
-
-                    if (appGame.currGameName == name) {
-                        appState.value = setGame(appState, appGame)
-                        appState.value = setPage(appState, Page.GAME)
-                        appState.value = appState.value.copy(backPage = Page.LOBBY)
-                        return@LobbyCarousel
-                    }
-                    selectedGame.value = game
+            val joinedGame = runBlocking {
+                try {
+                    appGame.saveEndGame()
+                } catch (e: Exception) {
+                    LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
                 }
+                loadGame(gameName, pieceType)
             }
 
-            selectedGame.value?.gameState?.let { gameState ->
-                val players = gameState.players.map { it.type }
-                PickAPiece(
-                    pieces = players,
-                    onPick = { pieceType ->
-                        val name = selectedGame.value?.currGameName ?: return@PickAPiece
-                        val appGame = selectedGame.value
-
-                        scope.launch {
-                            try {
-                                appGame?.saveEndGame()
-                            } catch (e: Exception) {
-                                LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
-                            }
-                        }
-
-                        val joinedGame = runBlocking { loadGame(name, pieceType) }
-
-                        selectedGame.value = null
-
-                        appState.value = setGame(appState, joinedGame)
-                        appState.value = setPage(appState, Page.GAME)
-                        appState.value = appState.value.copy(backPage = Page.LOBBY)
-                    },
-
-                    onDismiss = {
-                        selectedGame.value = null
-                        appState.value = setPage(appState, Page.LOBBY)
-                    }
-                )
-            }
+            appState.getStateAudioPool().play(HIT_SOUND)
+            appState.setGame(joinedGame)
+            appState.setPage(Page.GAME)
+            appState.value = appState.value.copy(backPage = Page.LOBBY)
+            onClose()
+        },
+        onDismiss = {
+            appState.setPage(Page.LOBBY)
+            onClose()
         }
-    }
+    )
 }
 
 @Composable
@@ -415,29 +438,50 @@ fun Loading() {
 fun Empty() {
     Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(Icons.Filled.SportsEsports, null, Modifier.size(80.dp), Color.White.copy(0.3f))
+            Icon(
+                Icons.Filled.SportsEsports,
+                contentDescription = null,
+                modifier = Modifier.size(80.dp),
+                tint = Color.White.copy(alpha = 0.3f)
+            )
             Spacer(Modifier.height(16.dp))
-            Text("Nenhum jogo guardado", fontSize = 22.sp, fontWeight = FontWeight.Bold, color = Color.White)
+            Text(
+                "Nenhum jogo guardado",
+                fontSize = 22.sp,
+                fontWeight = FontWeight.Bold,
+                color = Color.White
+            )
             Spacer(Modifier.height(8.dp))
-            Text("Comece um novo jogo", fontSize = 14.sp, color = Color.White.copy(0.6f), textAlign = TextAlign.Center)
+            Text(
+                "Comece um novo jogo",
+                fontSize = 14.sp,
+                color = Color.White.copy(alpha = 0.6f),
+                textAlign = TextAlign.Center
+            )
         }
     }
 }
 
-
 @Composable
-fun PickAPiece(pieces: List<PieceType>, onPick: (PieceType) -> Unit, onDismiss: () -> Unit = {}) {
+fun PickAPiece(
+    pieces: List<PieceType>,
+    onPick: (PieceType) -> Unit,
+    onDismiss: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.Black.copy(0.7f))
-            .clickable(indication = null, interactionSource = remember { MutableInteractionSource() }) { onDismiss() },
+            .background(Color.Black.copy(alpha = 0.7f))
+            .clickable(
+                indication = null,
+                interactionSource = remember { MutableInteractionSource() }
+            ) { onDismiss() },
     ) {
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
                 .background(Color(0xFF2D2D2D), RoundedCornerShape(16.dp))
-                .border(1.dp, Color.White.copy(0.2f), RoundedCornerShape(16.dp))
+                .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
                 .padding(24.dp)
         ) {
             Column(
@@ -459,8 +503,8 @@ fun PickAPiece(pieces: List<PieceType>, onPick: (PieceType) -> Unit, onDismiss: 
                             PieceType.WHITE -> Color.White
                         }
                         val borderColor = when (piece) {
-                            PieceType.BLACK -> Color.White.copy(0.3f)
-                            PieceType.WHITE -> Color.Black.copy(0.2f)
+                            PieceType.BLACK -> Color.White.copy(alpha = 0.3f)
+                            PieceType.WHITE -> Color.Black.copy(alpha = 0.2f)
                         }
                         IconButton(
                             onClick = { onPick(piece) },
@@ -468,7 +512,8 @@ fun PickAPiece(pieces: List<PieceType>, onPick: (PieceType) -> Unit, onDismiss: 
                                 .size(80.dp)
                                 .background(color, CircleShape)
                                 .border(2.dp, borderColor, CircleShape)
-                        ) {}
+                        ) {
+                        }
                     }
                 }
             }
