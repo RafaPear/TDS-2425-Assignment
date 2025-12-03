@@ -66,6 +66,7 @@ private fun setBackPage(appState: MutableState<AppState>, newPage: Page): Page {
     val page = appState.value.page
     LOGGER.info("Set back page: ${page.name}")
     return when (newPage) {
+        Page.LOBBY -> Page.MAIN_MENU
         Page.GAME -> Page.MAIN_MENU
         else      -> page
     }
