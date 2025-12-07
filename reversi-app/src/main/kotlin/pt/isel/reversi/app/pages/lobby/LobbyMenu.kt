@@ -2,44 +2,33 @@ package pt.isel.reversi.app.pages.lobby
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.CubicBezierEasing
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.ArrowBackIos
-import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
-import androidx.compose.material.icons.filled.SportsEsports
-import androidx.compose.material3.*
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import pt.isel.reversi.app.HIT_SOUND
-import pt.isel.reversi.app.MAIN_BACKGROUND_COLOR
-import pt.isel.reversi.app.ScaffoldView
+import pt.isel.reversi.app.*
 import pt.isel.reversi.app.exceptions.GameCorrupted
 import pt.isel.reversi.app.exceptions.GameIsFull
-import pt.isel.reversi.app.reversiFadeAnimation
+import pt.isel.reversi.app.pages.lobby.showGames.ShowGames
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.PieceType
@@ -48,313 +37,162 @@ import pt.isel.reversi.core.getAllGameNames
 import pt.isel.reversi.core.loadGame
 import pt.isel.reversi.core.readGame
 import pt.isel.reversi.utils.LOGGER
-import kotlin.math.absoluteValue
 
-private val PRIMARY = Color(0xFF1976D2)
-private val BACKGROUND = Color(0xFF121212)
-
-enum class GameStatus(val text: String, val color: Color) {
-    EMPTY("Vazio", Color.Green),
-    WAITING_FOR_PLAYERS("Aguardando Jogadores", Color.Yellow),
-    FULL("Cheio", Color.Blue),
-    CORRUPTED("Corrompido", Color.Red),
-    CURRENT_GAME("Jogo Atual", Color.Cyan)
+enum class LobbyState {
+    LOADING, EMPTY, SHOW_GAMES
 }
 
-@OptIn(ExperimentalFoundationApi::class)
+private const val UI_DELAY_SHORT_MS = 100L
+private const val POLL_INTERVAL_MS = 1000L
+private const val PAGE_TRANSITION_DURATION_MS = 500
+
+
+data class LobbyUiState(
+    val games: List<Game> = emptyList(),
+    val lobbyState: LobbyState = LobbyState.LOADING,
+    val canRefresh: Boolean = false,
+    val error: Exception? = null,
+)
+
+class LobbyViewModel : ViewModel() {
+    private val _uiState = mutableStateOf(LobbyUiState())
+    val uiState: State<LobbyUiState> = _uiState
+
+    private var knownNames: List<String> = emptyList()
+
+    init {
+        refresh()
+        startPolling()
+    }
+
+    fun refresh() {
+        viewModelScope.launch {
+            loadGamesAndUpdateState()
+        }
+    }
+
+    private suspend fun loadGamesAndUpdateState() {
+        _uiState.value = _uiState.value.copy(lobbyState = LobbyState.LOADING)
+        try {
+            val ids = getAllGameNames()
+            delay(UI_DELAY_SHORT_MS)
+            val loaded = ids.mapNotNull { id ->
+                try {
+                    readGame(id)
+                } catch (e: CancellationException) {
+                    throw e
+                } catch (e: Exception) {
+                    LOGGER.warning("Erro ao ler jogo: $id - ${e.message}")
+                    null
+                }
+            }
+            knownNames = loaded.mapNotNull { it.currGameName }
+            val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES
+            _uiState.value = _uiState.value.copy(
+                games = loaded,
+                lobbyState = newLobbyState,
+                canRefresh = false,
+            )
+        } catch (e: CancellationException) {
+            throw e
+        } catch (e: Exception) {
+            LOGGER.warning("Erro ao carregar jogos: ${e.message}")
+
+            _uiState.value = _uiState.value.copy(
+                games = emptyList(),
+                lobbyState = LobbyState.EMPTY,
+                canRefresh = false,
+                error = e
+            )
+        }
+    }
+
+    private fun startPolling() {
+        viewModelScope.launch {
+            while (isActive) {
+                try {
+                    val ids = getAllGameNames()
+                    if (ids != knownNames && ids.isNotEmpty()) {
+                        _uiState.value = _uiState.value.copy(canRefresh = true)
+                        knownNames = ids
+                    } else if (ids.isEmpty() && knownNames.isNotEmpty()) {
+                        _uiState.value = _uiState.value.copy(canRefresh = true)
+                        knownNames = ids
+                    }
+                } catch (e: Exception) {
+                    LOGGER.warning("Polling error: ${e.message}")
+                }
+                delay(POLL_INTERVAL_MS)
+            }
+        }
+    }
+
+    suspend fun tryLoadGame(gameName: String, desiredType: PieceType): Game? {
+        return try {
+            loadGame(gameName = gameName, desiredType = desiredType)
+        } catch (e: Exception) {
+            LOGGER.warning("Erro ao carregar jogo $gameName: ${e.message}")
+            _uiState.value = _uiState.value.copy(error = e)
+            null
+        }
+    }
+}
+
+
 @Composable
-fun LobbyCarousel(
+fun LobbyMenu(
     appState: MutableState<AppState>,
-    games: List<Game>,
-    onGameClick: (Game) -> Unit
+    viewModel: LobbyViewModel = viewModel()
 ) {
-    val pagerState = rememberPagerState(pageCount = { games.size })
-    val scope = rememberCoroutineScope()
-    var search by remember { mutableStateOf("") }
-    Column(
-        modifier = Modifier.fillMaxSize().padding(all = 24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceBetween,
-    ) {
+    val uiState by remember { viewModel.uiState }
+    val games = uiState.games
+    val lobbyState = uiState.lobbyState
+    val canRefresh = uiState.canRefresh
+    val error = uiState.error
 
-
-        OutlinedTextField(
-            value = search,
-            singleLine = true,
-            colors = OutlinedTextFieldDefaults.colors(
-                focusedTextColor = Color.White.copy(alpha = 0.7f),
-                unfocusedTextColor = Color.Gray.copy(alpha = 0.7f),
-                cursorColor = Color.White.copy(alpha = 0.7f),
-                focusedBorderColor = PRIMARY,
-                unfocusedBorderColor = Color.White.copy(alpha = 0.7f),
-                focusedContainerColor = Color.Transparent,
-                unfocusedContainerColor = Color.Transparent,
-            ),
-            onValueChange = {
-                scope.launch {
-                    search = it
-                    val game = games.find { game -> game.currGameName == it } ?: return@launch
-                    val page = games.indexOf(game)
-                    pagerState.animateScrollToPage(
-                        page = page,
-                        animationSpec = spring(
-                            stiffness = 400f,
-                            dampingRatio = 0.75f
-                        )
-                    )
-                }
-            },
-            placeholder = { Text("Procure um jogo...") },
-        )
-
-        BoxWithConstraints {
-            val availableWidth = this.maxWidth
-            val availableHeight = this.maxHeight
-
-            val maxCardWidth = (availableWidth * 0.7f).coerceAtMost(450.dp)
-            val maxCardHeight = (availableHeight * 0.8f).coerceAtMost(950.dp)
-
-            val horizontalPadding = (availableWidth / 2 - maxCardWidth / 2)
-
-            HorizontalPager(
-                state = pagerState,
-                contentPadding = PaddingValues(horizontal = horizontalPadding),
-                pageSpacing = 16.dp
-            ) { page ->
-                val pageOffset =
-                    (pagerState.currentPage - page) + pagerState.currentPageOffsetFraction
-                val distance = pageOffset.absoluteValue.coerceIn(0f, 1f)
-
-                val scale = 0.95f + (1f - distance) * 0.12f
-                val alpha = 0.2f + (1f - distance) * 0.8f
-                val translation = 8.dp * distance
-
-                val gameState = remember { mutableStateOf(games[page]) }
-                val statusState = remember { mutableStateOf(GameStatus.WAITING_FOR_PLAYERS) }
-
-                LaunchedEffect(gameState.value.currGameName) {
-                    while (isActive) {
-                        try {
-                            gameState.value = gameState.value.hardRefresh()
-                            val state =
-                                gameState.value.gameState ?: throw Exception("Estado do jogo nulo")
-
-                            statusState.value = when {
-                                appState.value.game.currGameName == gameState.value.currGameName ->
-                                    GameStatus.CURRENT_GAME
-
-                                state.players.size == 2 -> GameStatus.EMPTY
-                                state.players.size == 1 -> GameStatus.WAITING_FOR_PLAYERS
-                                state.players.isEmpty() -> GameStatus.FULL
-                                else -> GameStatus.CORRUPTED
-                            }
-                        } catch (e: Exception) {
-                            statusState.value = GameStatus.CORRUPTED
-                            LOGGER.warning(
-                                "Erro ao atualizar jogo: ${gameState.value.currGameName} - ${e.message}"
-                            )
-                        }
-
-                        val delayMillis = when (statusState.value) {
-                            GameStatus.EMPTY -> 100L
-                            GameStatus.WAITING_FOR_PLAYERS -> 500L
-                            GameStatus.FULL -> 15_000L
-                            GameStatus.CORRUPTED -> 20_000L
-                            GameStatus.CURRENT_GAME -> 100L
-                        }
-                        delay(delayMillis)
-
-                    }
-                }
-
-                GameCard(
-                    game = gameState.value,
-                    statusData = statusState.value,
-                    enabled = statusState.value !in listOf(
-                        GameStatus.CORRUPTED,
-                        GameStatus.FULL
-                    ),
-                    modifier = Modifier
-                        .width(maxCardWidth)
-                        .height(maxCardHeight)
-                        .graphicsLayer {
-                            this.scaleX = scale
-                            this.scaleY = scale
-                            this.alpha = alpha
-                            this.translationX =
-                                if (pageOffset < 0) translation.toPx() else -translation.toPx()
-                        },
-                    onClick = {
-                        scope.launch {
-                            if (page != pagerState.currentPage) {
-                                pagerState.animateScrollToPage(
-                                    page,
-                                    animationSpec = spring(
-                                        stiffness = 400f,
-                                        dampingRatio = 0.75f
-                                    )
-                                )
-                            }
-                            delay(150L)
-                            onGameClick(gameState.value)
-                        }
-                    }
-                )
-            }
-
-            if (games.size > 1) {
-                if (pagerState.currentPage > 0) {
-                    NavButton(
-                        icon = Icons.AutoMirrored.Rounded.ArrowBackIos,
-                        alignment = Alignment.CenterStart,
-                        onClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
-                            }
-                        }
-                    )
-                }
-                if (pagerState.currentPage < games.size - 1) {
-                    NavButton(
-                        icon = Icons.AutoMirrored.Rounded.ArrowForwardIos,
-                        alignment = Alignment.CenterEnd,
-                        onClick = {
-                            scope.launch {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
-                            }
-                        }
-                    )
-                }
-            }
-        }
-
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            PageIndicators(games.size, pagerState.currentPage)
-            Spacer(Modifier.height(8.dp))
-            Text(
-                text = "${pagerState.currentPage + 1} de ${games.size}",
-                fontSize = 14.sp,
-                color = Color.White.copy(alpha = 0.6f)
-            )
-        }
-    }
-}
-
-@Composable
-fun BoxScope.NavButton(
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
-    alignment: Alignment,
-    onClick: () -> Unit
-) {
-    IconButton(
-        onClick = onClick,
-        modifier = Modifier
-            .align(alignment)
-            .padding(16.dp)
-            .size(50.dp)
-            .background(Color(0xFF2D2D2D).copy(alpha = 0.9f), CircleShape)
-            .border(1.dp, Color.White.copy(alpha = 0.2f), CircleShape)
-    ) {
-        val icons = listOf(
-            Icons.AutoMirrored.Rounded.ArrowBackIos,
-            Icons.AutoMirrored.Rounded.ArrowForwardIos
-        )
-        Icon(
-            icon,
-            contentDescription = null,
-            tint = Color.White,
-            modifier = if (icon in icons) Modifier.padding(start = 4.dp) else Modifier
-        )
-    }
-}
-
-@Composable
-fun PageIndicators(total: Int, current: Int) {
-    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-        repeat(total) { index ->
-            val width by animateDpAsState(
-                targetValue = if (index == current) 28.dp else 8.dp,
-                animationSpec = spring(Spring.DampingRatioMediumBouncy),
-                label = "indicator"
-            )
-            Box(
-                Modifier
-                    .width(width)
-                    .height(8.dp)
-                    .clip(RoundedCornerShape(4.dp))
-                    .background(
-                        Color.White.copy(
-                            alpha = if (index == current) 1f else 0.3f
-                        )
-                    )
-            )
-        }
-    }
-}
-
-private enum class LobbyState {
-    LOADING, EMPTY, BACKGROUND_DRAW, SHOW_GAMES
-}
-
-
-@Composable
-fun LobbyMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
-    val games = remember { mutableStateListOf<Game>() }
-    val lobbyState = remember { mutableStateOf(LobbyState.EMPTY) }
     var selectedGame by remember { mutableStateOf<Game?>(null) }
 
-    LaunchedEffect(Unit) {
-        while (isActive) {
-            val ids = getAllGameNames()
-            val hasNewId = ids.any { id -> id !in games.mapNotNull { it.currGameName } } ||
-                    games.size != ids.size
-
-            if (hasNewId) {
-                lobbyState.value = LobbyState.LOADING
-                delay(100L)
-                val loaded = ids.mapNotNull { id ->
-                    try {
-                        runBlocking { readGame(id) }
-                    } catch (e: Exception) {
-                        LOGGER.warning("Erro ao ler jogo: $id - ${e.message}")
-                        null
-                    }
-                }
-                games.clear()
-                games.addAll(loaded)
-                lobbyState.value = if (games.isEmpty()) LobbyState.EMPTY else LobbyState.BACKGROUND_DRAW
+    val refreshAction: @Composable () -> Unit = {
+        if (canRefresh)
+            RefreshButton {
+                viewModel.refresh()
             }
-            delay(1000L)
-        }
+    }
+
+    //Transmite o error do viewModel para o appState, necessário porque o viewModel não conhece o View (appState)
+    LaunchedEffect(error) {
+        if (error == null) return@LaunchedEffect
+        appState.setError(error)
     }
 
     ScaffoldView(appState, title = "Lobby - Jogos Guardados") { padding ->
-        Box(
-            Modifier
+        AnimatedContent(
+            targetState = lobbyState,
+            transitionSpec = {
+                val iOSEasing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
+                reversiFadeAnimation(PAGE_TRANSITION_DURATION_MS, iOSEasing)
+            },
+            modifier = Modifier
                 .fillMaxSize()
-                .background(BACKGROUND)
-                .padding(padding)
-        ) {
-            AnimatedContent(
-                targetState = lobbyState.value,
-                transitionSpec = {
-                    val duration = 500
-                    val iOSEasing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
-                    reversiFadeAnimation(duration, iOSEasing)
-                },
+                .background(MAIN_BACKGROUND_COLOR),
+            label = "PageTransition"
+        ) { page ->
+            Column(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MAIN_BACKGROUND_COLOR),
-                label = "PageTransition"
-            ) { page ->
+                    .padding(paddingValues = padding)
+                    .padding(all = 24.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
                 when (page) {
                     LobbyState.LOADING -> Loading()
-                    LobbyState.EMPTY -> Empty()
-                    LobbyState.BACKGROUND_DRAW -> LobbyBackgroundLoad(lobbyState)
-                    LobbyState.SHOW_GAMES -> LobbyCarousel(appState, games) { game ->
+                    LobbyState.EMPTY -> Empty { refreshAction() }
+                    LobbyState.SHOW_GAMES -> ShowGames(
+                        currentGameName = appState.value.game.currGameName,
+                        games = games,
+                        buttonRefresh = { refreshAction() }
+                    ) { game ->
                         selectedGame = game
                     }
                 }
@@ -364,6 +202,7 @@ fun LobbyMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
                 LobbyLoadGame(
                     appState = appState,
                     game = game,
+                    viewModel = viewModel,
                     onClose = { selectedGame = null }
                 )
             }
@@ -372,98 +211,89 @@ fun LobbyMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun LobbyBackgroundLoad(lobbyState: MutableState<LobbyState>) {
-    Box(
-        Modifier
-            .fillMaxSize()
-            .background(MAIN_BACKGROUND_COLOR)
-    ) {
-        LaunchedEffect(Unit) {
-            delay(100L)
-            lobbyState.value = LobbyState.SHOW_GAMES
-        }
-    }
-}
-
-@Composable
 private fun LobbyLoadGame(
     appState: MutableState<AppState>,
     game: Game,
+    viewModel: LobbyViewModel,
     onClose: () -> Unit
 ) {
     LOGGER.info("Jogo selecionado: ${game.currGameName}")
+
     val state = game.gameState
     val name = game.currGameName
 
-    if (name == appState.value.game.currGameName) {
-        appState.setPage(Page.GAME)
-        appState.value = appState.value.copy(backPage = Page.LOBBY)
-        onClose()
-        return
-    }
-
-    if (state == null) {
-        LOGGER.warning("Estado do jogo nulo para o jogo: ${game.currGameName}")
-        appState.setError(
-            GameCorrupted(
-                message = "O jogo '${game.currGameName}' está corrompido.",
-                type = ErrorType.ERROR
-            )
-        )
-        onClose()
-        return
-    }
-    if (state.players.isEmpty()) {
-        LOGGER.warning("Jogo cheio selecionado: ${game.currGameName}")
-        appState.setError(GameIsFull())
-        onClose()
-        return
-    }
-
-    if (name == null) {
-        LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
-        appState.setError(
-            GameCorrupted(
-                message = "O jogo selecionado não tem um nome válido.",
-                type = ErrorType.ERROR
-            )
-        )
-        onClose()
-        return
-    }
-
-
-    val players = state.players.map { it.type }
-    PickAPiece(
-        pieces = players,
-        onPick = { pieceType ->
-            val gameName = game.currGameName ?: return@PickAPiece
-            val appGame = appState.value.game
-
-            val joinedGame = runBlocking {
-                try {
-                    appGame.saveEndGame()
-                } catch (e: Exception) {
-                    LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
-                }
-                try {
-                    loadGame(gameName, pieceType)
-                } catch (e: Exception) {
-                    appState.setError(e)
-                    null
-                }
-            }
-
-            if (joinedGame == null) {
-                onClose()
-                return@PickAPiece
-            }
-
-            appState.getStateAudioPool().play(HIT_SOUND)
-            appState.setGame(joinedGame)
+    when {
+        name == appState.value.game.currGameName -> {
             appState.setPage(Page.GAME)
             appState.value = appState.value.copy(backPage = Page.LOBBY)
             onClose()
+            return
+        }
+
+        state == null -> {
+            LOGGER.warning("Estado do jogo nulo para o jogo: ${game.currGameName}")
+            appState.setError(
+                GameCorrupted(
+                    message = "O jogo '${game.currGameName}' está corrompido.",
+                    type = ErrorType.ERROR
+                )
+            )
+            onClose()
+            return
+        }
+
+        state.players.isEmpty() -> {
+            LOGGER.warning("Jogo cheio selecionado: ${game.currGameName}")
+            appState.setError(GameIsFull())
+            onClose()
+            return
+        }
+
+        name == null -> {
+            LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
+            appState.setError(
+                GameCorrupted(
+                    message = "O jogo selecionado não tem um nome válido.",
+                    type = ErrorType.ERROR
+                )
+            )
+            onClose()
+            return
+        }
+    }
+
+    val players = state.players.map { it.type }
+    val scope = rememberCoroutineScope()
+
+    PickAPiece(
+        pieces = players,
+        onPick = { pieceType ->
+            val appGame = appState.value.game
+
+            scope.launch {
+                try {
+                    appState.setLoading(true)
+
+                    try {
+                        appGame.saveEndGame()
+                    } catch (e: Exception) {
+                        LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
+                    }
+
+                    val joinedGame = viewModel.tryLoadGame(gameName = name, desiredType = pieceType) ?: run {
+                        onClose()
+                        return@launch
+                    }
+
+                    LOGGER.info("Entrou no jogo '${joinedGame.currGameName}' como peça $pieceType.")
+
+                    appState.getStateAudioPool().play(HIT_SOUND)
+                    appState.setAppState(joinedGame, Page.GAME, backPage = Page.LOBBY)
+                    onClose()
+                } finally {
+                    appState.setLoading(false)
+                }
+            }
         },
         onDismiss = {
             appState.setPage(Page.LOBBY)
@@ -472,47 +302,12 @@ private fun LobbyLoadGame(
     )
 }
 
+/**
+ * Modal dialog for picking a piece.
+ * Clicking outside the inner dialog dismisses; clicking inside does not.
+ */
 @Composable
-fun Loading() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            CircularProgressIndicator(color = PRIMARY, modifier = Modifier.size(56.dp))
-            Spacer(Modifier.height(16.dp))
-            Text("A carregar jogos...", color = Color.White, fontSize = 18.sp)
-        }
-    }
-}
-
-@Composable
-fun Empty() {
-    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-        Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(
-                Icons.Filled.SportsEsports,
-                contentDescription = null,
-                modifier = Modifier.size(80.dp),
-                tint = Color.White.copy(alpha = 0.3f)
-            )
-            Spacer(Modifier.height(16.dp))
-            Text(
-                "Nenhum jogo guardado",
-                fontSize = 22.sp,
-                fontWeight = FontWeight.Bold,
-                color = Color.White
-            )
-            Spacer(Modifier.height(8.dp))
-            Text(
-                "Comece um novo jogo",
-                fontSize = 14.sp,
-                color = Color.White.copy(alpha = 0.6f),
-                textAlign = TextAlign.Center
-            )
-        }
-    }
-}
-
-@Composable
-fun PickAPiece(
+private fun PickAPiece(
     pieces: List<PieceType>,
     onPick: (PieceType) -> Unit,
     onDismiss: () -> Unit = {}
@@ -521,14 +316,20 @@ fun PickAPiece(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.7f))
-            .clickable(
-                indication = null,
-                interactionSource = remember { MutableInteractionSource() }
-            ) { onDismiss() },
+            // detect taps on the background to dismiss; interior box handles its own clicks
+            .pointerInput(Unit) {
+                // detectTapGestures usage — onTap on background => dismiss
+                detectTapGestures { onDismiss() }
+            }
     ) {
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
+                // interior should intercept clicks so they don't bubble to the background pointerInput
+                .pointerInput(Unit) {
+                    // consume all taps inside the dialog (so interior clicks don't dismiss)
+                    detectTapGestures(onTap = { /* consumed */ })
+                }
                 .background(Color(0xFF2D2D2D), RoundedCornerShape(16.dp))
                 .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
                 .padding(24.dp)
@@ -555,14 +356,14 @@ fun PickAPiece(
                             PieceType.BLACK -> Color.White.copy(alpha = 0.3f)
                             PieceType.WHITE -> Color.Black.copy(alpha = 0.2f)
                         }
+                        // use IconButton as a tappable circular surface; content intentionally empty
                         IconButton(
                             onClick = { onPick(piece) },
                             modifier = Modifier
                                 .size(80.dp)
                                 .background(color, CircleShape)
                                 .border(2.dp, borderColor, CircleShape)
-                        ) {
-                        }
+                        ) { /* no icon inside, just the colored circle */ }
                     }
                 }
             }
@@ -570,7 +371,6 @@ fun PickAPiece(
     }
 }
 
-// Test tags
 fun testTagLobbyBoard() = "LobbyBoardPreview"
 fun testTagCellPreview(coordinateIndex: Int) = "LobbyCellPreview_$coordinateIndex"
 fun testTagCarouselItem(name: String) = "LobbyCarouselItem_$name"

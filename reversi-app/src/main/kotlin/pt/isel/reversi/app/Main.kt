@@ -72,19 +72,19 @@ fun main(args: Array<String>) {
             state = windowState,
         ) {
 
-            window.minimumSize = java.awt.Dimension(500, 500)
+            window.minimumSize = java.awt.Dimension(600, 700)
 
             MakeMenuBar(appState, windowState, ::safeExitApplication)
 
             AppScreenSwitcher(appState) { page ->
                 when (page) {
                     Page.MAIN_MENU -> MainMenu(appState)
-                    Page.GAME      -> GamePage(appState)
-                    Page.SETTINGS  -> SettingsPage(appState)
-                    Page.ABOUT     -> AboutPage(appState)
-                    Page.NEW_GAME  -> NewGamePage(appState)
+                    Page.GAME -> GamePage(appState)
+                    Page.SETTINGS -> SettingsPage(appState)
+                    Page.ABOUT -> AboutPage(appState)
+                    Page.NEW_GAME -> NewGamePage(appState)
                     Page.SAVE_GAME -> SaveGamePage(appState)
-                    Page.LOBBY     -> LobbyMenu(appState)
+                    Page.LOBBY -> LobbyMenu(appState)
                 }
             }
         }
@@ -116,54 +116,56 @@ fun SaveGamePage(appState: MutableState<AppState>) {
     var gameName by remember { mutableStateOf(game.currGameName) }
     val coroutineAppScope = rememberCoroutineScope()
 
-    GamePage(appState = appState, freeze = true)
 
     ScaffoldView(
         appState = appState,
         title = "Guardar Jogo",
         previousPageContent = {
-            PreviousPage {appState.setPage(Page.GAME) }
+            PreviousPage { appState.setPage(Page.GAME) }
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize()
-                .background(Color.White.copy(alpha = 0.8f))
+                .background(Color.Black.copy(alpha = 0.3f))
                 .padding(paddingValues = padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-            Spacer(Modifier.height(height = 24.dp))
-
-            OutlinedTextField(
-                value = gameName ?: "",
-                enabled = appState.value.game.currGameName == null,
-                onValueChange = { gameName = it },
-                label = { Text("Nome do jogo", color = TEXT_COLOR) },
-                singleLine = true
-            )
-
-            Spacer(Modifier.height(height = 24.dp))
-
-            Button(
-                onClick = {
-                    appState.setGame(game.copy(currGameName = gameName?.trim() ?: return@Button))
-                    coroutineAppScope.launch {
-                        try {
-                            appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
-                            appState.setPage(Page.GAME)
-                        } catch (e: ReversiException) {
-                            appState.setAppState(
-                                error = e,
-                                game = game.copy(currGameName = null)
-                            )
-                        }
-                    }
-                },
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                    containerColor = PRIMARY
-                )
+            Column(
+                modifier = Modifier.background(Color.Transparent).fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("Guardar", color = TEXT_COLOR)
+                Spacer(Modifier.height(height = 24.dp))
+
+                OutlinedTextField(
+                    value = gameName ?: "",
+                    enabled = appState.value.game.currGameName == null,
+                    onValueChange = { gameName = it },
+                    label = { Text("Nome do jogo", color = TEXT_COLOR) },
+                    singleLine = true
+                )
+
+                Spacer(Modifier.height(height = 24.dp))
+
+                Button(
+                    onClick = {
+                        appState.setGame(game.copy(currGameName = gameName?.trim() ?: return@Button))
+                        coroutineAppScope.launch {
+                            try {
+                                appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
+                                appState.setPage(Page.GAME)
+                            } catch (e: ReversiException) {
+                                appState.setAppState(
+                                    error = e,
+                                    game = game.copy(currGameName = null)
+                                )
+                            }
+                        }
+                    },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = PRIMARY
+                    )
+                ) {
+                    Text("Guardar", color = TEXT_COLOR)
+                }
             }
         }
     }
@@ -190,7 +192,7 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
 
             // Convert volume in dB [-20, 0] to percentage [0, 100]
             val number = when (volume) {
-                0f   -> " (Default)"
+                0f -> " (Default)"
                 -20f -> " (disabled)"
                 else -> " (${
                     volumeDbToPercent(
