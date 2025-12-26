@@ -18,11 +18,6 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import pt.isel.reversi.app.*
@@ -33,118 +28,21 @@ import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.getAllGameNames
-import pt.isel.reversi.core.loadGame
-import pt.isel.reversi.core.readGame
 import pt.isel.reversi.utils.LOGGER
 
 enum class LobbyState {
     LOADING, EMPTY, SHOW_GAMES
 }
 
-private const val UI_DELAY_SHORT_MS = 100L
-private const val POLL_INTERVAL_MS = 1000L
 private const val PAGE_TRANSITION_DURATION_MS = 500
-
-
-data class LobbyUiState(
-    val games: List<Game> = emptyList(),
-    val lobbyState: LobbyState = LobbyState.LOADING,
-    val canRefresh: Boolean = false,
-    val error: Exception? = null,
-)
-
-class LobbyViewModel : ViewModel() {
-    private val _uiState = mutableStateOf(LobbyUiState())
-    val uiState: State<LobbyUiState> = _uiState
-
-    private var knownNames: List<String> = emptyList()
-
-    init {
-        refresh()
-        startPolling()
-    }
-
-    fun refresh() {
-        viewModelScope.launch {
-            loadGamesAndUpdateState()
-        }
-    }
-
-    private suspend fun loadGamesAndUpdateState() {
-        _uiState.value = _uiState.value.copy(lobbyState = LobbyState.LOADING)
-        try {
-            val ids = getAllGameNames()
-            delay(UI_DELAY_SHORT_MS)
-            val loaded = ids.mapNotNull { id ->
-                try {
-                    readGame(id)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
-                    LOGGER.warning("Erro ao ler jogo: $id - ${e.message}")
-                    null
-                }
-            }
-            knownNames = loaded.mapNotNull { it.currGameName }
-            val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES
-            _uiState.value = _uiState.value.copy(
-                games = loaded,
-                lobbyState = newLobbyState,
-                canRefresh = false,
-            )
-        } catch (e: CancellationException) {
-            throw e
-        } catch (e: Exception) {
-            LOGGER.warning("Erro ao carregar jogos: ${e.message}")
-
-            _uiState.value = _uiState.value.copy(
-                games = emptyList(),
-                lobbyState = LobbyState.EMPTY,
-                canRefresh = false,
-                error = e
-            )
-        }
-    }
-
-    private fun startPolling() {
-        viewModelScope.launch {
-            while (isActive) {
-                try {
-                    val ids = getAllGameNames()
-                    if (ids != knownNames && ids.isNotEmpty()) {
-                        _uiState.value = _uiState.value.copy(canRefresh = true)
-                        knownNames = ids
-                    } else if (ids.isEmpty() && knownNames.isNotEmpty()) {
-                        _uiState.value = _uiState.value.copy(canRefresh = true)
-                        knownNames = ids
-                    }
-                } catch (e: Exception) {
-                    LOGGER.warning("Polling error: ${e.message}")
-                }
-                delay(POLL_INTERVAL_MS)
-            }
-        }
-    }
-
-    suspend fun tryLoadGame(gameName: String, desiredType: PieceType): Game? {
-        return try {
-            loadGame(gameName = gameName, desiredType = desiredType)
-        } catch (e: Exception) {
-            LOGGER.warning("Erro ao carregar jogo $gameName: ${e.message}")
-            _uiState.value = _uiState.value.copy(error = e)
-            null
-        }
-    }
-}
-
 
 @Composable
 fun LobbyMenu(
     appState: MutableState<AppState>,
-    viewModel: LobbyViewModel = viewModel()
+    viewModel: LobbyViewModel = remember { LobbyViewModel() },
 ) {
-    val uiState by remember { viewModel.uiState }
+
+    val uiState = viewModel.uiState.value
     val games = uiState.games
     val lobbyState = uiState.lobbyState
     val canRefresh = uiState.canRefresh
@@ -152,13 +50,32 @@ fun LobbyMenu(
 
     var selectedGame by remember { mutableStateOf<Game?>(null) }
 
-    val refreshAction: @Composable () -> Unit = {
-        if (canRefresh)
-            RefreshButton {
-                viewModel.refresh()
+    val scope = rememberCoroutineScope()
+
+    LaunchedEffect(viewModel) {
+        LOGGER.info("Starting polling for lobby updates.")
+        try {
+            viewModel.refresh()
+            while (isActive) {
+                viewModel.startPolling()
             }
+        } finally {
+            LOGGER.info("Lobby polling stopped.")
+        }
     }
 
+    val refreshAction: @Composable () -> Unit = {
+        if (canRefresh) {
+            RefreshButton {
+                scope.launch {
+                    viewModel.refresh()
+                }
+            }
+        }
+    }
+
+    //TODO: transferir esta esta lógica de alteração do appState para o ViewModel quando o appState fizer parte do ViewModel
+    // por enquanto está aqui porque o ViewModel não deve conhecer o AppState, porque é parte da View
     //Transmite o error do viewModel para o appState, necessário porque o viewModel não conhece o View (appState)
     LaunchedEffect(error) {
         if (error == null) return@LaunchedEffect
@@ -191,6 +108,7 @@ fun LobbyMenu(
                     LobbyState.SHOW_GAMES -> ShowGames(
                         currentGameName = appState.value.game.currGameName,
                         games = games,
+                        viewModel,
                         buttonRefresh = { refreshAction() }
                     ) { game ->
                         selectedGame = game
@@ -222,6 +140,8 @@ private fun LobbyLoadGame(
     val state = game.gameState
     val name = game.currGameName
 
+    //TODO: transferir esta esta lógica de alteração do appState para o ViewModel quando o appState fizer parte do ViewModel
+    // por enquanto está aqui porque o ViewModel não deve conhecer o AppState, porque é parte da View
     when {
         name == appState.value.game.currGameName -> {
             appState.setPage(Page.GAME)
@@ -302,10 +222,6 @@ private fun LobbyLoadGame(
     )
 }
 
-/**
- * Modal dialog for picking a piece.
- * Clicking outside the inner dialog dismisses; clicking inside does not.
- */
 @Composable
 private fun PickAPiece(
     pieces: List<PieceType>,
@@ -316,19 +232,15 @@ private fun PickAPiece(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black.copy(alpha = 0.7f))
-            // detect taps on the background to dismiss; interior box handles its own clicks
             .pointerInput(Unit) {
-                // detectTapGestures usage — onTap on background => dismiss
                 detectTapGestures { onDismiss() }
             }
     ) {
         Box(
             modifier = Modifier
                 .align(Alignment.Center)
-                // interior should intercept clicks so they don't bubble to the background pointerInput
                 .pointerInput(Unit) {
-                    // consume all taps inside the dialog (so interior clicks don't dismiss)
-                    detectTapGestures(onTap = { /* consumed */ })
+                    detectTapGestures(onTap = { })
                 }
                 .background(Color(0xFF2D2D2D), RoundedCornerShape(16.dp))
                 .border(1.dp, Color.White.copy(alpha = 0.2f), RoundedCornerShape(16.dp))
@@ -356,14 +268,14 @@ private fun PickAPiece(
                             PieceType.BLACK -> Color.White.copy(alpha = 0.3f)
                             PieceType.WHITE -> Color.Black.copy(alpha = 0.2f)
                         }
-                        // use IconButton as a tappable circular surface; content intentionally empty
+
                         IconButton(
                             onClick = { onPick(piece) },
                             modifier = Modifier
                                 .size(80.dp)
                                 .background(color, CircleShape)
                                 .border(2.dp, borderColor, CircleShape)
-                        ) { /* no icon inside, just the colored circle */ }
+                        ) { }
                     }
                 }
             }

@@ -18,7 +18,10 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,10 +32,10 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import pt.isel.reversi.app.pages.lobby.LobbyViewModel
 import pt.isel.reversi.app.pages.lobby.showGames.drawCard.GameCard
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.utils.LOGGER
-import kotlin.coroutines.cancellation.CancellationException
 import kotlin.math.absoluteValue
 
 enum class CardStatus(val text: String, val color: Color) {
@@ -58,6 +61,7 @@ private suspend fun PagerState.animateScroll(page: Int) {
 fun ColumnScope.ShowGames(
     currentGameName: String?,
     games: List<Game>,
+    viewModel: LobbyViewModel,
     buttonRefresh: @Composable () -> Unit = {},
     onGameClick: (Game) -> Unit
 ) {
@@ -83,6 +87,7 @@ fun ColumnScope.ShowGames(
             currentGameName = currentGameName,
             pagerState = pagerState,
             games = games,
+            viewModel = viewModel,
         ) { game, page ->
             scope.launch {
                 if (page != pagerState.currentPage)
@@ -140,6 +145,7 @@ private fun BoxWithConstraintsScope.LobbyCarousel(
     currentGameName: String?,
     pagerState: PagerState,
     games: List<Game>,
+    viewModel: LobbyViewModel,
     onGameClick: (Game, Int) -> Unit
 ) {
     val availableWidth = this.maxWidth
@@ -163,12 +169,12 @@ private fun BoxWithConstraintsScope.LobbyCarousel(
         val alpha = 0.2f + (1f - distance) * 0.8f
         val translation = 8.dp * distance
 
-        val game = remember(page) { mutableStateOf(games[page]) }
-        val gameState = game.value.gameState
+        val game = games[page]
+        val gameState = game.gameState
 
         val cardState = when {
             gameState == null -> CardStatus.CORRUPTED
-            currentGameName == game.value.currGameName ->
+            currentGameName == game.currGameName ->
                 CardStatus.CURRENT_GAME
 
             gameState.players.size == 2 -> CardStatus.EMPTY
@@ -177,19 +183,12 @@ private fun BoxWithConstraintsScope.LobbyCarousel(
             else -> CardStatus.CORRUPTED
         }
 
-        LaunchedEffect(game.value.currGameName) {
-            val gameName = game.value.currGameName
+        LaunchedEffect(game.currGameName) {
+            val gameName = game.currGameName
             try {
                 LOGGER.info("lobbyCarousel: Iniciada corrotina de refresh do jogo: $gameName")
                 while (isActive) {
-                    try {
-                        val newGame = game.value.hardRefresh()
-                        if (newGame != game.value) game.value = newGame
-                    } catch (e: CancellationException) {
-                        throw e
-                    } catch (e: Exception) {
-                        LOGGER.warning("Erro: ${e.message}")
-                    }
+                    viewModel.refreshGame(game)
 
                     val delayMillis = when (cardState) {
                         CardStatus.EMPTY -> 100L
@@ -207,7 +206,7 @@ private fun BoxWithConstraintsScope.LobbyCarousel(
         }
 
         GameCard(
-            game = game.value,
+            game = game,
             cardData = cardState,
             enabled = cardState != CardStatus.CORRUPTED,
             modifier = Modifier
@@ -220,7 +219,7 @@ private fun BoxWithConstraintsScope.LobbyCarousel(
                     this.translationX =
                         if (pageOffset < 0) translation.toPx() else -translation.toPx()
                 },
-            onClick = { onGameClick(game.value, page) },
+            onClick = { onGameClick(game, page) },
         )
     }
 }
