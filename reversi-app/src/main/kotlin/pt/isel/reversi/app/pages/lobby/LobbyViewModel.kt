@@ -22,7 +22,7 @@ private const val POLL_INTERVAL_MS = 1000L
 
 data class LobbyUiState(
     val games: List<Game> = emptyList(),
-    val lobbyState: LobbyState = LobbyState.EMPTY,
+    val lobbyState: LobbyState = LobbyState.NONE,
     val selectedGame: Game? = null,
     val canRefresh: Boolean = false,
 )

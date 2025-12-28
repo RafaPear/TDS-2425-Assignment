@@ -17,14 +17,14 @@ import pt.isel.reversi.app.MAIN_BACKGROUND_COLOR
 import pt.isel.reversi.app.ScaffoldView
 import pt.isel.reversi.app.pages.lobby.lobbyViews.Empty
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.LobbyCarousel
+import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.PopupPickAPiece
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.RefreshButton
-import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.popupPickAPiece
 import pt.isel.reversi.app.reversiFadeAnimation
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.utils.LOGGER
 
 enum class LobbyState {
-    EMPTY, SHOW_GAMES
+    NONE, EMPTY, SHOW_GAMES
 }
 
 private const val PAGE_TRANSITION_DURATION_MS = 500
@@ -77,6 +77,7 @@ fun LobbyMenu(
                 verticalArrangement = Arrangement.Center
             ) {
                 when (page) {
+                    LobbyState.NONE -> {}
                     LobbyState.EMPTY -> Empty { refreshAction() }
                     LobbyState.SHOW_GAMES -> LobbyCarousel(
                         currentGameName = appState.value.game.currGameName,
@@ -97,7 +98,7 @@ fun LobbyMenu(
                 }
                 val players = state.players.map { it.type }
 
-                popupPickAPiece(
+                PopupPickAPiece(
                     pieces = players,
                     onPick = { pieceType ->
                         viewModel.joinGame(game, pieceType)

@@ -20,7 +20,7 @@ import pt.isel.reversi.core.board.PieceType
 
 
 @Composable
-fun popupPickAPiece(
+fun PopupPickAPiece(
     pieces: List<PieceType>,
     onPick: (PieceType) -> Unit,
     onDismiss: () -> Unit = {}
