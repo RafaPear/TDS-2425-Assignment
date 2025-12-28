@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import pt.isel.reversi.app.MAIN_BACKGROUND_COLOR
 import pt.isel.reversi.app.ScaffoldView
 import pt.isel.reversi.app.pages.lobby.lobbyViews.Empty
-import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.ShowGames
+import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.LobbyCarousel
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.RefreshButton
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.popupPickAPiece
 import pt.isel.reversi.app.reversiFadeAnimation
@@ -78,7 +78,7 @@ fun LobbyMenu(
             ) {
                 when (page) {
                     LobbyState.EMPTY -> Empty { refreshAction() }
-                    LobbyState.SHOW_GAMES -> ShowGames(
+                    LobbyState.SHOW_GAMES -> LobbyCarousel(
                         currentGameName = appState.value.game.currGameName,
                         games = games,
                         viewModel,
