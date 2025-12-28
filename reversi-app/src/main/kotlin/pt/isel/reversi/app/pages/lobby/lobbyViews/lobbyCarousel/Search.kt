@@ -3,14 +3,12 @@ package pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import pt.isel.reversi.app.pages.lobby.PRIMARY
 
 @Composable
-fun Search(onValueChange: (String) -> Unit) {
-    var search by remember { mutableStateOf("") }
-
+fun Search(search: String, onValueChange: (String) -> Unit) {
     OutlinedTextField(
         value = search,
         singleLine = true,
@@ -23,10 +21,7 @@ fun Search(onValueChange: (String) -> Unit) {
             focusedContainerColor = Color.Transparent,
             unfocusedContainerColor = Color.Transparent,
         ),
-        onValueChange = {
-            search = it
-            onValueChange(search)
-        },
+        onValueChange = { onValueChange(it) },
         placeholder = { Text("Procure um jogo...") },
     )
 }

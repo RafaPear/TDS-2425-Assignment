@@ -18,14 +18,7 @@ import androidx.compose.material.icons.automirrored.rounded.ArrowForwardIos
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -70,43 +63,25 @@ fun ColumnScope.ShowGames(
     buttonRefresh: @Composable () -> Unit = {},
     onGameClick: (Game) -> Unit
 ) {
-    val gamesToShow = remember { mutableStateListOf<Game>() }
     var searchQuery by remember { mutableStateOf("") }
+
+    val gamesToShow: List<Game> = remember(games, searchQuery) {
+        if (searchQuery.isEmpty())
+            games
+        else {
+            val foundGames = games.filter { it.currGameName?.contains(searchQuery, ignoreCase = true) == true }
+            LOGGER.info("Search query: '$searchQuery' - Found : ${foundGames.size}")
+            foundGames
+        }
+    }
+
     val pagerState = rememberPagerState(pageCount = { gamesToShow.size })
     val scope = rememberCoroutineScope()
 
-    LaunchedEffect(games) {
-        val filtered = if (searchQuery.isEmpty()) {
-            games
-        } else {
-            games.filter { it.currGameName?.contains(searchQuery, ignoreCase = true) == true }
-        }
-        gamesToShow.clear()
-        gamesToShow.addAll(filtered)
-    }
-
     Row {
-        Search { query ->
+        Search(searchQuery) { query ->
+            scope.launch { pagerState.scrollToPage(0) }
             searchQuery = query
-            scope.launch {
-                val foundGames =
-                    games.filter { game ->
-                        game.currGameName?.contains(query, ignoreCase = true) == true
-                    }
-                LOGGER.info("Search query: '$query' - Found games: ${foundGames.size}")
-                if (query.isEmpty()) {
-                    gamesToShow.clear()
-                    gamesToShow.addAll(games)
-                } else if (foundGames.isNotEmpty()) {
-                    gamesToShow.clear()
-                    gamesToShow.addAll(foundGames)
-                }
-                else {
-                    gamesToShow.clear()
-                    LOGGER.info("No games found for query: '$query'")
-                }
-                pagerState.scrollToPage(0)
-            }
         }
 
         buttonRefresh()
@@ -152,8 +127,7 @@ fun ColumnScope.ShowGames(
                     }
                 )
             }
-        }
-        else if (gamesToShow.isEmpty()) {
+        } else if (gamesToShow.isEmpty()) {
             Text(
                 text = "Nenhum jogo encontrado",
                 fontSize = 18.sp,
@@ -166,6 +140,11 @@ fun ColumnScope.ShowGames(
 
     Spacer(Modifier.weight(1f))
 
+    val text =
+        if (gamesToShow.isEmpty())
+            "0 de 0"
+        else
+            "${pagerState.currentPage + 1} de ${gamesToShow.size}"
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -173,7 +152,7 @@ fun ColumnScope.ShowGames(
         PageIndicators(gamesToShow.size, pagerState.currentPage)
         Spacer(Modifier.height(8.dp))
         Text(
-            text = "${pagerState.currentPage + 1} de ${gamesToShow.size}",
+            text = text,
             fontSize = 14.sp,
             color = Color.White.copy(alpha = 0.6f)
         )
@@ -236,6 +215,7 @@ private fun BoxWithConstraintsScope.LobbyCarousel(
             val delayMillis = when (cardState) {
                 CardStatus.EMPTY,
                 CardStatus.CURRENT_GAME -> 100L
+
                 CardStatus.WAITING_FOR_PLAYERS -> 500L
                 CardStatus.FULL -> 15_000L
                 CardStatus.CORRUPTED -> 20_000L
