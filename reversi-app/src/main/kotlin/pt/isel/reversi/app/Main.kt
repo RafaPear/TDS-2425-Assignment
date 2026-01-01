@@ -18,10 +18,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.painterResource
 import pt.isel.reversi.app.exceptions.GameNotStartedYet
-import pt.isel.reversi.app.gamePage.GamePage
-import pt.isel.reversi.app.mainMenu.JoinGamePage
-import pt.isel.reversi.app.mainMenu.MainMenu
-import pt.isel.reversi.app.mainMenu.NewGamePage
+import pt.isel.reversi.app.pages.MainMenu
+import pt.isel.reversi.app.pages.NewGamePage
+import pt.isel.reversi.app.pages.game.GamePage
+import pt.isel.reversi.app.pages.lobby.LobbyMenu
+import pt.isel.reversi.app.pages.lobby.LobbyViewModel
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ErrorType
@@ -56,7 +57,7 @@ fun main(args: Array<String>) {
 
             try {
                 runBlocking { appState.value.game.saveEndGame() }
-                getStateAudioPool(appState).destroy()
+                appState.getStateAudioPool().destroy()
             } catch (e: Exception) {
                 LOGGER.warning("Failed to save game on exit: ${e.message}")
             }
@@ -70,19 +71,22 @@ fun main(args: Array<String>) {
             icon = painterResource(Res.drawable.reversi),
             state = windowState,
         ) {
+            val scope = rememberCoroutineScope()
 
-            window.minimumSize = java.awt.Dimension(500, 500)
+            window.minimumSize = java.awt.Dimension(600, 700)
 
-            MakeMenuBar(appState, ::safeExitApplication)
+            MakeMenuBar(appState, windowState, ::safeExitApplication)
 
-            when (appState.value.page) {
-                Page.MAIN_MENU -> MainMenu(appState)
-                Page.GAME -> GamePage(appState)
-                Page.SETTINGS -> SettingsPage(appState)
-                Page.ABOUT -> AboutPage(appState)
-                Page.JOIN_GAME -> JoinGamePage(appState)
-                Page.NEW_GAME -> NewGamePage(appState)
-                Page.SAVE_GAME -> SaveGamePage(appState)
+            AppScreenSwitcher(appState) { page ->
+                when (page) {
+                    Page.MAIN_MENU -> MainMenu(appState)
+                    Page.GAME -> GamePage(appState)
+                    Page.SETTINGS -> SettingsPage(appState)
+                    Page.ABOUT -> AboutPage(appState)
+                    Page.NEW_GAME -> NewGamePage(appState)
+                    Page.SAVE_GAME -> SaveGamePage(appState)
+                    Page.LOBBY -> LobbyMenu( LobbyViewModel(scope, appState) )
+                }
             }
         }
     }
@@ -100,8 +104,7 @@ fun main(args: Array<String>) {
 fun SaveGamePage(appState: MutableState<AppState>) {
     val game = appState.value.game
     if (game.gameState == null) {
-        appState.value = setAppState(
-            appState,
+        appState.setAppState(
             page = appState.value.backPage,
             error = GameNotStartedYet(
                 message = "Not possible to save a game that has not started yet",
@@ -114,54 +117,56 @@ fun SaveGamePage(appState: MutableState<AppState>) {
     var gameName by remember { mutableStateOf(game.currGameName) }
     val coroutineAppScope = rememberCoroutineScope()
 
-    GamePage(appState = appState, freeze = true)
 
     ScaffoldView(
         appState = appState,
         title = "Guardar Jogo",
         previousPageContent = {
-            PreviousPage { appState.value = setPage(appState, Page.GAME) }
+            PreviousPage { appState.setPage(Page.GAME) }
         }
     ) { padding ->
-        Column(
+        Box(
             modifier = Modifier.fillMaxSize()
-                .background(Color.White.copy(alpha = 0.8f))
+                .background(Color.Black.copy(alpha = 0.3f))
                 .padding(paddingValues = padding),
-            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-
-            Spacer(Modifier.height(height = 24.dp))
-
-            OutlinedTextField(
-                value = gameName ?: "",
-                enabled = appState.value.game.currGameName == null,
-                onValueChange = { gameName = it },
-                label = { Text("Nome do jogo") },
-                singleLine = true
-            )
-
-            Spacer(Modifier.height(height = 24.dp))
-
-            Button(
-                onClick = {
-                    appState.value = setGame(
-                        appState,
-                        game.copy(currGameName = gameName?.trim() ?: return@Button)
-                    )
-                    coroutineAppScope.launch {
-                        try {
-                            appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
-                            appState.value = setPage(appState, Page.GAME)
-                        } catch (e: Exception) {
-                            appState.value = setAppState(
-                                appState, error = e,
-                                game = game.copy(currGameName = null)
-                            )
-                        }
-                    }
-                }
+            Column(
+                modifier = Modifier.background(Color.Transparent).fillMaxSize(),
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                Text("Guardar")
+                Spacer(Modifier.height(height = 24.dp))
+
+                OutlinedTextField(
+                    value = gameName ?: "",
+                    enabled = appState.value.game.currGameName == null,
+                    onValueChange = { gameName = it },
+                    label = { Text("Nome do jogo", color = TEXT_COLOR) },
+                    singleLine = true
+                )
+
+                Spacer(Modifier.height(height = 24.dp))
+
+                Button(
+                    onClick = {
+                        appState.setGame(game.copy(currGameName = gameName?.trim() ?: return@Button))
+                        coroutineAppScope.launch {
+                            try {
+                                appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
+                                appState.setPage(Page.GAME)
+                            } catch (e: Exception) {
+                                appState.setAppState(
+                                    error = e,
+                                    game = game.copy(currGameName = null)
+                                )
+                            }
+                        }
+                    },
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = PRIMARY
+                    )
+                ) {
+                    Text("Guardar", color = TEXT_COLOR)
+                }
             }
         }
     }
@@ -174,7 +179,7 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
         appState = appState,
         title = "Definições",
         previousPageContent = {
-            PreviousPage { appState.value = setPage(appState, appState.value.backPage) }
+            PreviousPage { appState.setPage(appState.value.backPage) }
         }
     ) { padding ->
         Column(
@@ -182,8 +187,8 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             verticalArrangement = Arrangement.spacedBy(15.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text("Opções futuras: som, tema, rede, etc.")
-            val currentMasterVolume = getStateAudioPool(appState).getMasterVolume()
+            Text("Opções futuras: som, tema, rede, etc.", color = TEXT_COLOR)
+            val currentMasterVolume = appState.getStateAudioPool().getMasterVolume()
             var volume by remember { mutableStateOf(currentMasterVolume ?: 0f) }
 
             // Convert volume in dB [-20, 0] to percentage [0, 100]
@@ -202,18 +207,25 @@ fun SettingsPage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             Text(
                 "Master Volume: $number",
                 fontSize = 20.sp,
-                fontWeight = FontWeight.Medium
+                fontWeight = FontWeight.Medium,
+                color = TEXT_COLOR
             )
-            Slider(value = volume, valueRange = -20f..0f, onValueChange = {
-                volume = it
-                val audioPool = getStateAudioPool(appState)
-                if (volume == -20f) {
-                    audioPool.mute(true)
-                } else {
-                    audioPool.mute(false)
-                    audioPool.setMasterVolume(volume)
-                }
-            })
+            Slider(
+                value = volume, valueRange = -20f..0f, onValueChange = {
+                    volume = it
+                    val audioPool = appState.getStateAudioPool()
+                    if (volume == -20f) {
+                        audioPool.mute(true)
+                    } else {
+                        audioPool.mute(false)
+                        audioPool.setMasterVolume(volume)
+                    }
+                },
+                colors = androidx.compose.material3.SliderDefaults.colors(
+                    thumbColor = PRIMARY,
+                    activeTrackColor = PRIMARY
+                )
+            )
 
         }
     }
@@ -238,7 +250,7 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
         appState = appState,
         title = "Sobre",
         previousPageContent = {
-            PreviousPage { appState.value = setPage(appState, appState.value.backPage) }
+            PreviousPage { appState.setPage(appState.value.backPage) }
         }
     ) { padding ->
         Column(
@@ -247,12 +259,12 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(height = 24.dp))
-            Text("Projeto Reversi desenvolvido no ISEL.")
-            Text("Autores: ")
-            Text(" - Rafael Pereira - NUMERO")
-            Text(" - Ian Frunze - NUMERO")
-            Text(" - Tito Silva - NUMERO")
-            Text("Versão: DEV Build")
+            Text("Projeto Reversi desenvolvido no ISEL.", color = TEXT_COLOR)
+            Text("Autores: ", color = TEXT_COLOR)
+            Text(" - Rafael Pereira - NUMERO", color = TEXT_COLOR)
+            Text(" - Ian Frunze - NUMERO", color = TEXT_COLOR)
+            Text(" - Tito Silva - NUMERO", color = TEXT_COLOR)
+            Text("Versão: DEV Build", color = TEXT_COLOR)
 
         }
     }

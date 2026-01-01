@@ -40,27 +40,23 @@ import pt.isel.reversi.utils.LOGGER
 @Composable
 fun ErrorMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     //TODO: Differentiate error types with different UI elements
+
+    // Evite logging on every recomposition, only log when the error changes
+    LaunchedEffect(appState.value.error) {
+        val error = appState.value.error ?: return@LaunchedEffect
+        when (error.type) {
+            ErrorType.INFO     -> LOGGER.info("${error.message}")
+            ErrorType.WARNING  -> LOGGER.warning("${error.message}")
+            ErrorType.ERROR    -> LOGGER.severe("${error.message}")
+            ErrorType.CRITICAL -> LOGGER.severe("Critical ${error.message}")
+        }
+    }
+
     when (appState.value.error?.type) {
-        ErrorType.INFO     -> {
-            LOGGER.info("${appState.value.error?.message}")
-            ToastMessage(appState, modifier)
-        }
-
-        ErrorType.WARNING  -> {
-            LOGGER.warning("${appState.value.error?.message}")
-            WarningMessage(appState, modifier)
-        }
-
-        ErrorType.ERROR    -> {
-            LOGGER.severe("${appState.value.error?.message}")
-            ToastMessage(appState, modifier)
-        }
-
-        ErrorType.CRITICAL -> {
-            LOGGER.severe("Critical ${appState.value.error?.message}")
-            ToastMessage(appState, modifier)
-        }
-
+        ErrorType.INFO     -> ToastMessage(appState, modifier)
+        ErrorType.WARNING  -> WarningMessage(appState, modifier)
+        ErrorType.ERROR    -> ToastMessage(appState, modifier)
+        ErrorType.CRITICAL -> ToastMessage(appState, modifier)
         null               -> return
     }
 }
@@ -110,7 +106,7 @@ fun WarningMessage(appState: MutableState<AppState>, modifier: Modifier = Modifi
 
             Button(
                 onClick = {
-                    appState.value = setError(appState, error = null)
+                    appState.setError(error = null)
                 },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = buttonBackgroundColor,
@@ -183,6 +179,6 @@ fun ToastMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier
             targetValue = -100f,
             animationSpec = tween(durationMillis = slideDuration)
         )
-        appState.value = setError(appState, error = null)
+        appState.setError(error = null)
     }
 }

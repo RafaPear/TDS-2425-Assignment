@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.mainMenu
+package pt.isel.reversi.app.pages
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.TextAutoSize
@@ -14,7 +14,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.BACKGROUND_MUSIC
+import pt.isel.reversi.app.PRIMARY
 import pt.isel.reversi.app.ScaffoldView
+import pt.isel.reversi.app.pages.game.TEXT_COLOR
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.app.state.getStateAudioPool
@@ -24,21 +26,19 @@ import pt.isel.reversi.utils.LOGGER
 val MAIN_MENU_PADDING = 20.dp
 
 val MAIN_MENU_AUTO_SIZE_BUTTON_TEXT = TextAutoSize.StepBased(
-    minFontSize = 10.sp,
-    maxFontSize = 30.sp
+    minFontSize = 10.sp, maxFontSize = 30.sp
 )
 
 val MAIN_MENU_BUTTON_SPACER = 30.dp
 
 val MAIN_MENU_AUTO_SIZE_TITLE_TEXT = TextAutoSize.StepBased(
-    minFontSize = 30.sp,
-    maxFontSize = 60.sp
+    minFontSize = 30.sp, maxFontSize = 60.sp
 )
 
 @Composable
 fun MainMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     LaunchedEffect(appState.value.page) {
-        val audioPool = getStateAudioPool(appState)
+        val audioPool = appState.getStateAudioPool()
         if (!audioPool.isPlaying(BACKGROUND_MUSIC)) {
             LOGGER.info("Playing background music")
             audioPool.stopAll()
@@ -50,73 +50,58 @@ fun MainMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
         previousPageContent = { /* No previous page */ },
     ) {
         Column(
-            modifier = modifier
-                .fillMaxSize()
-                .padding(MAIN_MENU_PADDING),
+            modifier = modifier.fillMaxSize().padding(MAIN_MENU_PADDING),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Título
             Text(
                 text = "Reversi",
+                color = TEXT_COLOR,
                 autoSize = MAIN_MENU_AUTO_SIZE_TITLE_TEXT,
                 fontWeight = FontWeight.Bold
             )
 
             Spacer(Modifier.height(MAIN_MENU_PADDING))
 
-            Button(
-                modifier = modifier,
-                onClick = { appState.value = setPage(appState, Page.NEW_GAME) },
-            ) {
-                Text(
-                    text = "Novo Jogo",
-                    textAlign = TextAlign.Center,
-                    autoSize = MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
-                )
+            MainMenuButton(text = "Novo Jogo") {
+                appState.setPage(Page.NEW_GAME)
             }
 
             Spacer(Modifier.height(MAIN_MENU_BUTTON_SPACER))
 
-            Button(
-                modifier = modifier,
-                onClick = { appState.value = setPage(appState, Page.JOIN_GAME) },
-            ) {
-                Text(
-                    text = "Entrar em Jogo",
-                    textAlign = TextAlign.Center,
-                    autoSize = MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
-                )
+            MainMenuButton(text = "Lobby") {
+                appState.setPage(Page.LOBBY)
             }
 
             Spacer(Modifier.height(MAIN_MENU_BUTTON_SPACER))
 
-            Button(
-                modifier = modifier,
-                onClick = { appState.value = setPage(appState, Page.SETTINGS) },
-            ) {
-                Text(
-                    text = "Definições",
-                    textAlign = TextAlign.Center,
-                    autoSize = MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
-                )
+            MainMenuButton(text = "Definições") {
+                appState.setPage(Page.SETTINGS)
             }
 
             Spacer(Modifier.height(MAIN_MENU_BUTTON_SPACER))
 
-            Button(
-                modifier = modifier,
-                onClick = { appState.value = setPage(appState, Page.ABOUT) },
-            ) {
-                Text(
-                    text = "Sobre",
-                    textAlign = TextAlign.Center,
-                    autoSize = MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
-                )
+            MainMenuButton(text = "Sobre") {
+                appState.setPage(Page.ABOUT)
             }
         }
     }
 }
 
-
-
+@Composable
+fun MainMenuButton(
+    text: String, modifier: Modifier = Modifier, onClick: () -> Unit
+) {
+    Button(
+        modifier = modifier,
+        onClick = onClick,
+        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+            containerColor = PRIMARY
+        )
+    ) {
+        Text(
+            text = text, color = TEXT_COLOR, textAlign = TextAlign.Center, autoSize = MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
+        )
+    }
+}

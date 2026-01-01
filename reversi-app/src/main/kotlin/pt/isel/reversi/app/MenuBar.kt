@@ -4,35 +4,43 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
+import androidx.compose.ui.window.WindowPlacement
+import androidx.compose.ui.window.WindowState
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.utils.LOGGER
 
 @Composable
-fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, exitAction: () -> Unit) {
+fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, windowState: WindowState, exitAction: () -> Unit) {
     MenuBar {
         Menu("Ficheiro") {
             Item("Novo Jogo") {
-                appState.value = setPage(appState, Page.NEW_GAME)
-            }
-            Item("Entrar em Jogo") {
-                appState.value = setPage(appState, Page.JOIN_GAME)
+                appState.setPage(Page.NEW_GAME)
             }
             Item("Guardar Jogo") {
-                appState.value = setPage(appState, Page.SAVE_GAME)
+                appState.setPage(Page.SAVE_GAME)
             }
             Item("Definições") {
-                appState.value = setPage(appState, Page.SETTINGS)
+                appState.setPage(Page.SETTINGS)
             }
             Item("Menu Principal") {
-                appState.value = setPage(appState, Page.MAIN_MENU)
+                appState.setPage(Page.MAIN_MENU)
             }
             Item("Jogo Atual") {
-                appState.value = setPage(appState, Page.GAME)
+                appState.setPage(Page.GAME)
             }
             Separator()
             Item("Sair") {
                 exitAction()
+            }
+        }
+
+        Menu("View") {
+            Item("Toggle Fullscreen") {
+                windowState.placement =
+                    if (windowState.placement == WindowPlacement.Floating) WindowPlacement.Fullscreen
+                    else WindowPlacement.Floating
+                appState.value = appState.value.copy() // Epa foi o q arranjei para forcar o gajo a dar update lol
             }
         }
 
@@ -41,28 +49,29 @@ fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, exitAction: (
                 appState.value.game.printDebugState()
             }
             Item("Nullify Game State") {
-                appState.value = setGame(
-                    appState,
+                appState.setGame(
                     Game()
                 )
                 LOGGER.info("Estado do jogo anulado para fins de teste.")
             }
             Item("Reload Config") {
                 try {
-                    appState.value = setGame(
-                        appState,
+                    appState.setGame(
                         appState.value.game.reloadConfig()
                     )
                     LOGGER.info("Config recarregada com sucesso.")
                 } catch (e: Exception) {
-                    appState.value = setError(appState, error = e)
+                    appState.setError(error = e)
                 }
+            }
+            Item("Lobby Screen") {
+                appState.setPage(Page.LOBBY)
             }
         }
 
         Menu("Ajuda") {
             Item("Sobre") {
-                appState.value = setPage(appState, Page.ABOUT)
+                appState.setPage(Page.ABOUT)
             }
         }
     }
