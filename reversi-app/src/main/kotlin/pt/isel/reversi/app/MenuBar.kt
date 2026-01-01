@@ -8,7 +8,6 @@ import androidx.compose.ui.window.WindowPlacement
 import androidx.compose.ui.window.WindowState
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
 
 @Composable
@@ -61,7 +60,7 @@ fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, windowState: 
                         appState.value.game.reloadConfig()
                     )
                     LOGGER.info("Config recarregada com sucesso.")
-                } catch (e: ReversiException) {
+                } catch (e: Exception) {
                     appState.setError(error = e)
                 }
             }

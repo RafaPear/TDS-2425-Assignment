@@ -26,7 +26,6 @@ import pt.isel.reversi.app.pages.lobby.LobbyViewModel
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.stringifyBoard
 import pt.isel.reversi.utils.LOGGER
 import reversi.reversi_app.generated.resources.Res
@@ -59,7 +58,7 @@ fun main(args: Array<String>) {
             try {
                 runBlocking { appState.value.game.saveEndGame() }
                 appState.getStateAudioPool().destroy()
-            } catch (e: ReversiException) {
+            } catch (e: Exception) {
                 LOGGER.warning("Failed to save game on exit: ${e.message}")
             }
 
@@ -154,7 +153,7 @@ fun SaveGamePage(appState: MutableState<AppState>) {
                             try {
                                 appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
                                 appState.setPage(Page.GAME)
-                            } catch (e: ReversiException) {
+                            } catch (e: Exception) {
                                 appState.setAppState(
                                     error = e,
                                     game = game.copy(currGameName = null)

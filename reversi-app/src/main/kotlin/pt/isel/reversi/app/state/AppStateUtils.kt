@@ -8,12 +8,25 @@ import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.audio.AudioPool
 
-
+/**
+ * Updates the game state within the application state.
+ *
+ * @param game the new [Game] state to be set
+ * @return the updated [AppState] with the new game state
+ */
 fun MutableState<AppState>.setGame(game: Game) {
     LOGGER.info("Set new game state")
     value = value.copy(game = game)
 }
 
+/**
+ * Updates the current page in the application state.
+ * Blocks page changes if there is an existing error.
+ * and clears informational errors this before changing the page.
+ *
+ * @param page the new [Page] to be set
+ * @return the updated [AppState] with the new page
+ */
 fun MutableState<AppState>.setPage(page: Page, backPage: Page? = null) {
     if (page == value.page) {
         LOGGER.info("Page is the same: ${page.name}, no changes made")
@@ -74,12 +87,29 @@ fun MutableState<AppState>.setAppState(
  */
 fun MutableState<AppState>.getStateAudioPool() = value.audioPool
 
+
+/**
+ * Updates the error state within the application state.
+ *
+ * @param error the new [Exception] or [ReversiException] to be set
+ * @return the updated [AppState] with the new error state
+ */
 fun MutableState<AppState>.setError(error: Exception?) {
     LOGGER.info("Set error: ${error?.message ?: "null"}")
     val newError = error as? ReversiException ?: error?.toReversiException(ErrorType.CRITICAL)
     value = value.copy(error = newError)
 }
 
+//fun setError(appState: MutableState<AppState>, error: Exception): AppState {
+//    return setError(appState, error.toReversiException(ErrorType.CRITICAL))
+//}
+
+/**
+ * Determines the back page based on the new page being set.
+ *
+ * @param newPage the new [Page] to be set
+ * @return the determined back [Page]
+ */
 private fun MutableState<AppState>.autoBackPage(newPage: Page) {
     val page = value.page
     val backPage = when (newPage) {

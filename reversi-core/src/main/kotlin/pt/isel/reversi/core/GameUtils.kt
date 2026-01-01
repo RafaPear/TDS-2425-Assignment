@@ -20,7 +20,7 @@ fun loadStorageFromConfig() = loadCoreConfig().let { conf ->
  * @param currGameName The current game name can omit to create a local game.
  * @return The new game state.
  * @throws InvalidGameException if no players are provided.
- * @throws Exception if already exists a game with the same name in storage.
+ * @throws InvalidNameAlreadyExists if already exists a game with the same name in storage.
  */
 suspend fun startNewGame(
     side: Int = loadCoreConfig().BOARD_SIDE,
@@ -78,9 +78,11 @@ suspend fun loadGame(
     desiredType: PieceType? = null,
 ): Game {
     val storage = loadStorageFromConfig()
-    val loadedState = storage.load(gameName) ?: throw InvalidFileException(
-        message = "$gameName does not exist", type = ErrorType.ERROR
-    )
+    val loadedState = storage.load(gameName)
+        ?: throw InvalidFileException(
+            message = "$gameName does not exist",
+            type = ErrorType.ERROR
+        )
 
     val myPieceType = if (loadedState.players.isNotEmpty()) desiredType ?: loadedState.players[0].type
     else throw InvalidPieceInFileException(
@@ -135,9 +137,9 @@ fun Game.stringifyBoard(): String {
             val cords = Coordinate(row, col)
             when {
                 row == 0 && col == 0 -> sb.append("  ")
-                row == 0             -> sb.append("$col ")
-                col == 0             -> sb.append("$row ")
-                else                 -> sb.append(
+                row == 0 -> sb.append("$col ")
+                col == 0 -> sb.append("$row ")
+                else -> sb.append(
                     when (useTarget && cords in availablePlays) {
                         true -> "${this.config.TARGET_CHAR} "
                         false -> (board[cords]?.symbol ?: this.config.EMPTY_CHAR) + " "

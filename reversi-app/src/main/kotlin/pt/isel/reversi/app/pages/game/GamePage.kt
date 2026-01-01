@@ -14,7 +14,7 @@ import kotlinx.coroutines.launch
 import pt.isel.reversi.app.*
 import pt.isel.reversi.app.corroutines.launchGameRefreshCoroutine
 import pt.isel.reversi.app.state.*
-import pt.isel.reversi.core.exceptions.ReversiException
+
 
 @Composable
 fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, freeze: Boolean = false) {
@@ -67,7 +67,7 @@ fun GamePage(appState: MutableState<AppState>, modifier: Modifier = Modifier, fr
                                     stop(PLACE_PIECE_SOUND)
                                     play(PLACE_PIECE_SOUND)
                                 }
-                            } catch (e: ReversiException) {
+                            } catch (e: Exception) {
                                 appState.setError(error = e)
                             }
                         }

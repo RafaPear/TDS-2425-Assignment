@@ -21,7 +21,6 @@ import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.loadGame
 import pt.isel.reversi.core.startNewGame
 import pt.isel.reversi.utils.LOGGER
@@ -65,7 +64,7 @@ fun NewGamePage(
                     setAppState(newGame, Page.GAME)
                     getStateAudioPool().play(HIT_SOUND)
                 }
-            } catch (e: ReversiException) {
+            } catch (e: Exception) {
                 appState.setError(e)
             }
         }
@@ -96,7 +95,7 @@ fun JoinGamePage(
                 )
                 LOGGER.info("Ligado ao jogo '$loadedGame'.")
                 appState.setAppState(loadedGame, Page.GAME)
-            } catch (e: ReversiException) {
+            } catch (e: Exception) {
                 appState.setError(e)
             }
         }
