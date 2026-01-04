@@ -71,4 +71,16 @@ class GameViewModel(val appState: MutableState<AppState>, val scope: CoroutineSc
             }
         }
     }
+
+    fun pass() {
+        scope.launch {
+            try {
+                _uiState.value = uiState.value.pass()
+            } catch (e: Exception) {
+                appState.setError(error = e)
+            } finally {
+                save()
+            }
+        }
+    }
 }

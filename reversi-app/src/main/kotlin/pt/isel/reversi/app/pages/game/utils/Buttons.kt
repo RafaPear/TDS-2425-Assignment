@@ -38,3 +38,29 @@ fun TargetButton(target: Boolean, modifier: Modifier = Modifier, freeze: Boolean
         )
     }
 }
+
+@Composable
+fun PassButton(modifier: Modifier = Modifier, freeze: Boolean, onClick: () -> Unit) {
+    Button(
+        //modifier = modifier.testTag(tag = testTagPassButton()),
+        colors = buttonColors(
+            containerColor = BUTTON_MAIN_COLOR,
+            contentColor = BUTTON_CONTENT_COLOR
+        ),
+        onClick = onClick,
+        enabled = !freeze,
+        shape = RoundedCornerShape(20.dp)
+    ) {
+        Text(
+            text = "Pass",
+            maxLines = 1,
+            softWrap = false,
+            textAlign = TextAlign.Center,
+            autoSize = TextAutoSize.StepBased(
+                minFontSize = BUTTON_MIN_FONT_SIZE,
+                maxFontSize = BUTTON_MAX_FONT_SIZE
+            ),
+            color = BUTTON_TEXT_COLOR
+        )
+    }
+}

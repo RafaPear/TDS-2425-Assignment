@@ -56,6 +56,7 @@ fun GamePage(viewModel: GameViewModel, modifier: Modifier = Modifier, freeze: Bo
             freeze,
             onCellClick = { viewModel.playMove(it) },
             setTargetMode = { viewModel.setTarget(!game.target) },
+            pass = { viewModel.pass() },
         )
     }
 }
