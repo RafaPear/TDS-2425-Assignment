@@ -44,7 +44,8 @@ class GamePageViewTest {
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList()},
-                setTargetMode = {}
+                setTargetMode = {},
+                pass = {}
             )
         }
         onNodeWithTag(testTag = testTagGamePage())
@@ -68,7 +69,8 @@ class GamePageViewTest {
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList() },
-                setTargetMode = {}
+                setTargetMode = {},
+                pass = {}
             )
         }
         onNodeWithTag(testTag = testTagGamePage()).assertExists()
@@ -91,7 +93,8 @@ class GamePageViewTest {
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList()},
-                setTargetMode = {}
+                setTargetMode = {},
+                pass = {}
             )
         }
 
@@ -117,7 +120,8 @@ class GamePageViewTest {
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList() },
-                setTargetMode = {}
+                setTargetMode = {},
+                pass = {}
             )
         }
 
