@@ -65,15 +65,15 @@ class CLI(
         }
 
         when {
-            result.type == CommandResultType.UNKNOWN_COMMAND  -> parser.printUnknownCommandError(input, result)
+            result.type == CommandResultType.UNKNOWN_COMMAND -> parser.printUnknownCommandError(input, result)
 
-            result.type != CommandResultType.SUCCESS          -> result.printError(parserConfig)
+            result.type != CommandResultType.SUCCESS -> result.printError(parserConfig)
 
             result.type == CommandResultType.SUCCESS && debug -> {
                 log(result.message); game = result.result
             }
 
-            result.result != null                             -> game = result.result
+            result.result != null -> game = result.result
         }
 
         return game

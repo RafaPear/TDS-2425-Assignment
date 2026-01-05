@@ -43,7 +43,7 @@ object PlayCmd : CommandImpl<Game>() {
                 else return null
             }
 
-            else            -> return null
+            else -> return null
         }
     }
 

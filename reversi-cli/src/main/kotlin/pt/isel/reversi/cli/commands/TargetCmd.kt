@@ -29,11 +29,11 @@ object TargetCmd : CommandImpl<Game>() {
 
         val arg = args.getOrNull(0)?.lowercase()
         val newGame = when {
-            trueAlias.contains(arg)  -> context.setTargetMode(true)
+            trueAlias.contains(arg) -> context.setTargetMode(true)
 
             falseAlias.contains(arg) -> context.setTargetMode(false)
 
-            else                     -> context
+            else -> context
         }
 
         return CommandResult.SUCCESS("Targeting is currently ${newGame.target}.", newGame)

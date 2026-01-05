@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.pages.lobby.LobbyViewModel
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.PageIndicators
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.Search
@@ -29,12 +30,24 @@ private suspend fun PagerState.animateScroll(page: Int) {
     )
 }
 
+/**
+ * Carousel component for browsing saved multiplayer games.
+ * Supports search filtering, pagination, and game status indication.
+ *
+ * @param currentGameName Name of the currently active game for highlighting.
+ * @param games List of all available games to display.
+ * @param viewModel The lobby view model managing game state.
+ * @param reversiScope The ReversiScope receiver for theming and utilities.
+ * @param buttonRefresh Optional composable for rendering a refresh button.
+ * @param onGameClick Callback invoked when a game card is selected.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ColumnScope.LobbyCarousel(
     currentGameName: String?,
     games: List<Game>,
     viewModel: LobbyViewModel,
+    reversiScope: ReversiScope,
     buttonRefresh: @Composable () -> Unit = {},
     onGameClick: (Game) -> Unit
 ) {
@@ -78,38 +91,43 @@ fun ColumnScope.LobbyCarousel(
         }
     }
 
-    Row {
-        Search(searchQuery) { query ->
-            scope.launch { pagerState.scrollToPage(0) }
-            searchQuery = query
+    with(reversiScope) {
+
+        Row {
+            Search(searchQuery) { query ->
+                scope.launch { pagerState.scrollToPage(0) }
+                searchQuery = query
+            }
+
+            buttonRefresh()
+
         }
 
-        buttonRefresh()
-    }
+        Spacer(Modifier.weight(1f))
 
-    Spacer(Modifier.weight(1f))
-
-    BoxWithConstraints {
-        LobbyCarouselView(
-            currentGameName = currentGameName,
-            pagerState = pagerState,
-            games = gamesToShow,
-            onNavButtonClick = { page ->
+        BoxWithConstraints {
+            LobbyCarouselView(
+                currentGameName = currentGameName,
+                pagerState = pagerState,
+                games = gamesToShow,
+                reversiScope = reversiScope,
+                onNavButtonClick = { page ->
+                    scope.launch {
+                        pagerState.animateScroll(page)
+                    }
+                },
+            ) { game, page ->
                 scope.launch {
-                    pagerState.animateScroll(page)
+                    if (page != pagerState.currentPage)
+                        pagerState.animateScroll(page)
+                    delay(150L)
+                    onGameClick(game)
                 }
-            },
-        ) { game, page ->
-            scope.launch {
-                if (page != pagerState.currentPage)
-                    pagerState.animateScroll(page)
-                delay(150L)
-                onGameClick(game)
             }
         }
+
+        Spacer(Modifier.weight(1f))
+
+        PageIndicators(gamesToShow.size, pagerState.currentPage)
     }
-
-    Spacer(Modifier.weight(1f))
-
-    PageIndicators(gamesToShow.size, pagerState.currentPage)
 }

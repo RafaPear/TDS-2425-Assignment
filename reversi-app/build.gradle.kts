@@ -40,10 +40,8 @@ compose.desktop {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
             packageName = rootProject.name
             packageVersion = rootProject.version.toString()
-            includeAllModules = true
-
             macOS {
-                dockName = "Reversi"
+                dockName = "Reversi App"
                 iconFile.set(project.file("src/main/composeResources/drawable/reversi.png"))
             }
         }
@@ -63,18 +61,20 @@ tasks.register<Jar>("fatJar") {
 
     from(sourceSets.main.get().output)
 
-    from(sourceSets.main.get().resources)
-
     dependsOn(configurations.runtimeClasspath)
     from({
-             configurations.runtimeClasspath.get()
-                 .filter { it.name.endsWith(".jar") }
-                 .map { zipTree(it) }
-         })
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith(".jar") }
+            .map { zipTree(it) }
+    })
 
     manifest {
         attributes["Main-Class"] = "pt.isel.reversi.app.MainKt"
     }
+}
+
+kotlin {
+    jvmToolchain(23)
 }
 
 // === Usa o fatJar como o jar padrão ===

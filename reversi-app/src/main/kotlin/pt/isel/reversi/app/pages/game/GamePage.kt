@@ -6,15 +6,19 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import pt.isel.reversi.app.BACKGROUND_MUSIC
-import pt.isel.reversi.app.MEGALOVANIA
 import pt.isel.reversi.app.PreviousPage
 import pt.isel.reversi.app.ScaffoldView
-import pt.isel.reversi.app.pages.game.utils.BOARD_BACKGROUND_COLOR
 import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.app.state.setPage
 
-
+/**
+ * Main game page displaying the Reversi board, player scores, and game controls.
+ * Manages game music playback and periodic game state refreshes for multiplayer games.
+ *
+ * @param viewModel The game page view model containing UI state and game logic.
+ * @param modifier Optional composable modifier for layout adjustments.
+ * @param freeze Whether to freeze the game board and prevent user interaction.
+ */
 @Composable
 fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze: Boolean = false) {
     val appState = viewModel.appState
@@ -27,10 +31,11 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
         }
 
         appState.getStateAudioPool().run {
-            if (!isPlaying(MEGALOVANIA)) {
-                stop(BACKGROUND_MUSIC)
-                stop(MEGALOVANIA)
-                play(MEGALOVANIA)
+            val theme = appState.value.theme
+            if (!isPlaying(theme.gameMusic)) {
+                stop(theme.backgroundMusic)
+                stop(theme.gameMusic)
+                play(theme.gameMusic)
             }
         }
 
@@ -51,7 +56,7 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
     ) { padding ->
         GamePageView(
             modifier = modifier.fillMaxSize()
-                .background(BOARD_BACKGROUND_COLOR)
+                .background(appState.value.theme.backgroundColor)
                 .padding(paddingValues = padding),
             game = game,
             freeze = freeze,

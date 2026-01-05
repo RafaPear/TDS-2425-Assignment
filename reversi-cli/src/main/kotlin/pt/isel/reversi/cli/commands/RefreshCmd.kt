@@ -15,7 +15,7 @@ object RefreshCmd : CommandImpl<Game>() {
         title = "Refresh",
         description = "Refreshes and displays the current game state.",
         longDescription = "Refreshes the game state and displays the current board. \n" +
-                          "Requires an initialized game context to function properly.",
+                "Requires an initialized game context to function properly.",
         aliases = listOf("r", "refresh"),
         usage = "refresh",
         minArgs = 0,

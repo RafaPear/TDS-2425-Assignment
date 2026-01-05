@@ -33,15 +33,19 @@ tasks.register<Jar>("fatJar") {
     // Inclui dependências (todas as libs do classpath)
     dependsOn(configurations.runtimeClasspath)
     from({
-             configurations.runtimeClasspath.get()
-                 .filter { it.name.endsWith(".jar") }
-                 .map { zipTree(it) }
-         })
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith(".jar") }
+            .map { zipTree(it) }
+    })
 
     // Manifest com Main-Class
     manifest {
         attributes["Main-Class"] = application.mainClass.get()
     }
+}
+
+kotlin {
+    jvmToolchain(21)
 }
 
 // === Tornar o fatJar o padrão ===

@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
-import pt.isel.reversi.app.HIT_SOUND
 import pt.isel.reversi.app.exceptions.GameCorrupted
 import pt.isel.reversi.app.exceptions.GameIsFull
 import pt.isel.reversi.app.state.*
@@ -20,6 +19,14 @@ import pt.isel.reversi.utils.LOGGER
 private const val UI_DELAY_SHORT_MS = 100L
 private const val POLL_INTERVAL_MS = 1000L
 
+/**
+ * UI state for the lobby screen displaying available games.
+ *
+ * @property games List of loaded games available to join.
+ * @property lobbyState Current state of the lobby (empty, showing games, etc.).
+ * @property selectedGame The currently selected game for joining.
+ * @property canRefresh Whether the refresh button is enabled.
+ */
 data class LobbyUiState(
     val games: List<Game> = emptyList(),
     val lobbyState: LobbyState = LobbyState.NONE,
@@ -27,6 +34,13 @@ data class LobbyUiState(
     val canRefresh: Boolean = false,
 )
 
+/**
+ * View model for the lobby screen managing game list, polling, and user interactions.
+ * Handles loading available games, polling for updates, and game selection.
+ *
+ * @property scope Coroutine scope for launching async lobby operations.
+ * @property appState Global application state for game and UI updates.
+ */
 class LobbyViewModel(
     val scope: CoroutineScope,
     val appState: MutableState<AppState>,
@@ -61,6 +75,7 @@ class LobbyViewModel(
                 }
             }
             knownNames = ids
+            LOGGER.info("Jogos carregados: ${loaded.size}")
             val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES
             appState.setLoading(false)
             _uiState.value = _uiState.value.copy(
@@ -85,6 +100,8 @@ class LobbyViewModel(
 
     fun startPolling() {
         if (pollingJob != null) throw IllegalStateException("Polling already started")
+
+        LOGGER.info("Starting lobby polling.")
 
         scope.launch {
             try {
@@ -222,7 +239,6 @@ class LobbyViewModel(
 
                 LOGGER.info("Entrou no jogo '${joinedGame.currGameName}' como peça $pieceType.")
 
-                appState.getStateAudioPool().play(HIT_SOUND)
                 appState.setAppState(joinedGame, Page.GAME, backPage = Page.LOBBY)
                 selectGame(null)
             } finally {

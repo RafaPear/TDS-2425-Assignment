@@ -4,12 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.*
 import kotlinx.coroutines.runBlocking
-import pt.isel.reversi.app.pages.game.GamePage
-import pt.isel.reversi.app.pages.game.GamePageViewModel
-import pt.isel.reversi.app.pages.game.utils.testTagBoard
-import pt.isel.reversi.app.pages.game.utils.testTagCellView
-import pt.isel.reversi.app.pages.game.utils.testTagPlayerScore
-import pt.isel.reversi.app.pages.game.utils.testTagTargetButtons
+import pt.isel.reversi.app.pages.game.*
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.core.Player
@@ -38,7 +33,8 @@ class GamePageTests {
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -77,7 +73,8 @@ class GamePageTests {
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -113,7 +110,8 @@ class GamePageTests {
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)
@@ -160,7 +158,8 @@ class GamePageTests {
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)

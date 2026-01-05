@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.GameCard
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.NavButton
 import pt.isel.reversi.core.Game
@@ -27,6 +28,7 @@ fun BoxWithConstraintsScope.LobbyCarouselView(
     currentGameName: String?,
     pagerState: PagerState,
     games: List<Game>,
+    reversiScope: ReversiScope,
     onNavButtonClick: (Int) -> Unit,
     onGameClick: (Game, Int) -> Unit
 ) {
@@ -53,23 +55,24 @@ fun BoxWithConstraintsScope.LobbyCarouselView(
 
         val game = games[page]
         val cardState = getCardStatus(game, currentGameName)
-
-        GameCard(
-            game = game,
-            cardData = cardState,
-            enabled = cardState != CardStatus.CORRUPTED,
-            modifier = Modifier
-                .width(maxCardWidth)
-                .height(maxCardHeight)
-                .graphicsLayer {
-                    this.scaleX = scale
-                    this.scaleY = scale
-                    this.alpha = alpha
-                    this.translationX =
-                        if (pageOffset < 0) translation.toPx() else -translation.toPx()
-                },
-            onClick = { onGameClick(game, page) },
-        )
+        with(reversiScope) {
+            GameCard(
+                game = game,
+                cardData = cardState,
+                enabled = cardState != CardStatus.CORRUPTED,
+                modifier = Modifier
+                    .width(maxCardWidth)
+                    .height(maxCardHeight)
+                    .graphicsLayer {
+                        this.scaleX = scale
+                        this.scaleY = scale
+                        this.alpha = alpha
+                        this.translationX =
+                            if (pageOffset < 0) translation.toPx() else -translation.toPx()
+                    },
+                onClick = { onGameClick(game, page) },
+            )
+        }
     }
 
     if (games.size > 1) {

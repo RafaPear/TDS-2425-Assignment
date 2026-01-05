@@ -13,8 +13,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import pt.isel.reversi.app.MAIN_BACKGROUND_COLOR
 import pt.isel.reversi.app.ScaffoldView
+import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.app.pages.lobby.lobbyViews.Empty
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.LobbyCarousel
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.PopupPickAPiece
@@ -23,17 +23,32 @@ import pt.isel.reversi.app.reversiFadeAnimation
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.utils.LOGGER
 
+/**
+ * Enumeration of possible lobby screen states.
+ */
 enum class LobbyState {
-    NONE, EMPTY, SHOW_GAMES
+    /** Initial uninitialized state. */
+    NONE,
+
+    /** Lobby has no available games. */
+    EMPTY,
+
+    /** Lobby displaying available games for joining. */
+    SHOW_GAMES
 }
 
 private const val PAGE_TRANSITION_DURATION_MS = 500
 
+/**
+ * Lobby menu screen for browsing and joining saved multiplayer games.
+ * Displays available games in a carousel and handles game selection and joining.
+ *
+ * @param viewModel The lobby view model managing game list and selection logic.
+ */
 @Composable
 fun LobbyMenu(
     viewModel: LobbyViewModel,
 ) {
-
     val uiState = viewModel.uiState.value
     val games = uiState.games
     val lobbyState = uiState.lobbyState
@@ -57,6 +72,7 @@ fun LobbyMenu(
     }
 
     ScaffoldView(appState, title = "Lobby - Jogos Guardados") { padding ->
+        val reversiScope = this
         AnimatedContent(
             targetState = lobbyState,
             transitionSpec = {
@@ -65,7 +81,7 @@ fun LobbyMenu(
             },
             modifier = Modifier
                 .fillMaxSize()
-                .background(MAIN_BACKGROUND_COLOR),
+                .background(getTheme().backgroundColor),
             label = "PageTransition"
         ) { page ->
             Column(
@@ -83,6 +99,7 @@ fun LobbyMenu(
                         currentGameName = appState.value.game.currGameName,
                         games = games,
                         viewModel,
+                        reversiScope = reversiScope,
                         buttonRefresh = { refreshAction() }
                     ) { game ->
                         viewModel.selectGame(game)

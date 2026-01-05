@@ -2,47 +2,57 @@ package pt.isel.reversi.app.pages
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import pt.isel.reversi.app.BACKGROUND_MUSIC
-import pt.isel.reversi.app.PRIMARY
+import pt.isel.reversi.app.ReversiButton
+import pt.isel.reversi.app.ReversiText
 import pt.isel.reversi.app.ScaffoldView
-import pt.isel.reversi.app.pages.game.utils.TEXT_COLOR
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.app.state.setPage
 import pt.isel.reversi.utils.LOGGER
 
+/** Padding around main menu content. */
 val MAIN_MENU_PADDING = 20.dp
 
+/** Auto-sizing configuration for main menu button text. */
 val MAIN_MENU_AUTO_SIZE_BUTTON_TEXT = TextAutoSize.StepBased(
     minFontSize = 10.sp, maxFontSize = 30.sp
 )
 
+/** Vertical spacing between main menu buttons. */
 val MAIN_MENU_BUTTON_SPACER = 30.dp
 
+/** Auto-sizing configuration for main menu title text. */
 val MAIN_MENU_AUTO_SIZE_TITLE_TEXT = TextAutoSize.StepBased(
     minFontSize = 30.sp, maxFontSize = 60.sp
 )
 
+/**
+ * Main menu screen of the application.
+ * Displays navigation buttons for starting a new game, joining lobby, accessing settings, and about page.
+ * Manages background music playback during menu display.
+ *
+ * @param appState Global application state for navigation and audio control.
+ * @param modifier Optional composable modifier for layout adjustments.
+ */
 @Composable
 fun MainMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
     LaunchedEffect(appState.value.page) {
         val audioPool = appState.getStateAudioPool()
-        if (!audioPool.isPlaying(BACKGROUND_MUSIC)) {
+        val theme = appState.value.theme
+
+        if (!audioPool.isPlaying(theme.backgroundMusic)) {
             LOGGER.info("Playing background music")
             audioPool.stopAll()
-            audioPool.play(BACKGROUND_MUSIC)
+            audioPool.play(theme.backgroundMusic)
         }
     }
     ScaffoldView(
@@ -55,53 +65,47 @@ fun MainMenu(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             // Título
-            Text(
+            ReversiText(
                 text = "Reversi",
-                color = TEXT_COLOR,
                 autoSize = MAIN_MENU_AUTO_SIZE_TITLE_TEXT,
-                fontWeight = FontWeight.Bold
+                fontWeight = FontWeight.Bold,
             )
 
             Spacer(Modifier.height(MAIN_MENU_PADDING))
 
-            MainMenuButton(text = "Novo Jogo") {
-                appState.setPage(Page.NEW_GAME)
-            }
+            ReversiButton(
+                text = "Novo Jogo",
+                onClick = {
+                    appState.setPage(Page.NEW_GAME)
+                },
+            )
 
             Spacer(Modifier.height(MAIN_MENU_BUTTON_SPACER))
 
-            MainMenuButton(text = "Lobby") {
-                appState.setPage(Page.LOBBY)
-            }
+            ReversiButton(
+                text = "Lobby",
+                onClick = {
+                    appState.setPage(Page.LOBBY)
+                },
+            )
 
             Spacer(Modifier.height(MAIN_MENU_BUTTON_SPACER))
 
-            MainMenuButton(text = "Definições") {
-                appState.setPage(Page.SETTINGS)
-            }
+            ReversiButton(
+                text = "Definições",
+                onClick = {
+                    appState.setPage(Page.SETTINGS)
+                },
+            )
 
             Spacer(Modifier.height(MAIN_MENU_BUTTON_SPACER))
 
-            MainMenuButton(text = "Sobre") {
-                appState.setPage(Page.ABOUT)
-            }
+            ReversiButton(
+                text = "Sobre",
+                onClick = {
+                    appState.setPage(Page.ABOUT)
+                },
+            )
         }
-    }
-}
-
-@Composable
-fun MainMenuButton(
-    text: String, modifier: Modifier = Modifier, onClick: () -> Unit
-) {
-    Button(
-        modifier = modifier,
-        onClick = onClick,
-        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-            containerColor = PRIMARY
-        )
-    ) {
-        Text(
-            text = text, color = TEXT_COLOR, textAlign = TextAlign.Center, autoSize = MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
-        )
     }
 }

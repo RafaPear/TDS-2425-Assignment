@@ -3,12 +3,14 @@ package lobbyMenuTest.lobbyCarouselTests
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
-import pt.isel.reversi.app.pages.game.utils.testTagBoard
+import pt.isel.reversi.app.ReversiScope
+import pt.isel.reversi.app.pages.game.testTagBoard
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.GameCard
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.cardTestTag
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.headerBadgeTestTag
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.scorePanelTestTag
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.getCardStatus
+import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
@@ -26,11 +28,13 @@ class DrawCardTests {
         )
     )
 
+    val reversiScope = ReversiScope(AppState.EMPTY_APP_STATE)
+
     @Test
     fun `verify if drawCard is displayed`() = runComposeUiTest {
         val name = game.currGameName!!
         setContent {
-            GameCard(
+            reversiScope.GameCard(
                 game = game,
                 enabled = false,
                 cardData = getCardStatus(game, name),
@@ -45,7 +49,7 @@ class DrawCardTests {
     fun `verify if drawCard is displayed correctly`() = runComposeUiTest {
         val name = game.currGameName!!
         setContent {
-            GameCard(
+            reversiScope.GameCard(
                 game = game,
                 enabled = false,
                 cardData = getCardStatus(game, name),
@@ -58,6 +62,4 @@ class DrawCardTests {
         onNodeWithTag(testTagBoard(), true).assertExists()
         onNodeWithTag(scorePanelTestTag(name), true).assertExists()
     }
-
-
 }

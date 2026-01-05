@@ -6,16 +6,24 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
+import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
-import pt.isel.reversi.app.pages.game.utils.PassButton
-import pt.isel.reversi.app.pages.game.utils.TargetButton
-import pt.isel.reversi.app.pages.game.utils.TextPlayersScore
-import pt.isel.reversi.app.pages.game.utils.testTagGamePage
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
 
+/**
+ * Main game view composable displaying the board and player information side-by-side.
+ * Combines the game board on the left with player scores and controls on the right.
+ *
+ * @param modifier Optional composable modifier for layout adjustments.
+ * @param game The current game instance containing state and configuration.
+ * @param freeze Whether to disable board interactions.
+ * @param getAvailablePlays Lambda returning list of valid move coordinates.
+ * @param onCellClick Callback invoked when a board cell is clicked.
+ * @param setTargetMode Callback invoked to toggle target mode visibility.
+ */
 @Composable
-fun GamePageView(
+fun ReversiScope.GamePageView(
     modifier: Modifier = Modifier,
     game: Game,
     freeze: Boolean,

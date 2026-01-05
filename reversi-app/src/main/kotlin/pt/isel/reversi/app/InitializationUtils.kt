@@ -1,16 +1,21 @@
 package pt.isel.reversi.app
 
 import pt.isel.reversi.app.gameAudio.loadGameAudioPool
-import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.audio.AudioPool
 import pt.isel.reversi.utils.setLoggerFilePath
 import pt.rafap.ktflag.cmd.args.CommandArg
 import pt.rafap.ktflag.cmd.args.CommandArgsParser
 
+/**
+ * Container for application initialization results.
+ *
+ * @property audioPool The initialized audio pool for sound effects and music.
+ */
 data class InitializedArgs(
     val audioPool: AudioPool
 )
 
+/** Command-line argument enabling file-based logging. */
 val logArg = CommandArg(
     name = "log",
     aliases = arrayOf("-l"),
@@ -19,6 +24,7 @@ val logArg = CommandArg(
     isRequired = false
 )
 
+/** Command-line argument disabling audio playback. */
 val noAudioArg = CommandArg(
     name = "no-audio",
     aliases = arrayOf("-na"),
@@ -27,6 +33,7 @@ val noAudioArg = CommandArg(
     isRequired = false
 )
 
+/** Command-line argument displaying help information. */
 val helpArg = CommandArg(
     name = "help",
     aliases = arrayOf("-h", "--help"),
@@ -35,12 +42,21 @@ val helpArg = CommandArg(
     isRequired = false
 )
 
+/** Array of all supported command-line arguments. */
 val allArgs = arrayOf(
     logArg, noAudioArg, helpArg
 )
 
+/** Parser for command-line arguments. */
 val argsParser = CommandArgsParser(*allArgs)
 
+/**
+ * Initializes application arguments including logging and audio settings.
+ * Parses command-line arguments and configures the application accordingly.
+ *
+ * @param args Command-line arguments array.
+ * @return InitializedArgs with configured audio pool, or null if help was requested.
+ */
 fun initializeAppArgs(args: Array<String>): InitializedArgs? {
     val parsedArgs = argsParser.parseArgs(*args)
 
@@ -56,7 +72,6 @@ fun initializeAppArgs(args: Array<String>): InitializedArgs? {
     if (logToFileName != null) setLoggerFilePath()
 
     val audioEnabled = parsedArgs[noAudioArg] == null
-    LOGGER.info("Audio enabled: $audioEnabled")
-    val audioPool = if (audioEnabled) loadGameAudioPool() else AudioPool(emptyList())
+    val audioPool = if (audioEnabled) loadGameAudioPool(AppThemes.DARK.appTheme) else AudioPool(emptyList())
     return InitializedArgs(audioPool)
 }

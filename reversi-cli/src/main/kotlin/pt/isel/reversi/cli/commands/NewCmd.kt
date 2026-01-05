@@ -32,7 +32,7 @@ object NewCmd : CommandImpl<Game>() {
         }
 
         val playerType = PieceType.entries.find { it.symbol.toString() == args[0] }
-                         ?: return ERROR("First player must be one of: $pieceTypes")
+            ?: return ERROR("First player must be one of: $pieceTypes")
         val player = Player(playerType)
 
         val name: String? = if (args.size == 2) args[1] else null

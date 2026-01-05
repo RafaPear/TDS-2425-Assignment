@@ -5,9 +5,10 @@ import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
 import kotlinx.coroutines.runBlocking
+import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.pages.game.GamePageView
-import pt.isel.reversi.app.pages.game.utils.testTagGamePage
-import pt.isel.reversi.app.pages.game.utils.testTagPlayerScore
+import pt.isel.reversi.app.pages.game.testTagGamePage
+import pt.isel.reversi.app.pages.game.testTagPlayerScore
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.core.Player
@@ -27,23 +28,26 @@ class GamePageViewTest {
         )
     }
 
+    val reversiScope = ReversiScope(AppState.EMPTY_APP_STATE)
+
     @Test
     fun `check if the GamePage is displayed`() = runComposeUiTest {
         val expectedAppState = AppState(
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
-            GamePageView(
+            reversiScope.GamePageView(
                 game = appState.value.game,
                 freeze = false,
                 onCellClick = {},
-                getAvailablePlays = { emptyList()},
+                getAvailablePlays = { emptyList() },
                 setTargetMode = {},
                 pass = {}
             )
@@ -58,13 +62,14 @@ class GamePageViewTest {
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
-            GamePageView(
+            reversiScope.GamePageView(
                 game = appState.value.game,
                 freeze = false,
                 onCellClick = {},
@@ -82,17 +87,18 @@ class GamePageViewTest {
             game = game,
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
-            GamePageView(
+            reversiScope.GamePageView(
                 game = appState.value.game,
                 freeze = false,
                 onCellClick = {},
-                getAvailablePlays = { emptyList()},
+                getAvailablePlays = { emptyList() },
                 setTargetMode = {},
                 pass = {}
             )
@@ -111,11 +117,12 @@ class GamePageViewTest {
             game = game.copy(gameState = null),
             page = Page.GAME,
             error = null,
-            audioPool = AudioPool(emptyList())
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
         )
 
         setContent {
-            GamePageView(
+            reversiScope.GamePageView(
                 game = expectedAppState.game,
                 freeze = false,
                 onCellClick = {},

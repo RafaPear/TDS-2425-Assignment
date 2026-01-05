@@ -11,39 +11,43 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.dropShadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
+import androidx.compose.ui.graphics.shadow.Shadow
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.testTag
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import pt.isel.reversi.app.BOARD_COLOR
-import pt.isel.reversi.app.PRIMARY
+import pt.isel.reversi.app.ReversiScope
+import pt.isel.reversi.app.getTheme
+import pt.isel.reversi.app.pages.game.testTagBoard
+import pt.isel.reversi.app.pages.game.testTagCellView
+import pt.isel.reversi.app.pages.game.testTagPiece
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
 
-// Main Color Definitions
-val TEXT_COLOR = Color.White           // Texto (pontuação)
+/** Transparency level for ghost pieces showing potential moves. */
+const val GHOST_PIECE_ALPHA = 0.5f
 
-val BOARD_BACKGROUND_COLOR = Color(0xFFB8860B)      // Fundo geral de madeira
-val BOARD_SIDE_COLOR = Color(0xFFD2A679)
-
-// Button configuration constants
-val BUTTON_CONTENT_COLOR = Color.White
-val BUTTON_MIN_FONT_SIZE = 12.sp
-val BUTTON_MAX_FONT_SIZE = 40.sp
-val BUTTON_TEXT_COLOR = TEXT_COLOR
-val BUTTON_MAIN_COLOR = PRIMARY
-
-const val GHOST_PIECE_ALPHA = 0.3f
-
+/**
+ * Composable rendering the interactive Reversi game board.
+ * Displays the grid, pieces, and available moves (if target mode is enabled).
+ * Handles user clicks for piece placement with click blocking during animations.
+ *
+ * @param target Whether to show available move indicators.
+ * @param gameState Current game state containing board and player information.
+ * @param modifier Optional composable modifier for layout adjustments.
+ * @param freeze Whether to prevent user interaction with the board.
+ * @param getAvailablePlays Lambda returning list of available move coordinates.
+ * @param onCellClick Callback invoked when a board cell is clicked with the coordinate.
+ */
 @Composable
-fun DrawBoard(
+fun ReversiScope.DrawBoard(
     target: Boolean,
     gameState: GameState,
     modifier: Modifier = Modifier,
@@ -54,17 +58,29 @@ fun DrawBoard(
     Box(
         modifier = modifier
             .aspectRatio(1f)
-            .background(BOARD_SIDE_COLOR, shape = RoundedCornerShape(12.dp))
-            .padding(all = 6.dp)
+            .dropShadow(shadow = Shadow(radius = 12.dp), shape = RoundedCornerShape(12.dp))
+            .background(getTheme().boardBgColor, shape = RoundedCornerShape(12.dp))
+            .padding(all = 2.dp)
+            .clip(RoundedCornerShape(12.dp))
             .testTag(tag = testTagBoard())
     ) {
         Grid(target, gameState, modifier, freeze, getAvailablePlays) { coordinate -> onCellClick(coordinate) }
     }
 }
 
-/** Composable that draws the board grid */
+/**
+ * Renders the board grid with cells, pieces, and animated indicators for valid moves.
+ * Supports animation feedback for available moves in target mode.
+ *
+ * @param target Whether to show available move indicators with animation.
+ * @param gameState Current game state containing board and player information.
+ * @param modifier Optional composable modifier for layout adjustments.
+ * @param freeze Whether to prevent user interaction with cells.
+ * @param getAvailablePlays Lambda returning list of available move coordinates.
+ * @param onCellClick Callback invoked when a board cell is clicked.
+ */
 @Composable
-fun Grid(
+fun ReversiScope.Grid(
     target: Boolean,
     gameState: GameState,
     modifier: Modifier = Modifier,
@@ -81,12 +97,12 @@ fun Grid(
         verticalArrangement = Arrangement.SpaceEvenly,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        val availablePlays = if (target) getAvailablePlays() else emptyList<Coordinate>()
+        val availablePlays = if (target) getAvailablePlays() else emptyList()
 
         val infiniteTransition = rememberInfiniteTransition()
         val alphaAnim by infiniteTransition.animateFloat(
             initialValue = 0.8f,
-            targetValue = 0.5f,
+            targetValue = 0.4f,
             animationSpec = infiniteRepeatable(
                 animation = tween(1000, easing = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)),
                 repeatMode = RepeatMode.Reverse
@@ -94,7 +110,7 @@ fun Grid(
         )
         val sizeAnim by infiniteTransition.animateFloat(
             initialValue = 1.0f,
-            targetValue = 0.8f,
+            targetValue = 0.85f,
             animationSpec = infiniteRepeatable(
                 animation = tween(1000, easing = CubicBezierEasing(0.4f, 0.0f, 0.2f, 1.0f)),
                 repeatMode = RepeatMode.Reverse
@@ -141,7 +157,7 @@ fun Grid(
 }
 
 @Composable
-fun cellView(
+fun ReversiScope.cellView(
     coordinate: Coordinate,
     piece: Piece?,
     freeze: Boolean = false,
@@ -151,17 +167,26 @@ fun cellView(
     onClick: (coordinate: Coordinate) -> Unit
 ) {
     val clickable = !freeze && (piece == null || piece.isGhostPiece)
+    val newModifier =
+        if (clickable) modifier.clickable { onClick(coordinate) }
+        else modifier
+
     Box(
-        modifier = modifier
+        modifier = newModifier
             .aspectRatio(1f)
             .padding(2.dp)
-            .clip(RoundedCornerShape(6.dp))
-            .background(BOARD_COLOR)
-            .clickable(enabled = clickable) { onClick(coordinate) }
+            .clip(RoundedCornerShape(12.dp))
+            .background(getTheme().boardColor)
             .testTag(testTagCellView(coordinate)),
         contentAlignment = Alignment.Center
     ) {
         val type = piece?.value ?: return@Box
+
+        val theme = getTheme()
+        val pieceColor = when (type) {
+            PieceType.BLACK -> theme.darkPieceColor
+            PieceType.WHITE -> theme.lightPieceColor
+        }
 
         Canvas(
             modifier = Modifier
@@ -170,22 +195,25 @@ fun cellView(
                 .semantics { testTag = testTagPiece(coordinate, type = type) }
         ) {
             val size = size
-            val radius = size.minDimension / 2 * 0.7f
+            val radius = size.minDimension / 2 * 0.5f
             val center = Offset(size.width / 2, size.height / 2)
 
-            val color = when (type) {
-                PieceType.BLACK -> Color.Black
-                PieceType.WHITE -> Color.White
-            }
-
             if (!piece.isGhostPiece) {
-                drawPiece(radius, center, color, drawScope = this)
+                drawPiece(radius, center, pieceColor, drawScope = this)
             } else {
+
                 drawCircle(
-                    color = color.copy(alpha = GHOST_PIECE_ALPHA),
+                    color = pieceColor.copy(alpha = GHOST_PIECE_ALPHA),
                     radius = radius * radiusModifier,
                     center = center,
                     alpha = alphaModifier,
+                )
+
+                drawCircle(
+                    color = pieceColor.copy(alpha = alphaModifier * 0.5f),
+                    radius = radius * radiusModifier,
+                    center = center,
+                    style = androidx.compose.ui.graphics.drawscope.Stroke(width = 2.dp.toPx())
                 )
             }
         }
@@ -199,28 +227,29 @@ private fun drawPiece(
     color: Color,
     drawScope: DrawScope
 ) {
-    // Sombra grande, oval, deslocada diagonal para baixo-direita
-    val shadowColor = Color(0xFF000000).copy(alpha = 0.3f)
+    val shadowColor = Color.Black.copy(alpha = 0.3f)
     drawScope.drawCircle(
         color = shadowColor,
         radius = radius,
-        center = center + Offset(15f, 15f),
+        center = center + Offset(10f, 10f),
     )
 
-    // lateral
-    val sideColor = if (color == Color.White) Color(0xFFB0B4C1) else Color(0xFF222222)
+    val sideColor = Color(
+        red = (color.red * 0.7f).coerceIn(0f, 1f),
+        green = (color.green * 0.7f).coerceIn(0f, 1f),
+        blue = (color.blue * 0.7f).coerceIn(0f, 1f),
+        alpha = color.alpha
+    )
+
     drawScope.drawCircle(
         color = sideColor,
         radius = radius,
-        center = center + Offset(5f, 5f),
+        center = center + Offset(4f, 4f),
     )
 
-    // Parte superior da peça
     drawScope.drawCircle(
         color = color,
         radius = radius,
-        center = center - Offset(3f, 3f),
+        center = center - Offset(2f, 2f),
     )
 }
-
-

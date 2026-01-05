@@ -15,13 +15,17 @@ import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
 
 /**
- * Componente central que gere transições entre páginas.
- * Desliza para a direita (forward) ou esquerda (backward).
+ * Central component managing transitions between pages in the application.
+ * Slides right (forward) when navigating to higher-level pages, left (backward) when returning.
+ *
+ * @param appState Global application state containing current page and theme.
+ * @param switchAction Lambda defining content for each page within the animation container.
  */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppScreenSwitcher(appState: MutableState<AppState>, switchAction: @Composable (BoxScope.(page: Page) -> Unit)) {
     val targetPage = appState.value.page
+    val theme = appState.value.theme
 
     AnimatedContent(
         targetState = targetPage,
@@ -34,7 +38,7 @@ fun AppScreenSwitcher(appState: MutableState<AppState>, switchAction: @Composabl
             if (forward) reversiGoInAnimation(duration, iOSEasing)
             else reversiGoOutAnimation(duration, iOSEasing)
         },
-        modifier = Modifier.fillMaxSize().background(MAIN_BACKGROUND_COLOR),
+        modifier = Modifier.fillMaxSize().background(theme.backgroundColor),
         label = "PageTransition"
     ) { page ->
         Box(modifier = Modifier.fillMaxSize()) {
@@ -43,6 +47,13 @@ fun AppScreenSwitcher(appState: MutableState<AppState>, switchAction: @Composabl
     }
 }
 
+/**
+ * Creates an animation for forward page transitions (sliding right with fade in).
+ *
+ * @param duration Animation duration in milliseconds.
+ * @param animation Easing function to apply to the animation.
+ * @return A ContentTransform combining slide and fade animations.
+ */
 fun reversiGoInAnimation(
     duration: Int = 500,
     animation: Easing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f),
@@ -51,12 +62,19 @@ fun reversiGoInAnimation(
         initialOffsetX = { it },
         animationSpec = tween(duration, easing = animation)
     ) + fadeIn(tween(duration, easing = animation)) togetherWith
-    slideOutHorizontally(
-        targetOffsetX = { -it },
-        animationSpec = tween(duration, easing = animation)
-    ) + fadeOut(tween(duration, easing = animation))
+            slideOutHorizontally(
+                targetOffsetX = { -it },
+                animationSpec = tween(duration, easing = animation)
+            ) + fadeOut(tween(duration, easing = animation))
 
-fun reversiGoOutAnimation (
+/**
+ * Creates an animation for backward page transitions (sliding left with fade in).
+ *
+ * @param duration Animation duration in milliseconds.
+ * @param animation Easing function to apply to the animation.
+ * @return A ContentTransform combining slide and fade animations.
+ */
+fun reversiGoOutAnimation(
     duration: Int = 500,
     animation: Easing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
 ): ContentTransform =
@@ -64,14 +82,21 @@ fun reversiGoOutAnimation (
         initialOffsetX = { -it },
         animationSpec = tween(duration, easing = animation)
     ) + fadeIn(tween(duration, easing = animation)) togetherWith
-    slideOutHorizontally(
-        targetOffsetX = { it },
-        animationSpec = tween(duration, easing = animation)
-    ) + fadeOut(tween(duration, easing = animation))
+            slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(duration, easing = animation)
+            ) + fadeOut(tween(duration, easing = animation))
 
+/**
+ * Creates a fade-only animation without slide transition.
+ *
+ * @param duration Animation duration in milliseconds.
+ * @param animation Easing function to apply to the animation.
+ * @return A ContentTransform combining only fade in/out animations.
+ */
 fun reversiFadeAnimation(
     duration: Int = 500,
     animation: Easing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
 ): ContentTransform =
     fadeIn(tween(duration, easing = animation)) togetherWith
-    fadeOut(tween(duration, easing = animation))
+            fadeOut(tween(duration, easing = animation))

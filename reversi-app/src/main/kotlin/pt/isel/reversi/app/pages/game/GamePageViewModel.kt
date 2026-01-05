@@ -4,7 +4,6 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
-import pt.isel.reversi.app.PLACE_PIECE_SOUND
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.app.state.setError
@@ -16,6 +15,13 @@ import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
 import pt.isel.reversi.utils.LOGGER
 import kotlin.coroutines.cancellation.CancellationException
 
+/**
+ * View model for the game page managing game state, UI updates, and user interactions.
+ * Handles game move execution, state polling for multiplayer games, and sound effects.
+ *
+ * @property appState Global application state containing game and UI configuration.
+ * @property scope Coroutine scope for launching async game operations.
+ */
 class GamePageViewModel(val appState: MutableState<AppState>, val scope: CoroutineScope) {
     private val _uiState = mutableStateOf(value = appState.value.game)
     val uiState: State<Game> = _uiState
@@ -76,11 +82,11 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
         scope.launch {
             try {
                 _uiState.value = uiState.value.play(coordinate)
+                val theme = appState.value.theme
 
-                //TODO: Need test this sound playing
                 appState.getStateAudioPool().run {
-                    stop(PLACE_PIECE_SOUND)
-                    play(PLACE_PIECE_SOUND)
+                    stop(theme.placePieceSound)
+                    play(theme.placePieceSound)
                 }
             } catch (e: Exception) {
                 appState.setError(error = e)

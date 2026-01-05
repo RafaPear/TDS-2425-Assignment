@@ -1,11 +1,13 @@
 package pt.isel.reversi.utils
 
 import java.io.File
-import java.time.LocalDate
 import java.net.URI
 import java.net.URL
-import java.nio.file.*
+import java.nio.file.FileSystems
+import java.nio.file.Files
+import java.time.LocalDate
 import java.util.stream.Collectors
+
 /**
  * Makes a path string by joining the given parts with the base game folder.
  * @param parts The parts of the path to join.
@@ -34,6 +36,7 @@ fun setLoggerFilePath() {
     LOGGER.addHandler(logFileHandler)
     LOGGER.info("Logging to file '$name' enabled.")
 }
+
 
 /**
  * Generic function to load resources from a folder and transform them.
@@ -89,6 +92,7 @@ private fun listResourceFiles(path: String): List<String> {
             // Running from IDE or exploded directory
             File(resource.toURI()).listFiles()?.map { it.name } ?: emptyList()
         }
+
         "jar" -> {
             // Running from JAR
             val jarPath = resource.toString()
@@ -103,6 +107,7 @@ private fun listResourceFiles(path: String): List<String> {
                     .collect(Collectors.toList())
             }
         }
+
         else -> throw IllegalArgumentException("Unsupported protocol: ${resource.protocol}")
     }
 }
@@ -113,7 +118,6 @@ private fun listResourceFiles(path: String): List<String> {
  * @param path The path to the resource file.
  * @return The resource file (as temporary file if running from JAR).
  */
-@Suppress("Unused")
 fun loadResource(path: String): File {
     val input = Thread.currentThread()
         .contextClassLoader

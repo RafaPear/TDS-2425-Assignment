@@ -1,66 +1,44 @@
-package pt.isel.reversi.app.pages.game.utils
+package pt.isel.reversi.app.pages.game
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.text.TextAutoSize
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults.buttonColors
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
+import pt.isel.reversi.app.ReversiButton
+import pt.isel.reversi.app.ReversiScope
 
-/** Composable button with auto-sizing text */
+/**
+ * Toggle button for target mode, showing available moves on the board.
+ * Displays "Target ON" or "Target OFF" based on the current state.
+ *
+ * @param target Whether target mode is currently enabled.
+ * @param modifier Optional composable modifier for layout adjustments.
+ * @param freeze Whether the button is disabled due to game frozen state.
+ * @param onClick Callback invoked when the button is clicked.
+ */
 @Composable
-fun TargetButton(target: Boolean, modifier: Modifier = Modifier, freeze: Boolean, onClick: () -> Unit) {
-    Button(
+fun ReversiScope.TargetButton(target: Boolean, modifier: Modifier = Modifier, freeze: Boolean, onClick: () -> Unit) {
+    val targetText = if (target) "ON" else "OFF"
+
+    ReversiButton(
+        text = "Target $targetText",
         modifier = modifier.testTag(tag = testTagTargetButtons(target)),
-        colors = buttonColors(
-            containerColor = BUTTON_MAIN_COLOR,
-            contentColor = BUTTON_CONTENT_COLOR
-        ),
-        enabled = !freeze,
         onClick = onClick,
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        val targetText = if (target) "ON" else "OFF"
-        Text(
-            text = "Target $targetText",
-            maxLines = 1,
-            softWrap = false,
-            textAlign = TextAlign.Center,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = BUTTON_MIN_FONT_SIZE,
-                maxFontSize = BUTTON_MAX_FONT_SIZE
-            ),
-            color = BUTTON_TEXT_COLOR
-        )
-    }
+        enabled = !freeze,
+    )
 }
 
+/**
+ * Button to pass the current player's turn.
+ *
+ * @param modifier Optional composable modifier for layout adjustments.
+ * @param freeze Whether the button is disabled due to game frozen state.
+ * @param onClick Callback invoked when the button is clicked.
+ */
 @Composable
-fun PassButton(modifier: Modifier = Modifier, freeze: Boolean, onClick: () -> Unit) {
-    Button(
-        //modifier = modifier.testTag(tag = testTagPassButton()),
-        colors = buttonColors(
-            containerColor = BUTTON_MAIN_COLOR,
-            contentColor = BUTTON_CONTENT_COLOR
-        ),
+fun ReversiScope.PassButton(modifier: Modifier = Modifier, freeze: Boolean, onClick: () -> Unit) {
+    ReversiButton(
+        text = "Pass",
         onClick = onClick,
         enabled = !freeze,
-        shape = RoundedCornerShape(20.dp)
-    ) {
-        Text(
-            text = "Pass",
-            maxLines = 1,
-            softWrap = false,
-            textAlign = TextAlign.Center,
-            autoSize = TextAutoSize.StepBased(
-                minFontSize = BUTTON_MIN_FONT_SIZE,
-                maxFontSize = BUTTON_MAX_FONT_SIZE
-            ),
-            color = BUTTON_TEXT_COLOR
-        )
-    }
+    )
 }
