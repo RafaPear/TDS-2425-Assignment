@@ -11,17 +11,17 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
-import pt.isel.reversi.app.pages.game.utils.BOARD_BACKGROUND_COLOR
-import pt.isel.reversi.app.pages.lobby.BOARD_COLOR
+import pt.isel.reversi.app.ReversiScope
+import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 
 @Composable
-fun BoardPreview(board: Board, modifier: Modifier = Modifier) {
+fun ReversiScope.BoardPreview(board: Board, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.aspectRatio(1f).shadow(8.dp, RoundedCornerShape(12.dp))
-            .background(BOARD_BACKGROUND_COLOR)
+            .background(getTheme().boardBgColor)
             .padding(6.dp)
     ) {
         Column(Modifier.fillMaxSize()) {
@@ -38,13 +38,13 @@ fun BoardPreview(board: Board, modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun Cell(piece: PieceType?, modifier: Modifier = Modifier) {
+private fun ReversiScope.Cell(piece: PieceType?, modifier: Modifier = Modifier) {
     Box(
         modifier = modifier
             .padding(1.dp)
             .clip(shape = RoundedCornerShape(6.dp))
             .aspectRatio(1f)
-            .background(BOARD_COLOR),
+            .background(getTheme().boardBgColor),
     ) {
         if (piece != null) {
             Canvas(Modifier.fillMaxSize().padding(3.dp)) {
