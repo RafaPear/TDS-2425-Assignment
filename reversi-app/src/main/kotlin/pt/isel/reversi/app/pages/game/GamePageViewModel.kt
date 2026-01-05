@@ -96,4 +96,17 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
     }
 
     fun getAvailablePlays() = uiState.value.getAvailablePlays()
+
+    fun pass() {
+        scope.launch {
+            try {
+                _uiState.value = uiState.value.pass()
+            } catch (e: Exception) {
+                appState.setError(error = e)
+            } finally {
+                save()
+            }
+        }
+    }
+
 }

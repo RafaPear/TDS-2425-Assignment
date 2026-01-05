@@ -7,6 +7,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import pt.isel.reversi.app.ReversiScope
+import pt.isel.reversi.app.pages.game.utils.DrawBoard
+import pt.isel.reversi.app.pages.game.utils.PassButton
+import pt.isel.reversi.app.pages.game.utils.TargetButton
+import pt.isel.reversi.app.pages.game.utils.TextPlayersScore
+import pt.isel.reversi.app.pages.game.utils.testTagGamePage
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
 
@@ -28,7 +33,8 @@ fun ReversiScope.GamePageView(
     freeze: Boolean,
     getAvailablePlays: () -> List<Coordinate>,
     onCellClick: (coordinate: Coordinate) -> Unit,
-    setTargetMode: (target: Boolean) -> Unit
+    setTargetMode: (target: Boolean) -> Unit,
+    pass: () -> Unit,
 ) {
     Column(
         modifier = modifier.testTag(tag = testTagGamePage()),
@@ -57,11 +63,15 @@ fun ReversiScope.GamePageView(
             ) {
                 TextPlayersScore(state = game.gameState)
 
+                Spacer(modifier = Modifier.height(32.dp))
+
                 val target = game.target
+
+                TargetButton(target, freeze = freeze) { setTargetMode(!target) }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                TargetButton(target, freeze = freeze) { setTargetMode(!target) }
+                PassButton(freeze = freeze) { pass() }
             }
         }
     }
