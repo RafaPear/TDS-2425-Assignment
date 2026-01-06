@@ -1,5 +1,6 @@
 package pt.isel.reversi.app.pages
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -13,14 +14,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import pt.isel.reversi.app.*
 import pt.isel.reversi.app.gameAudio.loadGameAudioPool
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.setAppState
-import pt.isel.reversi.app.state.setLoading
-import pt.isel.reversi.core.loadGame
 
 /**
  * Section header composable for organizing settings into logical groups.
@@ -60,10 +57,14 @@ private fun ReversiScope.SettingsSection(
  */
 @Composable
 fun SettingsPage(appState: MutableState<AppState>) {
-    val draftState = remember { mutableStateOf(appState.value.copy()) }
-    var currentVol by remember {
-        mutableStateOf(appState.value.audioPool.getMasterVolume() ?: 0f)
-    }
+    val currentTheme = appState.value.theme
+    val audioPool = appState.value.audioPool
+
+    var volume by remember { mutableStateOf(audioPool.getMasterVolume() ?: 0f) }
+
+    var themeMenuExpanded by remember { mutableStateOf(false) }
+
+    val availableThemes = AppThemes.entries.map { it.appTheme }
 
     ScaffoldView(
         appState = appState,
@@ -72,182 +73,125 @@ fun SettingsPage(appState: MutableState<AppState>) {
             PreviousPage { appState.setAppState(page = getCurrentState().backPage) }
         }
     ) { padding ->
-        val scope = rememberCoroutineScope()
+
         Box(
-            modifier = Modifier.fillMaxSize().padding(padding),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
             contentAlignment = Alignment.TopCenter
         ) {
             Column(
                 modifier = Modifier
-                    .padding(vertical = 24.dp)
+                    .padding(top = 24.dp, bottom = 24.dp)
                     .widthIn(max = 500.dp)
                     .fillMaxWidth(0.9f)
                     .verticalScroll(rememberScrollState()),
-                verticalArrangement = Arrangement.spacedBy(32.dp)
+                verticalArrangement = Arrangement.spacedBy(32.dp),
+                horizontalAlignment = Alignment.Start
             ) {
-                GameSection(draftState)
 
-                AudioSection(
-                    currentVol = currentVol,
-                    onVolumeChange = { currentVol = it },
-                )
+                // --- SECÇÃO 1: ÁUDIO ---
+                SettingsSection(title = "Áudio") {
 
-                AppearanceSection(
-                    draftState = draftState,
-                    appTheme = appState.value.theme
-                )
+                    val volumePercent = volumeDbToPercent(volume, -20f, 0f)
+                    val volumeLabel = if (volume <= -20f) "Mudo" else "$volumePercent%"
 
-                ApplyButton {
-                    scope.launch {
-                        appState.setLoading(true)
-                        applySettings(appState, draftState.value, currentVol)
-                        appState.setLoading(false)
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        ReversiText("Volume Geral", fontSize = 16.sp)
+                        ReversiText(volumeLabel, color = currentTheme.primaryColor, fontWeight = FontWeight.Bold)
                     }
+
+                    Slider(
+                        value = volume,
+                        valueRange = -20f..0f,
+                        onValueChange = { newVolume ->
+                            volume = newVolume
+                            if (volume <= -20f) {
+                                audioPool.mute(true)
+                            } else {
+                                audioPool.mute(false)
+                                audioPool.setMasterVolume(volume)
+                            }
+                        },
+                        colors = SliderDefaults.colors(
+                            thumbColor = currentTheme.primaryColor,
+                            activeTrackColor = currentTheme.primaryColor,
+                            inactiveTrackColor = currentTheme.primaryColor.copy(alpha = 0.2f)
+                        )
+                    )
                 }
-            }
-        }
-    }
-}
 
-@Composable
-private fun ReversiScope.GameSection(draftState: MutableState<AppState>) {
-    SettingsSection(title = "Jogo") {
-        ReversiTextField(
-            value = draftState.value.playerName ?: "",
-            onValueChange = { draftState.setAppState(playerName = it) },
-            label = { ReversiText("Nome do Jogador") },
-            modifier = Modifier.fillMaxWidth()
-        )
-    }
-}
+                SettingsSection(title = "Aspeto Visual") {
+                    ReversiText(
+                        "Tema da Aplicação",
+                        fontSize = 16.sp,
+                        modifier = Modifier.padding(bottom = 8.dp),
+                    )
 
-@Composable
-private fun ReversiScope.AudioSection(
-    currentVol: Float,
-    onVolumeChange: (Float) -> Unit
-) {
-    SettingsSection(title = "Áudio") {
-        val volumePercent = volumeDbToPercent(currentVol, -20f, 0f)
-        val volumeLabel = if (currentVol <= -20f) "Mudo" else "$volumePercent%"
-
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            ReversiText("Volume Geral", fontSize = 16.sp)
-            ReversiText(volumeLabel, fontWeight = FontWeight.Bold)
-        }
-
-        Slider(
-            value = currentVol,
-            valueRange = -20f..0f,
-            onValueChange = onVolumeChange,
-            colors = SliderDefaults.colors(
-                thumbColor = appState.theme.primaryColor,
-                activeTrackColor = appState.theme.primaryColor
-            )
-        )
-    }
-}
-
-@Composable
-private fun ReversiScope.AppearanceSection(
-    draftState: MutableState<AppState>,
-    appTheme: AppTheme
-) {
-    var expanded by remember { mutableStateOf(false) }
-
-    SettingsSection(title = "Aspeto Visual") {
-        Box(modifier = Modifier.fillMaxWidth()) {
-            OutlinedButton(
-                onClick = { expanded = true },
-                modifier = Modifier.fillMaxWidth(),
-                shape = RoundedCornerShape(12.dp)
-            ) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
-                ) {
-                    ReversiText(draftState.value.theme.name)
-                    Icon(Icons.Default.Palette, null, tint = appTheme.primaryColor)
-                }
-            }
-
-            ReversiDropDownMenu(
-                expanded = expanded,
-                onDismissRequest = { expanded = false }
-            ) {
-                AppThemes.entries.forEach { entry ->
-                    ReversiDropdownMenuItem(
-                        text = entry.appTheme.name,
-                        onClick = {
-                            draftState.setAppState(theme = entry.appTheme)
-                            expanded = false
+                    Box(modifier = Modifier.fillMaxWidth()) {
+                        OutlinedButton(
+                            onClick = { themeMenuExpanded = true },
+                            modifier = Modifier.fillMaxWidth(),
+                            shape = RoundedCornerShape(12.dp),
+                            border = BorderStroke(1.dp, currentTheme.textColor.copy(0.3f)),
+                            colors = ButtonDefaults.outlinedButtonColors(
+                                containerColor = currentTheme.secondaryColor.copy(alpha = 0.1f)
+                            )
+                        ) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                ReversiText(currentTheme.name)
+                                Icon(
+                                    imageVector = Icons.Default.Palette,
+                                    contentDescription = "Trocar tema",
+                                    tint = currentTheme.primaryColor
+                                )
+                            }
                         }
+
+                        ReversiDropDownMenu(
+                            expanded = themeMenuExpanded,
+                            onDismissRequest = { themeMenuExpanded = false }
+                        ) {
+                            availableThemes.forEach { theme ->
+                                ReversiDropdownMenuItem(
+                                    text = theme.name,
+                                    onClick = {
+                                        if (theme == currentTheme) {
+                                            themeMenuExpanded = false
+                                            return@ReversiDropdownMenuItem
+                                        }
+                                        audioPool.destroy()
+                                        appState.setAppState(theme = theme, audioPool = loadGameAudioPool(theme))
+                                        val newAudioPool = appState.value.audioPool
+                                        if (volume <= -20f) {
+                                            newAudioPool.mute(true)
+                                        } else {
+                                            newAudioPool.mute(false)
+                                            newAudioPool.setMasterVolume(volume)
+                                        }
+                                        themeMenuExpanded = false
+                                    }
+                                )
+                            }
+                        }
+                    }
+
+                    ReversiText(
+                        "A alteração do tema é aplicada imediatamente.",
+                        color = currentTheme.textColor.copy(alpha = 0.5f),
+                        fontSize = 12.sp,
+                        modifier = Modifier.padding(top = 8.dp),
                     )
                 }
             }
-        }
-    }
-}
-
-@Composable
-private fun ReversiScope.ApplyButton(onClick: () -> Unit) {
-    Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-        ReversiButton(text = "Aplicar", onClick = onClick)
-    }
-}
-
-private suspend fun applySettings(
-    appState: MutableState<AppState>,
-    draft: AppState,
-    volume: Float
-) {
-    delay(500) // Simulate loading time
-    val current = appState.value
-    val themeChangedAudio = draft.theme.backgroundMusic != current.theme.backgroundMusic ||
-            draft.theme.gameMusic != current.theme.gameMusic
-
-    val oldTheme = current.theme
-
-    val playingAudios = current.audioPool.getPlayingAudios()
-
-    val finalAudioPool = if (themeChangedAudio) {
-        current.audioPool.destroy()
-        loadGameAudioPool(draft.theme)
-    } else current.audioPool
-
-    if (volume <= -20f) {
-        finalAudioPool.mute(true)
-    } else {
-        finalAudioPool.mute(false)
-        finalAudioPool.setMasterVolume(volume)
-    }
-
-    val currGame = current.game
-    val currGameName = currGame.currGameName
-    val newGame = if (currGameName != null) {
-        currGame.saveEndGame()
-        loadGame(currGameName, draft.playerName, currGame.myPiece)
-    }
-    else currGame
-
-    appState.setAppState(
-        game = newGame,
-        playerName = draft.playerName,
-        theme = draft.theme,
-        audioPool = finalAudioPool
-    )
-
-    for (audio in playingAudios) {
-        val audioToPlay = when (audio) {
-            oldTheme.backgroundMusic -> draft.theme.backgroundMusic
-            oldTheme.gameMusic -> draft.theme.gameMusic
-            else -> null
-        }
-        if (audioToPlay != null) {
-            if (!finalAudioPool.isPlaying(audioToPlay))
-                finalAudioPool.play(audioToPlay)
         }
     }
 }
