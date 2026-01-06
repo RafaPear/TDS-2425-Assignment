@@ -26,7 +26,7 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
 
     // Launch the game refresh coroutine
     DisposableEffect(game.currGameName) {
-        if (game.currGameName != null && game.gameState?.players?.size != 2) {
+        if (game.currGameName != null && game.gameState?.players?.size != 2 && !viewModel.isPollingActive()) {
             viewModel.startPolling()
         }
 
