@@ -5,10 +5,9 @@ import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
+import pt.isel.reversi.core.storage.GameStorageType.Companion.setUpStorage
 
-fun loadStorageFromConfig() = loadCoreConfig().let { conf ->
-    conf.STORAGE_TYPE.storage(conf.SAVES_FOLDER)
-}
+fun loadStorageFromConfig() = setUpStorage(loadCoreConfig())
 
 /**
  * Starts a new game.

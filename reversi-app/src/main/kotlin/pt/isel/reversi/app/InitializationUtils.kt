@@ -16,10 +16,10 @@ data class InitializedArgs(
 )
 
 /** Command-line argument enabling file-based logging. */
-val logArg = CommandArg(
+val noLogArg = CommandArg(
     name = "log",
-    aliases = arrayOf("-l"),
-    description = "If set, enables logging to a file named reversi-app.log",
+    aliases = arrayOf("-nl"),
+    description = "If set, disables logging to a file named reversi-app.log",
     returnsValue = false,
     isRequired = false
 )
@@ -44,7 +44,7 @@ val helpArg = CommandArg(
 
 /** Array of all supported command-line arguments. */
 val allArgs = arrayOf(
-    logArg, noAudioArg, helpArg
+    noLogArg, noAudioArg, helpArg
 )
 
 /** Parser for command-line arguments. */
@@ -68,8 +68,8 @@ fun initializeAppArgs(args: Array<String>): InitializedArgs? {
         return null
     }
 
-    val logToFileName = parsedArgs[logArg]
-    if (logToFileName != null) setLoggerFilePath()
+    val logToFileName = parsedArgs[noLogArg]
+    if (logToFileName == null) setLoggerFilePath()
 
     val audioEnabled = parsedArgs[noAudioArg] == null
     val loadedPool = loadGameAudioPool(AppThemes.DARK.appTheme) {}

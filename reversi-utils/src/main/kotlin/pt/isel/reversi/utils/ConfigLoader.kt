@@ -13,45 +13,40 @@ import java.util.*
  */
 class ConfigLoader<U : Config>(
     val path: String,
-    val factory: (Map<String, String>) -> U,
+    val factory: (Map<String, String>) -> U
 ) {
-    /**
-     * Loads the configuration from the properties file.
-     * Creates the file with default entries if it does not exist.
-     * Synchronizes the file with the factory's default entries on load.
-     *
-     * @return The instantiated Config object with loaded properties.
-     */
+
     fun loadConfig(): U {
-        val props = Properties()
         val file = File(path)
-        val defaultEntries = factory(emptyMap()).getDefaultConfigFileEntries()
+        val props = Properties()
 
         if (!file.exists()) {
             file.parentFile?.mkdirs()
             file.createNewFile()
-            val entries = defaultEntries
-            for (entry in entries)
-                props.setProperty(entry.key, entry.value)
+        } else {
+            file.inputStream().use(props::load)
+        }
 
-            file.outputStream().use { output ->
-                props.store(output, "Configuration file created at ${file.absolutePath}")
+        val defaults = factory(emptyMap()).getDefaultConfigFileEntries()
+
+        var changed = false
+        for ((key, value) in defaults) {
+            if (!props.containsKey(key)) {
+                props.setProperty(key, value)
+                changed = true
             }
         }
 
-        file.inputStream().use { input ->
-            props.load(input)
+        if (changed) {
+            file.outputStream().use {
+                props.store(it, "Configuration file at ${file.absolutePath}")
+            }
         }
 
-        val configMap = props.entries.associate { it.key.toString() to it.value.toString() }
-        val factoryResult = factory(configMap)
-        val newProps = Properties().also {
-            it.putAll(factoryResult.getDefaultConfigFileEntries())
+        val configMap = props.entries.associate {
+            it.key.toString() to it.value.toString().trim()
         }
 
-        file.outputStream().use { output ->
-            newProps.store(output, "Configuration file created at ${file.absolutePath}")
-        }
-        return factoryResult
+        return factory(configMap)
     }
 }

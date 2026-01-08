@@ -80,7 +80,7 @@ fun MutableState<AppState>.setAppState(
         game = game,
         audioPool = audioPool,
         theme = theme,
-        playerName = playerName
+        playerName = playerName,
     )
 }
 

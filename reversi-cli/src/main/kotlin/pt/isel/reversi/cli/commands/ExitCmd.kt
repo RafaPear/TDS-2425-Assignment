@@ -33,6 +33,7 @@ object ExitCmd : CommandImpl<Game>() {
                 println("Saving game as '$saveName' before exit...")
                 runBlocking {
                     context.copy(currGameName = saveName).saveEndGame()
+                    context.closeStorage()
                 }
             }
         }

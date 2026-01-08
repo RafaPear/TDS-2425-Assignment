@@ -45,7 +45,7 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
         }
     }
 
-    val name = game.currGameName?.let { "Game: $it" }
+    val name = game.currGameName
 
     ScaffoldView(
         appState = appState,

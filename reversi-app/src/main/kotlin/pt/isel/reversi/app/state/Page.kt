@@ -5,6 +5,7 @@ package pt.isel.reversi.app.state
  * @property level The hierarchy level of the page, where a higher number indicates a deeper level.
  */
 enum class Page(val level: Int) {
+    NONE(-1),
     MAIN_MENU(0),
     SETTINGS(1),
     ABOUT(1),

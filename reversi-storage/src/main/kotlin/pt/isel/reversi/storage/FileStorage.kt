@@ -86,4 +86,8 @@ data class FileStorage<T>(
             .filter { fs.metadata(it).isRegularFile }
             .map { it.name.removeSuffix(".txt") }
     }
+
+    override fun close() {
+        // No resources to release
+    }
 }

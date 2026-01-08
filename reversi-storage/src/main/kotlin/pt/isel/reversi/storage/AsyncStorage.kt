@@ -35,4 +35,7 @@ interface AsyncStorage<K, T, U> {
 
     /** Loads all ids present in the storage. */
     suspend fun loadAllIds(): List<K>
+
+    /** Closes the storage, releasing any resources if necessary. */
+    suspend fun close()
 }

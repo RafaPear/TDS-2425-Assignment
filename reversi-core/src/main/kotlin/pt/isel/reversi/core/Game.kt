@@ -5,7 +5,9 @@ import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
+import pt.isel.reversi.core.storage.GameStorageType.Companion.setUpStorage
 import pt.isel.reversi.storage.AsyncStorage
+import pt.isel.reversi.utils.LOGGER
 
 /**
  * Represents a Reversi game, managing the game state, player turns, and interactions with storage.
@@ -33,7 +35,7 @@ data class Game(
     val myPiece: PieceType? = null,
     val config: CoreConfig = loadCoreConfig()
 ) {
-    val storage: AsyncStorage<String, GameState, String> = config.STORAGE_TYPE.storage(config.SAVES_FOLDER)
+    val storage: AsyncStorage<String, GameState, String> = setUpStorage(config)
 
     /**
      * Reloads the core configuration.
@@ -235,11 +237,18 @@ data class Game(
     suspend fun refresh(): Game {
         val gs = requireStartedGame()
         val loadedState = refreshBase() ?: return this
+
+        if (currGameName == null) return this
+
+        val newLastModified = storage.lastModified(currGameName)
+
+        if (newLastModified == this.lastModified) return this
+
         return copy(
             gameState = loadedState.copy(players = gs.players.map { it.refresh(loadedState.board) }),
             countPass = if (loadedState.board == gs.board && loadedState.lastPlayer != gs.lastPlayer) countPass + 1
             else 0,
-            lastModified = lastModified
+            lastModified = newLastModified
         )
     }
 
@@ -290,6 +299,7 @@ data class Game(
         playerNamesInStorage = playerNamesInStorage.filter { it.type != myPiece }
 
         try {
+            LOGGER.info("Saving game state to storage: $currGameName")
             storage.save(
                 id = currGameName,
                 obj = gs.copy(
@@ -329,9 +339,7 @@ data class Game(
 
         storage.lastModified(id = name) ?: run {
             try {
-                storage.new(id = name) {
-                    gameState.copy(players = emptyList())
-                }
+                storage.save(id = name, obj = gameState.copy(players = emptyList()))
                 return@saveOnlyBoard
             } catch (_: Exception) {
                 throw InvalidFileException(
@@ -345,9 +353,12 @@ data class Game(
         )
 
         storage.save(
-            id = name, obj = gs.copy(
+            id = name,
+            obj = gs.copy(
                 players = ls.players
             )
         )
     }
+
+    suspend fun closeStorage() { storage.close() }
 }

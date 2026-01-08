@@ -9,6 +9,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import org.jetbrains.compose.resources.painterResource
@@ -54,35 +57,55 @@ fun main(args: Array<String>) {
                     error = null,
                     audioPool = audioPool,
                     theme = AppThemes.DARK.appTheme,
-
                 )
             )
         }
 
+        // unica forma que permite sincronizar o estado do app no exit
+        val appJob = SupervisorJob()
+        val scope = CoroutineScope(Dispatchers.Default + appJob)
+
+
         fun safeExitApplication() {
-            LOGGER.info("Exiting application...")
+            LOGGER.info("Application exit requested")
+            LOGGER.info("Stopping compose application...")
 
             try {
-                runBlocking { appState.value.game.saveEndGame() }
+                LOGGER.info("Cancelling application coroutines...")
+                appJob.cancel()
+                appState.setPage(Page.NONE) // prevent new operations
+                runBlocking {
+                    LOGGER.info("Waiting for application coroutines to finish...")
+                    appJob.join()
+                    LOGGER.info("Application coroutines finished.")
+                    LOGGER.info("Saving game state...")
+                    appState.value.game.saveEndGame()
+                    LOGGER.info("Game state saved.")
+                    LOGGER.info("Closing game storage...")
+                    appState.value.game.closeStorage()
+                    LOGGER.info("Game storage closed.")
+                }
+                LOGGER.info("Destroying audio pool...")
                 appState.getStateAudioPool().destroy()
+                LOGGER.info("Audio pool destroyed. Application exited safely.")
             } catch (e: Exception) {
-                LOGGER.warning("Failed to save game on exit: ${e.message}")
+                LOGGER.info("Did it blow up? ${e.message}")
             }
-
             exitApplication()
         }
 
+        // Ref: https://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Runtime.html#addShutdownHook%28java.lang.Thread%29
+        Runtime.getRuntime().addShutdownHook(Thread { safeExitApplication() })
+
         Window(
-            onCloseRequest = ::safeExitApplication,
+            onCloseRequest = { safeExitApplication() },
             title = "Reversi-DEV",
             icon = painterResource(Res.drawable.reversi),
             state = windowState,
         ) {
-            val scope = rememberCoroutineScope()
-
             window.minimumSize = java.awt.Dimension(800, 800)
 
-            MakeMenuBar(appState, windowState, ::safeExitApplication)
+            MakeMenuBar(appState, windowState) { safeExitApplication() }
             AppScreenSwitcher(appState) { page ->
                 LOGGER.info("Navigating to page: $page")
                 when (page) {
@@ -93,6 +116,7 @@ fun main(args: Array<String>) {
                     Page.NEW_GAME -> NewGamePage(appState)
                     Page.SAVE_GAME -> SaveGamePage(appState)
                     Page.LOBBY -> LobbyMenu(LobbyViewModel(scope, appState))
+                    Page.NONE -> { /* No UI to show */ }
                 }
             }
         }

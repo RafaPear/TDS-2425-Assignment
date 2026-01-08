@@ -46,10 +46,11 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
 
                     if (game.gameState != null && game.currGameName != null) {
                         val newGame = game.refresh()
-                        val needsUpdate = newGame.gameState != game.gameState
+                        val needsUpdate = newGame.lastModified != game.lastModified
                         if (needsUpdate)
                             _uiState.value = newGame
                     }
+
                     delay(50L)
                 }
                 throw IllegalStateException("Polling coroutine ended unexpectedly")
@@ -59,6 +60,7 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
                 LOGGER.warning("Auto-refreshing game state gave an error ${e.message}")
             } finally {
                 LOGGER.info("Stop auto-refreshing game state coroutine: ${this@GamePageViewModel}")
+                save()
             }
         }.also { pollingJob = it }
     }
