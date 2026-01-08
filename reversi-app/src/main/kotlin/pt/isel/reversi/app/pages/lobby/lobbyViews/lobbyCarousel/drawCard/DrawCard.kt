@@ -34,6 +34,14 @@ fun headerBadgeTestTag(gameId: String) = "header_badge_$gameId"
 
 fun scorePanelTestTag(gameId: String) = "score_panel_$gameId"
 
+fun statusBadgeTestTag(gameId: String) = "status_badge_$gameId"
+
+fun statusTextTestTag(gameid: String) = "status_text_$gameid"
+
+fun scoreItemPieceTestTag(scorePainelTestTag: String, pieceType: PieceType) = "score_item_${scorePainelTestTag}_${pieceType.name}"
+
+fun scoreItemScoreTestTag(scorePainelTestTag: String, pieceType: PieceType, score: Int) = "score_item_${scorePainelTestTag}_${pieceType.name}_score_$score"
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReversiScope.GameCard(
@@ -72,13 +80,15 @@ fun ReversiScope.GameCard(
             DrawBoard(
                 false,
                 state,
-                modifier = Modifier.weight(4f), // Preenche o Box
+                modifier = Modifier.weight(4f),
                 true,
                 { emptyList() },
                 {}
             )
 
-            ScorePanel(Modifier.testTag(scorePanelTestTag(name)), state.board)
+            Spacer(Modifier.height(8.dp))
+
+            ScorePanel(board = state.board, scorePainelTestTag =  scorePanelTestTag(name))
         }
     }
 }
@@ -97,41 +107,55 @@ private fun ReversiScope.HeaderBadge(statusText: String, statusColor: Color, nam
             text = name,
             fontSize = 20.sp,
             fontWeight = FontWeight.Bold,
+            modifier = Modifier.testTag(statusTextTestTag(name)),
         )
-        StatusBadge(statusText, statusColor)
+        StatusBadge(statusText, statusColor, modifier = Modifier.testTag(statusBadgeTestTag(name)))
     }
 }
 
 @Composable
 private fun ReversiScope.StatusBadge(text: String, color: Color, modifier: Modifier = Modifier) {
     Surface(
-        modifier = modifier,
         shape = RoundedCornerShape(10.dp), color = color.copy(0.2f)
     ) {
         ReversiText(
             text = text,
             color = color,
             fontSize = 11.sp,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp),
+            modifier = modifier.padding(horizontal = 10.dp, vertical = 5.dp),
             fontWeight = FontWeight.Bold,
         )
     }
 }
 
 @Composable
-private fun ReversiScope.ScorePanel(modifier: Modifier, board: Board) {
+private fun ReversiScope.ScorePanel(modifier: Modifier = Modifier, board: Board, scorePainelTestTag: String) {
     Row(
-        modifier = modifier.fillMaxWidth().background(getTheme().secondaryColor.copy(.2f), RoundedCornerShape(16.dp))
-            .border(1.dp, Color.White.copy(0.1f), RoundedCornerShape(16.dp)).padding(8.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .background(getTheme().secondaryColor.copy(.2f), RoundedCornerShape(16.dp))
+            .border(1.dp, Color.White.copy(0.1f), RoundedCornerShape(16.dp))
+            .padding(8.dp)
+            .testTag(scorePainelTestTag),
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        ScoreItem(PieceType.BLACK, board.totalBlackPieces)
-        ScoreItem(PieceType.WHITE, board.totalWhitePieces)
+        ScoreItem(
+            type = PieceType.BLACK,
+            score = board.totalBlackPieces,
+            pieceTestTag = scoreItemPieceTestTag(scorePainelTestTag, PieceType.BLACK),
+            scoreTestTag = scoreItemScoreTestTag(scorePainelTestTag, PieceType.BLACK, board.totalBlackPieces)
+        )
+        ScoreItem(
+            type = PieceType.WHITE,
+            score = board.totalWhitePieces,
+            pieceTestTag = scoreItemPieceTestTag(scorePainelTestTag, PieceType.WHITE),
+            scoreTestTag = scoreItemScoreTestTag(scorePainelTestTag, PieceType.WHITE, board.totalWhitePieces)
+        )
     }
 }
 
 @Composable
-private fun ReversiScope.ScoreItem(type: PieceType, score: Int) {
+private fun ReversiScope.ScoreItem(type: PieceType, score: Int, pieceTestTag: String, scoreTestTag: String) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -144,11 +168,15 @@ private fun ReversiScope.ScoreItem(type: PieceType, score: Int) {
                     0.2f
                 ),
                 CircleShape
-            )
+            ).testTag(pieceTestTag)
         )
         Spacer(Modifier.height(8.dp))
         ReversiText(
-            text = score.toString(), color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold,
+            text = score.toString(),
+            color = Color.White,
+            fontSize = 24.sp,
+            fontWeight = FontWeight.Bold,
+            modifier = Modifier.testTag(scoreTestTag)
         )
     }
 }

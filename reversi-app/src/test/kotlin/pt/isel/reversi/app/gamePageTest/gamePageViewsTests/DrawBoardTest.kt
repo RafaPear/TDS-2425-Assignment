@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.gamePageTest.gamePageViewTests
+package pt.isel.reversi.app.gamePageTest.gamePageViewsTests
 
 import androidx.compose.ui.test.*
 import kotlinx.coroutines.runBlocking

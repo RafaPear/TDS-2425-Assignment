@@ -1,4 +1,4 @@
-package lobbyMenuTest
+package lobbyMenuTest.lobbyCarouselTests.lobbyCarouselViewsTests
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextEquals

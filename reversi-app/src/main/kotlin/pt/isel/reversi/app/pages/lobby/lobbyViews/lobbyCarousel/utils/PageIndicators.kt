@@ -12,10 +12,20 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.ReversiText
+
+fun testTagPageIndicators() = "page_indicators"
+fun testTagPageIndicatorText() = "page_indicator_text"
+
+fun textPageIndicator(current: Int, total: Int): String =
+    if (total <= 0)
+        "0 de 0"
+    else
+        "${current + 1} de $total"
 
 @Composable
 fun ReversiScope.PageIndicators(total: Int, current: Int) {
@@ -23,7 +33,7 @@ fun ReversiScope.PageIndicators(total: Int, current: Int) {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp), modifier = Modifier.testTag(testTagPageIndicators())) {
             repeat(total) { index ->
                 val width by animateDpAsState(
                     targetValue = if (index == current) 28.dp else 8.dp,
@@ -46,16 +56,13 @@ fun ReversiScope.PageIndicators(total: Int, current: Int) {
 
         Spacer(Modifier.height(8.dp))
 
-        val text =
-            if (total <= 0)
-                "0 de 0"
-            else
-                "${current + 1} de $total"
+        val text = textPageIndicator(current, total)
 
         ReversiText(
             text = text,
             color = Color.White.copy(alpha = 0.6f),
             fontSize = 14.sp,
+            modifier = Modifier.testTag(testTagPageIndicatorText())
         )
     }
 }

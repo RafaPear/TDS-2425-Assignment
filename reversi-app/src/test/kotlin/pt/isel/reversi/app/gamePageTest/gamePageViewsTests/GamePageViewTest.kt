@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.gamePageTest.gamePageViewTests
+package pt.isel.reversi.app.gamePageTest.gamePageViewsTests
 
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.ExperimentalTestApi

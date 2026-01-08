@@ -4,6 +4,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.*
 import kotlinx.coroutines.runBlocking
+import pt.isel.reversi.app.pages.MainMenu
 import pt.isel.reversi.app.pages.game.*
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
@@ -198,4 +199,38 @@ class GamePageTests {
 
         assertEquals(expectedPieces, countPieces)
     }
+
+    @Test
+    fun `check if game is saved in app state when disposed`() = runComposeUiTest {
+        val expectedAppState = AppState(
+            game = game,
+            page = Page.GAME,
+            error = null,
+            audioPool = AudioPool(emptyList()),
+            theme = AppState.EMPTY_APP_STATE.theme
+        )
+
+        val appState = mutableStateOf(value = expectedAppState)
+
+        setContent {
+            val scope = rememberCoroutineScope()
+            val gameViewModel = GamePageViewModel(appState, scope)
+
+            GamePage(gameViewModel)
+        }
+
+        //click on a valid cell to change the game state on view model
+        assert(game == appState.value.game )
+        onNodeWithTag(testTagCellView(game.getAvailablePlays()[0]), useUnmergedTree = true).performClick()
+
+        //set main menu page to dispose the game page
+        setContent {
+            MainMenu(appState)
+        }
+
+        //verify if the game state in app state is different from the initial game state
+        assert(game != appState.value.game)
+    }
+
+    //TODO: add test for pass, wait for winner page
 }

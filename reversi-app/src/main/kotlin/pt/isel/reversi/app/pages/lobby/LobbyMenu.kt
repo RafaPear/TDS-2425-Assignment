@@ -21,6 +21,7 @@ import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.PopupPickAPiece
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.RefreshButton
 import pt.isel.reversi.app.reversiFadeAnimation
 import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.setLoading
 import pt.isel.reversi.utils.LOGGER
 
 /**
@@ -60,6 +61,7 @@ fun LobbyMenu(
         viewModel.startPolling()
         onDispose {
             viewModel.stopPolling()
+            viewModel.appState.setLoading(false)
         }
     }
 
@@ -128,7 +130,3 @@ fun LobbyMenu(
         }
     }
 }
-
-fun testTagLobbyBoard() = "LobbyBoardPreview"
-fun testTagCellPreview(coordinateIndex: Int) = "LobbyCellPreview_$coordinateIndex"
-fun testTagCarouselItem(name: String) = "LobbyCarouselItem_$name"

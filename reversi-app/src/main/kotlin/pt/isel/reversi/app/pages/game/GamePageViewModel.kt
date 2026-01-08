@@ -31,6 +31,7 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
     }
 
     fun save() {
+        LOGGER.info("GamePageViewModel save on appState")
         appState.setGame(game = uiState.value)
     }
 

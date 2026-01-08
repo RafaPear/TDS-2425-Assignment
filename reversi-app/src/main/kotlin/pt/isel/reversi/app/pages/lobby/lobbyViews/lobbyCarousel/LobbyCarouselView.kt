@@ -102,6 +102,5 @@ fun BoxWithConstraintsScope.LobbyCarouselView(
             modifier = Modifier.align(Alignment.Center)
         )
     }
-
 }
 

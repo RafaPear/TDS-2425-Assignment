@@ -18,15 +18,26 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
 
+fun testTagNavButton(direction: String) = "nav_button_$direction"
+
+/**
+ * A composable function that creates a navigation button with an icon.
+ *
+ * @param modifier The modifier to be applied to the IconButton, test tag need is added here.
+ * @param icon The icon to be displayed inside the button.
+ * @param alignment The alignment of the button within its parent BoxScope.
+ * @param onClick The callback to be invoked when the button is clicked.
+ */
 @Composable
 fun BoxScope.NavButton(
+    modifier: Modifier = Modifier,
     icon: ImageVector,
     alignment: Alignment,
     onClick: () -> Unit
 ) {
     IconButton(
         onClick = onClick,
-        modifier = Modifier
+        modifier = modifier
             .align(alignment)
             .padding(16.dp)
             .size(50.dp)
