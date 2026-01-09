@@ -13,9 +13,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -25,6 +28,7 @@ import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.CardStatus
 import pt.isel.reversi.core.Game
+import pt.isel.reversi.core.PlayerName
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
 
@@ -69,6 +73,8 @@ fun ReversiScope.GameCard(
         ) {
             HeaderBadge(statusText, statusColor, name)
 
+            PlayerNamesInGameBadge(state.playerNames)
+
             DrawBoard(
                 false,
                 state,
@@ -82,6 +88,87 @@ fun ReversiScope.GameCard(
         }
     }
 }
+
+//public final data class PlayerName(
+//    public final val type: PieceType,
+//    public final val name: String
+//)
+
+
+@Composable
+private fun ReversiScope.PlayerNamesInGameBadge(names: List<PlayerName>) {
+    val orderedTypes = listOf(PieceType.WHITE, PieceType.BLACK)
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 6.dp),
+        verticalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        orderedTypes.forEach { type ->
+            val player = names.firstOrNull { it.type == type }
+
+            if (player != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.White.copy(alpha = 0.08f))
+                        .padding(vertical = 6.dp, horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        shape = CircleShape,
+                        color = if (type == PieceType.BLACK)
+                            getTheme().darkPieceColor
+                        else
+                            getTheme().lightPieceColor,
+                        border = BorderStroke(1.dp, getTheme().lightPieceColor),
+                        modifier = Modifier.size(18.dp)
+                    ) {}
+
+                    Spacer(Modifier.width(8.dp))
+
+                    ReversiText(
+                        text = player.name,
+                        fontWeight = FontWeight.SemiBold
+                    )
+                }
+            } else {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color.White.copy(alpha = 0.04f))
+                        .border(
+                            1.dp,
+                            Color.White.copy(alpha = 0.15f),
+                            RoundedCornerShape(16.dp)
+                        )
+                        .padding(vertical = 6.dp, horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Surface(
+                        shape = CircleShape,
+                        color = Color.Transparent,
+                        border = BorderStroke(1.dp, Color.White.copy(alpha = 0.3f)),
+                        modifier = Modifier.size(18.dp)
+                    ) {}
+
+                    Spacer(Modifier.width(8.dp))
+
+                    ReversiText(
+                        text = "À espera de jogador…",
+                        fontStyle = FontStyle.Italic,
+                        modifier = Modifier.alpha(0.5f)
+                    )
+                }
+            }
+        }
+    }
+}
+
 
 
 @Composable

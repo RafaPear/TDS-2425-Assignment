@@ -27,15 +27,10 @@ import pt.isel.reversi.core.PlayerName
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
 
-/**
- * Displays the score card showing both players' piece counts and game status.
- * Highlights the current player's turn and displays the winner when the game ends.
- *
- * @param state Current game state, or null if no game is active.
- */
 @Composable
 fun ReversiScope.TextPlayersScore(
     state: GameState?,
+    myPlayerName: PlayerName,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -60,34 +55,46 @@ fun ReversiScope.TextPlayersScore(
                 )
             }
         } else {
+            val orderedTypes = listOf(PieceType.WHITE, PieceType.BLACK)
 
-            state.playerNames.forEach { playerName ->
-                val points = when (playerName.type) {
-                    PieceType.BLACK -> state.board.totalBlackPieces
-                    PieceType.WHITE -> state.board.totalWhitePieces
+            orderedTypes.forEach { type ->
+                val playerName = state.playerNames.firstOrNull { it.type == type }
+
+                if (playerName != null) {
+                    val points = if (type == PieceType.BLACK)
+                        state.board.totalBlackPieces
+                    else
+                        state.board.totalWhitePieces
+
+                    val isTurn = type != state.lastPlayer
+                    val isWinner = state.winner?.type == type
+
+                    val displayName = playerName.copy(
+                        name = if (playerName.type == myPlayerName.type)
+                            "${playerName.name} (You)"
+                        else playerName.name
+                    )
+
+                    PlayerScoreRow(
+                        playerName = displayName,
+                        points = points,
+                        isTurn = isTurn,
+                        isWinner = isWinner,
+                        modifier = Modifier.testTag(testTagPlayerScore(Player(type, points)))
+                    )
+                } else {
+                    MissingPlayerRow(type)
                 }
-                val type = playerName.type
-                val isTurn = type != state.lastPlayer
-                val isWinner = state.winner?.type == type
-                val player = Player(type, points)
-
-                PlayerScoreRow(
-                    playerName = playerName,
-                    points = points,
-                    isTurn = isTurn,
-                    isWinner = isWinner,
-                    modifier = Modifier.testTag(testTagPlayerScore(player))
-                )
 
                 Spacer(Modifier.height(8.dp))
             }
 
-            // Mensagem de Final de Jogo
-            AnimatedVisibility(visible = state.winner != null) {
+            val winner = state.playerNames.firstOrNull { it.type == state.winner?.type }
+            AnimatedVisibility(visible = winner != null) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Spacer(Modifier.height(16.dp))
                     ReversiText(
-                        text = "Vencedor: ${state.winner?.type}",
+                        text = "Vencedor: ${winner?.name}",
                         color = Color.Green,
                         modifier = Modifier.padding(8.dp),
                         fontWeight = FontWeight.Bold,
@@ -107,6 +114,7 @@ private fun ReversiScope.PlayerScoreRow(
     modifier: Modifier = Modifier
 ) {
     val type = playerName.type
+
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -122,7 +130,6 @@ private fun ReversiScope.PlayerScoreRow(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            // Indicador visual da peça
             Surface(
                 shape = CircleShape,
                 color = if (type == PieceType.BLACK) getTheme().darkPieceColor else getTheme().lightPieceColor,
@@ -148,3 +155,44 @@ private fun ReversiScope.PlayerScoreRow(
     }
 }
 
+@Composable
+private fun ReversiScope.MissingPlayerRow(type: PieceType) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp))
+            .background(Color.White.copy(alpha = 0.05f))
+            .border(
+                1.dp,
+                Color.White.copy(alpha = 0.15f),
+                RoundedCornerShape(12.dp)
+            )
+            .padding(12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            Surface(
+                shape = CircleShape,
+                color = (if (type == PieceType.BLACK) getTheme().darkPieceColor else getTheme().lightPieceColor).copy(alpha = 0.1f),
+                border = BorderStroke(1.dp, getTheme().lightPieceColor.copy(alpha = 0.3f)),
+                modifier = Modifier.size(24.dp)
+            ) {}
+
+            Spacer(Modifier.width(12.dp))
+
+            ReversiText(
+                text = "À espera de jogador…",
+                fontStyle = FontStyle.Italic,
+                modifier = Modifier.alpha(0.5f)
+            )
+        }
+
+        ReversiText(
+            text = "--",
+            fontWeight = FontWeight.Bold,
+            fontSize = 22.sp,
+            modifier = Modifier.alpha(0.3f)
+        )
+    }
+}

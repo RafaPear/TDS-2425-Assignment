@@ -66,7 +66,7 @@ class LobbyViewModel(
         appState.setLoading(true)
 
         try {
-            val ids = getAllGameNames()
+            val ids = getAllGameNames().sorted()
             delay(UI_DELAY_SHORT_MS)
             val loaded = ids.mapNotNull { id ->
                 try {
@@ -77,7 +77,7 @@ class LobbyViewModel(
                     LOGGER.warning("Erro ao ler jogo: $id - ${e.message}")
                     null
                 }
-            }
+            }.sortedBy { it.currGameName }
             knownNames = ids
             LOGGER.info("Jogos carregados: ${loaded.size}")
             val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES

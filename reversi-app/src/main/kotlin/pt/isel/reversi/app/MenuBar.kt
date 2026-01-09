@@ -78,8 +78,11 @@ fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, windowState: 
                     appState.setError(error = e)
                 }
             }
-            Item("Lobby Screen") {
-                appState.setPage(Page.LOBBY)
+            Item("Trigger Error") {
+                appState.setError(error = Exception("Erro de teste disparado a partir do menu Dev"))
+            }
+            Item("Crash App") {
+                throw RuntimeException("App crash triggered from Dev menu")
             }
         }
 

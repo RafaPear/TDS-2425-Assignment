@@ -1,9 +1,8 @@
 package pt.isel.reversi.app.pages
 
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material3.*
@@ -86,18 +85,38 @@ fun SettingsPage(appState: MutableState<AppState>) {
         }
     ) { padding ->
         val scope = rememberCoroutineScope()
+        val scrollState = rememberScrollState(0)
+
         Box(
             modifier = Modifier.fillMaxSize().padding(padding),
             contentAlignment = Alignment.TopCenter
         ) {
+
+            // Scroll Bar for Desktop
+            VerticalScrollbar(
+                modifier = Modifier.align(Alignment.CenterEnd).fillMaxHeight(),
+                adapter = rememberScrollbarAdapter(
+                    scrollState = scrollState
+                ),
+                style = ScrollbarStyle(
+                    minimalHeight = 16.dp,
+                    thickness = 8.dp,
+                    shape = RoundedCornerShape(4.dp),
+                    hoverDurationMillis = 300,
+                    unhoverColor = getTheme().primaryColor.copy(alpha = 0.12f),
+                    hoverColor = getTheme().primaryColor.copy(alpha = 0.24f)
+                )
+            )
+
             Column(
                 modifier = Modifier
                     .padding(vertical = 24.dp)
                     .widthIn(max = 500.dp)
                     .fillMaxWidth(0.9f)
-                    .verticalScroll(rememberScrollState()),
+                    .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.spacedBy(32.dp)
             ) {
+
                 GameSection(draftState)
 
                 CoreConfigSection(
@@ -356,9 +375,18 @@ private suspend fun applySettings(
     val currGameName = currGame.currGameName
     val newGame = if (currGameName != null) {
         currGame.saveEndGame()
-        loadGame(currGameName, draft.playerName, currGame.myPiece)
-    } else {
-        // Update the game with the new config
+        try {
+            loadGame(currGameName, draft.playerName, currGame.myPiece).copy(config = draftCoreConfig)
+        } catch (e: Exception) {
+            LOGGER.severe("Failed to load game '$currGameName': ${e.message}")
+            appState.setError(
+                error = Exception("Failed to load game '$currGameName': ${e.message}. "),
+                errorType = ErrorType.WARNING
+            )
+            currGame.copy(config = draftCoreConfig)
+        }
+    }
+    else {
         currGame.copy(config = draftCoreConfig)
     }
 

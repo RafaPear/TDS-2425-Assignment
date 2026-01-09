@@ -4,7 +4,50 @@ package pt.isel.reversi.utils
  * A plain formatter for logging that outputs the log level, source method name, and message.
  */
 class PlainFormatter : java.util.logging.Formatter() {
+
     override fun format(record: java.util.logging.LogRecord): String {
-        return "[${record.level}] (${record.sourceMethodName}) " + record.message + System.lineSeparator()
+        val origin = buildOrigin(
+            record.sourceClassName,
+            record.sourceMethodName
+        )
+
+        return "[${record.level}] ($origin) ${record.message}${System.lineSeparator()}"
+    }
+
+    private fun buildOrigin(className: String?, methodName: String?): String {
+        if (className == null) return "Unknown"
+
+        val simpleClass = className
+            .substringAfterLast('.')
+            .substringBefore('$')
+            .removeSuffix("Kt")
+
+        val rawMethod = methodName.orEmpty()
+
+        val cleanMethod = rawMethod
+            .substringBefore('$')
+            .takeIf {
+                it.isNotBlank() &&
+                        it != "invoke" &&
+                        it != "invokeSuspend"
+            }
+
+        val isCoroutine =
+            rawMethod.contains("Suspend") ||
+                    className.contains('$')
+
+        return when {
+            cleanMethod != null && isCoroutine ->
+                "$simpleClass.$cleanMethod [coroutine]"
+
+            cleanMethod != null ->
+                "$simpleClass.$cleanMethod"
+
+            isCoroutine ->
+                "$simpleClass [coroutine]"
+
+            else ->
+                simpleClass
+        }
     }
 }

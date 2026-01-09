@@ -91,8 +91,15 @@ fun main(args: Array<String>) {
             exitApplication()
         }
 
-        // Ref: https://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Runtime.html#addShutdownHook%28java.lang.Thread%29
-        Runtime.getRuntime().addShutdownHook(Thread { safeExitApplication() })
+        installFatalCrashLogger()
+        addShutdownHook {
+            LOGGER.info("SHUTDOWN HOOK TRIGGERED")
+            for (handler in LOGGER.handlers) {
+                handler.flush()
+                handler.close()
+            }
+            safeExitApplication()
+        }
 
         Window(
             onCloseRequest = { safeExitApplication() },

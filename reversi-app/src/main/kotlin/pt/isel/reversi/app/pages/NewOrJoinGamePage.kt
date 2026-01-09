@@ -65,7 +65,8 @@ fun NewGamePage(
                                 Player(myPiece)
                             ),
                             firstTurn = myPiece,
-                            currGameName = currGameName.trim()
+                            currGameName = currGameName.trim(),
+                            playerName = appState.value.playerName
                         )
                     }
 
@@ -96,7 +97,7 @@ private fun ReversiScope.NewGamePageView(
     onClick: (Game, Int) -> Unit
 ) {
     var game by remember { mutableStateOf(getCurrentState().game) }
-    var boardSize by remember { mutableStateOf(8) }
+    var boardSize by remember { mutableStateOf("8") }
     var expanded by remember { mutableStateOf(false) }
     val theme = getTheme()
 
@@ -126,20 +127,23 @@ private fun ReversiScope.NewGamePageView(
                     onValueChange = { game = game.copy(currGameName = it) },
                     label = { ReversiText("Nome do jogo") },
                     modifier = Modifier.fillMaxWidth(),
-                    onDone = { onClick(game, boardSize) },
+                    onDone = { onClick(game, boardSize.parseBoardSize()) },
                 )
 
                 ReversiTextField(
-                    value = boardSize.toString(),
-                    onValueChange = {
-                        val newSize = it.toIntOrNull()
-                        if (newSize != null && newSize >= 4 && newSize <= 26) {
-                            boardSize = newSize
-                        }
-                    },
+                    value = appState.value.playerName ?: "",
+                    onValueChange = { appState.setAppState(playerName = it) },
+                    label = { ReversiText("Nome de jogador") },
+                    modifier = Modifier.fillMaxWidth(),
+                    onDone = { onClick(game, boardSize.parseBoardSize()) },
+                )
+
+                ReversiTextField(
+                    value = boardSize,
+                    onValueChange = { boardSize = it },
                     label = { ReversiText("Tamanho do Tabuleiro (4-26)") },
                     modifier = Modifier.fillMaxWidth(),
-                    onDone = { onClick(game, boardSize) },
+                    onDone = { onClick(game, boardSize.parseBoardSize()) },
                 )
 
 
@@ -153,7 +157,7 @@ private fun ReversiScope.NewGamePageView(
 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     ReversiText(
-                        "Minha peça:",
+                        "A minha peça:",
                         color = theme.textColor.copy(alpha = 0.7f),
                         fontSize = 14.sp,
                         modifier = Modifier.padding(bottom = 8.dp),
@@ -209,11 +213,15 @@ private fun ReversiScope.NewGamePageView(
 
                 ReversiButton(
                     modifier = Modifier.fillMaxWidth().height(50.dp),
-                    onClick = { onClick(game, boardSize) },
+                    onClick = { onClick(game, boardSize.parseBoardSize()) },
                     text = "Entrar"
                 )
             }
         }
     }
+}
+
+private fun String.parseBoardSize(): Int {
+    return toIntOrNull() ?: 0
 }
 

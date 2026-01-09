@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
 import pt.isel.reversi.core.Game
+import pt.isel.reversi.core.PlayerName
 import pt.isel.reversi.core.board.Coordinate
 
 /**
@@ -57,11 +58,19 @@ fun ReversiScope.GamePageView(
                 modifier = Modifier.weight(0.3f),
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
-                TextPlayersScore(state = game.gameState)
+                val myPiece = game.myPiece
+                if (myPiece != null) {
+                    TextPlayersScore(
+                        myPlayerName = PlayerName(myPiece, "You"),
+                        state = game.gameState
+                    )
+                }
 
                 Spacer(modifier = Modifier.height(32.dp))
 
                 val target = game.target
+                val lastPlayer = game.gameState?.lastPlayer
+                val canPass = getAvailablePlays().isEmpty() && lastPlayer != null && lastPlayer != game.myPiece
 
                 TargetButton(target, freeze = freeze) {
                     setTargetMode(!target)
@@ -69,7 +78,10 @@ fun ReversiScope.GamePageView(
 
                 Spacer(modifier = Modifier.height(32.dp))
 
-                PassButton(freeze = freeze) { pass() }
+                PassButton(
+                    canPass = canPass,
+                    freeze = freeze
+                ) { pass() }
             }
         }
     }

@@ -16,18 +16,24 @@ import java.util.stream.Collectors
 fun makePathString(vararg parts: String): String =
     listOf(BASE_FOLDER, *parts).joinToString(separator = "/")
 
+fun generateUniqueTimestampedFileName(baseName: String, extension: String): String {
+    val date = LocalDate.now()
+    var name = "${baseName}-$date$extension"
+    var count = 1
+    while (File(name).exists()) {
+        name = "${baseName}-$date-${count}$extension"
+        count++
+    }
+    return name
+}
+
 /**
  * Sets the logger to log to a file with a name based on the current date.
  * If a file with the same name already exists, a counter is added to the name.
  */
 fun setLoggerFilePath() {
-    val date = LocalDate.now()
-    var name = "${BASE_LOG_FILE_NAME}-$date.log"
-    var count = 1
-    while (File(name).exists()) {
-        name = "${BASE_LOG_FILE_NAME}-$date-${count}.log"
-        count++
-    }
+    val baseName = makePathString("logs", "reversi-app")
+    val name = generateUniqueTimestampedFileName(baseName, ".log")
     File(name).parentFile?.mkdirs()
     File(name).createNewFile()
     val logFileHandler = java.util.logging.FileHandler(name, true).also {

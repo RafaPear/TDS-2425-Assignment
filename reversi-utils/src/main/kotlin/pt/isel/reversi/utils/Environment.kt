@@ -1,6 +1,6 @@
 package pt.isel.reversi.utils
 
-import java.util.logging.ConsoleHandler
+import java.util.logging.Level
 import java.util.logging.Logger
 
 /** Base data directory for configuration and logs. */
@@ -25,10 +25,13 @@ val BASE_LOG_FILE_NAME = makePathString("logs/reversi-app")
  * Global logger instance configured with console handler and plain formatter.
  * Used throughout the application for logging game events, errors, and diagnostics.
  */
-val LOGGER: Logger = Logger.getGlobal().also {
-    val consoleHandler = ConsoleHandler().also { handler ->
-        handler.formatter = PlainFormatter()
+val LOGGER: Logger = Logger.getGlobal().apply {
+    useParentHandlers = false
+    level = Level.ALL
+    val handler = StdOutConsoleHandler().apply {
+        level = Level.ALL
+        formatter = PlainFormatter()
     }
-    it.addHandler(consoleHandler)
-    it.useParentHandlers = false
+    addHandler(handler)
 }
+

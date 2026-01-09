@@ -25,6 +25,7 @@ suspend fun startNewGame(
     side: Int,
     players: List<Player>,
     firstTurn: PieceType,
+    playerName: String? = null,
     currGameName: String? = null,
 ): Game {
     if (players.isEmpty()) throw InvalidGameException(
@@ -33,9 +34,14 @@ suspend fun startNewGame(
 
     val board = Board(side).startPieces()
 
+    val playerNames = players.map {
+            val name = if (it.type == firstTurn && playerName != null) playerName else it.type.name
+            PlayerName(it.type, name)
+        }
+
     val gs = GameState(
         players = players.map { it.refresh(board) },
-        playerNames = players.map { PlayerName(it.type, it.type.name) },
+        playerNames = playerNames,
         lastPlayer = firstTurn.swap(),
         board = board,
         winner = null
