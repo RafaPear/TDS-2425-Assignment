@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.lobby
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
@@ -43,7 +42,7 @@ data class LobbyUiState(
  */
 class LobbyViewModel(
     val scope: CoroutineScope,
-    val appState: MutableState<AppState>,
+    val appState: AppState,
 ) {
     private val _uiState = mutableStateOf(LobbyUiState())
     val uiState: State<LobbyUiState> = _uiState

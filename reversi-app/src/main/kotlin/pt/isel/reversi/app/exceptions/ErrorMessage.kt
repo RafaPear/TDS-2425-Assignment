@@ -15,7 +15,6 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,7 +41,7 @@ import pt.isel.reversi.utils.LOGGER
  * @param modifier Optional modifier for styling the composable.
  */
 @Composable
-fun ReversiScope.ErrorMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
+fun ReversiScope.ErrorMessage(appState: AppState, modifier: Modifier = Modifier) {
     //TODO: Differentiate error types with different UI elements
 
     // Evite logging on every recomposition, only log when the error changes
@@ -66,7 +65,7 @@ fun ReversiScope.ErrorMessage(appState: MutableState<AppState>, modifier: Modifi
 }
 
 @Composable
-fun ReversiScope.WarningMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
+fun ReversiScope.WarningMessage(appState: AppState, modifier: Modifier = Modifier) {
     val errorMessage = appState.value.error?.message ?: return
 
     val overlayColor = Color.Black.copy(alpha = 0.6f)
@@ -137,7 +136,7 @@ fun ReversiScope.WarningMessage(appState: MutableState<AppState>, modifier: Modi
  * @param modifier Optional modifier for styling the composable.
  */
 @Composable
-fun ReversiScope.ToastMessage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
+fun ReversiScope.ToastMessage(appState: AppState, modifier: Modifier = Modifier) {
     val offsetY = remember { Animatable(-100f) }
     val error = appState.value.error
     val message = error?.message

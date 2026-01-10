@@ -7,9 +7,11 @@ import pt.isel.reversi.core.board.PieceType
  * Represents a player in the game.
  * @property type The type of piece the player uses.
  * @property points The current points of the player.
+ * @property name The name of the player (defaults to piece type name if null).
  */
 data class Player(
     val type: PieceType,
+    val name: String = type.name,
     val points: Int = 0,
 ) {
     fun refresh(board: Board): Player {
@@ -19,6 +21,7 @@ data class Player(
                 PieceType.BLACK -> board.totalBlackPieces
                 PieceType.WHITE -> board.totalWhitePieces
             },
+            name = name
         )
     }
 
@@ -31,6 +34,6 @@ data class Player(
             PieceType.BLACK -> PieceType.WHITE
             PieceType.WHITE -> PieceType.BLACK
         }
-        return Player(type = swappedType)
+        return Player(type = swappedType, name = name)
     }
 }

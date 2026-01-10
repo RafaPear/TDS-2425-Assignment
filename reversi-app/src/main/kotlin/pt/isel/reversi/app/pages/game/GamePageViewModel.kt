@@ -1,15 +1,13 @@
 package pt.isel.reversi.app.pages.game
 
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.getStateAudioPool
-import pt.isel.reversi.app.state.setAppState
-import pt.isel.reversi.app.state.setGame
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
 import kotlin.coroutines.cancellation.CancellationException
 
@@ -20,8 +18,13 @@ import kotlin.coroutines.cancellation.CancellationException
  * @property appState Global application state containing game and UI configuration.
  * @property scope Coroutine scope for launching async game operations.
  */
-class GamePageViewModel(val appState: MutableState<AppState>, val scope: CoroutineScope) {
-    private val _uiState = mutableStateOf(value = appState.value.game)
+class GamePageViewModel(
+    val appState: AppState,
+    val scope: CoroutineScope,
+    val setGame: (Game) -> Unit,
+    val setError: (Exception) -> Unit
+) {
+    private val _uiState = mutableStateOf(value = appState.game)
     val uiState: State<Game> = _uiState
 
     private var pollingJob: Job? = null
@@ -31,8 +34,8 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
     }
 
     fun save() {
-        if (uiState.value == appState.value.game) return
-        appState.setGame(game = uiState.value)
+        if (uiState.value == appState.game) return
+        setGame(uiState.value)
     }
 
     fun startPolling() {
@@ -61,7 +64,6 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
                 LOGGER.warning("Auto-refreshing game state gave an error ${e.message}")
             } finally {
                 LOGGER.info("Stop auto-refreshing game state coroutine: ${this@GamePageViewModel}")
-                save()
             }
         }.also { pollingJob = it }
     }
@@ -84,13 +86,14 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
             try {
                 _uiState.value = uiState.value.play(coordinate)
 
-                val theme = appState.value.theme
+                val theme = appState.theme
                 appState.getStateAudioPool().run {
                     stop(theme.placePieceSound)
                     play(theme.placePieceSound)
                 }
-            } catch (e: Exception) {
-                appState.setAppState(error = e, game = _uiState.value)
+            } catch (e: ReversiException) {
+                setGame(uiState.value)
+                setError(e)
             }
         }
     }
@@ -102,7 +105,8 @@ class GamePageViewModel(val appState: MutableState<AppState>, val scope: Corouti
             try {
                 _uiState.value = uiState.value.pass()
             } catch (e: Exception) {
-                appState.setAppState(error = e, game = _uiState.value)
+                setGame(uiState.value)
+                setError(e)
             }
         }
     }

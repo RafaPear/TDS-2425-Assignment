@@ -50,7 +50,7 @@ fun ReversiScope.getCurrentState() = appState
  *
  * @return The AppTheme from the current application state.
  */
-fun ReversiScope.getTheme() = getCurrentState().theme
+fun ReversiScope.getTheme() = getCurrentState().theme.value
 
 /**
  * Themed text composable following the application's color scheme.
@@ -71,7 +71,7 @@ fun ReversiScope.getTheme() = getCurrentState().theme
 @Composable
 fun ReversiScope.ReversiText(
     text: String,
-    color: Color = appState.theme.textColor,
+    color: Color = getTheme().textColor,
     autoSize: TextAutoSize? = null,
     fontSize: TextUnit = TextUnit.Unspecified,
     modifier: Modifier = Modifier,

@@ -24,6 +24,7 @@ import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.utils.LOGGER
 
 /**
@@ -34,16 +35,16 @@ import pt.isel.reversi.utils.LOGGER
  */
 @Composable
 fun NewGamePage(
-    appState: MutableState<AppState>,
+    appState: AppState,
 ) {
     val coroutineAppScope = rememberCoroutineScope()
-    val reversiScope = ReversiScope(appState.value)
+    val reversiScope = ReversiScope(appState)
     with(reversiScope) {
         NewGamePageView("Novo Jogo", appState) { game, boardSize ->
             val currGameName = game.currGameName
 
             val myPiece: PieceType = game.myPiece ?: run {
-                appState.setError(error = NoPieceSelected())
+                setError(appState,(error = NoPieceSelected())
                 return@NewGamePageView
             }
 
@@ -52,30 +53,30 @@ fun NewGamePage(
                     val newGame = if (currGameName.isNullOrBlank()) {
                         startNewGame(
                             side = boardSize,
-                            players = listOf(
+                            players = MatchPlayers(
                                 Player(PieceType.BLACK),
                                 Player(PieceType.WHITE)
                             ),
                             firstTurn = myPiece,
                         )
                     } else {
+                        val name = appState.playerName.value ?: myPiece.name
                         startNewGame(
                             side = boardSize,
-                            players = listOf(
-                                Player(myPiece)
+                            players = MatchPlayers(
+                                Player(myPiece, name = name)
                             ),
                             firstTurn = myPiece,
                             currGameName = currGameName.trim(),
-                            playerName = appState.value.playerName
                         )
                     }
 
                     LOGGER.info("Novo jogo '${currGameName?.ifBlank { "(local)" } ?: "(local)"} ' iniciado.")
                     appState.run {
-                        setAppState(newGame, Page.GAME)
+                        setAppState(appState, game=newGame, page=Page.GAME)
                     }
                 } catch (e: Exception) {
-                    appState.setError(e)
+                    setError(appState,(e)
                 }
             }
         }
@@ -93,10 +94,10 @@ fun NewGamePage(
 @Composable
 private fun ReversiScope.NewGamePageView(
     title: String,
-    appState: MutableState<AppState>,
+    appState: AppState,
     onClick: (Game, Int) -> Unit
 ) {
-    var game by remember { mutableStateOf(getCurrentState().game) }
+    var game by remember { mutableStateOf(getCurrentState().game.value) }
     var boardSize by remember { mutableStateOf("8") }
     var expanded by remember { mutableStateOf(false) }
     val theme = getTheme()
@@ -105,7 +106,7 @@ private fun ReversiScope.NewGamePageView(
         appState = appState,
         title = title,
         previousPageContent = {
-            PreviousPage { appState.setAppState(page = Page.MAIN_MENU) }
+            PreviousPage { setAppState(appState,(page = Page.MAIN_MENU) }
         }
     ) { padding ->
         Box(
@@ -131,8 +132,8 @@ private fun ReversiScope.NewGamePageView(
                 )
 
                 ReversiTextField(
-                    value = appState.value.playerName ?: "",
-                    onValueChange = { appState.setAppState(playerName = it) },
+                    value = appState.playerName.value ?: "",
+                    onValueChange = { setAppState(appState,(playerName = it) },
                     label = { ReversiText("Nome de jogador") },
                     modifier = Modifier.fillMaxWidth(),
                     onDone = { onClick(game, boardSize.parseBoardSize()) },

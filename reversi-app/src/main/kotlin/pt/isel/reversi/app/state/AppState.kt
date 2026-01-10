@@ -1,5 +1,7 @@
 package pt.isel.reversi.app.state
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import pt.isel.reversi.app.AppTheme
 import pt.isel.reversi.app.AppThemes
 import pt.isel.reversi.core.Game
@@ -7,34 +9,31 @@ import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.audio.AudioPool
 
 /**
- * Central application state holding game, navigation, UI, and audio configuration.
- *
- * @property game The current game instance and state.
- * @property page The currently displayed page in the application.
- * @property error The current error exception to display, or null if no error.
- * @property backPage The previous page for back navigation (defaults to MAIN_MENU).
- * @property isLoading Whether the application is in a loading state.
- * @property audioPool The audio pool managing sound effects and background music.
- * @property theme The currently applied application theme.
+ * Central application state with each field as a mutable state.
+ * This allows fine-grained reactivity: changing one field only invalidates
+ * composables that read that specific field.
  */
 data class AppState(
-    val game: Game,
-    val page: Page,
-    val error: ReversiException?,
-    val backPage: Page = Page.MAIN_MENU,
-    val isLoading: Boolean = false,
+    val game: MutableState<Game>,
+    val page: MutableState<Page>,
+    val error: MutableState<ReversiException?>,
+    val backPage: MutableState<Page>,
+    val isLoading: MutableState<Boolean>,
     val audioPool: AudioPool,
-    val theme: AppTheme,
-    val playerName: String? = game.myPiece?.name
+    val theme: MutableState<AppTheme>,
+    val playerName: MutableState<String?>
 ) {
     companion object {
         // Empty AppState for initialization
-        val EMPTY_APP_STATE = AppState(
-            game = Game(),
-            page = Page.MAIN_MENU,
-            error = null,
+        fun empty(): AppState = AppState(
+            game = mutableStateOf(Game()),
+            page = mutableStateOf(Page.MAIN_MENU),
+            error = mutableStateOf(null),
+            backPage = mutableStateOf(Page.MAIN_MENU),
+            isLoading = mutableStateOf(false),
             audioPool = AudioPool(emptyList()),
-            theme = AppThemes.DARK.appTheme,
+            theme = mutableStateOf(AppThemes.DARK.appTheme),
+            playerName = mutableStateOf(null)
         )
     }
 }

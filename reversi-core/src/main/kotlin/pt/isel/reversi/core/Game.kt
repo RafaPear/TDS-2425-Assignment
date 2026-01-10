@@ -7,6 +7,7 @@ import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.*
 import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.core.storage.GameStorageType.Companion.setUpStorage
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.storage.AsyncStorage
 import pt.isel.reversi.utils.LOGGER
 
@@ -62,7 +63,7 @@ data class Game(
      * @throws InvalidGameException if the game is not started yet (game state is null or players list is empty).
      */
     private fun requireStartedGame(): GameState {
-        if (gameState == null || gameState.players.isEmpty()) throw InvalidGameException(
+        if (gameState == null || gameState.players.isEmpty() || myPiece == null) throw InvalidGameException(
             message = "Game is not started yet.", type = ErrorType.INFO
         )
         return gameState
@@ -74,7 +75,7 @@ data class Game(
      * @throws InvalidPlayException if it's not the player's turn.
      */
     private fun checkTurnOnNotLocalGame(gs: GameState) {
-        if (gs.players.size == 1 && gs.players[0].type != gs.lastPlayer.swap()) {
+        if (currGameName != null && myPiece != gs.lastPlayer.swap()) {
             throw InvalidPlayException(
                 message = "It's not your turn", type = ErrorType.INFO
             )
@@ -93,12 +94,12 @@ data class Game(
 
     private suspend fun hasAllPlayers(): Boolean {
         val gs = requireStartedGame()
-        val name = currGameName ?: return (gs.players.size == 2)
-        if (gameState?.players?.size == 2) return (gs.players.size == 2)
+        val name = currGameName ?: return (gs.players.isFull())
+
         val loaded = storage.load(name) ?: throw InvalidFileException(
             message = "Failed to load game state from storage: $name", type = ErrorType.WARNING
         )
-        return (loaded.players.isEmpty())
+        return (loaded.players.isFull())
     }
 
     /**
@@ -129,17 +130,16 @@ data class Game(
 
         val newBoard = GameLogic.play(gs.board, myPiece = piece)
 
-        val refreshPlayers = gs.players.map { it.refresh(newBoard) }
+        val refreshPlayers = gs.players.refreshPlayers(newBoard)
 
         val newGameState = GameState(
             lastPlayer = piece.value,
-            playerNames = gs.playerNames,
             board = newBoard,
             players = refreshPlayers,
             winner = gs.winner
         )
 
-        if (currGameName != null && gameState?.players?.size == 1) {
+        if (currGameName != null) {
             saveOnlyBoard(newGameState)
         }
 
@@ -202,12 +202,12 @@ data class Game(
                 winner = when {
                     gs.board.totalBlackPieces > gs.board.totalWhitePieces -> Player(
                         PieceType.BLACK,
-                        gs.board.totalBlackPieces
+                        points = gs.board.totalBlackPieces
                     )
 
                     gs.board.totalWhitePieces > gs.board.totalBlackPieces -> Player(
                         PieceType.WHITE,
-                        gs.board.totalWhitePieces
+                        points = gs.board.totalWhitePieces
                     )
 
                     else -> throw EndGameException(
@@ -249,7 +249,7 @@ data class Game(
         if (newLastModified == this.lastModified) return this
 
         return copy(
-            gameState = loadedState.copy(players = gs.players.map { it.refresh(loadedState.board) }),
+            gameState = loadedState.copy(players = gs.players.refreshPlayers(loadedState.board)),
             countPass = if (loadedState.board == gs.board && loadedState.lastPlayer != gs.lastPlayer) countPass + 1
             else 0,
             lastModified = newLastModified
@@ -286,54 +286,48 @@ data class Game(
     suspend fun saveEndGame() {
         val gs = requireStartedGame()
 
-        if (currGameName == null) throw InvalidFileException(
+        val name = currGameName ?: throw InvalidFileException(
             message = "Name of the current game is null", type = ErrorType.WARNING
         )
 
-        val loadedGs = try { storage.load(currGameName) }
-        catch (e: InvalidFileException) {
+        storage.lastModified(currGameName) ?: run {
+            storage.new(
+                id = name,
+            ) { gs.copy(players = MatchPlayers()) }
+            return
+        }
+
+        val loadedGs = try {
+            storage.load(currGameName)
+        } catch (e: InvalidFileException) {
             storage.delete(currGameName)
             LOGGER.warning("Deleted corrupted game from storage: $currGameName due to ${e.message}")
             return
         }
 
-        var playersInStorage = loadedGs?.players ?: emptyList()
-        var playerNamesInStorage = loadedGs?.playerNames ?: emptyList()
 
-        if (loadedGs != null && loadedGs.winner == gs.winner && playerNamesInStorage.isNotEmpty()) {
+        var playersInStorage = loadedGs?.players ?: MatchPlayers()
+
+        if (loadedGs != null && loadedGs.winner != null && loadedGs.winner == gs.winner) {
             LOGGER.info("Game already ended in storage: $currGameName")
             storage.delete(currGameName)
             LOGGER.info("Deleted ended game from storage: $currGameName")
             return
         }
 
-        gs.players.forEach {
-            if (it !in playersInStorage) {
-                playersInStorage = playersInStorage + it
-            }
-        }
+        val myPieceTemp = myPiece ?: throw InvalidGameException(
+            message = "Game is not started yet.", type = ErrorType.WARNING
+        )
 
-        playerNamesInStorage = playerNamesInStorage.filter { it.type != myPiece }
+        playersInStorage = MatchPlayers(null, playersInStorage.getPlayerByType(myPieceTemp.swap()))
 
-        try {
-            LOGGER.info("Saving game state to storage: $currGameName")
-            storage.save(
-                id = currGameName,
-                obj = gs.copy(
-                    players = playersInStorage,
-                    playerNames = playerNamesInStorage
-                )
+        LOGGER.info("Saving game state to storage: $currGameName")
+        storage.save(
+            id = currGameName,
+            obj = gs.copy(
+                players = playersInStorage,
             )
-        } catch (_: IllegalArgumentException) {
-            storage.new(
-                id = currGameName,
-            ) {
-                gs.copy(
-                    players = playersInStorage,
-                    playerNames = gs.playerNames,
-                )
-            }
-        }
+        )
     }
 
     /**
@@ -356,7 +350,7 @@ data class Game(
 
         storage.lastModified(id = name) ?: run {
             try {
-                storage.new(id = name) { gameState.copy(players = emptyList()) }
+                storage.new(id = name) { gameState.copy(players = MatchPlayers()) }
                 return@saveOnlyBoard
             } catch (e: Exception) {
                 throw InvalidFileException(
@@ -385,8 +379,7 @@ data class Game(
     suspend fun runStorageHealthCheck(): Boolean {
         val testId = "health_check_test_game"
         val testState = GameState(
-            players = listOf(Player(PieceType.BLACK)),
-            playerNames = listOf(),
+            players = MatchPlayers(Player(PieceType.BLACK)),
             lastPlayer = PieceType.WHITE,
             board = Board(8),
             winner = null

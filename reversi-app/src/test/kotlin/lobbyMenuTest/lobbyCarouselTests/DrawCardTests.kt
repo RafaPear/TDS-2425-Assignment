@@ -15,6 +15,7 @@ import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
+import pt.isel.reversi.core.storage.MatchPlayers
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -22,8 +23,7 @@ class DrawCardTests {
     val game = Game(
         currGameName = "TestGame",
         gameState = GameState(
-            players = emptyList(),
-            playerNames = emptyList(),
+            players = MatchPlayers(),
             lastPlayer = PieceType.BLACK,
             board = Board(4)
         )

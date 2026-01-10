@@ -17,10 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.app.*
 import pt.isel.reversi.app.gameAudio.loadGameAudioPool
-import pt.isel.reversi.app.state.AppState
-import pt.isel.reversi.app.state.setAppState
-import pt.isel.reversi.app.state.setError
-import pt.isel.reversi.app.state.setLoading
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.CoreConfig
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.loadCoreConfig
@@ -66,12 +63,25 @@ private fun ReversiScope.SettingsSection(
  * @param appState Global application state for accessing and updating settings.
  */
 @Composable
-fun SettingsPage(appState: MutableState<AppState>) {
-    val draftState = remember { mutableStateOf(appState.value.copy()) }
+fun SettingsPage(appState: AppState) {
+    val draftState = remember {
+        mutableStateOf(
+            AppState(
+                game = mutableStateOf(appState.game.value),
+                page = mutableStateOf(appState.page.value),
+                error = mutableStateOf(appState.error.value),
+                backPage = mutableStateOf(appState.backPage.value),
+                isLoading = mutableStateOf(appState.isLoading.value),
+                audioPool = appState.audioPool,
+                theme = mutableStateOf(appState.theme.value),
+                playerName = mutableStateOf(appState.playerName.value)
+            )
+        )
+    }
     val draftCoreConfig = remember { mutableStateOf(loadCoreConfig()) }
     var currentVol by remember {
-        val masterVol = appState.value.audioPool.getMasterVolume()
-        val isMuted = appState.value.audioPool.isPoolMuted()
+        val masterVol = appState.audioPool.getMasterVolume()
+        val isMuted = appState.audioPool.isPoolMuted()
 
         if (isMuted) mutableStateOf(-20f)
         else mutableStateOf(masterVol ?: 0f)
@@ -81,7 +91,7 @@ fun SettingsPage(appState: MutableState<AppState>) {
         appState = appState,
         title = "Definições",
         previousPageContent = {
-            PreviousPage { appState.setAppState(page = getCurrentState().backPage) }
+            PreviousPage { setPage(appState, getCurrentState().backPage.value) }
         }
     ) { padding ->
         val scope = rememberCoroutineScope()
@@ -131,7 +141,7 @@ fun SettingsPage(appState: MutableState<AppState>) {
 
                 AppearanceSection(
                     draftState = draftState,
-                    appTheme = appState.value.theme
+                    appTheme = appState.theme.value
                 )
 
                 ApplyButton {
@@ -141,7 +151,7 @@ fun SettingsPage(appState: MutableState<AppState>) {
                         runBlocking {
                             draftState.value = newState.copy()
                             draftCoreConfig.value = loadCoreConfig()
-                            appState.value = newState
+                            appState = newState
                         }
                     }
                 }
@@ -155,7 +165,7 @@ private fun ReversiScope.GameSection(draftState: MutableState<AppState>) {
     SettingsSection(title = "Jogo") {
         ReversiTextField(
             value = draftState.value.playerName ?: "",
-            onValueChange = { draftState.setAppState(playerName = it) },
+            onValueChange = { setAppState(draftState,(playerName = it) },
             label = { ReversiText("Nome do Jogador") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -316,7 +326,7 @@ private fun ReversiScope.AppearanceSection(
                     ReversiDropdownMenuItem(
                         text = entry.appTheme.name,
                         onClick = {
-                            draftState.setAppState(theme = entry.appTheme)
+                            setAppState(draftState,(theme = entry.appTheme)
                             expanded = false
                         }
                     )
@@ -334,14 +344,14 @@ private fun ReversiScope.ApplyButton(onClick: () -> Unit) {
 }
 
 private suspend fun applySettings(
-    appState: MutableState<AppState>,
+    appState: AppState,
     draft: AppState,
     draftCoreConfig: CoreConfig,
     volume: Float
 ): AppState {
-    appState.setLoading(true)
+    setLoading(appState,(true)
 
-    val current = appState.value
+    val current = appState
     val oldTheme = current.theme
 
     // try to load newStorage (can fail if config is invalid)
@@ -351,7 +361,7 @@ private suspend fun applySettings(
         saveCoreConfig(draftCoreConfig)
     } else {
         LOGGER.severe("Storage settings are invalid: ${error.message}")
-        appState.setError(
+        setError(appState,(
             error = Exception(
                 "Invalid storage settings. " +
                         "Rolling Back. Please check your configuration and try again.",
@@ -364,7 +374,7 @@ private suspend fun applySettings(
     val playingAudios = current.audioPool.getPlayingAudios()
 
     val loadedAudioPool = loadGameAudioPool(draft.theme) { error ->
-        appState.setError(error)
+        setError(appState,(error)
     }
 
     current.audioPool.merge(loadedAudioPool)
@@ -379,7 +389,7 @@ private suspend fun applySettings(
             loadGame(currGameName, draft.playerName, currGame.myPiece).copy(config = draftCoreConfig)
         } catch (e: Exception) {
             LOGGER.severe("Failed to load game '$currGameName': ${e.message}")
-            appState.setError(
+            setError(appState,(
                 error = Exception("Failed to load game '$currGameName': ${e.message}. "),
                 errorType = ErrorType.WARNING
             )
@@ -390,7 +400,7 @@ private suspend fun applySettings(
         currGame.copy(config = draftCoreConfig)
     }
 
-    appState.setAppState(
+    setAppState(appState,(
         game = newGame.reloadConfig(),
         playerName = draft.playerName,
         theme = draft.theme,
@@ -415,8 +425,8 @@ private suspend fun applySettings(
 
     delay(100)
 
-    appState.setLoading(false)
-    return appState.value
+    setLoading(appState,(false)
+    return appState
 }
 
 private fun parseVolume(volume: Float, current: AppState) {

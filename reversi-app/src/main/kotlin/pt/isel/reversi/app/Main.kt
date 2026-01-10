@@ -51,17 +51,8 @@ fun main(args: Array<String>) {
         // start storage health check coroutine
         scope.launch { runStorageHealthCheck() }
 
-        val appState = remember {
-            mutableStateOf(
-                AppState(
-                    game = Game(),
-                    page = Page.MAIN_MENU,
-                    error = null,
-                    audioPool = audioPool,
-                    theme = AppThemes.DARK.appTheme,
-                )
-            )
-        }
+        val appState = remember { AppState.empty() }
+        appState.audioPool.merge(audioPool)
 
         fun safeExitApplication() {
             LOGGER.info("Application exit requested")
@@ -70,20 +61,20 @@ fun main(args: Array<String>) {
             try {
                 LOGGER.info("Cancelling application coroutines...")
                 appJob.cancel()
-                appState.setPage(Page.NONE) // prevent new operations
+                setPage(appState, Page.NONE) // prevent new operations
                 runBlocking {
                     LOGGER.info("Waiting for application coroutines to finish...")
                     appJob.join()
                     LOGGER.info("Application coroutines finished.")
                     LOGGER.info("Saving game state...")
-                    appState.value.game.saveEndGame()
+                    appState.game.value.saveEndGame()
                     LOGGER.info("Game state saved.")
                     LOGGER.info("Closing game storage...")
-                    appState.value.game.closeStorage()
+                    appState.game.value.closeStorage()
                     LOGGER.info("Game storage closed.")
                 }
                 LOGGER.info("Destroying audio pool...")
-                appState.getStateAudioPool().destroy()
+                getStateAudioPool(appState).destroy()
                 LOGGER.info("Audio pool destroyed. Application exited safely.")
             } catch (e: Exception) {
                 LOGGER.info("Did it blow up? ${e.message}")
@@ -110,12 +101,15 @@ fun main(args: Array<String>) {
             window.minimumSize = java.awt.Dimension(800, 800)
 
             MakeMenuBar(appState, windowState) { safeExitApplication() }
-            //val page = appState.value.page
-            AppScreenSwitcher(appState) { page ->
-                LOGGER.info("Navigating to page: $page")
-                when (page) {
+            val page = remember { derivedStateOf { appState.page.value } }
+            val backPage = remember { derivedStateOf { appState.backPage.value } }
+            val theme = remember { derivedStateOf { appState.theme.value } }
+
+            AppScreenSwitcher(page.value, backPage.value, theme.value) { currentPage ->
+                LOGGER.info("Navigating to page: $currentPage")
+                when (currentPage) {
                     Page.MAIN_MENU -> MainMenu(appState)
-                    Page.GAME -> GamePage(GamePageViewModel(appState, scope))
+                    Page.GAME -> GamePage(GamePageViewModel(appState, scope, { game -> setGame(appState, game) }, { e -> setError(appState, e) }))
                     Page.SETTINGS -> SettingsPage(appState)
                     Page.ABOUT -> AboutPage(appState)
                     Page.NEW_GAME -> NewGamePage(appState)
@@ -137,11 +131,12 @@ fun main(args: Array<String>) {
  * When the user clicks the save button, saves the game and returns to the game page.
  */
 @Composable
-fun SaveGamePage(appState: MutableState<AppState>) {
-    val game = appState.value.game
+fun SaveGamePage(appState: AppState) {
+    val game = appState.game.value
     if (game.gameState == null) {
-        appState.setAppState(
-            page = appState.value.backPage,
+        setAppState(
+            appState = appState,
+            page = appState.backPage.value,
             error = GameNotStartedYet(
                 message = "Not possible to save a game that has not started yet",
                 type = ErrorType.WARNING
@@ -158,7 +153,7 @@ fun SaveGamePage(appState: MutableState<AppState>) {
         appState = appState,
         title = "Guardar Jogo",
         previousPageContent = {
-            PreviousPage { appState.setPage(Page.GAME) }
+            PreviousPage { setPage(appState, Page.GAME) }
         }
     ) { padding ->
         Box(
@@ -174,9 +169,9 @@ fun SaveGamePage(appState: MutableState<AppState>) {
 
                 ReversiTextField(
                     value = gameName ?: "",
-                    enabled = appState.value.game.currGameName == null,
+                    enabled = appState.game.value.currGameName == null,
                     onValueChange = { gameName = it },
-                    label = { ReversiText("Nome do jogo", color = getTheme().textColor) },
+                    label = { ReversiText("Nome do jogo", color = appState.theme.value.textColor) },
                     singleLine = true
                 )
 
@@ -184,24 +179,21 @@ fun SaveGamePage(appState: MutableState<AppState>) {
 
                 Button(
                     onClick = {
-                        appState.setGame(game.copy(currGameName = gameName?.trim() ?: return@Button))
+                        val savedGame = game.copy(currGameName = gameName?.trim() ?: return@Button)
                         coroutineAppScope.launch {
                             try {
-                                appState.value.game.saveOnlyBoard(gameState = appState.value.game.gameState)
-                                appState.setPage(Page.GAME)
+                                savedGame.saveOnlyBoard(gameState = savedGame.gameState)
+                                setPage(appState, Page.GAME)
                             } catch (e: Exception) {
-                                appState.setAppState(
-                                    error = e,
-                                    game = game.copy(currGameName = null)
-                                )
+                                setError(appState, e)
                             }
                         }
                     },
                     colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                        containerColor = getTheme().primaryColor
+                        containerColor = appState.theme.value.primaryColor
                     )
                 ) {
-                    ReversiText("Guardar", color = getTheme().primaryColor)
+                    ReversiText("Guardar", color = appState.theme.value.primaryColor)
                 }
             }
         }
@@ -227,13 +219,13 @@ fun volumeDbToPercent(volume: Float, min: Float, max: Float): String {
  * @param modifier Optional modifier to adjust layout in previews or reuse.
  */
 @Composable
-fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
+fun AboutPage(appState: AppState, modifier: Modifier = Modifier) {
 
     ScaffoldView(
         appState = appState,
         title = "Sobre",
         previousPageContent = {
-            PreviousPage { appState.setPage(appState.value.backPage) }
+            PreviousPage { setPage(appState, appState.backPage.value) }
         }
     ) { padding ->
         Column(
@@ -242,12 +234,12 @@ fun AboutPage(appState: MutableState<AppState>, modifier: Modifier = Modifier) {
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(height = 24.dp))
-            ReversiText("Projeto Reversi desenvolvido no ISEL.", color = getTheme().textColor)
-            ReversiText("Autores: ", color = getTheme().textColor)
-            ReversiText(" - Rafael Pereira - NUMERO", color = getTheme().textColor)
-            ReversiText(" - Ian Frunze - NUMERO", color = getTheme().textColor)
-            ReversiText(" - Tito Silva - NUMERO", color = getTheme().textColor)
-            ReversiText("Versão: DEV Build", color = getTheme().textColor)
+            ReversiText("Projeto Reversi desenvolvido no ISEL.", color = appState.theme.value.textColor)
+            ReversiText("Autores: ", color = appState.theme.value.textColor)
+            ReversiText(" - Rafael Pereira - NUMERO", color = appState.theme.value.textColor)
+            ReversiText(" - Ian Frunze - NUMERO", color = appState.theme.value.textColor)
+            ReversiText(" - Tito Silva - NUMERO", color = appState.theme.value.textColor)
+            ReversiText("Versão: DEV Build", color = appState.theme.value.textColor)
 
         }
     }

@@ -28,9 +28,9 @@ import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.CardStatus
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.PlayerName
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.storage.MatchPlayers
 
 fun cardTestTag(gameId: String) = "game_card_$gameId"
 
@@ -73,7 +73,7 @@ fun ReversiScope.GameCard(
         ) {
             HeaderBadge(statusText, statusColor, name)
 
-            PlayerNamesInGameBadge(state.playerNames)
+            PlayerNamesInGameBadge(state.players)
 
             DrawBoard(
                 false,
@@ -96,7 +96,7 @@ fun ReversiScope.GameCard(
 
 
 @Composable
-private fun ReversiScope.PlayerNamesInGameBadge(names: List<PlayerName>) {
+private fun ReversiScope.PlayerNamesInGameBadge(players: MatchPlayers) {
     val orderedTypes = listOf(PieceType.WHITE, PieceType.BLACK)
 
     Column(
@@ -107,7 +107,7 @@ private fun ReversiScope.PlayerNamesInGameBadge(names: List<PlayerName>) {
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         orderedTypes.forEach { type ->
-            val player = names.firstOrNull { it.type == type }
+            val player = players.getPlayerByType(type)
 
             if (player != null) {
                 Row(

@@ -2,13 +2,14 @@ package pt.isel.reversi.core.storage.serializers
 
 import org.junit.Test
 import pt.isel.reversi.core.Player
-import pt.isel.reversi.core.PlayerName
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.utils.LOGGER
+import kotlin.test.assertEquals
 import kotlin.test.assertFails
 
 class GameStateSerializerTest {
@@ -26,15 +27,12 @@ class GameStateSerializerTest {
             }
             val board = Board(side, pieces)
             val currentPlayer = PieceType.entries.random()
-            val players = listOf(
-                Player(PieceType.BLACK), Player(PieceType.WHITE)
-            )
-            val playerNames = listOf(
-                PlayerName(PieceType.BLACK, "Alice"),
-                PlayerName(PieceType.WHITE, "Bob")
+            val players = MatchPlayers(
+                Player(PieceType.BLACK, "Alice"),
+                Player(PieceType.WHITE, "Bob")
             )
             val gameState = GameState(
-                players = players, playerNames = playerNames, lastPlayer = currentPlayer, board = board
+                players = players, lastPlayer = currentPlayer, board = board
             )
             list += gameState
         }
@@ -42,12 +40,9 @@ class GameStateSerializerTest {
     }
 
     val testingGameState = GameState(
-        players = listOf(
-            Player(PieceType.BLACK), Player(PieceType.WHITE)
-        ),
-        playerNames = listOf(
-            PlayerName(PieceType.BLACK, "Alice"),
-            PlayerName(PieceType.WHITE, "Bob")
+        players = MatchPlayers(
+            Player(PieceType.BLACK, "Alice"),
+            Player(PieceType.WHITE, "Bob")
         ),
         lastPlayer = PieceType.BLACK,
         board = Board(8).startPieces(),
@@ -57,12 +52,9 @@ class GameStateSerializerTest {
     private fun buildStringFromGameState(state: GameState): String {
         return buildString {
             for (player in state.players) {
-                append("${player.type.symbol},${player.points};")
+                append("${player.type.symbol},${player.name},${player.points};")
             }
             appendLine()
-            for (playerName in state.playerNames) {
-                append("${playerName.type.symbol},${playerName.name};")
-            }
             appendLine()
             appendLine(state.lastPlayer.symbol)
             if (state.winner != null) appendLine("${state.winner.type.symbol},${state.winner.points}")
@@ -90,6 +82,15 @@ class GameStateSerializerTest {
     }
 
     @Test
+    fun `Test serialize with empty players` () {
+        val gamState = testingGameState.copy(players = MatchPlayers())
+        val expected = buildStringFromGameState(gamState)
+        val uut = GameStateSerializer().serialize(gamState)
+
+        assertEquals(expected, uut)
+    }
+
+    @Test
     fun `Test deserialize`() {
         val data = buildStringFromGameState(testingGameState)
         val deserialized = GameStateSerializer().deserialize(data)
@@ -114,5 +115,25 @@ class GameStateSerializerTest {
                 GameStateSerializer().deserialize(badData)
             }
         }
+    }
+
+    @Test
+    fun `Deserialize empty players results in empty MatchPlayers`() {
+        val expectedGameState = testingGameState.copy(players = MatchPlayers())
+        val data = buildStringFromGameState(expectedGameState)
+        val deserialized = GameStateSerializer().deserialize(data)
+
+        assert(deserialized == expectedGameState)
+    }
+
+    @Test
+    fun `Deserialize with one player results in MatchPlayers with one player`() {
+        val expectedGameState = testingGameState.copy(
+            players = MatchPlayers(testingGameState.players.last())
+        )
+        val data = buildStringFromGameState(expectedGameState)
+        val deserialized = GameStateSerializer().deserialize(data)
+
+        assert(deserialized == expectedGameState)
     }
 }

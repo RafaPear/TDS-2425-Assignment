@@ -1,131 +1,104 @@
 package pt.isel.reversi.app.state
 
-import androidx.compose.runtime.MutableState
 import pt.isel.reversi.app.AppTheme
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
-import pt.isel.reversi.utils.audio.AudioPool
-
-/**
- * Updates the game state within the application state.
- *
- * @param game the new [Game] state to be set
- * @return the updated [AppState] with the new game state
- */
-fun MutableState<AppState>.setGame(game: Game) {
-    value = value.copy(game = game)
-}
 
 /**
  * Updates the current page in the application state.
- * Blocks page changes if there is an existing error.
- * and clears informational errors this before changing the page.
- *
- * @param page the new [Page] to be set
- * @return the updated [AppState] with the new page
+ * @param appState The application state holder.
+ * @param page The new page to set.
+ * @param backPage The new back page (auto-calculated if null).
  */
-fun MutableState<AppState>.setPage(page: Page, backPage: Page? = null) {
-    if (page == value.page) {
+fun setPage(appState: AppState, page: Page, backPage: Page? = null) {
+    if (page == appState.page.value) {
         LOGGER.info("Page is the same: ${page.name}, no changes made")
         return
     }
-    checkAndClearInfoError()
-    val error = value.error
 
-    if (error != null) return
-
-    when {
-        page == Page.MAIN_MENU -> setBackPage(Page.NONE)
-        backPage != null -> setBackPage(backPage)
-        else -> autoBackPage(page)
-    }
-
+    val newBackPage = if (page == Page.MAIN_MENU) Page.NONE else backPage ?: appState.page.value
     LOGGER.info("Set page ${page.name}")
-    value = value.copy(page = page, error = error)
+    appState.page.value = page
+    appState.backPage.value = newBackPage
 }
 
-private fun MutableState<AppState>.checkAndClearInfoError() {
-    val error = value.error
-    if (error?.type == ErrorType.INFO) {
-        LOGGER.info("Clearing info error")
-        value = value.copy(error = null)
-    }
-}
-
-fun MutableState<AppState>.setAppState(
-    game: Game = value.game,
-    page: Page = value.page,
-    error: Exception? = value.error,
+/**
+ * Sets the entire app state atomically by updating individual MutableState fields.
+ * @param appState The application state holder.
+ * @param game The new game state (optional).
+ * @param page The new page (optional).
+ * @param error The new error (optional).
+ * @param backPage The new back page (optional).
+ * @param theme The new theme (optional).
+ * @param playerName The new player name (optional).
+ */
+fun setAppState(
+    appState: AppState,
+    game: Game? = null,
+    page: Page? = null,
+    error: Exception? = null,
     backPage: Page? = null,
-    audioPool: AudioPool = value.audioPool,
-    theme: AppTheme = value.theme,
-    playerName: String? = value.playerName,
+    theme: AppTheme? = null,
+    playerName: String? = null,
 ) {
-    if (page != value.page) {
-        setPage(page, backPage)
-    } else {
-        if (backPage != null) {
-            setBackPage(backPage)
-        }
+    LOGGER.info("Set app state")
+
+    if (game != null) {
+        appState.game.value = game
     }
-
-    setError(error)
-
-    value = value.copy(
-        game = game,
-        audioPool = audioPool,
-        theme = theme,
-        playerName = playerName,
-    )
+    if (page != null) {
+        setPage(appState, page, backPage)
+    }
+    if (error != null) {
+        setError(appState, error)
+    }
+    if (theme != null) {
+        appState.theme.value = theme
+    }
+    if (playerName != null) {
+        appState.playerName.value = playerName
+    }
 }
 
 /**
- * Retrieves the [AudioPool] from the current [AppState].
- *
- * @return the [AudioPool] instance from the [AppState]
+ * Sets the game state.
+ * @param appState The application state holder.
+ * @param game The new game state.
  */
-fun MutableState<AppState>.getStateAudioPool() = value.audioPool
-
+fun setGame(appState: AppState, game: Game) {
+    LOGGER.info("Set new game state")
+    appState.game.value = game
+}
 
 /**
- * Updates the error state within the application state.
- *
- * @param error the new [Exception] or [ReversiException] to be set
- * @return the updated [AppState] with the new error state
+ * Retrieves the AudioPool from the current AppState.
+ * @param appState The application state holder.
+ * @return the AudioPool instance.
  */
-fun MutableState<AppState>.setError(error: Exception?, errorType: ErrorType = ErrorType.CRITICAL) {
+fun getStateAudioPool(appState: AppState) = appState.audioPool
+
+/**
+ * Updates the error state.
+ * @param appState The application state holder.
+ * @param error The new error.
+ */
+fun setError(appState: AppState, error: Exception?) {
     LOGGER.info("Set error: ${error?.message ?: "null"}")
-    val newError = error as? ReversiException ?: error?.toReversiException(errorType)
-    value = value.copy(error = newError)
+    val newError = if (error is ReversiException) error else error?.toReversiException(ErrorType.CRITICAL)
+    appState.error.value = newError
 }
 
 /**
- * Determines the back page based on the new page being set.
- *
- * @param newPage the new [Page] to be set
- * @return the determined back [Page]
+ * Updates the loading state.
+ * @param appState The application state holder.
+ * @param isLoading Whether the app is loading.
  */
-private fun MutableState<AppState>.autoBackPage(newPage: Page) {
-    val page = value.page
-    val backPage = when (newPage) {
-        Page.LOBBY -> Page.MAIN_MENU
-        Page.GAME -> Page.MAIN_MENU
-        else -> page
-    }
-    LOGGER.info("Set back page: ${backPage.name}")
-    value = value.copy(backPage = backPage)
-}
-
-fun MutableState<AppState>.setBackPage(backPage: Page) {
-    LOGGER.info("Set back page: ${backPage.name}")
-    value = value.copy(backPage = backPage)
-}
-
-fun MutableState<AppState>.setLoading(isLoading: Boolean) {
-    if (isLoading == value.isLoading) return
+fun setLoading(appState: AppState, isLoading: Boolean) {
+    if (isLoading == appState.isLoading.value) return
     LOGGER.info("Set loading: $isLoading")
-    value = value.copy(isLoading = isLoading)
+    appState.isLoading.value = isLoading
 }
+

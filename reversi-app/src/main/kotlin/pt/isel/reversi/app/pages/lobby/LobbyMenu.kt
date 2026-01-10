@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -53,7 +52,7 @@ fun LobbyMenu(
     val games = uiState.games
     val lobbyState = uiState.lobbyState
     val canRefresh = uiState.canRefresh
-    val appState: MutableState<AppState> = viewModel.appState
+    val appState: AppState = viewModel.appState
 
     viewModel.initLobbyAudio()
 

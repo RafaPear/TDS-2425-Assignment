@@ -9,7 +9,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
@@ -25,9 +24,9 @@ import pt.isel.reversi.app.state.setPage
  * @param appState Global application state for navigation.
  */
 @Composable
-fun ReversiScope.previousPageContentDefault(appState: MutableState<AppState>) {
+fun ReversiScope.previousPageContentDefault(appState: AppState) {
     PreviousPage {
-        appState.setPage(appState.value.backPage)
+        setPage(appState, appState.backPage.value)
     }
 }
 
@@ -45,14 +44,14 @@ fun ReversiScope.previousPageContentDefault(appState: MutableState<AppState>) {
 @Composable
 @OptIn(ExperimentalMaterial3Api::class)
 fun ScaffoldView(
-    appState: MutableState<AppState>,
+    appState: AppState,
     backgroundTopBar: Color = Color.Transparent,
     title: String = "",
     loadingModifier: Modifier = Modifier,
     previousPageContent: (@Composable ReversiScope.() -> Unit)? = null,
     content: @Composable ReversiScope.(paddingValues: PaddingValues) -> Unit
 ) {
-    val theme = appState.value.theme
+    val theme = appState.theme.value
     val scope = ReversiScope(appState.value)
     Scaffold(modifier = Modifier.background(theme.backgroundColor), containerColor = Color.Transparent, topBar = {
         CenterAlignedTopAppBar(

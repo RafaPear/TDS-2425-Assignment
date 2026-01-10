@@ -23,14 +23,13 @@ import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.ReversiText
 import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.core.Player
-import pt.isel.reversi.core.PlayerName
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
 
 @Composable
 fun ReversiScope.TextPlayersScore(
     state: GameState?,
-    myPlayerName: PlayerName,
+    myPlayerName: Player,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -58,29 +57,20 @@ fun ReversiScope.TextPlayersScore(
             val orderedTypes = listOf(PieceType.WHITE, PieceType.BLACK)
 
             orderedTypes.forEach { type ->
-                val playerName = state.playerNames.firstOrNull { it.type == type }
+                val player = state.players.getPlayerByType(type)
 
-                if (playerName != null) {
-                    val points = if (type == PieceType.BLACK)
-                        state.board.totalBlackPieces
-                    else
-                        state.board.totalWhitePieces
-
+                if (player != null) {
+                    val points = player.points
                     val isTurn = type != state.lastPlayer
                     val isWinner = state.winner?.type == type
 
-                    val displayName = playerName.copy(
-                        name = if (playerName.type == myPlayerName.type)
-                            "${playerName.name} (You)"
-                        else playerName.name
-                    )
 
                     PlayerScoreRow(
-                        playerName = displayName,
+                        player = player,
                         points = points,
                         isTurn = isTurn,
                         isWinner = isWinner,
-                        modifier = Modifier.testTag(testTagPlayerScore(Player(type, points)))
+                        modifier = Modifier.testTag(testTagPlayerScore(Player(type, points = points)))
                     )
                 } else {
                     MissingPlayerRow(type)
@@ -89,7 +79,7 @@ fun ReversiScope.TextPlayersScore(
                 Spacer(Modifier.height(8.dp))
             }
 
-            val winner = state.playerNames.firstOrNull { it.type == state.winner?.type }
+            val winner = state.players.firstOrNull { it.type == state.winner?.type }
             AnimatedVisibility(visible = winner != null) {
                 Column(horizontalAlignment = Alignment.CenterHorizontally) {
                     Spacer(Modifier.height(16.dp))
@@ -107,13 +97,13 @@ fun ReversiScope.TextPlayersScore(
 
 @Composable
 private fun ReversiScope.PlayerScoreRow(
-    playerName: PlayerName,
+    player: Player,
     points: Int,
     isTurn: Boolean,
     isWinner: Boolean,
     modifier: Modifier = Modifier
 ) {
-    val type = playerName.type
+    val type = player.type
 
     Row(
         modifier = modifier
@@ -140,7 +130,7 @@ private fun ReversiScope.PlayerScoreRow(
             Spacer(Modifier.width(12.dp))
 
             ReversiText(
-                text = playerName.name,
+                text = player.name,
                 fontWeight = if (isTurn) FontWeight.Bold else FontWeight.Normal,
                 modifier = Modifier.alpha(if (isTurn || isWinner) 1f else 0.6f)
             )

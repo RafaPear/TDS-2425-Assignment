@@ -174,7 +174,7 @@ fun ReversiScope.AnimatedBackground() {
 
 @Composable
 fun MainMenu(
-    appState: MutableState<AppState>,
+    appState: AppState,
     modifier: Modifier = Modifier
 ) {
     LaunchedEffect(appState.value.page) {

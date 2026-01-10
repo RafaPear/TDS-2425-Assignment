@@ -10,6 +10,7 @@ import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.utils.audio.AudioPool
 import kotlin.test.Test
 import kotlin.test.assertEquals
@@ -20,7 +21,7 @@ class GamePageTests {
     val game = runBlocking {
         startNewGame(
             side = 4,
-            players = listOf(Player(type = PieceType.BLACK), Player(type = PieceType.WHITE)),
+            players = MatchPlayers(Player(type = PieceType.BLACK), Player(type = PieceType.WHITE)),
             firstTurn = PieceType.BLACK,
             currGameName = null
         )
@@ -60,11 +61,13 @@ class GamePageTests {
 
         val newPlayers = expectedGameState.gameState?.players!!
 
-        //verify if the players score have changed
-        repeat(times = 2) {
-            onNodeWithTag(testTag = testTagPlayerScore(players[it])).assertDoesNotExist()
-            onNodeWithTag(testTag = testTagPlayerScore(player = newPlayers[it])).assertExists()
-        }
+
+        onNodeWithTag(testTag = testTagPlayerScore(players.first())).assertDoesNotExist()
+        onNodeWithTag(testTag = testTagPlayerScore(players.last())).assertDoesNotExist()
+
+        onNodeWithTag(testTag = testTagPlayerScore(player = newPlayers.first())).assertExists()
+        onNodeWithTag(testTag = testTagPlayerScore(player = newPlayers.last())).assertExists()
+
     }
 
     @Test

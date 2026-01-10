@@ -4,6 +4,7 @@ import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.MatchPlayers
 import kotlin.test.Test
 import kotlin.test.assertTrue
 
@@ -21,7 +22,7 @@ class PassCmdTests {
         val g = runBlocking {
             startNewGame(
                 side = 8,
-                players = listOf(Player(PieceType.BLACK)),
+                players = MatchPlayers(Player(PieceType.BLACK)),
                 firstTurn = PieceType.BLACK
             )
         }

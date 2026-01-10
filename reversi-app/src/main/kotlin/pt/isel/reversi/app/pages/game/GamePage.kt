@@ -24,14 +24,15 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
     val appState = viewModel.appState
     val game = viewModel.uiState.value
 
+
     // Launch the game refresh coroutine
     DisposableEffect(viewModel) {
-        if (game.currGameName != null && game.gameState?.players?.size != 2 && !viewModel.isPollingActive()) {
+        if (game.currGameName != null && !viewModel.isPollingActive()) {
             viewModel.startPolling()
         }
 
         appState.getStateAudioPool().run {
-            val theme = appState.value.theme
+            val theme = appState.theme
             if (!isPlaying(theme.gameMusic)) {
                 stop(theme.backgroundMusic)
                 stop(theme.gameMusic)

@@ -42,9 +42,9 @@ fun getCardStatus(game: Game, currentGameName: String?): CardStatus {
         currentGameName == game.currGameName ->
             CardStatus.CURRENT_GAME
 
-        gameState.players.size == 2 -> CardStatus.EMPTY
-        gameState.players.size == 1 -> CardStatus.WAITING_FOR_PLAYERS
-        gameState.players.isEmpty() -> CardStatus.FULL
+        gameState.players.isFull() -> CardStatus.FULL
+        gameState.players.isEmpty() -> CardStatus.EMPTY
+        gameState.players.isNotEmpty() -> CardStatus.WAITING_FOR_PLAYERS
         else -> CardStatus.CORRUPTED
     }
 }

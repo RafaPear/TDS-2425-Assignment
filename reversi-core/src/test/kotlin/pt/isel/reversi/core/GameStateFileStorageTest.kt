@@ -5,6 +5,7 @@ import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.core.storage.GameStorageType
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.core.storage.StorageParams
 import pt.isel.reversi.utils.CONFIG_FOLDER
 import java.io.File
@@ -16,13 +17,9 @@ class GameStateFileStorageTest {
     val storage = GameStorageType.FILE_STORAGE.storage(storageParams)
 
     val defaultGameState = GameState(
-        players = listOf(
-            Player(PieceType.BLACK),
-            Player(PieceType.WHITE)
-        ),
-        playerNames = listOf(
-            PlayerName(PieceType.BLACK, "Player 1"),
-            PlayerName(PieceType.WHITE, "Player 2")
+        players = MatchPlayers(
+            Player(PieceType.BLACK, name = "Player 1"),
+            Player(PieceType.WHITE, name = "Player 2")
         ),
         lastPlayer = PieceType.BLACK,
         board = Board(8).startPieces()

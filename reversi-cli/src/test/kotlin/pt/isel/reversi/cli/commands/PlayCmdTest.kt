@@ -4,6 +4,7 @@ import pt.isel.reversi.cli.cleanup
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.rafap.ktflag.cmd.CommandResultType
 import kotlin.test.Test
 
@@ -16,7 +17,7 @@ class PlayCmdTest {
                 "3", "4",
                 context = startNewGame(
                     side = 8,
-                    players = listOf(Player(PieceType.BLACK), Player(PieceType.WHITE)),
+                    players = MatchPlayers(Player(PieceType.BLACK), Player(PieceType.WHITE)),
                     firstTurn = PieceType.BLACK
                 )
             )

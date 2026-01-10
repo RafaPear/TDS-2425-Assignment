@@ -14,6 +14,7 @@ import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.utils.audio.AudioPool
 import kotlin.test.Test
 
@@ -22,7 +23,7 @@ class GamePageViewTest {
     val game = runBlocking {
         startNewGame(
             side = 4,
-            players = listOf(Player(type = PieceType.BLACK), Player(type = PieceType.WHITE)),
+            players = MatchPlayers(Player(type = PieceType.BLACK), Player(type = PieceType.WHITE)),
             firstTurn = PieceType.BLACK,
             currGameName = null
         )
@@ -132,7 +133,7 @@ class GamePageViewTest {
             )
         }
 
-        onNodeWithTag(testTag = testTagPlayerScore(game.gameState?.players[0]!!))
+        onNodeWithTag(testTag = testTagPlayerScore(game.gameState?.players!!.first()))
             .assertDoesNotExist()
     }
 }

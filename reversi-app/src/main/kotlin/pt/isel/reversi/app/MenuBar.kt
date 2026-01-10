@@ -1,7 +1,6 @@
 package pt.isel.reversi.app
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.window.FrameWindowScope
 import androidx.compose.ui.window.MenuBar
 import androidx.compose.ui.window.WindowPlacement
@@ -20,28 +19,28 @@ import pt.isel.reversi.utils.LOGGER
  * @param exitAction Callback function to execute on application exit.
  */
 @Composable
-fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, windowState: WindowState, exitAction: () -> Unit) {
+fun FrameWindowScope.MakeMenuBar(appState: AppState, windowState: WindowState, exitAction: () -> Unit) {
     MenuBar {
         Menu("Ficheiro") {
             Item("Novo Jogo") {
-                appState.setPage(Page.NEW_GAME)
+                setPage(appState, Page.NEW_GAME)
             }
             Item("Guardar Jogo") {
-                appState.setPage(Page.SAVE_GAME)
+                setPage(appState, Page.SAVE_GAME)
             }
             Item("Definições") {
-                appState.setPage(Page.SETTINGS)
+                setPage(appState, Page.SETTINGS)
             }
             Item("Menu Principal") {
-                appState.setPage(Page.MAIN_MENU)
+                setPage(appState, Page.MAIN_MENU)
             }
             Item("Jogo Atual") {
-                appState.setPage(Page.GAME)
+                setPage(appState, Page.GAME)
             }
             Item("Sair do jogo atual") {
-                runBlocking{ appState.value.game.saveEndGame() }
-                appState.setGame(Game())
-                appState.setPage(Page.MAIN_MENU)
+                runBlocking { appState.game.value.saveEndGame() }
+                setPage(appState, Page.MAIN_MENU)
+                setGame(appState, Game())
             }
             Separator()
             Item("Sair") {
@@ -54,32 +53,34 @@ fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, windowState: 
                 windowState.placement =
                     if (windowState.placement == WindowPlacement.Floating) WindowPlacement.Fullscreen
                     else WindowPlacement.Floating
-                appState.value = appState.value.copy() // Epa foi o q arranjei para forcar o gajo a dar update lol
+                appState.theme.value = appState.theme.value.copy() // Force recomposition
             }
         }
 
         Menu("Dev") {
             Item("Mostrar Estado do Jogo") {
-                appState.value.game.printDebugState()
+                appState.game.value.printDebugState()
             }
             Item("Nullify Game State") {
-                appState.setGame(
+                setGame(
+                    appState,
                     Game()
                 )
                 LOGGER.info("Estado do jogo anulado para fins de teste.")
             }
             Item("Reload Config") {
                 try {
-                    appState.setGame(
-                        appState.value.game.reloadConfig()
+                    setGame(
+                        appState,
+                        appState.game.value.reloadConfig()
                     )
                     LOGGER.info("Config recarregada com sucesso.")
                 } catch (e: Exception) {
-                    appState.setError(error = e)
+                    setError(appState, error = e)
                 }
             }
             Item("Trigger Error") {
-                appState.setError(error = Exception("Erro de teste disparado a partir do menu Dev"))
+                setError(appState, error = Exception("Erro de teste disparado a partir do menu Dev"))
             }
             Item("Crash App") {
                 throw RuntimeException("App crash triggered from Dev menu")
@@ -88,7 +89,7 @@ fun FrameWindowScope.MakeMenuBar(appState: MutableState<AppState>, windowState: 
 
         Menu("Ajuda") {
             Item("Sobre") {
-                appState.setPage(Page.ABOUT)
+                setPage(appState, Page.ABOUT)
             }
         }
     }

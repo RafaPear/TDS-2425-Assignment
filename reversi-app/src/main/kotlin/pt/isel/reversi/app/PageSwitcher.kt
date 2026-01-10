@@ -9,9 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
-import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.Page
 
 /**
@@ -23,9 +21,7 @@ import pt.isel.reversi.app.state.Page
  */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun AppScreenSwitcher(appState: MutableState<AppState>, switchAction: @Composable (BoxScope.(page: Page) -> Unit)) {
-    val targetPage = appState.value.page
-    val theme = appState.value.theme
+fun AppScreenSwitcher(targetPage: Page, backPage: Page, theme: AppTheme, switchAction: @Composable (BoxScope.(page: Page) -> Unit)) {
 
     AnimatedContent(
         targetState = targetPage,
@@ -42,7 +38,7 @@ fun AppScreenSwitcher(appState: MutableState<AppState>, switchAction: @Composabl
         label = "PageTransition"
     ) { page ->
         Box(modifier = Modifier.fillMaxSize()) {
-            if (page != appState.value.backPage || appState.value.page == Page.MAIN_MENU) switchAction(page)
+            if (page != backPage || page == Page.MAIN_MENU) switchAction(page)
         }
     }
 }

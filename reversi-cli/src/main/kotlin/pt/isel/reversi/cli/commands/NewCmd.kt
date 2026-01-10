@@ -6,6 +6,7 @@ import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
+import pt.isel.reversi.core.storage.MatchPlayers
 import pt.rafap.ktflag.cmd.CommandImpl
 import pt.rafap.ktflag.cmd.CommandInfo
 import pt.rafap.ktflag.cmd.CommandResult
@@ -39,9 +40,9 @@ object NewCmd : CommandImpl<Game>() {
 
         val game: Game = runBlocking {
             if (name != null) {
-                startNewGame(side = 8, players = listOf(player), currGameName = name, firstTurn = playerType)
+                startNewGame(side = 8, players = MatchPlayers(player), currGameName = name, firstTurn = playerType)
             } else {
-                startNewGame(side = 8, players = listOf(player, player.swap()), firstTurn = playerType)
+                startNewGame(side = 8, players = MatchPlayers(player, player.swap()), firstTurn = playerType)
             }
         }
 
