@@ -11,7 +11,6 @@ import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
 import pt.isel.reversi.core.storage.MatchPlayers
-import pt.isel.reversi.utils.audio.AudioPool
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
@@ -29,20 +28,14 @@ class GamePageTests {
 
     @Test
     fun `check if player score change after a move`() = runComposeUiTest {
-
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
 
-        val appState = mutableStateOf(value = expectedAppState)
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(appState, scope)
-
+            val gameViewModel = GamePageViewModel(appState, scope, { }, { })
             GamePage(gameViewModel)
         }
 
@@ -53,7 +46,6 @@ class GamePageTests {
         }
 
         val validMove = game.getAvailablePlays().first()
-
         val expectedGameState = game.play(coordinate = validMove)
 
         //find the valid cell and perform click
@@ -61,31 +53,23 @@ class GamePageTests {
 
         val newPlayers = expectedGameState.gameState?.players!!
 
-
         onNodeWithTag(testTag = testTagPlayerScore(players.first())).assertDoesNotExist()
         onNodeWithTag(testTag = testTagPlayerScore(players.last())).assertDoesNotExist()
 
         onNodeWithTag(testTag = testTagPlayerScore(player = newPlayers.first())).assertExists()
         onNodeWithTag(testTag = testTagPlayerScore(player = newPlayers.last())).assertExists()
-
     }
 
     @Test
     fun `check if player score not change if freeze is true`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
-
-        val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(appState, scope)
-
+            val gameViewModel = GamePageViewModel(appState, scope, { }, { })
             GamePage(gameViewModel, freeze = true)
         }
 
@@ -106,18 +90,12 @@ class GamePageTests {
         }
     }
 
-
     @Test
     fun `check if ghost pieces shows when target mode is on`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
-
-        val appState = mutableStateOf(value = expectedAppState)
 
         val board = game.gameState!!.board
         val expectedGhostPieces = game.getAvailablePlays().size
@@ -125,8 +103,7 @@ class GamePageTests {
 
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(appState, scope)
-
+            val gameViewModel = GamePageViewModel(appState, scope, { }, { })
             GamePage(gameViewModel)
         }
 
@@ -157,23 +134,17 @@ class GamePageTests {
 
     @Test
     fun `check if ghost pieces not shows when target mode is on and freeze is true`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
-
-        val appState = mutableStateOf(value = expectedAppState)
 
         val board = game.gameState!!.board
         val expectedPieces = board.totalBlackPieces + board.totalWhitePieces
 
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(appState, scope)
-
+            val gameViewModel = GamePageViewModel(appState, scope, { }, { })
             GamePage(gameViewModel, freeze = true)
         }
 

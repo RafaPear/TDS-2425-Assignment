@@ -48,7 +48,7 @@
 //            )
 //
 //            val uut = setAppState(expectedAppState, page = Page.JOIN_GAME, error = GameNotStartedYet())
-//            assertEquals(expectedAppState.value.backPage, uut.backPage)
+//            assertEquals(expectedModuleappState.value.backPage, uut.backPage)
 //        }
 //    }
 //}

@@ -57,8 +57,8 @@ fun ScaffoldView(
     content: @Composable ReversiScope.(paddingValues: PaddingValues) -> Unit
 ) {
     val theme = appState.theme.value
-    val scope = ReversiScope(appState.value)
-    val backgroundImage = appState.value.theme.backgroundImage
+    val scope = ReversiScope(appState)
+    val backgroundImage = theme.backgroundImage
 
     Box(modifier = Modifier.fillMaxSize()) {
         // Background layer
@@ -88,14 +88,14 @@ fun ScaffoldView(
                         }
                     },
                     navigationIcon = {
-                        if (!appState.value.isLoading) {
+                        if (!appState.isLoading.value) {
                             if (previousPageContent != null) scope.previousPageContent()
                             else scope.previousPageContentDefault(appState)
                         }
                     }
                 )
             },
-            snackbarHost = { appState.value.error?.let { scope.ErrorMessage(appState) } }
+            snackbarHost = { appState.error.value?.let { scope.ErrorMessage(appState) } }
         ) { paddingValues ->
             with(scope) {
                 Box(
@@ -115,7 +115,7 @@ fun ScaffoldView(
                 }
                 Box {
                     content(paddingValues)
-                    if (appState.value.isLoading) {
+                    if (appState.isLoading.value) {
                         Loading(loadingModifier)
                     }
                 }

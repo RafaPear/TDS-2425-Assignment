@@ -78,7 +78,6 @@ dependencies {
     dokka(rootProject)
 }
 
-// Copy CLI fat jar
 val reversiCliJar =
     tasks.register<Copy>("copyReversiCliJar") {
         dependsOn(":reversi-cli:build")
@@ -87,26 +86,27 @@ val reversiCliJar =
         include("*.jar")
     }
 
-// Copy App fat jar and native app bundles
-val reversiAppJar =
-    tasks.register<Copy>("copyReversiAppJar") {
-        dependsOn(":reversi-app:build")
+val reversiAppJar = tasks.register<Copy>("copyReversiAppJar") {
+    dependsOn(":reversi-app:build")
 
-        // Copy fat jar
-        from(project(":reversi-app").layout.buildDirectory.dir("libs")) {
-            include("*.jar")
-        }
-
-        // Copy native distributions (the .app, .exe, etc.)
-        from(project(":reversi-app").layout.buildDirectory.dir("compose/binaries/main/app")) {
-            include("**/*")
-        }
-
-        into(layout.buildDirectory.dir("distributions"))
+    from(project(":reversi-app").layout.buildDirectory.dir("libs")) {
+        include("*.jar")
     }
 
-// Garante que os jars dos subprojetos aparecem no build do root
+    into(layout.buildDirectory.dir("libs"))
+}
+
+val reversiDistributions = tasks.register<Copy>("copyReversiDistributions") {
+    dependsOn(":reversi-app:build")
+
+    from(project(":reversi-app").layout.buildDirectory.dir("compose/binaries/main/app")) {
+        include("**/*")
+    }
+
+    into(layout.buildDirectory.dir("distributions"))
+}
+
 tasks.named("build") {
-    dependsOn(reversiCliJar, reversiAppJar)
+    dependsOn(reversiCliJar, reversiAppJar, reversiDistributions)
     dependsOn(tasks.dokkaGenerate)
 }

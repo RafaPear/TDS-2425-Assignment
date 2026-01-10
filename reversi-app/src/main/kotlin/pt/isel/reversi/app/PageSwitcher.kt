@@ -22,13 +22,13 @@ import pt.isel.reversi.app.state.Page
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun AppScreenSwitcher(targetPage: Page, backPage: Page, theme: AppTheme, switchAction: @Composable (BoxScope.(page: Page) -> Unit)) {
+    val duration = 500
 
     AnimatedContent(
         targetState = targetPage,
         transitionSpec = {
             val forward = targetPage.level > initialState.level
 
-            val duration = 500
             val iOSEasing = CubicBezierEasing(0.22f, 1f, 0.36f, 1f)
 
             if (forward) reversiGoInAnimation(duration, iOSEasing)

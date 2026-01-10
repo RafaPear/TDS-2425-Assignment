@@ -15,7 +15,6 @@ import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.startNewGame
 import pt.isel.reversi.core.storage.MatchPlayers
-import pt.isel.reversi.utils.audio.AudioPool
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
@@ -29,23 +28,18 @@ class GamePageViewTest {
         )
     }
 
-    val reversiScope = ReversiScope(AppState.EMPTY_APP_STATE)
+    val reversiScope = ReversiScope(AppState.empty())
 
     @Test
     fun `check if the GamePage is displayed`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
-
-        val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
             reversiScope.GamePageView(
-                game = appState.value.game,
+                game = appState.game.value,
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList() },
@@ -59,19 +53,14 @@ class GamePageViewTest {
 
     @Test
     fun `check if have a board`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
-
-        val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
             reversiScope.GamePageView(
-                game = appState.value.game,
+                game = appState.game.value,
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList() },
@@ -84,19 +73,14 @@ class GamePageViewTest {
 
     @Test
     fun `check if have a two players on Score`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game,
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game),
+            page = mutableStateOf(Page.GAME)
         )
-
-        val appState = mutableStateOf(value = expectedAppState)
 
         setContent {
             reversiScope.GamePageView(
-                game = appState.value.game,
+                game = appState.game.value,
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList() },
@@ -114,17 +98,14 @@ class GamePageViewTest {
 
     @Test
     fun `check if don't have players on Score when gameState is null`() = runComposeUiTest {
-        val expectedAppState = AppState(
-            game = game.copy(gameState = null),
-            page = Page.GAME,
-            error = null,
-            audioPool = AudioPool(emptyList()),
-            theme = AppState.EMPTY_APP_STATE.theme
+        val appState = AppState.empty().copy(
+            game = mutableStateOf(game.copy(gameState = null)),
+            page = mutableStateOf(Page.GAME)
         )
 
         setContent {
             reversiScope.GamePageView(
-                game = expectedAppState.game,
+                game = appState.game.value,
                 freeze = false,
                 onCellClick = {},
                 getAvailablePlays = { emptyList() },

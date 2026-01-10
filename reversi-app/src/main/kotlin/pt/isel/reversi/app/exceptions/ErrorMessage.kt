@@ -42,11 +42,9 @@ import pt.isel.reversi.utils.LOGGER
  */
 @Composable
 fun ReversiScope.ErrorMessage(appState: AppState, modifier: Modifier = Modifier) {
-    //TODO: Differentiate error types with different UI elements
-
-    // Evite logging on every recomposition, only log when the error changes
-    LaunchedEffect(appState.value.error) {
-        val error = appState.value.error ?: return@LaunchedEffect
+    // Avoid logging on every recomposition, only when error changes
+    LaunchedEffect(appState.error.value) {
+        val error = appState.error.value ?: return@LaunchedEffect
         when (error.type) {
             ErrorType.INFO -> LOGGER.info("${error.message}")
             ErrorType.WARNING -> LOGGER.warning("${error.message}")
@@ -55,7 +53,7 @@ fun ReversiScope.ErrorMessage(appState: AppState, modifier: Modifier = Modifier)
         }
     }
 
-    when (appState.value.error?.type) {
+    when (appState.error.value?.type) {
         ErrorType.INFO -> ToastMessage(appState, modifier)
         ErrorType.WARNING -> WarningMessage(appState, modifier)
         ErrorType.ERROR -> ToastMessage(appState, modifier)
@@ -66,7 +64,7 @@ fun ReversiScope.ErrorMessage(appState: AppState, modifier: Modifier = Modifier)
 
 @Composable
 fun ReversiScope.WarningMessage(appState: AppState, modifier: Modifier = Modifier) {
-    val errorMessage = appState.value.error?.message ?: return
+    val errorMessage = appState.error.value?.message ?: return
 
     val overlayColor = Color.Black.copy(alpha = 0.6f)
     val warningBackgroundColor = Color(0xFFFFCC80)
@@ -111,9 +109,7 @@ fun ReversiScope.WarningMessage(appState: AppState, modifier: Modifier = Modifie
             )
 
             Button(
-                onClick = {
-                    appState.setError(error = null)
-                },
+                onClick = { setError(appState, null) },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = buttonBackgroundColor,
                     contentColor = Color.White
@@ -138,7 +134,7 @@ fun ReversiScope.WarningMessage(appState: AppState, modifier: Modifier = Modifie
 @Composable
 fun ReversiScope.ToastMessage(appState: AppState, modifier: Modifier = Modifier) {
     val offsetY = remember { Animatable(-100f) }
-    val error = appState.value.error
+    val error = appState.error.value
     val message = error?.message
 
     val slideDuration = 300
@@ -185,6 +181,6 @@ fun ReversiScope.ToastMessage(appState: AppState, modifier: Modifier = Modifier)
             targetValue = -100f,
             animationSpec = tween(durationMillis = slideDuration)
         )
-        appState.setError(error = null)
+        setError(appState, null)
     }
 }

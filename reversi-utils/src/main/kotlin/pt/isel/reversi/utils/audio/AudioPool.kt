@@ -16,14 +16,6 @@ class AudioPool(startPool: List<AudioWrapper>) {
         LOGGER.info("AudioPool created with ${pool.size} audio tracks")
         resetBalance()
         resetMasterVolume()
-
-        val range = getMasterVolumeRange()
-        if (range != null){
-            val (min, max) = range
-            var halfway = (min + max) / 2
-            halfway -= halfway / 2
-            setMasterVolume(halfway)
-        }
     }
 
     /**

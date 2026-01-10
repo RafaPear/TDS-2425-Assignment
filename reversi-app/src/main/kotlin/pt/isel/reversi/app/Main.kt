@@ -28,6 +28,8 @@ import reversi.reversi_app.generated.resources.Res
 import reversi.reversi_app.generated.resources.reversi
 import java.lang.System.setProperty
 
+val pageEnterCounter = mutableMapOf<Page, Int>()
+
 /**
  * Entry point for the desktop Reversi application. Initializes app dependencies
  * and launches the Compose window with the current `AppState`.
@@ -99,23 +101,29 @@ fun main(args: Array<String>) {
             state = windowState,
         ) {
             window.minimumSize = java.awt.Dimension(800, 800)
-
             MakeMenuBar(appState, windowState) { safeExitApplication() }
-            val page = remember { derivedStateOf { appState.page.value } }
-            val backPage = remember { derivedStateOf { appState.backPage.value } }
-            val theme = remember { derivedStateOf { appState.theme.value } }
 
-            AppScreenSwitcher(page.value, backPage.value, theme.value) { currentPage ->
+            val pageState = remember { derivedStateOf { appState.page.value } }
+            val backPageState = remember { derivedStateOf { appState.backPage.value } }
+            val themeState = remember { derivedStateOf { appState.theme.value } }
+
+            AppScreenSwitcher(pageState.value, backPageState.value, themeState.value) { currentPage ->
                 LOGGER.info("Navigating to page: $currentPage")
                 when (currentPage) {
                     Page.MAIN_MENU -> MainMenu(appState)
-                    Page.GAME -> GamePage(GamePageViewModel(appState, scope, { game -> setGame(appState, game) }, { e -> setError(appState, e) }))
+                    Page.GAME -> GamePage(
+                        GamePageViewModel(
+                            appState,
+                            scope,
+                            { game -> setGame(appState, game) },
+                            { e -> setError(appState, e) })
+                    )
                     Page.SETTINGS -> SettingsPage(appState)
                     Page.ABOUT -> AboutPage(appState)
                     Page.NEW_GAME -> NewGamePage(appState)
                     Page.SAVE_GAME -> SaveGamePage(appState)
                     Page.LOBBY -> LobbyMenu(LobbyViewModel(scope, appState))
-                    Page.NONE -> { /* No UI to show */ }
+                    Page.NONE -> { }
                 }
             }
         }
@@ -193,7 +201,7 @@ fun SaveGamePage(appState: AppState) {
                         containerColor = appState.theme.value.primaryColor
                     )
                 ) {
-                    ReversiText("Guardar", color = appState.theme.value.primaryColor)
+                    ReversiText("Guardar", color = appState.theme.value.textColor)
                 }
             }
         }

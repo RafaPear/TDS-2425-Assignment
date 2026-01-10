@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.TextAutoSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
@@ -24,12 +23,12 @@ val MAIN_MENU_AUTO_SIZE_BUTTON_TEXT =
 
 @Composable
 fun MainMenu(
-    appState: MutableState<AppState>,
+    appState: AppState,
     modifier: Modifier = Modifier
 ) {
-    LaunchedEffect(appState.value.page) {
-        val audioPool = appState.getStateAudioPool()
-        val theme = appState.value.theme
+    LaunchedEffect(appState.page.value) {
+        val audioPool = getStateAudioPool(appState)
+        val theme = appState.theme.value
         if (!audioPool.isPlaying(theme.backgroundMusic)) {
             audioPool.stopAll()
             audioPool.play(theme.backgroundMusic)
@@ -54,10 +53,10 @@ fun MainMenu(
                     verticalArrangement = Arrangement.spacedBy(20.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    ReversiButton("Novo Jogo") { appState.setPage(Page.NEW_GAME) }
-                    ReversiButton("Lobby") { appState.setPage(Page.LOBBY) }
-                    ReversiButton("Definições") { appState.setPage(Page.SETTINGS) }
-                    ReversiButton("Sobre") { appState.setPage(Page.ABOUT) }
+                    ReversiButton("Novo Jogo") { setPage(appState, Page.NEW_GAME) }
+                    ReversiButton("Lobby") { setPage(appState, Page.LOBBY) }
+                    ReversiButton("Definições") { setPage(appState, Page.SETTINGS) }
+                    ReversiButton("Sobre") { setPage(appState, Page.ABOUT) }
                 }
             }
         }

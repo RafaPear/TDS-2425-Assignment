@@ -12,19 +12,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.app.*
-import pt.isel.reversi.app.gameAudio.loadGameAudioPool
-import pt.isel.reversi.app.state.*
+import pt.isel.reversi.app.state.AppState
+import pt.isel.reversi.app.state.setAppState
+import pt.isel.reversi.app.state.setPage
 import pt.isel.reversi.core.CoreConfig
-import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.loadCoreConfig
-import pt.isel.reversi.core.loadGame
-import pt.isel.reversi.core.saveCoreConfig
 import pt.isel.reversi.core.storage.GameStorageType
-import pt.isel.reversi.utils.LOGGER
 
 /**
  * Section header composable for organizing settings into logical groups.
@@ -147,13 +142,12 @@ fun SettingsPage(appState: AppState) {
 
                 ApplyButton {
                     scope.launch {
-                        val newState = applySettings(appState, draftState.value, draftCoreConfig.value, currentVol)
-                        // update draft state with the applied settings
-                        runBlocking {
-                            draftState.value = newState.copy()
-                            draftCoreConfig.value = loadCoreConfig()
-                            appState = newState
-                        }
+                        // Placeholder apply: update top-level appState from draft
+                        setAppState(
+                            appState,
+                            playerName = draftState.value.playerName.value,
+                            theme = draftState.value.theme.value,
+                        )
                     }
                 }
             }
@@ -165,8 +159,8 @@ fun SettingsPage(appState: AppState) {
 private fun ReversiScope.GameSection(draftState: MutableState<AppState>) {
     SettingsSection(title = "Jogo") {
         ReversiTextField(
-            value = draftState.value.playerName ?: "",
-            onValueChange = { setAppState(draftState,(playerName = it) },
+            value = draftState.value.playerName.value ?: "",
+            onValueChange = { draftState.value.playerName.value = it },
             label = { ReversiText("Nome do Jogador") },
             modifier = Modifier.fillMaxWidth()
         )
@@ -274,8 +268,8 @@ private fun ReversiScope.AudioSection(
 ) {
     SettingsSection(title = "Áudio") {
         val (minVol, maxVol) = appState.audioPool.getMasterVolumeRange() ?: (-20f to 0f)
-        val volumePercent = volumeDbToPercent(currentVol, minVol, maxVol)
-        val volumeLabel = if (currentVol <= minVol) "Mudo" else "$volumePercent%"
+        val percent = (((currentVol - minVol) / (maxVol - minVol)) * 100).toInt().coerceIn(0, 100)
+        val volumeLabel = if (currentVol <= minVol) "Mudo" else "$percent%"
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -290,9 +284,9 @@ private fun ReversiScope.AudioSection(
             valueRange = minVol..maxVol,
             onValueChange = onVolumeChange,
             colors = SliderDefaults.colors(
-                thumbColor = appState.theme.primaryColor,
-                activeTrackColor = appState.theme.primaryColor,
-                inactiveTrackColor = appState.theme.textColor.copy(alpha = 0.3f)
+                thumbColor = appState.theme.value.primaryColor,
+                activeTrackColor = appState.theme.value.primaryColor,
+                inactiveTrackColor = appState.theme.value.textColor.copy(alpha = 0.3f)
             )
         )
     }
@@ -316,7 +310,7 @@ private fun ReversiScope.AppearanceSection(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    ReversiText(draftState.value.theme.name)
+                    ReversiText(draftState.value.theme.value.name)
                     Icon(Icons.Default.Palette, null, tint = appTheme.primaryColor)
                 }
             }
@@ -329,7 +323,7 @@ private fun ReversiScope.AppearanceSection(
                     ReversiDropdownMenuItem(
                         text = entry.appTheme.name,
                         onClick = {
-                            setAppState(draftState,(theme = entry.appTheme)
+                            draftState.value.theme.value = entry.appTheme
                             expanded = false
                         }
                     )
@@ -346,98 +340,4 @@ private fun ReversiScope.ApplyButton(onClick: () -> Unit) {
     }
 }
 
-private suspend fun applySettings(
-    appState: AppState,
-    draft: AppState,
-    draftCoreConfig: CoreConfig,
-    volume: Float
-): AppState {
-    setLoading(appState,(true)
-
-    val current = appState
-    val oldTheme = current.theme
-
-    // try to load newStorage (can fail if config is invalid)
-    val error = runStorageHealthCheck(draftCoreConfig)
-    if (error == null) {
-        LOGGER.info("Storage settings are valid.")
-        saveCoreConfig(draftCoreConfig)
-    } else {
-        LOGGER.severe("Storage settings are invalid: ${error.message}")
-        setError(appState,(
-            error = Exception(
-                "Invalid storage settings. " +
-                        "Rolling Back. Please check your configuration and try again.",
-                error
-            ),
-            errorType = ErrorType.WARNING
-        )
-    }
-
-    val playingAudios = current.audioPool.getPlayingAudios()
-
-    val loadedAudioPool = loadGameAudioPool(draft.theme) { error ->
-        setError(appState,(error)
-    }
-
-    current.audioPool.merge(loadedAudioPool)
-
-    parseVolume(volume, current)
-
-    val currGame = current.game
-    val currGameName = currGame.currGameName
-    val newGame = if (currGameName != null) {
-        currGame.saveEndGame()
-        try {
-            loadGame(currGameName, draft.playerName, currGame.myPiece).copy(config = draftCoreConfig)
-        } catch (e: Exception) {
-            LOGGER.severe("Failed to load game '$currGameName': ${e.message}")
-            setError(appState,(
-                error = Exception("Failed to load game '$currGameName': ${e.message}. "),
-                errorType = ErrorType.WARNING
-            )
-            currGame.copy(config = draftCoreConfig)
-        }
-    }
-    else {
-        currGame.copy(config = draftCoreConfig)
-    }
-
-    setAppState(appState,(
-        game = newGame.reloadConfig(),
-        playerName = draft.playerName,
-        theme = draft.theme,
-        audioPool = current.audioPool
-    )
-
-    for (audio in playingAudios) {
-        val audioToPlay = when (audio) {
-            oldTheme.backgroundMusic -> draft.theme.backgroundMusic
-            oldTheme.gameMusic -> draft.theme.gameMusic
-            else -> null
-        }
-        if (audioToPlay != null && !current.audioPool.isPlaying(audioToPlay)) {
-            current.audioPool.play(audioToPlay)
-            LOGGER.info("Resuming audio: $audioToPlay")
-        }
-    }
-
-    val loadedAudios = current.audioPool.pool.map { it.id }
-    LOGGER.info("Loaded audios after applying settings: $loadedAudios")
-    LOGGER.info("Core config saved: storageType=${draftCoreConfig.gameStorageType}")
-
-    delay(100)
-
-    setLoading(appState,(false)
-    return appState
-}
-
-private fun parseVolume(volume: Float, current: AppState) {
-    val minVol = current.audioPool.getMasterVolumeRange()?.first ?: -20f
-    if (volume <= minVol) {
-        current.audioPool.mute(true)
-    } else {
-        current.audioPool.mute(false)
-        current.audioPool.setMasterVolume(volume)
-    }
-}
+// applySettings left for later refinement

@@ -4,6 +4,7 @@ import androidx.compose.ui.graphics.Color
 import reversi.reversi_app.generated.resources.Res
 import reversi.reversi_app.generated.resources.benfica_background
 import reversi.reversi_app.generated.resources.matrix_background
+import reversi.reversi_app.generated.resources.polish_cow_background
 
 private val darkTheme = AppTheme(
     name = "Dark Default",
@@ -109,6 +110,24 @@ private val nordTheme = AppTheme(
     lightPieceColor = Color(0xFFD8DEE9)
 )
 
+private val polishCowTheme = AppTheme(
+    name = "Polish Cow",
+    backgroundMusic = "polish-cow",
+    gameMusic = "polish-cow",
+    placePieceSound = "putPiece",
+    textColor = Color(0xFFFFFFFF),
+    buttonTextColor = Color(0xFF000000),
+    backgroundColor = Color(0xFF000000),
+    backgroundImage = Res.drawable.polish_cow_background,
+    primaryColor = Color(0xFFFFFFFF),
+    secondaryColor = Color(0xFF1A1A1A),
+    boardColor = Color(0xFF4F4F4F),
+    boardBgColor = Color(0xFF000000),
+    boardSideColor = Color(0xFFFFFFFF),
+    darkPieceColor = Color(0xFF000000),
+    lightPieceColor = Color(0xFFFFFFFF)
+)
+
 /**
  * Enumeration of all available application themes.
  * Each theme provides a complete color scheme and audio configuration.
@@ -121,5 +140,6 @@ enum class AppThemes(val appTheme: AppTheme) {
     BENFICA(benficaTheme),
     MATRIX(matrixTheme),
     CYBERPUNK(cyberpunkTheme),
-    NORD(nordTheme)
+    NORD(nordTheme),
+    POLISH_COW(polishCowTheme)
 }

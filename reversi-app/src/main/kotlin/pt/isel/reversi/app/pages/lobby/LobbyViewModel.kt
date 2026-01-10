@@ -56,23 +56,16 @@ class LobbyViewModel(
     }
 
     fun refreshAll() {
-        scope.launch {
-            loadGamesAndUpdateState()
-        }
+        scope.launch { loadGamesAndUpdateState() }
     }
 
     private suspend fun loadGamesAndUpdateState() {
-        appState.setLoading(true)
-
+        setLoading(appState, true)
         try {
             val ids = getAllGameNames().sorted()
             delay(UI_DELAY_SHORT_MS)
             val loaded = ids.mapNotNull { id ->
-                try {
-                    readGame(id)
-                } catch (e: CancellationException) {
-                    throw e
-                } catch (e: Exception) {
+                try { readGame(id) } catch (e: CancellationException) { throw e } catch (e: Exception) {
                     LOGGER.warning("Erro ao ler jogo: $id - ${e.message}")
                     null
                 }
@@ -80,7 +73,7 @@ class LobbyViewModel(
             knownNames = ids
             LOGGER.info("Jogos carregados: ${loaded.size}")
             val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES
-            appState.setLoading(false)
+            setLoading(appState, false)
             _uiState.value = _uiState.value.copy(
                 games = loaded,
                 lobbyState = newLobbyState,
@@ -90,20 +83,19 @@ class LobbyViewModel(
             throw e
         } catch (e: Exception) {
             LOGGER.warning("Erro ao carregar jogos: ${e.message}")
-
             _uiState.value = _uiState.value.copy(
                 games = emptyList(),
                 lobbyState = LobbyState.EMPTY,
                 canRefresh = false,
             )
-            appState.setLoading(false)
-            appState.setError(e)
+            setLoading(appState, false)
+            setError(appState, e)
         }
     }
 
     fun initLobbyAudio() {
-        val audioPool = appState.getStateAudioPool()
-        val theme = appState.value.theme
+        val audioPool = getStateAudioPool(appState)
+        val theme = appState.theme.value
         if (!audioPool.isPlaying(theme.backgroundMusic)) {
             audioPool.stopAll()
             audioPool.play(theme.backgroundMusic)
@@ -112,15 +104,11 @@ class LobbyViewModel(
 
     fun startPolling() {
         if (pollingJob != null) throw IllegalStateException("Polling already started")
-
         LOGGER.info("Starting lobby polling.")
-
         scope.launch {
             try {
                 loadGamesAndUpdateState()
-                while (isActive) {
-                    pollLobbyUpdates()
-                }
+                while (isActive) { pollLobbyUpdates() }
                 throw IllegalStateException("Polling coroutine ended unexpectedly")
             } catch (_: CancellationException) {
                 LOGGER.info("Lobby polling cancelled.")
@@ -149,22 +137,19 @@ class LobbyViewModel(
     }
 
     fun stopPolling() {
-        pollingJob?.let {
-            pollingJob = null
-            it.cancel()
-        }
+        pollingJob?.let { pollingJob = null; it.cancel() }
     }
 
     suspend fun tryLoadGame(gameName: String, desiredType: PieceType): Game? {
         return try {
             loadGame(
                 gameName = gameName,
-                playerName = appState.value.playerName,
+                playerName = appState.playerName.value,
                 desiredType = desiredType
             )
         } catch (e: Exception) {
             LOGGER.warning("Erro ao carregar jogo $gameName: ${e.message}")
-            appState.setError(e)
+            setError(appState, e)
             null
         }
     }
@@ -175,13 +160,10 @@ class LobbyViewModel(
                 val newGame = game.hardRefresh()
                 if (newGame != game) _uiState.value = _uiState.value.copy(
                     games = _uiState.value.games.map {
-                        if (it.currGameName == newGame.currGameName) newGame
-                        else it
+                        if (it.currGameName == newGame.currGameName) newGame else it
                     }
                 )
-            } catch (e: CancellationException) {
-                throw e
-            } catch (e: Exception) {
+            } catch (e: CancellationException) { throw e } catch (e: Exception) {
                 LOGGER.warning("Erro: ${e.message}, ${e.localizedMessage}")
             }
         }
@@ -195,17 +177,15 @@ class LobbyViewModel(
     fun joinGameValidations(game: Game): GameState? {
         val state: GameState? = game.gameState
         val name: String? = game.currGameName
-
         when {
-            name == appState.value.game.currGameName -> {
-                appState.setPage(Page.GAME)
-                appState.value = appState.value.copy(backPage = Page.LOBBY)
+            name == appState.game.value.currGameName -> {
+                setPage(appState, Page.GAME, Page.LOBBY)
                 return state
             }
-
             state == null -> {
                 LOGGER.warning("Estado do jogo nulo para o jogo: $name")
-                appState.setError(
+                setError(
+                    appState,
                     GameCorrupted(
                         message = "O jogo '${name}' está corrompido.",
                         type = ErrorType.ERROR
@@ -213,16 +193,15 @@ class LobbyViewModel(
                 )
                 return null
             }
-
             state.players.isEmpty() -> {
                 LOGGER.warning("Jogo cheio selecionado: $name")
-                appState.setError(GameIsFull())
+                setError(appState, GameIsFull())
                 return null
             }
-
             name == null -> {
                 LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
-                appState.setError(
+                setError(
+                    appState,
                     GameCorrupted(
                         message = "O jogo selecionado não tem um nome válido.",
                         type = ErrorType.ERROR
@@ -235,31 +214,21 @@ class LobbyViewModel(
     }
 
     fun joinGame(game: Game, pieceType: PieceType) {
-        val appGame = appState.value.game
+        val appGame = appState.game.value
         val name = game.currGameName ?: return
-
         scope.launch {
             try {
-                appState.setLoading(true)
-
-                try {
-                    appGame.saveEndGame()
-                } catch (e: Exception) {
+                setLoading(appState, true)
+                try { appGame.saveEndGame() } catch (e: Exception) {
                     LOGGER.warning("Erro ao salvar estado atual do jogo: ${e.message}")
                 }
-
                 val joinedGame = tryLoadGame(gameName = name, desiredType = pieceType) ?: run {
-                    selectGame(null)
-                    return@launch
+                    selectGame(null); return@launch
                 }
-
                 LOGGER.info("Entrou no jogo '${joinedGame.currGameName}' como peça $pieceType.")
-
-                appState.setAppState(joinedGame, Page.GAME, backPage = Page.LOBBY)
+                setAppState(appState, game = joinedGame, page = Page.GAME, backPage = Page.LOBBY)
                 selectGame(null)
-            } finally {
-                appState.setLoading(false)
-            }
+            } finally { setLoading(appState, false) }
         }
     }
 }

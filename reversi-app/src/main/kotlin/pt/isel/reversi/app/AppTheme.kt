@@ -28,7 +28,6 @@ data class AppTheme(
     val gameMusic: String = "MEGALOVANIA",
     val placePieceSound: String = "putPiece",
     val textColor: Color = Color(0xFF000000),
-    // Image resource for background image
     val backgroundImage: DrawableResource? = null,
     val backgroundColor: Color = Color(0xFFFFFFFF),
     val buttonTextColor: Color = Color(0xFFFFFFFF),

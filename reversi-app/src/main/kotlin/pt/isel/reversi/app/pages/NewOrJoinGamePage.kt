@@ -16,10 +16,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.launch
 import pt.isel.reversi.app.*
 import pt.isel.reversi.app.exceptions.NoPieceSelected
-import pt.isel.reversi.app.state.AppState
-import pt.isel.reversi.app.state.Page
-import pt.isel.reversi.app.state.setAppState
-import pt.isel.reversi.app.state.setError
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
@@ -44,7 +41,7 @@ fun NewGamePage(
             val currGameName = game.currGameName
 
             val myPiece: PieceType = game.myPiece ?: run {
-                setError(appState,(error = NoPieceSelected())
+                setError(appState, NoPieceSelected())
                 return@NewGamePageView
             }
 
@@ -72,11 +69,9 @@ fun NewGamePage(
                     }
 
                     LOGGER.info("Novo jogo '${currGameName?.ifBlank { "(local)" } ?: "(local)"} ' iniciado.")
-                    appState.run {
-                        setAppState(appState, game=newGame, page=Page.GAME)
-                    }
+                    setAppState(appState, game = newGame, page = Page.GAME)
                 } catch (e: Exception) {
-                    setError(appState,(e)
+                    setError(appState, e)
                 }
             }
         }
@@ -106,7 +101,7 @@ private fun ReversiScope.NewGamePageView(
         appState = appState,
         title = title,
         previousPageContent = {
-            PreviousPage { setAppState(appState,(page = Page.MAIN_MENU) }
+            PreviousPage { setPage(appState, Page.MAIN_MENU) }
         }
     ) { padding ->
         Box(
@@ -133,7 +128,7 @@ private fun ReversiScope.NewGamePageView(
 
                 ReversiTextField(
                     value = appState.playerName.value ?: "",
-                    onValueChange = { setAppState(appState,(playerName = it) },
+                    onValueChange = { setAppState(appState, playerName = it) },
                     label = { ReversiText("Nome de jogador") },
                     modifier = Modifier.fillMaxWidth(),
                     onDone = { onClick(game, boardSize.parseBoardSize()) },
@@ -225,4 +220,3 @@ private fun ReversiScope.NewGamePageView(
 private fun String.parseBoardSize(): Int {
     return toIntOrNull() ?: 0
 }
-

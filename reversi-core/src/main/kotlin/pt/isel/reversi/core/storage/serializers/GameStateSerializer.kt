@@ -16,11 +16,9 @@ internal class GameStateSerializer : Serializer<GameState, String> {
     private val pieceTypeSerializer = PieceTypeSerializer()
     private val boardSerializer = BoardSerializer()
     private val playerSerializer = PlayerSerializer()
-    //TODO delete playerNameSerializer if not used
-    //private val playerNameSerializer = PlayerNameSerializer()
 
     private val playersLine = 0
-    private val lastPlayerLine = playersLine + 2
+    private val lastPlayerLine = playersLine + 1
     private val winnerLine = lastPlayerLine + 1
     private val boardStartLine = winnerLine + 1
 
@@ -30,17 +28,12 @@ internal class GameStateSerializer : Serializer<GameState, String> {
 
         val sb = StringBuilder()
 
-        if (obj.players.isEmpty()) {
-            sb.appendLine()
-            sb.appendLine()
-        } else {
-            for (player in obj.players) {
-                sb.append(playerSerializer.serialize(player))
-                sb.append(";")
-            }
-            sb.appendLine()
-            sb.appendLine()
+        for (player in obj.players) {
+            sb.append(playerSerializer.serialize(player))
+            sb.append(";")
         }
+        sb.appendLine()
+
 
         sb.appendLine(pieceTypeSerializer.serialize(obj.lastPlayer))
 
@@ -61,7 +54,7 @@ internal class GameStateSerializer : Serializer<GameState, String> {
         var players = MatchPlayers()
 
         for (player in playerStrings) {
-            if (player.isNotBlank()){
+            if (player.isNotBlank()) {
                 val newPlayers =
                     players.addPlayerOrNull(playerSerializer.deserialize(player)) ?: players
                 players = newPlayers

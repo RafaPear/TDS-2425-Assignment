@@ -19,10 +19,38 @@ separation of concerns, explicit domain modeling, and pluggable persistence.
 
 ## Project Modules
 
-- `reversi-core` — immutable core domain model, game logic and serializers
-- `reversi-storage` — simple local filesystem storage implementation (text files)
-- `reversi-cli` — small command-line client to play the game
-- `reversi-utils` — utility functions and extensions used by other modules
+The project is organized into five specialized modules:
+
+- **`reversi-core`** — Immutable core domain model, game logic and serializers
+  - Implements the Reversi game rules (move validation, piece capture, board management)
+  - Contains no I/O or UI concerns; purely functional and testable
+  - Defines DTOs for serialization/deserialization
+  - See [reversi-core/MODULE.md](reversi-core/MODULE.md) for architecture details
+
+- **`reversi-storage`** — Simple local filesystem storage implementation
+  - Provides file-based persistence for game snapshots
+  - Implements the generic `Storage<K,T,U>` contract with text serializers
+  - Human-readable `.txt` files for easy debugging and manual inspection
+  - See [reversi-storage/MODULE.md](reversi-storage/MODULE.md) for architecture details
+
+- **`reversi-utils`** — Utility functions and extensions
+  - Configuration loading and management (ConfigLoader pattern)
+  - Environment constants and helper functions
+  - Shared utilities for other modules
+  - See [reversi-utils/MODULE.md](reversi-utils/MODULE.md) for architecture details
+
+- **`reversi-cli`** — Command-line interface client
+  - Interactive read-eval-print loop for gameplay
+  - Command framework (built on KtFlag dependency)
+  - Multiple command implementations (new, join, play, pass, show, etc.)
+  - Configurable colors and prompts
+  - See [reversi-cli/MODULE.md](reversi-cli/MODULE.md) for architecture details
+
+- **`reversi-app`** — Desktop GUI application (Jetpack Compose for Desktop)
+  - Modern user interface for gameplay
+  - State management and ViewModel pattern
+  - Rich visual feedback and interactive board rendering
+  - See [reversi-app/MODULE.md](reversi-app/MODULE.md) for architecture details
 
 ## Documentation Site
 

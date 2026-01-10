@@ -59,6 +59,7 @@ fun FrameWindowScope.MakeMenuBar(appState: AppState, windowState: WindowState, e
 
         Menu("Dev") {
             Item("Mostrar Estado do Jogo") {
+                // Use the extension function defined in the pt.isel.reversi.app package
                 appState.game.value.printDebugState()
             }
             Item("Nullify Game State") {

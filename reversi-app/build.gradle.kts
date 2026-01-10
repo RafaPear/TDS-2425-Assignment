@@ -78,12 +78,41 @@ compose.desktop {
     }
 }
 
+
+// === Fat Jar executável ===
+tasks.register<Jar>("fatJar") {
+    group = "build"
+    description = "Assembles an executable fat jar including all dependencies."
+
+    archiveBaseName.set("reversi-app")
+    archiveVersion.set("v1.0.1")
+    archiveClassifier.set("")
+
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+
+    from(sourceSets.main.get().output)
+
+    dependsOn(configurations.runtimeClasspath)
+    from({
+        configurations.runtimeClasspath.get()
+            .filter { it.name.endsWith(".jar") }
+            .map { zipTree(it) }
+    })
+
+    manifest {
+        attributes["Main-Class"] = "pt.isel.reversi.app.MainKt"
+    }
+}
+
 kotlin {
     jvmToolchain(21)
 }
 
 tasks {
     build {
-        dependsOn("createDistributable")
+        dependsOn(
+            "fatJar",
+            "createDistributable"
+        )
     }
 }

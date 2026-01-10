@@ -30,8 +30,8 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
             viewModel.startPolling()
         }
 
-        appState.getStateAudioPool().run {
-            val theme = appState.theme
+        val theme = appState.theme.value
+        getStateAudioPool(appState).run {
             if (!isPlaying(theme.gameMusic)) {
                 stop(theme.backgroundMusic)
                 stop(theme.gameMusic)
@@ -51,7 +51,7 @@ fun GamePage(viewModel: GamePageViewModel, modifier: Modifier = Modifier, freeze
         appState = appState,
         title = name ?: "Reversi",
         previousPageContent = {
-            PreviousPage { appState.setAppState(page = appState.value.backPage, game = game) }
+            PreviousPage { setAppState(appState, page = appState.backPage.value, game = game) }
         }
     ) { padding ->
         GamePageView(

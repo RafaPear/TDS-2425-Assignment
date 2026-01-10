@@ -59,17 +59,11 @@ fun LobbyMenu(
     DisposableEffect(viewModel) {
         LOGGER.info("Starting polling for lobby updates.")
         viewModel.startPolling()
-        onDispose {
-            viewModel.stopPolling()
-        }
+        onDispose { viewModel.stopPolling() }
     }
 
     val refreshAction: @Composable () -> Unit = {
-        if (canRefresh) {
-            RefreshButton {
-                viewModel.refreshAll()
-            }
-        }
+        if (canRefresh) { RefreshButton { viewModel.refreshAll() } }
     }
 
     ScaffoldView(appState, title = "Lobby - Jogos Guardados") { padding ->
@@ -97,7 +91,7 @@ fun LobbyMenu(
                     LobbyState.NONE -> {}
                     LobbyState.EMPTY -> Empty { refreshAction() }
                     LobbyState.SHOW_GAMES -> LobbyCarousel(
-                        currentGameName = appState.value.game.currGameName,
+                        currentGameName = appState.game.value.currGameName,
                         games = games,
                         viewModel,
                         reversiScope = reversiScope,
@@ -116,15 +110,11 @@ fun LobbyMenu(
                 }
                 val players = state.players.map { it.type }
 
-                if (game.currGameName != appState.value.game.currGameName) {
+                if (game.currGameName != appState.game.value.currGameName) {
                     PopupPickAPiece(
                         pieces = players,
-                        onPick = { pieceType ->
-                            viewModel.joinGame(game, pieceType)
-                        },
-                        onDismiss = {
-                            viewModel.selectGame(null)
-                        }
+                        onPick = { pieceType -> viewModel.joinGame(game, pieceType) },
+                        onDismiss = { viewModel.selectGame(null) }
                     )
                 }
             }

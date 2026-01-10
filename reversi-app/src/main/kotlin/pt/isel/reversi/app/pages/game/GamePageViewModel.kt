@@ -24,7 +24,7 @@ class GamePageViewModel(
     val setGame: (Game) -> Unit,
     val setError: (Exception) -> Unit
 ) {
-    private val _uiState = mutableStateOf(value = appState.game)
+    private val _uiState = mutableStateOf(appState.game.value)
     val uiState: State<Game> = _uiState
 
     private var pollingJob: Job? = null
@@ -34,7 +34,7 @@ class GamePageViewModel(
     }
 
     fun save() {
-        if (uiState.value == appState.game) return
+        if (uiState.value == appState.game.value) return
         setGame(uiState.value)
     }
 
@@ -86,8 +86,8 @@ class GamePageViewModel(
             try {
                 _uiState.value = uiState.value.play(coordinate)
 
-                val theme = appState.theme
-                appState.getStateAudioPool().run {
+                val theme = appState.theme.value
+                getStateAudioPool(appState).run {
                     stop(theme.placePieceSound)
                     play(theme.placePieceSound)
                 }

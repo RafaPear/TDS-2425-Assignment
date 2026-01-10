@@ -16,7 +16,7 @@ import kotlin.test.fail
 
 @OptIn(ExperimentalTestApi::class)
 class DrawBoardTest {
-    val reversiScope = ReversiScope(AppState.EMPTY_APP_STATE)
+    val reversiScope = ReversiScope(AppState.empty())
 
     @Test
     fun `DrawBoard test if all cells are displayed`() = runComposeUiTest {

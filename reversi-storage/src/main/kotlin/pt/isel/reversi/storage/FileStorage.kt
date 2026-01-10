@@ -2,6 +2,7 @@ package pt.isel.reversi.storage
 
 import okio.FileSystem
 import okio.Path.Companion.toPath
+import pt.isel.reversi.utils.LOGGER
 
 /**
  * [Storage] implementation via file + text strings.
@@ -15,6 +16,10 @@ data class FileStorage<T>(
     private val folder: String,
     override val serializer: Serializer<T, String>
 ) : Storage<String, T, String> {
+
+    init {
+        LOGGER.info("FileStorage initialized with folder='$folder'")
+    }
 
     /** Storage file path for entity identified by [id]. */
     private fun path(id: String) = "$folder/$id.txt".toPath()

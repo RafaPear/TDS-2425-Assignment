@@ -1,4 +1,4 @@
-package lobbyMenuTest.lobbyCarouselTests
+package pt.isel.reversi.app.lobbyMenuTest.lobbyCarouselTests
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
@@ -29,7 +29,7 @@ class DrawCardTests {
         )
     )
 
-    val reversiScope = ReversiScope(AppState.EMPTY_APP_STATE)
+    val reversiScope = ReversiScope(AppState.empty())
 
     @Test
     fun `verify if drawCard is displayed`() = runComposeUiTest {

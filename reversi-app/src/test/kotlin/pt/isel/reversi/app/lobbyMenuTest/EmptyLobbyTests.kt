@@ -1,4 +1,4 @@
-package lobbyMenuTest
+package pt.isel.reversi.app.lobbyMenuTest
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextEquals
@@ -11,7 +11,7 @@ import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class EmptyLobbyTests {
-    val reversiScope = ReversiScope(AppState.EMPTY_APP_STATE)
+    val reversiScope = ReversiScope(AppState.empty())
 
     @Test
     fun `test if empty lobby view is displayed correctly`() = runComposeUiTest {

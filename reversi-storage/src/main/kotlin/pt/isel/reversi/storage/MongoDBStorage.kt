@@ -25,9 +25,6 @@ data class MongoDBStorage<T>(
     private val collection = database.getCollection<Document>(collectionName)
 
     init {
-        // força ligação imediata (fail fast)
-        database.runCommand(Document("ping", 1))
-
         // cria coleção se não existir
         val collectionNames = database.listCollectionNames().toList()
         if (collectionName !in collectionNames) {

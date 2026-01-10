@@ -13,7 +13,17 @@ import pt.rafap.ktflag.cmd.CommandResult
 import pt.rafap.ktflag.cmd.CommandResult.ERROR
 
 /**
- * Command to create a new game with the specified first player.
+ * Command to create a new Reversi game.
+ *
+ * Creates a new game with the specified starting player:
+ * - `new # [name]` — Creates a game where Black (#) goes first
+ * - `new @ [name]` — Creates a game where White (@) goes first
+ *
+ * If a game name is provided, the game is saved to persistent storage.
+ * If no name is given, the game exists only in memory (local game).
+ * The name must be unique; attempting to create a game with an existing name will fail.
+ *
+ * If a game is already in progress, it is automatically saved before creating the new game.
  */
 object NewCmd : CommandImpl<Game>() {
 
@@ -27,6 +37,13 @@ object NewCmd : CommandImpl<Game>() {
         maxArgs = 2
     )
 
+    /**
+     * Executes the new game creation command.
+     *
+     * @param args The command arguments: `[playerSymbol] [optionalGameName]`
+     * @param context The current game context (will be saved before creating new game).
+     * @return A CommandResult with the newly created game or an error message.
+     */
     override fun execute(vararg args: String, context: Game?): CommandResult<Game> {
         if (context != null && context.currGameName != null) {
             runBlocking { context.saveEndGame() }

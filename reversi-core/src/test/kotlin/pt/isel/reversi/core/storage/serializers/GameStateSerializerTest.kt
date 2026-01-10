@@ -55,7 +55,6 @@ class GameStateSerializerTest {
                 append("${player.type.symbol},${player.name},${player.points};")
             }
             appendLine()
-            appendLine()
             appendLine(state.lastPlayer.symbol)
             if (state.winner != null) appendLine("${state.winner.type.symbol},${state.winner.points}")
             else appendLine()
