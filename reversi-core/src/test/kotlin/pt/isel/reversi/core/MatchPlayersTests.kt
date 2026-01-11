@@ -54,7 +54,7 @@ class MatchPlayersTests {
     fun `test getPlayerByType method`() {
         val player1 = Player(name = "Alice",type = PieceType.BLACK)
         val player2 = Player(name = "Bob",type = PieceType.WHITE)
-        val matchPlayers = MatchPlayers(player1, player2)
+        val matchPlayers = MatchPlayers(player2, player1)
 
         val retrievedPlayer1 = matchPlayers.getPlayerByType(PieceType.BLACK)
         val retrievedPlayer2 = matchPlayers.getPlayerByType(PieceType.WHITE)
@@ -210,5 +210,42 @@ class MatchPlayersTests {
         assert(result2 != null)
         assert(result2!!.player1 == newPlayerWhite)
         assert(result2.player2 == null)
+    }
+
+    @Test
+    fun `test getAvailable players with empty match players (all available)`() {
+        val emptyPlayers = MatchPlayers()
+        val availableTypesEmpty = emptyPlayers.getAvailableTypes()
+        assert(availableTypesEmpty.contains(PieceType.BLACK))
+    }
+
+    @Test
+    fun `test getAvailable players with first player black (one white available)`() {
+        val onePlayerBlack = MatchPlayers(Player(name = "Alice", type = PieceType.BLACK), null)
+        val availableTypesOneBlack = onePlayerBlack.getAvailableTypes()
+        assert(availableTypesOneBlack.size == 1)
+        assert(availableTypesOneBlack.contains(PieceType.WHITE))
+    }
+
+    @Test
+    fun `test getAvailable players with first player white (one black available)`() {
+        val onePlayerWhite = MatchPlayers(Player(name = "Bob", type = PieceType.WHITE), null)
+        val availableTypesOneWhite = onePlayerWhite.getAvailableTypes()
+        assert(availableTypesOneWhite.size == 1)
+        assert(availableTypesOneWhite.contains(PieceType.BLACK))
+    }
+
+    @Test
+    fun `test getAvailable players with both players present first black second white (none available)`() {
+        val fullPlayers = MatchPlayers(Player(name = "Alice", type = PieceType.BLACK), Player(name = "Bob", type = PieceType.WHITE))
+        val availableTypesFull = fullPlayers.getAvailableTypes()
+        assert(availableTypesFull.isEmpty())
+    }
+
+    @Test
+    fun `test getAvailable players with both players present first white second black (none available)`() {
+        val fullPlayers = MatchPlayers(Player(name = "Bob", type = PieceType.WHITE), Player(name = "Alice", type = PieceType.BLACK))
+        val availableTypesFull = fullPlayers.getAvailableTypes()
+        assert(availableTypesFull.isEmpty())
     }
 }

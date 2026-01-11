@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.pages.game
+package pt.isel.reversi.app.pages.game.utils
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
@@ -23,6 +23,7 @@ import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.ReversiText
 import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.app.invert
+import pt.isel.reversi.app.pages.game.testTagPlayerScore
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.GameState
@@ -30,7 +31,6 @@ import pt.isel.reversi.core.storage.GameState
 @Composable
 fun ReversiScope.TextPlayersScore(
     state: GameState?,
-    myPlayerName: Player,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -64,7 +64,6 @@ fun ReversiScope.TextPlayersScore(
                     val points = player.points
                     val isTurn = type != state.lastPlayer
                     val isWinner = state.winner?.type == type
-
 
                     PlayerScoreRow(
                         player = player,

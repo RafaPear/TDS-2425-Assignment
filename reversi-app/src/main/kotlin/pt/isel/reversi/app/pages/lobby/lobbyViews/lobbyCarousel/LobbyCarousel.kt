@@ -12,10 +12,10 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import pt.isel.reversi.app.ReversiScope
+import pt.isel.reversi.app.pages.lobby.LobbyLoadedState
 import pt.isel.reversi.app.pages.lobby.LobbyViewModel
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.PageIndicators
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.Search
-import pt.isel.reversi.core.Game
 import pt.isel.reversi.utils.LOGGER
 
 private suspend fun PagerState.animateScroll(page: Int) {
@@ -43,19 +43,19 @@ private suspend fun PagerState.animateScroll(page: Int) {
 @Composable
 fun ColumnScope.LobbyCarousel(
     currentGameName: String?,
-    games: List<Game>,
+    games: List<LobbyLoadedState>,
     viewModel: LobbyViewModel,
     reversiScope: ReversiScope,
     buttonRefresh: @Composable () -> Unit = {},
-    onGameClick: (Game) -> Unit
+    onGameClick: (LobbyLoadedState) -> Unit
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
-    val gamesToShow: List<Game> = remember(games, searchQuery) {
+    val gamesToShow: List<LobbyLoadedState> = remember(games, searchQuery) {
         if (searchQuery.isEmpty())
             games
         else {
-            val foundGames = games.filter { it.currGameName?.contains(searchQuery, ignoreCase = true) == true }
+            val foundGames = games.filter { it.name.contains(searchQuery, ignoreCase = true) }
             LOGGER.info("Search query: '$searchQuery' - Found : ${foundGames.size}")
             foundGames
         }
@@ -70,9 +70,9 @@ fun ColumnScope.LobbyCarousel(
         val leftGame = gamesToShow.getOrNull(pagerState.currentPage - 1)
         val rightGame = gamesToShow.getOrNull(pagerState.currentPage + 1)
 
-        val gameName = game.currGameName
-        val leftGameName = leftGame?.currGameName
-        val rightGameName = rightGame?.currGameName
+        val gameName = game.name
+        val leftGameName = leftGame?.name
+        val rightGameName = rightGame?.name
         LOGGER.info("lobbyCarousel: Refresh iniciado para $gameName, $leftGameName, $rightGameName")
 
         val delayMillis = when (getCardStatus(game, currentGameName)) {

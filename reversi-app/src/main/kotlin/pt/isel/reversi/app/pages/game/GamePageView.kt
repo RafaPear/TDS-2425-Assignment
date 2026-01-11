@@ -8,8 +8,8 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
+import pt.isel.reversi.app.pages.game.utils.TextPlayersScore
 import pt.isel.reversi.core.Game
-import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.Coordinate
 
 /**
@@ -61,7 +61,6 @@ fun ReversiScope.GamePageView(
                 val myPiece = game.myPiece
                 if (myPiece != null) {
                     TextPlayersScore(
-                        myPlayerName = Player(myPiece, "You"),
                         state = game.gameState
                     )
                 }

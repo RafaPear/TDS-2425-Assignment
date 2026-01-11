@@ -12,11 +12,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pt.isel.reversi.app.*
+import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.core.CoreConfig
+import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.loadCoreConfig
+import pt.isel.reversi.core.saveCoreConfig
 import pt.isel.reversi.core.storage.GameStorageType
+import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 
 /**
  * Section header composable for organizing settings into logical groups.
@@ -55,7 +61,13 @@ private fun ReversiScope.SettingsSection(
  * @param appState Global application state for accessing and updating settings.
  */
 @Composable
-fun ReversiScope.SettingsPage(viewModel: SettingsViewModel, onLeave: () -> Unit, save: (String?, AppTheme, Float) -> Unit) {
+fun ReversiScope.SettingsPage(
+    viewModel: SettingsViewModel,
+    onLeave: () -> Unit,
+    save: (String?, AppTheme, Float) -> Unit
+) {
+    TRACKER.trackRecomposition()
+
     val draftState = remember {
         mutableStateOf(value = appState)
     }
@@ -126,7 +138,10 @@ fun ReversiScope.SettingsPage(viewModel: SettingsViewModel, onLeave: () -> Unit,
 
                 AudioSection(
                     currentVol = currentVol,
-                    onVolumeChange = { currentVol = it },
+                    onVolumeChange = {
+                        currentVol = it
+                        getStateAudioPool(appState).setMasterVolume(it)
+                    },
                 )
 
                 AppearanceSection(
@@ -136,8 +151,10 @@ fun ReversiScope.SettingsPage(viewModel: SettingsViewModel, onLeave: () -> Unit,
                     draftState.value = draftState.value.copy(theme = newTheme)
                 }
 
+                // Apply button
                 ApplyButton {
                     scope.launch {
+                        TRACKER.trackFunctionCall(details = "Apply settings clicked")
                         save(
                             draftState.value.playerName,
                             draftState.value.theme,
@@ -149,6 +166,82 @@ fun ReversiScope.SettingsPage(viewModel: SettingsViewModel, onLeave: () -> Unit,
         }
     }
 }
+
+//TODO: Rever esta fun com as novas alteracoes
+//// Settings application logic (simplified to avoid unresolved references)
+//private suspend fun applySettings(
+//    appState: AppState,
+//    draft: AppState,
+//    draftCoreConfig: CoreConfig,
+//    volume: Float
+//): AppState {
+//    setLoading(appState, true)
+//
+//    try {
+//
+//        // check if storage type changed and test connection if needed
+//        val currentCoreConfig = loadCoreConfig()
+//        if (currentCoreConfig != draftCoreConfig) {
+//            LOGGER.info("Storage type changed from ${currentCoreConfig.gameStorageType} to ${draftCoreConfig.gameStorageType}, testing connectivity...")
+//            val exception = runStorageHealthCheck(testConf = draftCoreConfig, save = true)
+//            if (exception != null) {
+//                setError(appState, exception, ErrorType.WARNING)
+//                LOGGER.severe("Storage type change failed: ${exception.message}")
+//            }
+//            else {
+//                saveCoreConfig(draftCoreConfig)
+//                LOGGER.info("Core config saved: storageType=${draftCoreConfig.gameStorageType}")
+//            }
+//        }
+//
+//        // Load audio pool for the selected theme and merge into current
+//        val current = appState
+//        val oldTheme = current.theme.value
+//        val playingAudios = current.audioPool.value.getPlayingAudios()
+//
+//        val loadedAudioPool = loadGameAudioPool(draft.theme.value) { err ->
+//            setError(appState, err)
+//        }
+//        current.audioPool.value.merge(loadedAudioPool)
+//
+//        // Apply audio volume
+//        parseVolume(volume, current)
+//
+//        // Apply theme and player name
+//        setAppState(
+//            appState,
+//            game = current.game.value,
+//            playerName = draft.playerName.value,
+//            theme = draft.theme.value
+//        )
+//
+//        // Resume previously playing theme-related audios
+//        for (audio in playingAudios) {
+//            val audioToPlay = when (audio) {
+//                oldTheme.backgroundMusic -> draft.theme.value.backgroundMusic
+//                oldTheme.gameMusic -> draft.theme.value.gameMusic
+//                else -> null
+//            }
+//            if (audioToPlay != null && !current.audioPool.value.isPlaying(audioToPlay)) {
+//                current.audioPool.value.play(audioToPlay)
+//                LOGGER.info("Resuming audio: $audioToPlay")
+//            }
+//        }
+//
+//        val loadedAudios = current.audioPool.value.pool.map { it.id }
+//        LOGGER.info("Loaded audios after applying settings: $loadedAudios")
+//
+//        // Small delay for UX
+//        delay(100)
+//    } catch (e: Exception) {
+//        LOGGER.severe("Failed to apply settings: ${e.message}")
+//    } finally {
+//        setLoading(appState, false)
+//    }
+//
+//    return appState
+//}
+
 
 @Composable
 private fun ReversiScope.GameSection(playerName: String?, onValueChange: (String) -> Unit) {

@@ -26,8 +26,8 @@ import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.ReversiText
 import pt.isel.reversi.app.getTheme
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
+import pt.isel.reversi.app.pages.lobby.LobbyLoadedState
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.CardStatus
-import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.storage.MatchPlayers
@@ -41,14 +41,14 @@ fun scorePanelTestTag(gameId: String) = "score_panel_$gameId"
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ReversiScope.GameCard(
-    game: Game,
+    game: LobbyLoadedState,
     enabled: Boolean,
     cardData: CardStatus,
     modifier: Modifier = Modifier,
     onClick: () -> Unit
 ) {
-    val name = game.currGameName ?: return
-    val state = game.gameState ?: return
+    val name = game.name
+    val state = game.gameState
 
     val statusText = cardData.text
     val statusColor = cardData.color

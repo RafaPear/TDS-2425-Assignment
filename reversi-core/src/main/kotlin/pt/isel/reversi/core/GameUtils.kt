@@ -130,6 +130,11 @@ suspend fun readGame(gameName: String): Game? {
     )
 }
 
+suspend fun readState(gameName: String): GameState? {
+    val storage = loadStorageFromConfig()
+    return storage.load(gameName)
+}
+
 fun Game.stringifyBoard(): String {
     val sb = StringBuilder()
     val board = gameState?.board ?: return "Board not initialized"

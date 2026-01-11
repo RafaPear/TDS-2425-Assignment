@@ -10,6 +10,7 @@ import pt.isel.reversi.core.storage.GameStorageType.Companion.setUpStorage
 import pt.isel.reversi.core.storage.MatchPlayers
 import pt.isel.reversi.storage.AsyncStorage
 import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 
 /**
  * Represents a Reversi game, managing the game state, player turns, and interactions with storage.
@@ -40,6 +41,10 @@ data class Game(
     // make this a lazy property to avoid initializing storage if not needed
     val storage: AsyncStorage<String, GameState, String> by lazy {
         setUpStorage(config)
+    }
+
+    init {
+        TRACKER.trackClassCreated(this)
     }
 
     /**
@@ -384,6 +389,7 @@ data class Game(
             board = Board(8),
             winner = null
         )
+        if (storage.lastModified(testId) != null) storage.delete(testId)
 
         storage.new(testId) { testState }
         val loadedState = storage.load(testId)

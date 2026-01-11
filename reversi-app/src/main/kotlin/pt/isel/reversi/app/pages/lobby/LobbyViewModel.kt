@@ -12,23 +12,29 @@ import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.getAllGameNames
 import pt.isel.reversi.core.loadGame
-import pt.isel.reversi.core.readGame
+import pt.isel.reversi.core.readState
 import pt.isel.reversi.core.storage.GameState
 import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 
 private const val UI_DELAY_SHORT_MS = 100L
 private const val POLL_INTERVAL_MS = 1000L
 
+data class LobbyLoadedState(
+    val gameState: GameState,
+    val name: String,
+)
+
 /**
  * UI state for the lobby screen displaying available games.
  *
- * @property games List of loaded games available to join.
+ * @property gameStates List of loaded games available to join.
  * @property lobbyState Current state of the lobby (empty, showing games, etc.).
  * @property selectedGame The currently selected game for joining.
  * @property canRefresh Whether the refresh button is enabled.
  */
 data class LobbyUiState(
-    val games: List<Game> = emptyList(),
+    val gameStates: List<LobbyLoadedState>  = emptyList(),
     val lobbyState: LobbyState = LobbyState.NONE,
     val selectedGame: Game? = null,
     val canRefresh: Boolean = false,
@@ -70,6 +76,7 @@ class LobbyViewModel(
     private var pollingJob: Job? = null
 
     init {
+        TRACKER.trackViewModelCreated(this)
         LOGGER.info("LobbyViewModel initialized")
     }
 
@@ -88,20 +95,24 @@ class LobbyViewModel(
             delay(UI_DELAY_SHORT_MS)
             val loaded = ids.mapNotNull { id ->
                 try {
-                    readGame(id)
+                    val state = readState(id) ?: return@mapNotNull null
+                    LobbyLoadedState(
+                        gameState = state,
+                        name = id,
+                    )
                 } catch (e: CancellationException) {
                     throw e
                 } catch (e: Exception) {
                     LOGGER.warning("Erro ao ler jogo: $id - ${e.message}")
                     null
                 }
-            }.sortedBy { it.currGameName }
+            }.sortedBy { it.name }
             knownNames = ids
             LOGGER.info("Jogos carregados: ${loaded.size}")
             val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES
             _uiState.setLoading(false)
             _uiState.value = _uiState.value.copy(
-                games = loaded,
+                gameStates = loaded,
                 lobbyState = newLobbyState,
                 canRefresh = false,
             )
@@ -112,7 +123,7 @@ class LobbyViewModel(
             _uiState.setLoading(false)
             _uiState.setError(e)
             _uiState.value = _uiState.value.copy(
-                games = emptyList(),
+                gameStates = emptyList(),
                 lobbyState = LobbyState.EMPTY,
                 canRefresh = false,
             )
@@ -134,9 +145,7 @@ class LobbyViewModel(
         scope.launch {
             try {
                 loadGamesAndUpdateState()
-                while (isActive) {
-                    pollLobbyUpdates()
-                }
+                while (isActive) { pollLobbyUpdates() }
                 throw IllegalStateException("Polling coroutine ended unexpectedly")
             } catch (_: CancellationException) {
                 LOGGER.info("Lobby polling cancelled.")
@@ -182,13 +191,17 @@ class LobbyViewModel(
         }
     }
 
-    fun refreshGame(game: Game) {
+    fun refreshGame(game: LobbyLoadedState) {
         scope.launch {
             try {
-                val newGame = game.hardRefresh()
+                val state = readState(game.name) ?: return@launch
+                val newGame = LobbyLoadedState(
+                    gameState = state,
+                    name = game.name,
+                )
                 if (newGame != game) _uiState.value = _uiState.value.copy(
-                    games = _uiState.value.games.map {
-                        if (it.currGameName == newGame.currGameName) newGame else it
+                    gameStates = _uiState.value.gameStates.map {
+                        if (it.name == newGame.name) newGame else it
                     }
                 )
             } catch (e: CancellationException) {
@@ -199,50 +212,41 @@ class LobbyViewModel(
         }
     }
 
-    fun selectGame(game: Game?) {
-        LOGGER.info("Jogo selecionado: ${game?.currGameName}")
+    fun selectGame(game: LobbyLoadedState?) {
+        LOGGER.info("Jogo selecionado: ${game?.name}")
         _uiState.value = _uiState.value.copy(selectedGame = game)
     }
 
-    fun joinGameValidations(game: Game): GameState? {
-        val state: GameState? = game.gameState
-        val name: String? = game.currGameName
+    fun joinGameValidations(game: LobbyLoadedState): GameState? {
+        val state: GameState = game.gameState
+        val name: String = game.name
         when {
-            name == appState.game.currGameName -> return state
-            state == null -> {
-                LOGGER.warning("Estado do jogo nulo para o jogo: $name")
-                _uiState.setError(
-                    GameCorrupted(
-                        message = "O jogo '${name}' está corrompido.",
-                        type = ErrorType.ERROR
-                    )
-                )
-                return null
+            name == appState.game.value.currGameName -> {
+                setPage(appState, Page.GAME, Page.LOBBY)
+                return state
             }
 
-            state.players.isEmpty() -> {
+            state.players.isFull() -> {
                 LOGGER.warning("Jogo cheio selecionado: $name")
                 _uiState.setError(GameIsFull())
                 return null
             }
 
-            name == null -> {
-                LOGGER.warning("Nome do jogo nulo ao tentar entrar no jogo.")
-                _uiState.setError(
-                    GameCorrupted(
-                        message = "O jogo selecionado não tem um nome válido.",
-                        type = ErrorType.ERROR
-                    )
-                )
-                return null
+            state.players.isNotEmpty() -> {
+                val freeType = state.players.getFreeType()
+                if (freeType == null) {
+                    LOGGER.warning("Jogo corrompido selecionado: $name")
+                    _uiState.setError( GameCorrupted("No available piece types in the selected game: $name."))
+                    return null
+                }
             }
         }
         return state
     }
 
-    fun joinGame(game: Game, pieceType: PieceType) {
+    fun joinGame(game: LobbyLoadedState, pieceType: PieceType) {
         val appGame = appState.game
-        val name = game.currGameName ?: return
+        val name = game.name
         scope.launch {
             try {
                 _uiState.setLoading(true)

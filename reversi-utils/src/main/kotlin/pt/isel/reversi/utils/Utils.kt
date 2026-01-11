@@ -32,15 +32,15 @@ fun generateUniqueTimestampedFileName(baseName: String, extension: String): Stri
  * If a file with the same name already exists, a counter is added to the name.
  */
 fun setLoggerFilePath() {
-    val baseName = makePathString("logs", "reversi-app")
-    val name = generateUniqueTimestampedFileName(baseName, ".log")
-    File(name).parentFile?.mkdirs()
+    val runFolder = RUN_LOG_FOLDER  // already created at startup
+    val baseName = generateUniqueTimestampedFileName("reversi-log", ".log")
+    val name = "$runFolder/$baseName"
     File(name).createNewFile()
     val logFileHandler = java.util.logging.FileHandler(name, true).also {
         it.formatter = PlainFormatter()
     }
     LOGGER.addHandler(logFileHandler)
-    LOGGER.info("Logging to file '$name' enabled.")
+    LOGGER.info("Logging to file '$name' enabled. Run folder: '$runFolder'")
 }
 
 
@@ -141,4 +141,41 @@ fun loadResource(path: String): File {
 
     temp.deleteOnExit()
     return temp
+}
+
+internal fun buildOrigin(className: String?, methodName: String?): String {
+    if (className == null) return "Unknown"
+
+    val simpleClass = className
+        .substringAfterLast('.')
+        .substringBefore('$')
+        .removeSuffix("Kt")
+
+    val rawMethod = methodName.orEmpty()
+
+    val cleanMethod = rawMethod
+        .substringBefore('$')
+        .takeIf {
+            it.isNotBlank() &&
+                    it != "invoke" &&
+                    it != "invokeSuspend"
+        }
+
+    val isCoroutine =
+        rawMethod.contains("Suspend") ||
+                className.contains('$')
+
+    return when {
+        cleanMethod != null && isCoroutine ->
+            "$simpleClass.$cleanMethod [coroutine]"
+
+        cleanMethod != null ->
+            "$simpleClass.$cleanMethod"
+
+        isCoroutine ->
+            "$simpleClass [coroutine]"
+
+        else ->
+            simpleClass
+    }
 }

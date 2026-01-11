@@ -22,15 +22,16 @@ import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ErrorType
+import pt.isel.reversi.core.loadCoreConfig
 import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.stringifyBoard
+import pt.isel.reversi.utils.ExportFormat
 import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 import reversi.reversi_app.generated.resources.Res
 import reversi.reversi_app.generated.resources.reversi
 import java.lang.System.setProperty
-
-val pageEnterCounter = mutableMapOf<Page, Int>()
 
 /**
  * Entry point for the desktop Reversi application. Initializes app dependencies
@@ -43,6 +44,10 @@ fun main(args: Array<String>) {
     val initializedArgs = initializeAppArgs(args) ?: return
 
 
+    // Initialize tracker with auto-save enabled
+    TRACKER.setTrackerFilePath(autoSave = true)
+    LOGGER.info("Development tracker initialized with auto-save enabled")
+
     application {
         val windowState = rememberWindowState(
             placement = WindowPlacement.Floating,
@@ -53,7 +58,6 @@ fun main(args: Array<String>) {
         val scope = CoroutineScope(Dispatchers.Default + appJob)
 
         // start storage health check coroutine
-        scope.launch { runStorageHealthCheck() }
 
         val pageState = remember { mutableStateOf(Page.MAIN_MENU) }
         val backPageState = remember { mutableStateOf(Page.NONE) }
@@ -73,11 +77,27 @@ fun main(args: Array<String>) {
             playerName = playerName.value
         )
 
+        scope.launch {
+            //TODO: se for para ter loading precisa estar dentro de alguma pagina
+            //setLoading(appState, true)
+            val conf = loadCoreConfig()
+            val exception = runStorageHealthCheck(testConf = conf, save = true)
+            if (exception != null) {
+                globalError.value = exception.toReversiException(ErrorType.WARNING)
+                LOGGER.severe("Storage type change failed: ${exception.message}")
+            }
+            //setLoading(appState, false)
+        }
+
         fun safeExitApplication() {
             LOGGER.info("Application exit requested")
             LOGGER.info("Stopping compose application...")
 
             try {
+                LOGGER.info("Saving tracking data...")
+                TRACKER.saveToFile()
+                LOGGER.info("Tracking data saved.")
+
                 LOGGER.info("Cancelling application coroutines...")
                 appJob.cancel()
                 pageState.setPage(Page.NONE)
@@ -104,6 +124,8 @@ fun main(args: Array<String>) {
         installFatalCrashLogger()
         addShutdownHook {
             LOGGER.info("SHUTDOWN HOOK TRIGGERED")
+            for (type in ExportFormat.entries) TRACKER.saveToFile(type)
+
             for (handler in LOGGER.handlers) {
                 handler.flush()
                 handler.close()
@@ -163,6 +185,8 @@ fun main(args: Array<String>) {
                     Page.NONE -> null
                 } as Any
             }
+
+            TRACKER.trackRecomposition()
 
             // Log navigation once per page change
             LaunchedEffect(currentPage) {
@@ -325,17 +349,6 @@ fun main(args: Array<String>) {
 //    }
 //}
 
-/**
- * Converts a volume in decibels to a percentage string representation (0-100).
- * @param volume The volume in decibels.
- * @param min The minimum volume in decibels, defining the lower bound of the conversion range (default -20f).
- * @param max The maximum volume in decibels, defining the upper bound of the conversion range (default 0f).
- * @return A string representation of the volume as a percentage (0-100).
- */
-fun volumeDbToPercent(volume: Float, min: Float, max: Float): String {
-    val percent = ((volume - min) / (max - min)) * 100
-    return percent.toInt().toString()
-}
 
 /**
  * Logs the current game state for debugging, including players, scores, and board layout.

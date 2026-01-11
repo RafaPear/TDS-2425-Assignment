@@ -18,6 +18,7 @@ import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.LobbyCarousel
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.PopupPickAPiece
 import pt.isel.reversi.app.pages.lobby.lobbyViews.utils.RefreshButton
 import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 
 /**
  * Enumeration of possible lobby screen states.
@@ -56,8 +57,12 @@ fun ReversiScope.LobbyMenu(
 
     DisposableEffect(viewModel) {
         LOGGER.info("Starting polling for lobby updates.")
+        TRACKER.trackEffectStart(viewModel)
         viewModel.startPolling()
-        onDispose { viewModel.stopPolling() }
+        onDispose {
+            TRACKER.trackEffectStop(viewModel)
+            viewModel.stopPolling()
+        }
     }
 
     val refreshAction: @Composable () -> Unit = {
@@ -116,7 +121,7 @@ fun ReversiScope.LobbyMenu(
                     viewModel.selectGame(null)
                     return@let
                 }
-                val players = state.players.map { it.type }
+                val players = state.players.getAvailableTypes()
 
                 if (game.currGameName != appState.game.currGameName) {
                     PopupPickAPiece(

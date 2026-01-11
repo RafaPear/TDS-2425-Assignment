@@ -20,10 +20,23 @@ data class MatchPlayers(val player1: Player? = null, val player2: Player? = null
     fun hasOnlyOnePlayer(): Boolean = (player1 == null) != (player2 == null)
 
     fun getPlayerByType(type: PieceType): Player? =
-        when (type) {
-            PieceType.BLACK -> player1?.takeIf { it.type == PieceType.BLACK }
-            PieceType.WHITE -> player2?.takeIf { it.type == PieceType.WHITE }
+        this.firstOrNull { it.type == type }
+
+    /**
+     * Returns a list of available piece types that can be assigned to new players.
+     * If both players are already assigned, the list will be empty.
+     * @return A list of available PieceType values.
+     */
+    fun getAvailableTypes(): List<PieceType> {
+        val availableTypes = mutableListOf<PieceType>()
+        if (player1?.type != PieceType.BLACK && player2?.type != PieceType.BLACK) {
+            availableTypes.add(PieceType.BLACK)
         }
+        if (player1?.type != PieceType.WHITE && player2?.type != PieceType.WHITE) {
+            availableTypes.add(PieceType.WHITE)
+        }
+        return availableTypes
+    }
 
     fun refreshPlayers(board: Board): MatchPlayers {
         val refreshedPlayer1 = player1?.refresh(board)

@@ -10,6 +10,7 @@ import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 import kotlin.coroutines.cancellation.CancellationException
 
 
@@ -48,7 +49,7 @@ class GamePageViewModel(
     private var pollingJob: Job? = null
 
     init {
-        LOGGER.info("GamePageViewModel created: ${this@GamePageViewModel}")
+        TRACKER.trackViewModelCreated(this)
     }
 
     fun save() {

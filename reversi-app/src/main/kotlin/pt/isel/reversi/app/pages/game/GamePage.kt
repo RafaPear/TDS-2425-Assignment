@@ -30,6 +30,7 @@ fun ReversiScope.GamePage(
 
     // Launch the game refresh coroutine
     DisposableEffect(viewModel) {
+        TRACKER.trackEffectStart(this)
         if (game.currGameName != null && !viewModel.isPollingActive()) {
             viewModel.startPolling()
         }
@@ -45,6 +46,7 @@ fun ReversiScope.GamePage(
         onDispose {
             viewModel.stopPolling()
             viewModel.save()
+            TRACKER.trackEffectStop(this)
         }
     }
 
