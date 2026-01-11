@@ -48,7 +48,7 @@ fun ReversiScope.LobbyMenu(
     onLeave: () -> Unit,
 ) {
     val uiState = viewModel.uiState.value
-    val games = uiState.games
+    val games = uiState.gameStates
     val lobbyState = uiState.lobbyState
     val canRefresh = uiState.canRefresh
     val appState = this.appState
@@ -123,7 +123,7 @@ fun ReversiScope.LobbyMenu(
                 }
                 val players = state.players.getAvailableTypes()
 
-                if (game.currGameName != appState.game.currGameName) {
+                if (game.name != appState.game.currGameName) {
                     PopupPickAPiece(
                         pieces = players,
                         onPick = { pieceType -> viewModel.joinGame(game, pieceType) },

@@ -9,6 +9,7 @@ import pt.isel.reversi.app.PreviousPage
 import pt.isel.reversi.app.ReversiScope
 import pt.isel.reversi.app.ScaffoldView
 import pt.isel.reversi.core.Game
+import pt.isel.reversi.utils.TRACKER
 
 /**
  * Main game page displaying the Reversi board, player scores, and game controls.

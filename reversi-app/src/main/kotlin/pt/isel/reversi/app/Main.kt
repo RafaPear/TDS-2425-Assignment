@@ -22,9 +22,9 @@ import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.exceptions.ErrorType
-import pt.isel.reversi.core.loadCoreConfig
 import pt.isel.reversi.core.exceptions.ErrorType.Companion.toReversiException
 import pt.isel.reversi.core.exceptions.ReversiException
+import pt.isel.reversi.core.loadCoreConfig
 import pt.isel.reversi.core.stringifyBoard
 import pt.isel.reversi.utils.ExportFormat
 import pt.isel.reversi.utils.LOGGER
@@ -178,7 +178,12 @@ fun main(args: Array<String>) {
                     Page.LOBBY -> LobbyViewModel(
                         scope = scope,
                         appState = appState,
-                        pickGame = { game.setGame(it) },
+                        pickGame = {
+                            Snapshot.withMutableSnapshot {
+                                game.setGame(it)
+                                pageState.setPage(Page.GAME)
+                            }
+                        },
                         globalError = globalError.value,
                     )
 

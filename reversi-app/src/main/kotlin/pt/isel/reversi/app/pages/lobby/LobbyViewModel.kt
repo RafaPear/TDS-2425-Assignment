@@ -8,7 +8,6 @@ import pt.isel.reversi.app.exceptions.GameIsFull
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.PieceType
-import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.getAllGameNames
 import pt.isel.reversi.core.loadGame
@@ -36,7 +35,7 @@ data class LobbyLoadedState(
 data class LobbyUiState(
     val gameStates: List<LobbyLoadedState>  = emptyList(),
     val lobbyState: LobbyState = LobbyState.NONE,
-    val selectedGame: Game? = null,
+    val selectedGame: LobbyLoadedState? = null,
     val canRefresh: Boolean = false,
     override val screenState: ScreenState = ScreenState(
         error = null,
@@ -221,8 +220,7 @@ class LobbyViewModel(
         val state: GameState = game.gameState
         val name: String = game.name
         when {
-            name == appState.game.value.currGameName -> {
-                setPage(appState, Page.GAME, Page.LOBBY)
+            name == appState.game.currGameName -> {
                 return state
             }
 
