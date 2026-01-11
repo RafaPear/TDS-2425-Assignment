@@ -3,6 +3,7 @@ package pt.isel.reversi.storage
 import com.mongodb.client.model.Filters.eq
 import com.mongodb.kotlin.client.MongoClient
 import org.bson.Document
+import pt.isel.reversi.utils.TRACKER
 
 /**
  * [Storage] implementation via MongoDB + text strings.
@@ -25,6 +26,7 @@ data class MongoDBStorage<T>(
     private val collection = database.getCollection<Document>(collectionName)
 
     init {
+        TRACKER.trackClassCreated(this)
         // cria coleção se não existir
         val collectionNames = database.listCollectionNames().toList()
         if (collectionName !in collectionNames) {

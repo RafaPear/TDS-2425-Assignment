@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.pages.mainMenu
+package pt.isel.reversi.app.pages.menu
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.text.TextAutoSize
@@ -12,7 +12,6 @@ import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.*
 import pt.isel.reversi.app.state.Page
 import pt.isel.reversi.app.state.getStateAudioPool
-import pt.isel.reversi.app.state.setPage
 import pt.isel.reversi.utils.TRACKER
 
 val MAIN_MENU_AUTO_SIZE_BUTTON_TEXT =

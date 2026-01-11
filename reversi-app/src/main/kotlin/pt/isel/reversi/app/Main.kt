@@ -13,8 +13,8 @@ import pt.isel.reversi.app.pages.game.GamePage
 import pt.isel.reversi.app.pages.game.GamePageViewModel
 import pt.isel.reversi.app.pages.lobby.LobbyMenu
 import pt.isel.reversi.app.pages.lobby.LobbyViewModel
-import pt.isel.reversi.app.pages.mainMenu.MainMenu
-import pt.isel.reversi.app.pages.mainMenu.MainMenuViewModel
+import pt.isel.reversi.app.pages.menu.MainMenu
+import pt.isel.reversi.app.pages.menu.MainMenuViewModel
 import pt.isel.reversi.app.pages.newGamePage.NewGamePage
 import pt.isel.reversi.app.pages.newGamePage.NewGameViewModel
 import pt.isel.reversi.app.pages.settingsPage.SettingsPage
@@ -172,7 +172,14 @@ fun main(args: Array<String>) {
                         setGame = { game.setGame(it) },
                     ) as Any
 
-                    Page.SETTINGS -> SettingsViewModel(scope, globalError.value)
+                    Page.SETTINGS -> SettingsViewModel(
+                        scope,
+                        setTheme = { themeState.value = it },
+                        setPlayerName = { playerName.value = it },
+                        audioPool = audioPool.value,
+                        globalError = globalError.value
+                    )
+
                     Page.ABOUT -> AboutPageViewModel(scope, globalError.value)
                     Page.NEW_GAME -> NewGameViewModel(scope, globalError.value)
                     Page.LOBBY -> LobbyViewModel(
@@ -188,7 +195,7 @@ fun main(args: Array<String>) {
                     )
 
                     Page.NONE -> null
-                } as Any
+                }
             }
 
             TRACKER.trackRecomposition()
@@ -228,13 +235,6 @@ fun main(args: Array<String>) {
                                 onLeave = {
                                     pageState.setPage(Page.MAIN_MENU)
                                 },
-                                save = { newPlayerName, theme, masterVol ->
-                                    Snapshot.withMutableSnapshot {
-                                        themeState.value = theme
-                                        playerName.value = newPlayerName
-                                        audioPool.value.setMasterVolume(masterVol)
-                                    }
-                                }
                             )
                         }
 

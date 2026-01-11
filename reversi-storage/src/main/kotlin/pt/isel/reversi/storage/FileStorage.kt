@@ -2,7 +2,7 @@ package pt.isel.reversi.storage
 
 import okio.FileSystem
 import okio.Path.Companion.toPath
-import pt.isel.reversi.utils.LOGGER
+import pt.isel.reversi.utils.TRACKER
 
 /**
  * [Storage] implementation via file + text strings.
@@ -18,7 +18,7 @@ data class FileStorage<T>(
 ) : Storage<String, T, String> {
 
     init {
-        LOGGER.info("FileStorage initialized with folder='$folder'")
+        TRACKER.trackClassCreated(this)
     }
 
     /** Storage file path for entity identified by [id]. */

@@ -12,16 +12,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pt.isel.reversi.app.*
-import pt.isel.reversi.app.state.getStateAudioPool
 import pt.isel.reversi.core.CoreConfig
-import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.loadCoreConfig
-import pt.isel.reversi.core.saveCoreConfig
 import pt.isel.reversi.core.storage.GameStorageType
-import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.TRACKER
 
 /**
@@ -58,19 +53,18 @@ private fun ReversiScope.SettingsSection(
  * Settings page displaying application configuration options.
  * Includes theme selection and audio volume control.
  *
- * @param appState Global application state for accessing and updating settings.
+ * @param viewModel The ViewModel managing the settings state and logic.
+ * @param onLeave Callback invoked when leaving the settings page.
  */
 @Composable
 fun ReversiScope.SettingsPage(
     viewModel: SettingsViewModel,
-    onLeave: () -> Unit,
-    save: (String?, AppTheme, Float) -> Unit
+    onLeave: () -> Unit
 ) {
     TRACKER.trackRecomposition()
 
-    val draftState = remember {
-        mutableStateOf(value = appState)
-    }
+    val draftPlayerName = remember { mutableStateOf(appState.playerName) }
+    val draftTheme = remember { mutableStateOf(appState.theme) }
 
     val draftCoreConfig = remember { mutableStateOf(loadCoreConfig()) }
     var currentVol by remember {
@@ -125,9 +119,9 @@ fun ReversiScope.SettingsPage(
             ) {
 
                 GameSection(
-                    playerName = draftState.value.playerName,
+                    playerName = draftPlayerName.value,
                     onValueChange = {
-                        draftState.value = draftState.value.copy(playerName = it)
+                        draftPlayerName.value = it
                     }
                 )
 
@@ -140,25 +134,26 @@ fun ReversiScope.SettingsPage(
                     currentVol = currentVol,
                     onVolumeChange = {
                         currentVol = it
-                        getStateAudioPool(appState).setMasterVolume(it)
                     },
                 )
 
                 AppearanceSection(
-                    theme = draftState.value.theme,
+                    theme = draftTheme.value,
                     appTheme = appState.theme
                 ) { newTheme ->
-                    draftState.value = draftState.value.copy(theme = newTheme)
+                    draftTheme.value = newTheme
                 }
 
                 // Apply button
                 ApplyButton {
                     scope.launch {
                         TRACKER.trackFunctionCall(details = "Apply settings clicked")
-                        save(
-                            draftState.value.playerName,
-                            draftState.value.theme,
-                            currentVol
+                        viewModel.applySettings(
+                            oldTheme = appState.theme,
+                            newName = draftPlayerName.value,
+                            newTheme = draftTheme.value,
+                            draftCoreConfig = draftCoreConfig.value,
+                            volume = currentVol
                         )
                     }
                 }

@@ -62,9 +62,9 @@ fun <T : UiState> MutableState<T>.setLoading(isLoading: Boolean) {
  * @param T The concrete UiState type.
  * @param error The new error.
  */
-fun <T : UiState> MutableState<T>.setError(error: Exception?) {
+fun <T : UiState> MutableState<T>.setError(error: Exception?, type: ErrorType = ErrorType.CRITICAL) {
     LOGGER.info("Set error: ${error?.message ?: "null"}")
-    val newError = error as? ReversiException ?: error?.toReversiException(ErrorType.CRITICAL)
+    val newError = error as? ReversiException ?: error?.toReversiException(type)
     val newScreenState = value.screenState.copy(error = newError)
     @Suppress("UNCHECKED_CAST")
     value = value.updateScreenState(newScreenState) as T

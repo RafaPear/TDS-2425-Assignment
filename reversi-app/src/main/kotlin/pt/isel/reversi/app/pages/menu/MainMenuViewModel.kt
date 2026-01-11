@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.pages.mainMenu
+package pt.isel.reversi.app.pages.menu
 
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf

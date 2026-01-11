@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.pages.mainMenu
+package pt.isel.reversi.app.pages.menu
 
 import androidx.compose.animation.core.*
 import androidx.compose.foundation.Canvas
