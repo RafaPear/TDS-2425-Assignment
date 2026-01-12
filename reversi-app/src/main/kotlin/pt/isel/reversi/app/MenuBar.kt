@@ -44,7 +44,13 @@ fun FrameWindowScope.MakeMenuBar(
                 setPage(Page.MAIN_MENU)
             }
             Item("Jogo Atual") {
-                setPage(Page.GAME)
+                try {
+                    appState.game.requireStartedGame()
+                    setPage(Page.GAME)
+                } catch (e: Exception) {
+                    setGlobalError(e)
+                    return@Item
+                }
             }
             Item("Sair do jogo atual") {
                 runBlocking { appState.game.saveEndGame() }
@@ -72,12 +78,12 @@ fun FrameWindowScope.MakeMenuBar(
                 appState.game.printDebugState()
             }
             Item("Nullify Game State") {
-                setGame( Game() )
+                setGame(Game())
                 LOGGER.info("Estado do jogo anulado para fins de teste.")
             }
             Item("Reload Config") {
                 try {
-                    setGame( appState.game.reloadConfig() )
+                    setGame(appState.game.reloadConfig())
                     LOGGER.info("Config recarregada com sucesso.")
                 } catch (e: Exception) {
                     setGlobalError(e)

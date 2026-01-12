@@ -67,7 +67,7 @@ data class Game(
      * @return The current game state if the game has started.
      * @throws InvalidGameException if the game is not started yet (game state is null or players list is empty).
      */
-    private fun requireStartedGame(): GameState {
+    fun requireStartedGame(): GameState {
         if (gameState == null || gameState.players.isEmpty() || myPiece == null) throw InvalidGameException(
             message = "Game is not started yet.", type = ErrorType.INFO
         )
