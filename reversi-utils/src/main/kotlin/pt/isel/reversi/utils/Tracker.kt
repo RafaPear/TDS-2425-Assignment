@@ -198,6 +198,7 @@ class DevTracker(
             totalEventsTracked.incrementAndGet()
 
             val contextKey = event.context
+            val isFirstEvent = !events.containsKey(contextKey)
 
             // Update or create event list with size limit
             events.compute(contextKey) { _, existing ->
@@ -225,7 +226,10 @@ class DevTracker(
             }
             contextStats.lastOccurrence = event.timestamp
 
-            logTrackingEvent(event)
+            // Log only on first occurrence of this context
+            if (isFirstEvent) {
+                logTrackingEvent(event)
+            }
 
             if (autoSaveEnabled) {
                 asyncSave()
@@ -242,7 +246,7 @@ class DevTracker(
         val message = buildString {
             append("[${event.timestamp.format(dateFormatter)}] ")
             append("[Thread-${event.threadId}] ")
-            append("${event.type.name}: ${event.context}")
+            append("Started tracking ${event.type.name}:${event.context}")
             if (event.details.isNotEmpty()) {
                 append(" - ${event.details}")
             }
