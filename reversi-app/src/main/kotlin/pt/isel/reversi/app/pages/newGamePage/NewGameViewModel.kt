@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.state.ScreenState
 import pt.isel.reversi.app.state.UiState
+import pt.isel.reversi.app.state.ViewModel
 import pt.isel.reversi.app.state.setError
 import pt.isel.reversi.core.exceptions.ReversiException
 
@@ -18,14 +19,14 @@ data class NewGameUiState(
 class NewGameViewModel(
     val scope: CoroutineScope,
     globalError: ReversiException? = null
-) {
+): ViewModel  {
     private val _uiState = mutableStateOf(
         NewGameUiState(
             screenState = ScreenState(error = globalError)
         )
     )
-    val uiState: State<NewGameUiState> = _uiState
+    override val uiState: State<NewGameUiState> = _uiState
 
-    fun setError(error: Exception?) =
+    override fun setError(error: Exception?) =
         _uiState.setError(error)
 }

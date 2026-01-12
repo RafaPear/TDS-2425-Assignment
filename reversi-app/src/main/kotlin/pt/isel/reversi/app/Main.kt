@@ -156,7 +156,7 @@ fun main(args: Array<String>) {
             val currentPage = pageState.value
 
             // Create one ViewModel per page change
-            val currentViewModel = remember(currentPage, globalError.value) {
+            val currentViewModel: ViewModel? = remember(currentPage, globalError.value) {
                 when (currentPage) {
                     Page.MAIN_MENU -> MainMenuViewModel(scope = scope, globalError = globalError.value)
                     Page.GAME -> GamePageViewModel(
@@ -170,12 +170,24 @@ fun main(args: Array<String>) {
                             }
                         },
                         setGame = { game.setGame(it) },
-                    ) as Any
+                    )
 
                     Page.SETTINGS -> SettingsViewModel(
                         scope,
                         setTheme = { themeState.value = it },
-                        setPlayerName = { playerName.value = it },
+                        setPlayerName = {
+                            Snapshot.withMutableSnapshot {
+                                playerName.value = it
+                                val newName = it ?: return@withMutableSnapshot
+                                val gameState = game.value.gameState ?: return@withMutableSnapshot
+                                val myPiece = game.value.myPiece ?: return@withMutableSnapshot
+                                game.setGame(
+                                    game.value.copy(
+                                        gameState = gameState.changeName(newName, myPiece)
+                                    )
+                                )
+                            }
+                        },
                         audioPool = audioPool.value,
                         globalError = globalError.value
                     )
@@ -207,19 +219,19 @@ fun main(args: Array<String>) {
             }
 
             AppScreenSwitcher(pageState.value, backPageState.value, themeState.value) { currentPage ->
-                with(ReversiScope(appState.copy())) {
+                with(ReversiScope(appState)) {
                     when (currentPage) {
-                        Page.MAIN_MENU -> (currentViewModel as? MainMenuViewModel)?.let { vm ->
+                        Page.MAIN_MENU -> if (currentViewModel is MainMenuViewModel) {
                             MainMenu(
-                                viewModel = vm,
+                                viewModel = currentViewModel,
                                 setPage = { pageState.setPage(it) },
                                 onLeave = {}
                             )
                         }
 
-                        Page.GAME -> (currentViewModel as? GamePageViewModel)?.let { vm ->
+                        Page.GAME -> if (currentViewModel is GamePageViewModel) {
                             GamePage(
-                                viewModel = vm,
+                                viewModel = currentViewModel,
                                 onLeave = {
                                     Snapshot.withMutableSnapshot {
                                         game.setGame(it)
@@ -229,27 +241,27 @@ fun main(args: Array<String>) {
                             )
                         }
 
-                        Page.SETTINGS -> (currentViewModel as? SettingsViewModel)?.let { vm ->
+                        Page.SETTINGS -> if (currentViewModel is SettingsViewModel) {
                             SettingsPage(
-                                viewModel = vm,
+                                viewModel = currentViewModel,
                                 onLeave = {
                                     pageState.setPage(Page.MAIN_MENU)
                                 },
                             )
                         }
 
-                        Page.ABOUT -> (currentViewModel as? AboutPageViewModel)?.let { vm ->
+                        Page.ABOUT -> if (currentViewModel is AboutPageViewModel) {
                             AboutPage(
-                                viewModel = vm,
+                                viewModel = currentViewModel,
                                 onLeave = {
                                     pageState.setPage(Page.MAIN_MENU)
                                 }
                             )
                         }
 
-                        Page.NEW_GAME -> (currentViewModel as? NewGameViewModel)?.let { vm ->
+                        Page.NEW_GAME -> if (currentViewModel is NewGameViewModel) {
                             NewGamePage(
-                                viewModel = vm,
+                                viewModel = currentViewModel,
                                 playerNameChange = { name -> playerName.value = name },
                                 onLeave = {
                                     pageState.setPage(Page.MAIN_MENU)
@@ -263,9 +275,9 @@ fun main(args: Array<String>) {
                             )
                         }
 
-                        Page.LOBBY -> (currentViewModel as? LobbyViewModel)?.let { vm ->
+                        Page.LOBBY -> if (currentViewModel is LobbyViewModel) {
                             LobbyMenu(
-                                vm,
+                                currentViewModel,
                                 onLeave = { pageState.setPage(Page.MAIN_MENU) }
                             )
                         }

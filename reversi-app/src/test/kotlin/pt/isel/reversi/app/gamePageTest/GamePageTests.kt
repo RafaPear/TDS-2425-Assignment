@@ -36,7 +36,7 @@ class GamePageTests {
 
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(game, scope, { },)
+            val gameViewModel = GamePageViewModel(game, scope, {},{ },)
             ReversiScope(appState).GamePage(gameViewModel, onLeave = { })
         }
 
@@ -65,7 +65,7 @@ class GamePageTests {
     fun `check if player score not change if freeze is true`() = runComposeUiTest {
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(game, scope, { },)
+            val gameViewModel = GamePageViewModel(game, scope, {} ,{ },)
             ReversiScope(appState).GamePage(gameViewModel, onLeave = { }, freeze = true)
         }
 
@@ -94,7 +94,7 @@ class GamePageTests {
 
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(game, scope, { },)
+            val gameViewModel = GamePageViewModel(game, scope, { }, {})
             ReversiScope(appState).GamePage(gameViewModel, onLeave = { })
         }
 
@@ -130,7 +130,7 @@ class GamePageTests {
 
         setContent {
             val scope = rememberCoroutineScope()
-            val gameViewModel = GamePageViewModel(game, scope, { },)
+            val gameViewModel = GamePageViewModel(game, scope, { }, { })
             ReversiScope(appState).GamePage(gameViewModel, onLeave = { }, freeze = true)
         }
 

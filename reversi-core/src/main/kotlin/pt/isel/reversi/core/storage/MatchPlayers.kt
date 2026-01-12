@@ -67,6 +67,13 @@ data class MatchPlayers(val player1: Player? = null, val player2: Player? = null
         else -> null
     }
 
+    operator fun get(index: Int): Player? =
+        when (index) {
+            0 -> player1
+            1 -> player2
+            else -> null
+        }
+
     override fun iterator(): Iterator<Player> {
         val playersList = listOfNotNull(player1, player2)
         return playersList.iterator()

@@ -3,11 +3,15 @@ package pt.isel.reversi.app.pages.game
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
+import pt.isel.reversi.app.exceptions.GameCorrupted
+import pt.isel.reversi.app.exceptions.GameNotStartedYet
 import pt.isel.reversi.app.state.ScreenState
 import pt.isel.reversi.app.state.UiState
+import pt.isel.reversi.app.state.ViewModel
 import pt.isel.reversi.app.state.setError
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
+import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.TRACKER
@@ -35,16 +39,16 @@ class GamePageViewModel(
     private val game: Game,
     private val scope: CoroutineScope,
     private val setGame: (Game) -> Unit,
-    private val audioPlayMove: () -> Unit = {},
+    private val audioPlayMove: () -> Unit,
     globalError: ReversiException? = null,
-) {
+): ViewModel {
     private val _uiState = mutableStateOf(
         GameUiState(
             game = game,
             screenState = ScreenState(error = globalError)
         )
     )
-    val uiState: State<GameUiState> = _uiState
+    override val uiState: State<GameUiState> = _uiState
 
     private var pollingJob: Job? = null
 
@@ -57,9 +61,10 @@ class GamePageViewModel(
         setGame(uiState.value.game)
     }
 
-    fun setError(error: Exception?) {
+    override fun setError(error: Exception?) {
         _uiState.setError(error)
     }
+
     fun startPolling() {
         if (pollingJob != null) throw IllegalStateException("Polling already started")
 
@@ -69,9 +74,26 @@ class GamePageViewModel(
             try {
                 while (isActive) {
                     val game = uiState.value.game
+                    val gameState = game.gameState
+                    val myPiece = game.myPiece ?: run {
+                        _uiState.setError(GameNotStartedYet(), ErrorType.ERROR)
+                        return@launch
+                    }
 
                     if (game.gameState != null && game.currGameName != null) {
-                        val newGame = game.refresh()
+                        var newGame = game.refresh()
+                        val newGameState = newGame.gameState ?: run {
+                            _uiState.setError(GameCorrupted(), ErrorType.ERROR)
+                            return@launch
+                        }
+                        val myName = gameState?.players?.getPlayerByType(myPiece)?.name
+
+                        if (myName != null) {
+                            newGame = newGame.copy(
+                                gameState = newGameState.changeName(myName, myPiece)
+                            )
+                        }
+
                         val needsUpdate = newGame.lastModified != game.lastModified
                         if (needsUpdate)
                             _uiState.value = _uiState.value.copy(game = newGame)
@@ -109,7 +131,7 @@ class GamePageViewModel(
                 _uiState.value = uiState.value.copy(
                     game = uiState.value.game.play(coordinate)
                 )
-
+                setGame(_uiState.value.game)
                 audioPlayMove()
             } catch (e: Exception) {
                 setGame(uiState.value.game)

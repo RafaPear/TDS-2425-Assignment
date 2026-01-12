@@ -588,7 +588,7 @@ class GameTests {
             var uutB = startNewGame(
                 side = 4,
                 players = MatchPlayers(Player(PieceType.BLACK)),
-                firstTurn = PieceType.BLACK,
+                firstTurn = PieceType.WHITE,
                 currGameName = "testGame",
             )
 
@@ -597,12 +597,10 @@ class GameTests {
                 desiredType = null
             )
 
-            uutB = uutB.play(Coordinate(1, 2))
+            uutW = uutW.play(uutW.getAvailablePlays().first())
 
-            uutW = uutW.refresh()
-
-            assertEquals(uutB.gameState?.board, uutW.gameState?.board)
-            assertEquals(uutB.gameState?.lastPlayer, uutW.gameState?.lastPlayer)
+            uutB = uutB.refresh()
+            assertEquals(uutW.gameState, uutB.gameState)
         }
     }
 
@@ -714,6 +712,125 @@ class GameTests {
             assertFailsWith<InvalidFileException> {
                 uut.saveOnlyBoard(uut.gameState)
             }
+        }
+    }
+
+    @Test
+    fun `GameState changeName updates the correct player's name`() {
+        val player1 = Player(type = PieceType.BLACK, name = "Alice")
+        val player2 = Player(type = PieceType.WHITE, name = "Bob")
+        val expectedPlayer1 = player1.copy(name = "Charlie")
+        val expectedPlayer2 = player2.copy(name = "Diana")
+
+        val initialPlayers = MatchPlayers(
+            player1 = player1,
+            player2 = player2
+        )
+
+
+        val gameState = GameState(
+            players = initialPlayers,
+            lastPlayer = PieceType.BLACK,
+            board = Board(4).startPieces()
+        )
+
+        val updatedGameStateBlack = gameState.changeName(
+            newName = expectedPlayer1.name,
+            pieceType = expectedPlayer1.type
+        )
+
+        assertEquals(expectedPlayer1, updatedGameStateBlack.players.player1)
+        assertEquals(player2, updatedGameStateBlack.players.player2)
+
+        val updatedGameStateWhite = gameState.changeName(
+            newName = expectedPlayer2.name,
+            pieceType = expectedPlayer2.type
+        )
+
+        assertEquals(expectedPlayer2, updatedGameStateWhite.players.player2)
+        assertEquals(player1, updatedGameStateWhite.players.player1)
+    }
+
+    @Test
+    fun `GameState changeName with non-existing piece type does not change players`() {
+        val player1 = Player(type = PieceType.BLACK, name = "Alice")
+
+        val initialPlayers = MatchPlayers(
+            player1 = player1,
+        )
+
+        val gameState = GameState(
+            players = initialPlayers,
+            lastPlayer = PieceType.BLACK,
+            board = Board(4).startPieces()
+        )
+
+        val updatedGameState = gameState.changeName(
+            newName = "Charlie",
+            pieceType = PieceType.WHITE // Non-existing piece type in this context
+        )
+
+        assertEquals(initialPlayers, updatedGameState.players)
+    }
+
+    @Test
+    fun `GameState refreshPlayers updates players based on current board state`() {
+        val player1 = Player(type = PieceType.BLACK, name = "Alice", points = 0)
+        val player2 = Player(type = PieceType.WHITE, name = "Bob", points = 0)
+
+        val initialPlayers = MatchPlayers(
+            player1 = player1,
+            player2 = player2
+        )
+
+        val board = Board(4)
+            .addPiece(Coordinate(1, 1), PieceType.BLACK)
+            .addPiece(Coordinate(1, 2), PieceType.BLACK)
+            .addPiece(Coordinate(2, 1), PieceType.WHITE)
+
+        val gameState = GameState(
+            players = initialPlayers,
+            lastPlayer = PieceType.BLACK,
+            board = board
+        )
+
+        val refreshedGameState = gameState.refreshPlayers()
+
+        val expectedPlayer1Points = 2 // BLACK pieces
+        val expectedPlayer2Points = 1 // WHITE pieces
+
+        assertEquals(expectedPlayer1Points, refreshedGameState.players.player1?.points)
+        assertEquals(expectedPlayer2Points, refreshedGameState.players.player2?.points)
+    }
+
+    @Test
+    fun `saveOnlyBoard in not local game, verify if my name is preserved when my name is changed`() {
+        cleanup {
+            val initialMyPlayer = Player(PieceType.BLACK, name = "Player 1")
+            var initialPlayer2 = Player(PieceType.WHITE, name = "Player 2")
+            var uut = startNewGame(
+                side = 4,
+                players = MatchPlayers(initialMyPlayer, initialPlayer2),
+                firstTurn = initialMyPlayer.type,
+                currGameName = "testGame",
+            )
+
+            val expectedMyPlayer = initialMyPlayer.copy(name = "Changed Name").refresh(uut.gameState!!.board) // Refresh points
+            initialPlayer2 = initialPlayer2.refresh(uut.gameState.board) // Refresh points
+
+            uut = uut.copy(
+                gameState = uut.gameState.changeName(
+                    newName = expectedMyPlayer.name,
+                    pieceType = expectedMyPlayer.type
+                )
+            )
+
+            uut.saveOnlyBoard(uut.gameState)
+
+            val lsGameState = uut.storage.load(uut.currGameName!!)
+
+            assertEquals(expectedMyPlayer, lsGameState?.players?.getPlayerByType(expectedMyPlayer.type))
+            assertEquals(initialPlayer2, lsGameState?.players?.getPlayerByType(initialPlayer2.type))
         }
     }
 }

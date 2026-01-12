@@ -5,6 +5,7 @@ import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.state.ScreenState
 import pt.isel.reversi.app.state.UiState
+import pt.isel.reversi.app.state.ViewModel
 import pt.isel.reversi.app.state.setError
 import pt.isel.reversi.core.exceptions.ReversiException
 
@@ -20,7 +21,7 @@ data class MainMenuUIState(
 class MainMenuViewModel(
     val scope: CoroutineScope,
     globalError: ReversiException?
-) {
+): ViewModel {
     private val _uiState = mutableStateOf(
         MainMenuUIState(
             screenState = ScreenState(
@@ -28,9 +29,9 @@ class MainMenuViewModel(
             )
         )
     )
-    val uiState: State<MainMenuUIState> = _uiState
+    override val uiState: State<MainMenuUIState> = _uiState
 
-    fun setErro(error: Exception?) {
+    override fun setError(error: Exception?) {
         _uiState.setError(error)
     }
 }

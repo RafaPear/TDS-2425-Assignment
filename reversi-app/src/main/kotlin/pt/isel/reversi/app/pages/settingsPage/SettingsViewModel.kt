@@ -8,10 +8,7 @@ import kotlinx.coroutines.delay
 import pt.isel.reversi.app.AppTheme
 import pt.isel.reversi.app.gameAudio.loadGameAudioPool
 import pt.isel.reversi.app.runStorageHealthCheck
-import pt.isel.reversi.app.state.ScreenState
-import pt.isel.reversi.app.state.UiState
-import pt.isel.reversi.app.state.setError
-import pt.isel.reversi.app.state.setLoading
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.CoreConfig
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
@@ -33,16 +30,16 @@ class SettingsViewModel(
     private val setPlayerName: (String?) -> Unit,
     private val audioPool: AudioPool,
     globalError: ReversiException? = null
-) {
+): ViewModel {
     private val _uiState = mutableStateOf(
         SettingsUiState(
             screenState = ScreenState(error = globalError)
         )
     )
 
-    val uiState: State<SettingsUiState> = _uiState
+    override val uiState: State<SettingsUiState> = _uiState
 
-    fun setError(error: Exception?) =
+    override fun setError(error: Exception?) =
         _uiState.setError(error)
 
     suspend fun applySettings(

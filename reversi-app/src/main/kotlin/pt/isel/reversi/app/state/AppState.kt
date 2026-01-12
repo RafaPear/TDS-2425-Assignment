@@ -1,5 +1,6 @@
 package pt.isel.reversi.app.state
 
+import androidx.compose.runtime.State
 import pt.isel.reversi.app.AppTheme
 import pt.isel.reversi.app.AppThemes
 import pt.isel.reversi.core.Game
@@ -51,4 +52,10 @@ abstract class UiState {
      * Each subclass implements this using its data class copy() method.
      */
     abstract fun updateScreenState(newScreenState: ScreenState): UiState
+}
+
+interface ViewModel {
+    val uiState: State<UiState>
+
+    fun setError(error: Exception?)
 }

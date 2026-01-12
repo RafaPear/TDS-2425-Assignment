@@ -245,16 +245,16 @@ data class Game(
      */
     suspend fun refresh(): Game {
         val gs = requireStartedGame()
-        val loadedState = refreshBase() ?: return this
-
         if (currGameName == null) return this
 
         val newLastModified = storage.lastModified(currGameName)
 
         if (newLastModified == this.lastModified) return this
 
+        val loadedState = refreshBase() ?: return this
+
         return copy(
-            gameState = loadedState.copy(players = gs.players.refreshPlayers(loadedState.board)),
+            gameState = loadedState.refreshPlayers(),
             countPass = if (loadedState.board == gs.board && loadedState.lastPlayer != gs.lastPlayer) countPass + 1
             else 0,
             lastModified = newLastModified
@@ -355,7 +355,7 @@ data class Game(
 
         storage.lastModified(id = name) ?: run {
             try {
-                storage.new(id = name) { gameState.copy(players = MatchPlayers()) }
+                storage.new(id = name) { gameState }
                 return@saveOnlyBoard
             } catch (e: Exception) {
                 throw InvalidFileException(
@@ -368,10 +368,20 @@ data class Game(
             message = "Failed to load game state from storage: $name", type = ErrorType.ERROR
         )
 
+
+        var lsGameState = ls
+
+        ls.players.forEachIndexed { index, player ->
+            val gsPlayer = gs.players[index]
+            if (gsPlayer != null && gsPlayer.name != player.name) {
+                lsGameState = lsGameState.changeName(newName = gsPlayer.name, pieceType = gsPlayer.type)
+            }
+        }
+
         storage.save(
             id = name,
             obj = gs.copy(
-                players = ls.players
+                players = lsGameState.players,
             )
         )
     }

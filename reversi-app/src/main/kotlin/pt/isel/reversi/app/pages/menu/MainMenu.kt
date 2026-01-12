@@ -36,7 +36,7 @@ fun ReversiScope.MainMenu(
     }
 
     ScaffoldView(
-        setError = { error -> viewModel.setErro(error) },
+        setError = { error -> viewModel.setError(error) },
         error = viewModel.uiState.value.screenState.error,
         isLoading = viewModel.uiState.value.screenState.isLoading,
         previousPageContent = { PreviousPage { onLeave() } },

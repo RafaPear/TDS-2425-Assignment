@@ -61,14 +61,14 @@ class LobbyViewModel(
     val appState: AppState,
     val pickGame: (Game) -> Unit,
     globalError: ReversiException? = null,
-) {
-    private val _uiState = mutableStateOf(
+): ViewModel {
+    val _uiState = mutableStateOf(
         LobbyUiState(
             screenState = ScreenState(error = globalError)
         )
     )
 
-    val uiState: State<LobbyUiState> = _uiState
+    override val uiState: State<LobbyUiState> = _uiState
 
     private var knownNames: List<String> = emptyList()
 
@@ -83,7 +83,7 @@ class LobbyViewModel(
         scope.launch { loadGamesAndUpdateState() }
     }
 
-    fun setError(error: Exception?) {
+    override fun setError(error: Exception?) {
         _uiState.setError(error)
     }
 
@@ -221,7 +221,8 @@ class LobbyViewModel(
         val name: String = game.name
         when {
             name == appState.game.currGameName -> {
-                return state
+                val myPiece = appState.game.myPiece ?: return state
+                joinGame(game, myPiece)
             }
 
             state.players.isFull() -> {
