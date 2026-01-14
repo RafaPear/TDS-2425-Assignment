@@ -9,6 +9,7 @@ import pt.isel.reversi.app.state.pages.ScreenState
 import pt.isel.reversi.app.state.pages.UiState
 import pt.isel.reversi.app.state.pages.ViewModel
 import pt.isel.reversi.app.state.setError
+import pt.isel.reversi.app.state.*
 import pt.isel.reversi.core.Game
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.exceptions.ErrorType
@@ -18,10 +19,20 @@ import pt.isel.reversi.utils.TRACKER
 import kotlin.coroutines.cancellation.CancellationException
 
 
+/**
+ * UI state for the game page.
+ * @property game The current game instance.
+ * @property screenState The screen state containing error and loading information.
+ */
 data class GameUiState(
     val game: Game,
     override val screenState: ScreenState = ScreenState()
 ) : UiState {
+    /**
+     * Creates a copy of this UI state with the given screen state.
+     * @param newScreenState The new screen state to apply.
+     * @return A new GameUiState with the updated screen state.
+     */
     override fun updateScreenState(newScreenState: ScreenState): GameUiState {
         return copy(screenState = newScreenState)
     }
@@ -34,6 +45,9 @@ data class GameUiState(
  * @property game The current game state.
  * @property scope Coroutine scope for launching async game operations.
  * @property globalError Optional error to display on initial load.
+ * @property setGlobalError Callback function to update global error state.
+ * @property setGame Callback function to persist updated game state.
+ * @property audioPlayMove Callback function to play move sound effect.
  */
 class GamePageViewModel(
     private val game: Game,
@@ -54,7 +68,7 @@ class GamePageViewModel(
     private var pollingJob: Job? = null
 
     init {
-        TRACKER.trackViewModelCreated(this)
+        TRACKER.trackViewModelCreated(this, category = Page.GAME)
     }
 
     fun save() {

@@ -6,6 +6,20 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.window.*
 import kotlinx.coroutines.*
 import org.jetbrains.compose.resources.painterResource
+import pt.isel.reversi.app.pages.aboutPage.AboutPage
+import pt.isel.reversi.app.pages.aboutPage.AboutPageViewModel
+import pt.isel.reversi.app.pages.game.GamePage
+import pt.isel.reversi.app.pages.game.GamePageViewModel
+import pt.isel.reversi.app.pages.lobby.LobbyMenu
+import pt.isel.reversi.app.pages.lobby.LobbyViewModel
+import pt.isel.reversi.app.pages.menu.MainMenu
+import pt.isel.reversi.app.pages.menu.MainMenuViewModel
+import pt.isel.reversi.app.pages.newGamePage.NewGamePage
+import pt.isel.reversi.app.pages.newGamePage.NewGameViewModel
+import pt.isel.reversi.app.pages.settingsPage.SettingsPage
+import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
+import pt.isel.reversi.app.pages.statisticsPage.StatisticsPage
+import pt.isel.reversi.app.pages.statisticsPage.StatisticsPageViewModel
 import pt.isel.reversi.app.state.*
 import pt.isel.reversi.app.state.pages.Page
 import pt.isel.reversi.app.state.pages.PagesState
@@ -162,7 +176,7 @@ fun main(args: Array<String>) {
                 )
             }
 
-            TRACKER.trackRecomposition()
+            TRACKER.trackRecomposition(category = "App.Main")
 
             // Log navigation once per page change
             LaunchedEffect(currentPage) {

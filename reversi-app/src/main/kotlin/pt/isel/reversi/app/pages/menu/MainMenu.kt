@@ -20,15 +20,23 @@ import pt.isel.reversi.utils.TRACKER
 val MAIN_MENU_AUTO_SIZE_BUTTON_TEXT =
     TextAutoSize.StepBased(minFontSize = 10.sp, maxFontSize = 24.sp)
 
-
+/**
+ * Main menu screen showing navigation options.
+ * Handles menu audio playback and navigation callbacks to other pages.
+ *
+ * @param viewModel View model handling menu audio and error state.
+ * @param modifier Modifier for layout customization.
+ * @param setPage Callback to navigate to a target page.
+ * @param onLeave Callback invoked when returning to the previous screen.
+ */
 @Composable
 fun ReversiScope.MainMenu(
     viewModel: MainMenuViewModel,
     modifier: Modifier = Modifier,
     onLeave: () -> Unit,
 ) {
-    TRACKER.trackPageEnter()
-    //TODO: Rever esta corroutina
+    TRACKER.trackPageEnter(category = Page.MAIN_MENU)
+    //TODO: Rever esta corroutina -- Porque? (rafa)
     LaunchedEffect(appState.pagesState.page) {
         viewModel.playMenuAudio()
     }
