@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package pt.isel.reversi.app.state
 
 import androidx.compose.runtime.MutableState
@@ -62,7 +64,6 @@ fun <T : UiState> MutableState<T>.setLoading(isLoading: Boolean) {
     if (isLoading == value.screenState.isLoading) return
     LOGGER.info("Set loading: $isLoading")
     val newScreenState = value.screenState.copy(isLoading = isLoading)
-    @Suppress("UNCHECKED_CAST")
     value = value.updateScreenState(newScreenState) as T
 }
 
@@ -76,7 +77,6 @@ fun <T : UiState> MutableState<T>.setError(error: Exception?, type: ErrorType = 
     LOGGER.info("Set error: ${error?.message ?: "null"}")
     val newError = error as? ReversiException ?: error?.toReversiException(type)
     val newScreenState = value.screenState.copy(error = newError)
-    @Suppress("UNCHECKED_CAST")
     value = value.updateScreenState(newScreenState) as T
 }
 
@@ -84,6 +84,5 @@ fun MutableState<ReversiException?>.setGlobalError(error: Exception?, type: Erro
     LOGGER.info("Set global error: ${error?.message ?: "null"}")
     val newError = error as? ReversiException ?: error?.toReversiException(type)
 
-    @Suppress("UNCHECKED_CAST")
     value = newError
 }

@@ -52,8 +52,7 @@ abstract class ViewModel<T : UiState> {
         if (globalError != null) {
             setGlobalError(error)
         } else {
-            @Suppress("UNCHECKED_CAST")
-            (_uiState as MutableState<UiState>).setError(error)
+            _uiState.setError(error)
         }
     }
 }
