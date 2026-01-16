@@ -1,17 +1,26 @@
 package pt.isel.reversi.cli.commands
 
-import pt.isel.reversi.cli.cleanup
+import kotlinx.coroutines.test.runTest
 import pt.isel.reversi.core.Player
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.gameServices.EmptyGameService
 import pt.isel.reversi.core.startNewGame
 import pt.isel.reversi.core.storage.MatchPlayers
 import pt.rafap.ktflag.cmd.CommandResultType
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNull
+import java.io.File
+import kotlin.test.*
 
 class PlayCmdTests {
+
+    @BeforeTest
+    fun cleanup() {
+        File("data/saves").deleteRecursively()
+    }
+
+    @AfterTest
+    fun cleanupAfter() {
+        File("data/saves").deleteRecursively()
+    }
 
     @Test
     fun `parseCoordinateArgs accepts separated numbers`() {
@@ -43,40 +52,34 @@ class PlayCmdTests {
     }
 
     @Test
-    fun `Test PlayCmd execution`() {
-        cleanup {
-            val result = PlayCmd.executeWrapper(
-                "3", "4",
-                context = startNewGame(
-                    side = 8,
-                    players = MatchPlayers(Player(PieceType.BLACK), Player(PieceType.WHITE)),
-                    firstTurn = PieceType.BLACK,
-                    service = EmptyGameService()
-                )
+    fun `Test PlayCmd execution`() = runTest {
+        val result = PlayCmd.executeWrapper(
+            "3", "4",
+            context = startNewGame(
+                side = 8,
+                players = MatchPlayers(Player(PieceType.BLACK), Player(PieceType.WHITE)),
+                firstTurn = PieceType.BLACK,
+                service = EmptyGameService()
             )
-            assert(result.type == CommandResultType.SUCCESS) {
-                "Expected SUCCESS but got ${result.type} with message: ${result.message}"
-            }
+        )
+        assert(result.type == CommandResultType.SUCCESS) {
+            "Expected SUCCESS but got ${result.type} with message: ${result.message}"
         }
     }
 
     @Test
     fun `Test PlayCmd execution fails on null game`() {
-        cleanup {
-            val result = PlayCmd.executeWrapper("1", "4", context = null)
-            assert(result.type == CommandResultType.ERROR) {
-                "Expected ERROR but got ${result.type} with message: ${result.message}"
-            }
+        val result = PlayCmd.executeWrapper("1", "4", context = null)
+        assert(result.type == CommandResultType.ERROR) {
+            "Expected ERROR but got ${result.type} with message: ${result.message}"
         }
     }
 
     @Test
     fun `Test PlayCmd fails execution by arguments`() {
-        cleanup {
-            val result = PlayCmd.executeWrapper(context = null)
-            assert(result.type == CommandResultType.INVALID_ARGS) {
-                "Expected INVALID_ARGS but got ${result.type} with message: ${result.message}"
-            }
+        val result = PlayCmd.executeWrapper(context = null)
+        assert(result.type == CommandResultType.INVALID_ARGS) {
+            "Expected INVALID_ARGS but got ${result.type} with message: ${result.message}"
         }
     }
 }

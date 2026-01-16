@@ -67,6 +67,8 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
 
     override suspend fun hardLoad(id: String) = storage.load(id)
 
+    override suspend fun hardSave(id: String, gameState: GameState) =
+        storage.save(id, gameState)
 
     override suspend fun saveEndGame(game: Game) {
         TRACKER.trackFunctionCall(customName = "Game.saveEndGame", category = "Core.Game")

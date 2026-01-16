@@ -9,6 +9,7 @@ interface GameServiceImpl {
     suspend fun refresh(game: Game): Game
     suspend fun refreshBase(game: Game): GameState?
     suspend fun hardLoad(id: String): GameState?
+    suspend fun hardSave(id: String, gameState: GameState)
     suspend fun saveEndGame(game: Game)
     suspend fun saveOnlyBoard(gameName: String?, gameState: GameState?)
     suspend fun runStorageHealthCheck()

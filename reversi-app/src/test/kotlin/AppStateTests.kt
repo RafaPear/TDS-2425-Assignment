@@ -7,7 +7,7 @@
 //    }
 //    @Test
 //    fun `setPage update the same page does not change the state`() {
-//        cleanup {
+//
 //            val expectedAppState = mutableStateOf(
 //                value = AppState(
 //                    page = Page.JOIN_GAME,
@@ -30,7 +30,7 @@
 //
 //    @Test
 //    fun `setAppState the same page does not change the backPageState`() {
-//        cleanup {
+//
 //            val expectedAppState = mutableStateOf(
 //                value = AppState(
 //                    page = Page.JOIN_GAME,

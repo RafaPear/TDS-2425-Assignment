@@ -22,6 +22,10 @@ class EmptyGameService: GameServiceImpl {
 
     override suspend fun hardLoad(id: String): GameState? = null
 
+    override suspend fun hardSave(id: String, gameState: GameState) {
+        // No-op
+    }
+
     override suspend fun saveEndGame(game: Game) {
         // No-op
     }
@@ -30,8 +34,8 @@ class EmptyGameService: GameServiceImpl {
         // No-op
     }
 
-    override suspend fun runStorageHealthCheck(): Boolean {
-        return true
+    override suspend fun runStorageHealthCheck() {
+
     }
 
     override suspend fun closeService() {

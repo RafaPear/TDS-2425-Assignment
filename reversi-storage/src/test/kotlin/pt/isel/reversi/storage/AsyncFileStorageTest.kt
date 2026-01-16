@@ -1,6 +1,7 @@
 package pt.isel.reversi.storage
 
 import kotlinx.coroutines.runBlocking
+import org.junit.After
 import org.junit.Before
 import java.io.File
 import kotlin.test.Test
@@ -27,6 +28,11 @@ class AsyncFileStorageTest {
 
     @Before
     fun cleanup() {
+        File("test-async-saves").deleteRecursively()
+    }
+
+    @After
+    fun cleanupAfter() {
         File("test-async-saves").deleteRecursively()
     }
 

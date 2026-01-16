@@ -24,7 +24,9 @@ fun loadStorageFromConfig() = setUpStorage(loadCoreConfig())
  * @throws InvalidGame if no players are provided.
  * @throws InvalidNameAlreadyExists if already exists a game with the same name in storage.
  */
-suspend fun startNewGame(
+suspend fun startNewGame(//TODO: ele esá a possibilitar criar jogos não locais onde os 2 players têm o mesmo tipo
+    //acontece quando meto 1 player com tipo preto, e o fristTurn é o oposto e outra pessoa conecta as duas ficam com tipo branco
+    //pq o myPice é criado com referencia no fristTurn
     side: Int,
     players: MatchPlayers,
     firstTurn: PieceType,
@@ -87,8 +89,7 @@ suspend fun loadAndEntryGame(
     service: GameServiceImpl
 ): Game {
     TRACKER.trackFunctionCall(customName = "loadGame", details = "gameName=$gameName", category = "Core.Game")
-    val storage = loadStorageFromConfig()
-    val loadedState = storage.load(gameName)
+    val loadedState = service.hardLoad(gameName)
         ?: throw InvalidFile(
             message = "$gameName does not exist",
             type = ErrorType.ERROR
@@ -109,9 +110,9 @@ suspend fun loadAndEntryGame(
 
     val newState = loadedState.copy(players = newMatch)
 
-    storage.save(
+    service.hardSave(
         id = gameName,
-        obj = newState
+        gameState = newState
     )
 
     return Game(

@@ -30,7 +30,7 @@ dependencies {
     implementation(libs.coroutines)
 
     // TEST MODULE
-    testImplementation(libs.kotlin.test)
+    testImplementation(kotlin("test"))
 }
 
 

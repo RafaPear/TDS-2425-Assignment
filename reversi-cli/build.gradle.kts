@@ -8,6 +8,7 @@ dependencies {
     implementation(libs.coroutines)
     implementation(project(":reversi-core"))
     implementation(project(":reversi-utils"))
+    testImplementation(libs.coroutines.test)
     testImplementation(kotlin("test"))
 }
 

@@ -68,6 +68,10 @@ data class Game(
         if (gameState == null || !hasStarted()) throw InvalidGame(
             message = "Game is not started yet.", type = ErrorType.INFO
         )
+        if (currGameName == null && !gameState.players.isFull()) throw InvalidGame(
+            message = "Local games must have two players, but have only one.",
+            type = ErrorType.ERROR
+        )
         return gameState
     }
 
@@ -76,7 +80,7 @@ data class Game(
      * @param gs The game state to check.
      * @throws InvalidPlay if it's not the player's turn.
      */
-    private fun checkTurnOnNotLocalGame(gs: GameState) {
+    internal fun checkTurnOnNotLocalGame(gs: GameState) {
         if (currGameName != null && myPiece != gs.lastPlayer.swap()) {
             throw InvalidPlay(
                 message = "It's not your turn", type = ErrorType.INFO
@@ -88,7 +92,7 @@ data class Game(
      * Validates whether the game already ended and throws if a winner is set.
      * @throws EndGame if the game already has a winner.
      */
-    private fun gameEnded() {
+    internal fun gameEnded() {
         val gs = requireStartedGame()
         if (gs.winner != null) {
             throw EndGame(
