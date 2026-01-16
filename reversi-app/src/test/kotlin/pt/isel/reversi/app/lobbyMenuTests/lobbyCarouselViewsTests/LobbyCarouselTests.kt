@@ -95,7 +95,7 @@ class LobbyCarouselTests {
                         scope,
                         {},
                         null,
-                        { _, _ -> }
+                        { _, _ -> },
                     ),
                     reversiScope = reversiScope,
                     onGameClick = { }
@@ -122,7 +122,7 @@ class LobbyCarouselTests {
                         scope,
                         {},
                         null,
-                        { _, _ -> }
+                        { _, _ -> },
                     ),
                     reversiScope = reversiScope,
                     onGameClick = { }
@@ -156,7 +156,8 @@ class LobbyCarouselTests {
                         scope,
                         {},
                         null,
-                        { _, _ -> }
+                        { _, _ -> },
+
                     ),
                     reversiScope = reversiScope,
                     onGameClick = { }
@@ -197,7 +198,7 @@ class LobbyCarouselTests {
                         scope,
                         {},
                         null,
-                        { _, _ -> }
+                        { _, _ -> },
                     ),
                     reversiScope = reversiScope,
                     onGameClick = { }
@@ -228,7 +229,7 @@ class LobbyCarouselTests {
                         scope,
                         {},
                         null,
-                        { _, _ -> }
+                        { _, _ -> },
                     ),
                     reversiScope = reversiScope,
                     onGameClick = { }
@@ -254,7 +255,7 @@ class LobbyCarouselTests {
                         scope,
                         {},
                         null,
-                        { _, _ -> }
+                        { _, _ -> },
                     ),
                     reversiScope = reversiScope,
                     onGameClick = { }

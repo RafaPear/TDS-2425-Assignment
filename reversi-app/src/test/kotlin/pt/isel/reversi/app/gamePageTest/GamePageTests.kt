@@ -200,6 +200,4 @@ class GamePageTests {
 
         assertEquals(expectedGame, gameSaved!!)
     }
-
-    //TODO: add test for pass, wait for winner page
 }

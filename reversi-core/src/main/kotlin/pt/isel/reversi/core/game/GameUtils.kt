@@ -130,16 +130,6 @@ suspend fun loadAndEntryGame(
 }
 
 /**
- * Reads the raw game state from storage without wrapping it in a Game instance.
- * @param gameName The name of the game to read.
- * @return The game state, or null if the game does not exist.
- */
-suspend fun readState(gameName: String): GameState? {
-    val storage = loadStorageFromConfig()
-    return storage.load(gameName)
-}
-
-/**
  * Converts the game board to a string representation with row/column labels and target markers.
  * If target mode is enabled, available plays are marked with the target character.
  * @return A formatted string representation of the board, or an error message if board is uninitialized.
@@ -197,12 +187,3 @@ fun newGameForTest(
     service = service,
     config = CoreConfig(emptyMap())
 )
-
-/**
- * Retrieves all game names stored in the configured storage backend.
- * @return A list of all game identifiers in storage.
- */
-suspend fun getAllGameNames(): List<String> {
-    val storage = loadStorageFromConfig()
-    return storage.loadAllIds()
-}

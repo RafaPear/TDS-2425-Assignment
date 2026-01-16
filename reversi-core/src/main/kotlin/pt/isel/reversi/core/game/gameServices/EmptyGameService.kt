@@ -45,4 +45,7 @@ class EmptyGameService : GameServiceImpl {
     override suspend fun new(gameName: String, gameStateProvider: () -> GameState) {
         // No-op
     }
+    override suspend fun getAllGameNames(): List<String> {
+        return emptyList()
+    }
 }

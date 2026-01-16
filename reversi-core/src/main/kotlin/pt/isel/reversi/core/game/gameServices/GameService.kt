@@ -191,6 +191,14 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         )
     }
 
+    /**
+     * Retrieves all game names stored in the configured storage backend.
+     * @return A list of all game identifiers in storage.
+     */
+    override suspend fun getAllGameNames(): List<String> {
+        return storage.loadAllIds()
+    }
+
     override suspend fun closeService() {
         storage.close()
     }

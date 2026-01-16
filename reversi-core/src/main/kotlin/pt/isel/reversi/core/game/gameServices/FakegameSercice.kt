@@ -160,4 +160,8 @@ class FakeGameService : GameServiceImpl {
     override suspend fun closeService() {
         // No-op for fake service
     }
+
+    override suspend fun getAllGameNames(): List<String> {
+        return _game.map { it.first }
+    }
 }

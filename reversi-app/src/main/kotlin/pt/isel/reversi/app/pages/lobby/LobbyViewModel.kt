@@ -16,9 +16,7 @@ import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.game.Game
-import pt.isel.reversi.core.game.getAllGameNames
 import pt.isel.reversi.core.game.loadAndEntryGame
-import pt.isel.reversi.core.game.readState
 import pt.isel.reversi.core.gameState.GameState
 import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.TRACKER
@@ -87,6 +85,8 @@ class LobbyViewModel(
         )
     )
 
+    private val service = appState.service
+
     private var knownNames: List<String> = emptyList()
 
     private var pollingJob: Job? = null
@@ -102,11 +102,11 @@ class LobbyViewModel(
     private suspend fun loadGamesAndUpdateState() {
         _uiState.setLoading(true)
         try {
-            val ids = getAllGameNames().sorted()
+            val ids = service.getAllGameNames().sorted()
             delay(UI_DELAY_SHORT_MS)
             val loaded = ids.mapNotNull { id ->
                 try {
-                    val state = readState(id) ?: return@mapNotNull null
+                    val state = service.hardLoad(id) ?: return@mapNotNull null
                     LobbyLoadedState(
                         gameState = state,
                         name = id,
@@ -118,10 +118,15 @@ class LobbyViewModel(
                     null
                 }
             }.sortedBy { it.name }
+
             knownNames = ids
+
             LOGGER.info("Jogos carregados: ${loaded.size}")
+
             val newLobbyState = if (loaded.isEmpty()) LobbyState.EMPTY else LobbyState.SHOW_GAMES
+
             _uiState.setLoading(false)
+
             _uiState.value = _uiState.value.copy(
                 gameStates = loaded,
                 lobbyState = newLobbyState,
@@ -138,7 +143,6 @@ class LobbyViewModel(
                 lobbyState = LobbyState.EMPTY,
                 canRefresh = false,
             )
-
         }
     }
 
@@ -173,7 +177,7 @@ class LobbyViewModel(
 
     private suspend fun pollLobbyUpdates() {
         try {
-            val ids = getAllGameNames()
+            val ids = service.getAllGameNames()
             if (ids != knownNames && ids.isNotEmpty()) {
                 _uiState.value = _uiState.value.copy(canRefresh = true)
                 knownNames = ids
@@ -209,7 +213,7 @@ class LobbyViewModel(
     fun refreshGame(game: LobbyLoadedState) {
         scope.launch {
             try {
-                val state = readState(game.name) ?: return@launch
+                val state = service.hardLoad(game.name) ?: return@launch
                 val newGame = LobbyLoadedState(
                     gameState = state,
                     name = game.name,

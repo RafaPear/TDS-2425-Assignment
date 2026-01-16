@@ -15,4 +15,5 @@ interface GameServiceImpl {
     suspend fun runStorageHealthCheck()
     suspend fun new(gameName: String, gameStateProvider: () -> GameState)
     suspend fun closeService()
+    suspend fun getAllGameNames(): List<String>
 }
