@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.newGamePage
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -56,8 +55,6 @@ class NewGameViewModel(
             screenState = ScreenState(error = globalError)
         )
     )
-
-    override val uiState: State<NewGameUiState> = _uiState
 
     fun tryCreateGame(game: Game, boardSize: Int, playerName: String?) {
         LOGGER.info("Using ${appState.service.getStorageTypeName()}")

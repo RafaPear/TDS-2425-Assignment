@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.aboutPage
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.app.pages.ScreenState
@@ -42,7 +41,6 @@ class AboutPageViewModel(
             screenState = ScreenState(error = globalError)
         )
     )
-    override val uiState: State<AboutUiState> = _uiState
 
     init {
         TRACKER.trackViewModelCreated(viewModel = this, category = Page.ABOUT)

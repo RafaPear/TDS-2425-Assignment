@@ -37,7 +37,7 @@ fun ReversiScope.NewGamePage(
 
     ScaffoldView(
         setError = { error, type -> viewModel.setError(error, type) },
-        error = viewModel.uiState.value.screenState.error,
+        error = viewModel.error,
         isLoading = viewModel.uiState.value.screenState.isLoading,
         title = title,
         previousPageContent = {

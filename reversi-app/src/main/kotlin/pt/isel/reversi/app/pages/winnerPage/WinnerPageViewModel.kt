@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.winnerPage
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import pt.isel.reversi.app.pages.ScreenState
 import pt.isel.reversi.app.pages.UiState
@@ -32,5 +31,4 @@ class WinnerPageViewModel(
             screenState = ScreenState(error = globalError)
         )
     )
-    override val uiState: State<WinnerUiState> = _uiState
 }

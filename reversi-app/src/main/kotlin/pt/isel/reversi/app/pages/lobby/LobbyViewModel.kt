@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.lobby
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import kotlinx.coroutines.*
 import pt.isel.reversi.app.exceptions.GameCorrupted
@@ -87,8 +86,6 @@ class LobbyViewModel(
             screenState = ScreenState(error = globalError)
         )
     )
-
-    override val uiState: State<LobbyUiState> = _uiState
 
     private var knownNames: List<String> = emptyList()
 

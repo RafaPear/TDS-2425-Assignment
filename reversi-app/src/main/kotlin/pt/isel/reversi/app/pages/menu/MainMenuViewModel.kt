@@ -51,7 +51,6 @@ class MainMenuViewModel(
             )
         )
     )
-    override val uiState: State<MainMenuUIState> = _uiState
 
     init {
         TRACKER.trackViewModelCreated(this, category = Page.MAIN_MENU)

@@ -36,9 +36,8 @@ import pt.isel.reversi.core.game.Game
 private inline fun <reified T : ViewModel<out UiState>> createPageViewIfType(
     vm: ViewModel<out UiState>,
     noinline content: @Composable ReversiScope.() -> Unit,
-): @Composable ReversiScope.() -> Unit = if (vm is T) content else {
-    {}
-}
+): @Composable ReversiScope.() -> Unit =
+    if (vm is T) content else { {} }
 
 /**
  * Creates and returns the appropriate composable page view based on the current [Page] type.

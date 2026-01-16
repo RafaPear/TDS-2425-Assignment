@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.settingsPage
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.snapshots.Snapshot
 import kotlinx.coroutines.CoroutineScope
@@ -95,8 +94,6 @@ class SettingsViewModel(
             currentVol = currentVol,
         )
     }
-
-    override val uiState: State<SettingsUiState> = _uiState
 
     init {
         TRACKER.trackViewModelCreated(this, category = Page.SETTINGS)

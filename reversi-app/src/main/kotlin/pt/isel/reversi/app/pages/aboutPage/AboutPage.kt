@@ -25,7 +25,7 @@ fun ReversiScope.AboutPage(viewModel: AboutPageViewModel, modifier: Modifier = M
     TRACKER.trackPageEnter(category = Page.ABOUT)
     ScaffoldView(
         setError = { error, type -> viewModel.setError(error, type) },
-        error = viewModel.uiState.value.screenState.error,
+        error = viewModel.error,
         isLoading = viewModel.uiState.value.screenState.isLoading,
         title = "Sobre",
         previousPageContent = {
