@@ -1,6 +1,8 @@
 package pt.isel.reversi.app.app
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontFamily
 import org.jetbrains.compose.resources.DrawableResource
 
 /**
@@ -24,6 +26,7 @@ import org.jetbrains.compose.resources.DrawableResource
  */
 data class AppTheme(
     val name: String,
+    val fontFamily: @Composable () -> FontFamily,
     val backgroundMusic: String = "background-music",
     val gameMusic: String = "MEGALOVANIA",
     val placePieceSound: String = "putPiece",

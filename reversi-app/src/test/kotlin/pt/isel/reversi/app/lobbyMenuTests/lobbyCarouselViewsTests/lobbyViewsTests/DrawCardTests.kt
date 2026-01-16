@@ -3,8 +3,8 @@ package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests.lobbyViewsTes
 import androidx.compose.ui.test.*
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
-import pt.isel.reversi.app.pages.game.testTagBoard
-import pt.isel.reversi.app.pages.game.testTagCellView
+import pt.isel.reversi.app.pages.game.utils.testTagBoard
+import pt.isel.reversi.app.pages.game.utils.testTagCellView
 import pt.isel.reversi.app.pages.lobby.LobbyLoadedState
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.*
 import pt.isel.reversi.core.board.Board

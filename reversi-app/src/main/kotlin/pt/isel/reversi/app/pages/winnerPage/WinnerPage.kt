@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.winnerPage
 
-import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
@@ -12,21 +11,22 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.ScaffoldView
-import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.app.state.ReversiText
+import pt.isel.reversi.app.app.state.getTheme
+import pt.isel.reversi.app.pages.menu.MovingPiece
 import pt.isel.reversi.app.pages.menu.drawCrown
+import pt.isel.reversi.app.pages.menu.drawEyes
+import pt.isel.reversi.app.pages.menu.drawPiece
 import pt.isel.reversi.app.utils.PreviousPage
-import pt.isel.reversi.core.game.Game
-import pt.isel.reversi.core.game.gameServices.EmptyGameService
+import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.gameState.Player
 
 fun testTagDrawCrown(): String = "draw_crown"
 
 @Composable
 fun ReversiScope.WinnerPage(
-    viewModel: WinnerPageViewModel,
-    onLeave: () -> Unit
+    viewModel: WinnerPageViewModel, onLeave: () -> Unit
 ) {
     val state = viewModel.uiState.value
 
@@ -37,8 +37,7 @@ fun ReversiScope.WinnerPage(
         title = "Fim de Jogo",
         previousPageContent = {
             PreviousPage { onLeave() }
-        }
-    ) {
+        }) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
@@ -46,8 +45,7 @@ fun ReversiScope.WinnerPage(
         ) {
             val winner = state.winner ?: run {
                 ReversiText(
-                    text = "Empate!",
-                    color = appState.theme.textColor
+                    text = "Empate!", color = appState.theme.textColor
                 )
                 return@Column
             }
@@ -55,8 +53,7 @@ fun ReversiScope.WinnerPage(
 
             if (players.isEmpty()) {
                 ReversiText(
-                    text = "Dados do vencedor indisponíveis.",
-                    color = appState.theme.textColor
+                    text = "Dados do vencedor indisponíveis.", color = appState.theme.textColor
                 )
             } else {
                 Row(
@@ -65,10 +62,9 @@ fun ReversiScope.WinnerPage(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     players.forEach { player ->
+
                         PlayerResultColumn(
-                            player = player,
-                            isWinner = player == winner,
-                            modifier = Modifier.weight(1f)
+                            player = player, isWinner = player == winner, modifier = Modifier.weight(1f)
                         )
                     }
                 }
@@ -79,25 +75,36 @@ fun ReversiScope.WinnerPage(
 
 @Composable
 fun ReversiScope.PlayerResultColumn(
-    player: Player,
-    isWinner: Boolean,
-    modifier: Modifier = Modifier
+    player: Player, isWinner: Boolean, modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier, // Each player takes 50% width
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
     ) {
         Box(modifier = Modifier.size(80.dp)) {
             Canvas(
-                modifier = Modifier.fillMaxSize()
-                    .semantics { testTag = testTagDrawCrown() }
-            ) {
+                modifier = Modifier.fillMaxSize().semantics { testTag = testTagDrawCrown() }) {
+                val paddingH = size.height * 0.5f
                 val cx = size.width / 2f
-                val cy = size.height / 2f
-                val crownRadius = size.minDimension / 1.2f
+                val cy = size.height / 2f - paddingH / 2f
+                val radius = size.minDimension / 1.2f
+                val isWhite = player.type == PieceType.WHITE
+                val theme = getTheme()
 
-                drawCrown(cx, cy, crownRadius, if (isWinner) 1f else 0f)
+                drawPiece(
+                    piece = MovingPiece.empty(isWhite),
+                    theme = theme,
+                    x = cx,
+                    y = cy,
+                    radiusPx = radius,
+                    edgeFade = 1f,
+                    baseAlpha = 1f
+                )
+
+                drawEyes(isWhite, theme, cx, cy, radius, 100f)
+
+                // Crown
+                drawCrown(cx, cy, radius, if (isWinner) 1f else 0f)
             }
         }
         DrawPlayerInfo(player)
@@ -122,18 +129,4 @@ fun ReversiScope.DrawPlayerInfo(player: Player) {
             modifier = Modifier.padding(top = 8.dp)
         )
     }
-}
-
-@Preview
-@Composable
-fun WinnerPagePreview() {
-    ReversiScope(appState = AppState.empty(service = EmptyGameService()))
-        .WinnerPage(
-            viewModel = WinnerPageViewModel(
-                game = Game(service = EmptyGameService()),
-                globalError = null,
-                setGlobalError = { _, _ -> }
-            ),
-            onLeave = {}
-        )
 }

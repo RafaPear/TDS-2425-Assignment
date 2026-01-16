@@ -11,6 +11,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import pt.isel.reversi.app.ScaffoldView
@@ -18,6 +19,17 @@ import pt.isel.reversi.app.app.state.*
 import pt.isel.reversi.app.utils.PreviousPage
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.game.Game
+
+// Test Tags for New Game Page
+fun testTagNewGamePage() = "new_game_page"
+fun testTagLocalGameCheckbox() = "new_game_local_checkbox"
+fun testTagGameNameTextField() = "new_game_name_textfield"
+fun testTagPlayerNameTextField() = "new_game_player_name_textfield"
+fun testTagBoardSizeTextField() = "new_game_board_size_textfield"
+fun testTagPieceDropdown() = "new_game_piece_dropdown"
+fun testTagPieceDropdownBlack() = "new_game_piece_dropdown_black"
+fun testTagPieceDropdownWhite() = "new_game_piece_dropdown_white"
+fun testTagStartGameButton() = "new_game_start_button"
 
 /**
  * New game page for creating a local game with piece selection.
@@ -62,16 +74,17 @@ private fun ReversiScope.NewGamePageView(
     modifier: Modifier,
     onClick: (Game, Int, String?) -> Unit
 ) {
-    var game by remember { mutableStateOf(getCurrentState().game) }
+    var game by remember { mutableStateOf(getCurrentState().game.copy(currGameName = "")) }
     var playerName by remember { mutableStateOf(appState.playerName ?: "") }
     var boardSize by remember { mutableStateOf("8") }
     var expanded by remember { mutableStateOf(false) }
+    var isLocal by remember { mutableStateOf(game.currGameName.isNullOrBlank()) }
     val theme = getTheme()
-
 
     Box(
         modifier = modifier
-            .fillMaxSize(),
+            .fillMaxSize()
+            .testTag(testTagNewGamePage()),
         contentAlignment = Alignment.TopCenter
     ) {
         Column(
@@ -82,19 +95,51 @@ private fun ReversiScope.NewGamePageView(
             verticalArrangement = Arrangement.spacedBy(20.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            ReversiTextField(
-                value = game.currGameName ?: "",
-                onValueChange = { game = game.copy(currGameName = it) },
-                label = { ReversiText("Nome do jogo") },
+            Row(
                 modifier = Modifier.fillMaxWidth(),
-            )
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Column(modifier = Modifier.weight(1f)) {
+                    ReversiText("Jogo local", fontSize = 16.sp)
+                    ReversiText(
+                        text = if (!isLocal) "Sem nome cria jogo local" else "Desmarcar cria jogo multijogador",
+                        color = theme.textColor.copy(alpha = 0.7f),
+                        fontSize = 12.sp,
+                        maxLines = 2,
+                        softWrap = true,
+                    )
+                }
+                ReversiCheckbox(
+                    checked = isLocal,
+                    onCheckedChange = {
+                        isLocal = it
+                        if (it) game = game.copy(currGameName = "")
+                    }
+                )
+            }
 
-            ReversiTextField(
-                value = playerName,
-                onValueChange = { playerName = it },
-                label = { ReversiText("Nome de jogador") },
-                modifier = Modifier.fillMaxWidth(),
-            )
+            if (!isLocal) {
+                ReversiTextField(
+                    value = game.currGameName ?: "",
+                    onValueChange = {
+                        isLocal = it.isBlank()
+                        game = game.copy(currGameName = it)
+                    },
+                    label = { ReversiText("Nome do jogo (multijogador)") },
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = !isLocal,
+                )
+            }
+
+            if (!isLocal) {
+                ReversiTextField(
+                    value = playerName,
+                    onValueChange = { playerName = it },
+                    label = { ReversiText("Nome de jogador") },
+                    modifier = Modifier.fillMaxWidth(),
+                )
+            }
 
             ReversiTextField(
                 value = boardSize,
@@ -171,7 +216,8 @@ private fun ReversiScope.NewGamePageView(
             ReversiButton(
                 modifier = Modifier.fillMaxWidth().height(50.dp),
                 onClick = {
-                    onClick(game, boardSize.parseBoardSize(), playerName.ifBlank { null })
+                    val preparedGame = if (isLocal) game.copy(currGameName = "") else game
+                    onClick(preparedGame, boardSize.parseBoardSize(), playerName.ifBlank { null })
                 },
                 text = "Entrar"
             )

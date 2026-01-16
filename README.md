@@ -2,8 +2,12 @@
 
 [![Release Tests](https://github.com/isel-leic-tds/32d-2526i-g01-muyloco/actions/workflows/release-tests.yml/badge.svg)](https://github.com/isel-leic-tds/32d-2526i-g01-muyloco/actions/workflows/release-tests.yml)
 
-A modular, test-friendly implementation of the Reversi board game written in Kotlin (JVM). The project emphasizes clean
-separation of concerns, explicit domain modeling, and pluggable persistence.
+A modular, test-friendly implementation of the Reversi board game written in Kotlin (JVM) targeting **Java 21**. 
+The project emphasizes clean separation of concerns, explicit domain modeling, and pluggable persistence.
+
+**Requirements:**
+- Java 21 or later
+- Gradle 8.0 or later
 
 ## Made By
 
@@ -11,6 +15,17 @@ separation of concerns, explicit domain modeling, and pluggable persistence.
 |------------------------------------------------------------|-----------------------------------------------------------|----------------------------------------------------------------|
 | <img src="https://github.com/IanFrunze.png" width="100" /> | <img src="https://github.com/RafaPear.png" width="100" /> | <img src="https://github.com/TitoSilva5000.png" width="100" /> |
 | 52867                                                      | 52880                                                     | 53118                                                          |
+
+## Technology Stack
+
+| Component                     | Version |
+|-------------------------------|---------|
+| **Java**                      | **21**  |
+| **Kotlin**                    | 2.2.20  |
+| **Gradle**                    | 8.0+    |
+| **Compose (Desktop)**         | 1.9.1   |
+| **Coroutines**                | 1.10.2  |
+| **MongoDB Driver** (optional) | 5.6.1   |
 
 ## Pictures
 
@@ -43,37 +58,41 @@ separation of concerns, explicit domain modeling, and pluggable persistence.
 
 ## Project Modules
 
-The project is organized into five specialized modules:
+The project is organized into five specialized, independently testable modules:
 
 - **`reversi-core`** — Immutable core domain model, game logic and serializers
     - Implements the Reversi game rules (move validation, piece capture, board management)
-    - Contains no I/O or UI concerns; purely functional and testable
-    - Defines DTOs for serialization/deserialization
+    - Pure functional domain logic with no I/O or UI concerns
+    - Defines types and serializers for persistence
+    - Comprehensive test coverage for all game rules
     - See [reversi-core/MODULE.md](reversi-core/MODULE.md) for architecture details
 
 - **`reversi-storage`** — Simple local filesystem storage implementation
-    - Provides file-based persistence for game snapshots
-    - Implements the generic `Storage<K,T,U>` contract with text serializers
-    - Human-readable `.txt` files for easy debugging and manual inspection
+    - Provides file-based persistence for game snapshots using the generic `Storage<K,T,U>` contract
+    - Supports human-readable `.txt` files for easy debugging and manual inspection
+    - Optional MongoDB support for scalable server deployments
+    - Fully decoupled from serialization logic
     - See [reversi-storage/MODULE.md](reversi-storage/MODULE.md) for architecture details
 
 - **`reversi-utils`** — Utility functions and extensions
-    - Configuration loading and management (ConfigLoader pattern)
-    - Environment constants and helper functions
-    - Shared utilities for other modules
+    - Configuration loading and management via `ConfigLoader` pattern
+    - Environment constants and shared helper functions
+    - Used by other modules for common concerns
     - See [reversi-utils/MODULE.md](reversi-utils/MODULE.md) for architecture details
 
-- **`reversi-cli`** — Command-line interface client
-    - Interactive read-eval-print loop for gameplay
-    - Command framework (built on KtFlag dependency)
-    - Multiple command implementations (new, join, play, pass, show, etc.)
-    - Configurable colors and prompts
+- **`reversi-cli`** — Interactive command-line interface client
+    - REPL-based gameplay with multiple command implementations
+    - Command framework using KtFlag library for elegant parsing
+    - Color-coded output and configurable prompts
+    - Full game lifecycle: create, join, play, save, exit
+    - Debug mode for developer testing
     - See [reversi-cli/MODULE.md](reversi-cli/MODULE.md) for architecture details
 
 - **`reversi-app`** — Desktop GUI application (Jetpack Compose for Desktop)
-    - Modern user interface for gameplay
-    - State management and ViewModel pattern
+    - Modern, responsive user interface for gameplay
+    - State management with ViewModel pattern
     - Rich visual feedback and interactive board rendering
+    - Supports game persistence and multiple players
     - See [reversi-app/MODULE.md](reversi-app/MODULE.md) for architecture details
 
 ## Documentation Site
@@ -87,20 +106,30 @@ A full HTML version of the generated documentation is available online:
 
 ## Quick Start
 
-For the CLI version Run:
+### Prerequisites
+
+- **Java 21** (verify with `java -version`)
+- Gradle 8.0+ (or use the included `./gradlew`)
+
+### Building and Running
 
 ```bash
 ./gradlew build
 ```
 
-Then, run the produced module jar (paths vary depending on build).
-To use the debug commands for testing use the `--debug` or `-d` flag:
+Then, run the CLI module jar:
 
 ```bash
-java -jar build/libs/reversi-cli-v*.*.*.jar
+java -jar build/libs/reversi-cli-2.0.0.jar
 ```
 
-> Note: change `v*.*.*` to the actual version number.
+To use debug commands for testing, add the `--debug` or `-d` flag:
+
+```bash
+java -jar build/libs/reversi-cli-2.0.0.jar --debug
+```
+
+> Note: Replace version number `2.0.0` with the actual version from the build output if different.
 
 ## Project Structure
 
@@ -112,15 +141,25 @@ The project is split in four modules (core, utils, storage and cli). See the `re
 
 ## Testing
 
-Run the test suite:
+Run the complete test suite:
 
 ```bash
 ./gradlew test
 ```
 
+Run tests for a specific module:
+
+```bash
+./gradlew :reversi-core:test
+```
+
+The project emphasizes comprehensive test coverage, particularly for the `reversi-core` module which contains all game logic.
+
 ## Documentation
 
-Generate Dokka multi-module HTML:
+### Generate Documentation
+
+Generate Dokka multi-module HTML documentation:
 
 ```bash
 ./gradlew dokkaHtmlMultiModule
@@ -128,60 +167,82 @@ Generate Dokka multi-module HTML:
 
 Output: `build/dokka/htmlMultiModule/index.html`
 
-For module-level descriptions see the `MODULE.md` files inside each module folder which are also included in the
-generated documentation.
+### Online Documentation
 
-## How to play (Rules)
+A full HTML version of the generated documentation is available online:  
+[Reversi Documentation](https://isel-leic-tds.github.io/32d-2526i-g01-muyloco/)
 
-Reversi (also called Othello) is a two-player board game played on an N x N board (normally 8x8).
+### Module Documentation
 
-- Players are identified by pieces: Black (#) and White (@). Each piece has a symbol: '#' or '@'.
-- The game starts with four pieces placed in the center in a diagonal pattern (two Black and two White).
-- Players alternate turns. On a turn a player must place a piece of their color on an empty square such that one or more
-  of the opponent's contiguous pieces in any of the eight directions (horizontal, vertical, diagonal) are flanked
-  between the newly placed piece and another piece of the current player's color.
-- All flanked opponent pieces are flipped to the current player's color.
-- If a player has no legal moves, they must pass their turn. If both players have no legal moves, the game ends.
-- The winner is the player with more pieces of their color when the game ends. A draw is possible.
+For module-level architecture and design details, see the `MODULE.md` files inside each module folder. These are also included in the generated Dokka documentation.
 
-This project implements the Reversi rules in `reversi-core`. The CLI (`reversi-cli`) provides an interactive
-command-line client to create, load, play, and save games using the `reversi-storage` module (text files).
+## How to Play (Rules)
+
+Reversi (also known as Othello) is a classic two-player board game played on an N × N board (traditionally 8×8).
+
+### Game Overview
+
+- **Players**: Two players using different colored pieces
+  - **Black** (#) and **White** (@) pieces
+- **Board**: N × N grid (default 8×8)
+- **Setup**: Four pieces placed in the center in a diagonal pattern (two Black, two White)
+
+### Game Rules
+
+1. **Placement**: Players alternate turns, placing a piece of their color on an empty square
+2. **Capture**: A piece can only be placed if it flanks one or more opponent pieces in any of the eight directions (horizontal, vertical, diagonal) between the newly placed piece and another piece of the same color
+3. **Flipping**: All flanked opponent pieces are immediately flipped to the current player's color
+4. **Passing**: If a player has no legal moves, they must pass their turn
+5. **Game End**: When both players have no legal moves, the game ends
+6. **Winning**: The player with more pieces of their color wins. Draws are possible.
+
+### Implementation
+
+- **`reversi-core`** module implements the complete Reversi game logic and rules validation
+- **`reversi-cli`** provides an interactive command-line interface for gameplay
+- **`reversi-storage`** handles saving and loading games to/from disk
 
 ## Playing with the CLI
 
-Start the CLI jar (after building). You can enable debug mode with `--debug` or `-d` to unlock additional developer
-commands:
+Start the CLI jar (after building with `./gradlew build`):
 
 ```bash
-java -jar build/libs/reversi-cli-v*.*.*.jar [--debug]
+java -jar build/libs/reversi-cli-2.0.0.jar [--debug]
 ```
 
-When the CLI starts you'll see a welcome message and a prompt (configurable). The game runs in an interactive
-read-eval-print loop: type commands and press Enter.
+Optionally enable debug mode with `--debug` or `-d` flag to unlock additional developer commands.
 
-Basic interaction contract:
+### CLI Interaction Model
 
-- Context: the CLI keeps a current `Game` context while you create/join/play.
-- Saving: creating or joining a new named game automatically saves the previous named game (if any).
-- Commands return human-readable messages and may update the in-memory `Game` state.
+When the CLI starts you'll see a welcome message and a prompt (configurable). The game runs in an interactive read-eval-print loop: type commands and press Enter.
 
-### Available commands (summary)
+**Context & Persistence:**
+- The CLI maintains a current `Game` context during your session
+- Creating or joining a named game automatically saves the previous game (if any)
+- Commands return human-readable messages and may update the in-memory state
+- All named games are persisted to disk in the `saves/` folder
 
-- new (n)
+### Available Commands (Summary)
+
+#### Game Management Commands
+
+- **new (n)**
     - Usage: `new (#|@) [<name>]`
     - Creates a new game. The argument is the first player symbol ('#' for Black or '@' for White). Optionally supply a
       game name to use persistent storage. If no name is given, the game is ephemeral (in-memory only).
     - Examples:
         - `new #` — start a local game where Black (#) starts and the opponent is the opposite color (in-memory).
-        - `new @ mymatch` — start a named game saved to disk as `mymatch` with White (@) starting.
+        - `new @ mygame` — start a named game saved to disk as `mygame` with White (@) starting.
 
-- join (j)
-    - Usage: `join (<name>) [#|@]`
+- **join (j)**
+    - Usage: `join <name> [#|@]`
     - Loads a named saved game from storage. Optionally pass a player symbol to specify which side you control when
       joining a saved game.
-    - Example: `join mymatch @` — open saved game `mymatch` and set you as White (@) if applicable.
+    - Example: `join mygame @` — open saved game `mygame` and set you as White (@) if applicable.
 
-- play (p)
+#### Gameplay Commands
+
+- **play (p)**
     - Usage: `play (row) (col)` or `play (rowcol)` (both integer and letter column formats supported)
     - Makes a move at the given coordinate. The CLI accepts different coordinate formats:
         - Separate row and column: `play 3 4`
@@ -190,92 +251,89 @@ Basic interaction contract:
     - Rows and columns are 1-based.
     - Example: `play 4 5` or `play 4A`
 
-- pass
+- **pass**
     - Usage: `pass`
     - Skip your turn when you have no legal moves. If the game ends (no player can move), the winner will be reported.
 
-- show (s)
+- **show (s)**
     - Usage: `show`
     - Displays the current board, player scores, current player turn, and (when joined to a named game) the game name
       and which player is "You".
 
-- refresh (r)
+- **refresh (r)**
     - Usage: `refresh`
     - Re-reads the underlying game state (useful in multi-process scenarios) and prints the updated board.
 
-- exit
+#### Session Commands
+
+- **exit**
     - Usage: `exit`
     - Exits the CLI. If the current game has a name it will be saved before exit.
 
-Developer / debug-only commands (available with `--debug`):
+#### Developer Commands (available with `--debug`)
 
-- debug — extra diagnostics and internal state printing.
-- listgames — lists saved game files (helpful during development).
+- **debug** — Print internal state and extra diagnostics for troubleshooting
+- **listgames** — List all saved game files in the saves folder
 
-Note: command aliases and colored help text are provided by the CLI parsing library. Use the `usage` shown in the
-command help to learn more.
+> **Note**: Command aliases and colored help text are provided by the CLI parsing library. Use `help <command>` for more details on any command.
 
-## CLI configuration files
+## CLI Configuration
 
-Configuration is stored under the `config/` folder. Two important files are created automatically with sensible defaults
-if missing:
+Configuration files are stored in the `config/` folder and are created automatically with sensible defaults if missing.
 
-- `config/reversi-cli.properties`
-    - Controls the CLI appearance and messages (prompt, colors, welcome message).
-    - Relevant keys (defaults shown) — these are read by `reversi-cli`'s `CliConfig`:
-        - `WELCOME_MESSAGE` — default: "Welcome to Reversi!"
-        - `PROMPT` — default: "> "
-        - `PROMPT_COLOR`, `TEXT_COLOR`, `ERROR_COLOR`, `WARNING_COLOR`, `INFO_COLOR`, `HELP_USAGE_COLOR`,
-          `HELP_ALIAS_COLOR`, `HELP_DESC_COLOR` — color names used by the styling library (defaults are ANSI color
-          constants).
-    - The CLI writes the default file when it is missing, so you can safely edit the generated
-      `config/reversi-cli.properties` to customize colors and prompt.
+### reversi-cli.properties
 
-- `config/reversi-core.properties`
-    - Used by core components; this file is created when the core configuration loader runs. It contains settings that
-      may affect game persistence or other core behaviors. See
-      `reversi-core/src/main/kotlin/pt/isel/reversi/core/CoreConfig.kt` for specific entries and defaults.
+Controls the CLI appearance and behavior:
 
-The config loader used across the project is `reversi-utils`'s `ConfigLoader`, which creates the file with default keys
-and loads them into a typed `Config` object.
+**Display Settings:**
+- `PROMPT` — Command prompt (default: `"> "`)
+- `WELCOME_MESSAGE` — Startup greeting (default: `"Welcome to Reversi!"`)
 
-## Game save file structure (storage format)
+**Color Settings** — Uses standard ANSI color names
+- `PROMPT_COLOR`, `TEXT_COLOR`, `ERROR_COLOR`, `WARNING_COLOR`, `INFO_COLOR`
+- `HELP_USAGE_COLOR`, `HELP_ALIAS_COLOR`, `HELP_DESC_COLOR`
+
+You can safely edit the generated file to customize colors, prompts, and messages.
+
+### reversi-core.properties
+
+Contains core configuration affecting game logic and persistence:
+- `savesPath` — Directory for saved games (default: `"saves"`)
+
+See `reversi-core/src/main/kotlin/pt/isel/reversi/core/CoreConfig.kt` for all available options.
+
+### Configuration System
+
+Configuration is managed by `reversi-utils`'s `ConfigLoader`, which:
+- Creates files with default values if missing
+- Loads settings into typed `Config` objects
+- Supports runtime configuration changes
+
+## Game Save File Structure (Storage Format)
 
 Saved games are plain text files stored by `reversi-storage`'s `FileStorage` implementation. Each saved game uses a
 filename of the form `<name>.txt` and by default is placed in the `saves/` folder. The default folder can be changed via
-`config/reversi-core.properties` using the key `savesPath` (default: `saves`).
+`config/reversi-core.properties` using the key `savesPath` (default: `"saves"`).
 
-The on-disk format is produced by `reversi-core` serializers; it's line-oriented and human-readable. A saved game file
-consists of the following parts (in order):
+The format is line-oriented and human-readable, produced by serializers in `reversi-core`. A saved game file consists of:
 
-1) Players line (first line)
-    - Contains zero or more serialized players separated by `;` and terminated with a newline.
-    - Player format: `<symbol>,<points>` (e.g. `#,12` or `@,5`).
-    - Example: `#,12;@,5;` (note the trailing separator and ending newline)
+**Line 1 — Players** 
+- Serialized players separated by `;`, terminated with newline
+- Format: `<symbol>,<points>` (e.g., `#,12;@,5;`)
 
-2) Last player line (second line)
-    - A single character representing the last player's piece symbol (e.g. `#` or `@`) followed by newline.
-    - This indicates who performed the most recent move; the next turn belongs to the opposite color.
+**Line 2 — Last Player**
+- Single character: `#` or `@` indicating who played last
+- Next turn belongs to the opposite color
 
-3) Winner line (third line)
-    - If the game has a winner, this line contains the serialized `Player` (same format as players above). If there is
-      no winner yet, this line is empty (just a newline).
+**Line 3 — Winner**
+- If game ended: serialized winner in same format as players
+- If ongoing: empty line (just newline)
 
-4) Board lines (starting at fourth line)
-    - The board serializer writes the board as multiple lines. The very first board line is the board side (an integer,
-      e.g. `8` for an 8x8 board).
-    - Subsequent lines each encode a single piece in the format: `row,col,symbol`
-        - `row` and `col` are integers (1-based coordinates), and `symbol` is the piece symbol (`#` or `@`).
-    - Example board section for a small board:
-      ```text
-      8
-      4,4,@
-      4,5,#
-      5,4,#
-      5,5,@
-      ```
+**Lines 4+ — Board**
+- First board line: integer (board size, e.g., `8` for 8×8)
+- Following lines: each piece as `row,col,symbol` (1-based coordinates)
 
-Putting it all together, a minimal saved game file could look like:
+**Example saved game:**
 
 ```text
 #,2;@,2;
@@ -288,35 +346,51 @@ Putting it all together, a minimal saved game file could look like:
 5,5,@
 ```
 
-In this example:
+This represents a game where:
+- Players are Black (#) and White (@), each with 2 points
+- Black played last; winner line is empty (game ongoing)
+- Board is 8×8 with the four central pieces shown
 
-- two players (# and @) with 2 points each are recorded on the first line;
-- `#` is the last player who moved; the winner line is empty;
-- the board is 8x8 and lists the four central pieces.
+### Serializers
 
-The serializer and deserializer live in `reversi-core/src/main/kotlin/pt/isel/reversi/core/storage/serializers/`:
+Serialization logic lives in `reversi-core/src/main/kotlin/pt/isel/reversi/core/storage/serializers/`:
 
-- `PlayerSerializer` — serializes `<symbol>,<points>` lines
-- `PieceTypeSerializer` — maps piece symbols to enum values and vice versa
-- `PieceSerializer` — serializes individual pieces as `row,col,symbol`
-- `BoardSerializer` — writes board side then pieces
-- `GameStateSerializer` — composes the whole file (players, last player, winner, board)
+- `GameStateSerializer` — Entire game state (players, last player, winner, board)
+- `BoardSerializer` — Board and all pieces  
+- `PlayerSerializer` — Individual player data
+- `PieceSerializer` — Individual pieces as `row,col,symbol`
+- `PieceTypeSerializer` — Piece symbols (#, @) ↔ enum values
 
-If a saved file is malformed the core will throw a typed exception (for example `InvalidGameStateInFileException`)
-providing a helpful error message.
+### Error Handling
 
-## Where files are created
+Malformed save files throw typed exceptions from the core (e.g., `InvalidGameStateInFileException`) with helpful error messages.
 
-- Config: `config/reversi-cli.properties` and `config/reversi-core.properties` are created by the `ConfigLoader` when
-  missing.
-- Saves: `FileStorage` writes `<name>.txt` files into the `saves/` folder by default (configurable via
-  `config/reversi-core.properties` key `savesPath`).
-- Saves folder default: `saves`
+## File Locations
 
-## Troubleshooting & tips
+| Component | Location | Default |
+|-----------|----------|---------|
+| CLI Config | `config/reversi-cli.properties` | Auto-created |
+| Core Config | `config/reversi-core.properties` | Auto-created |
+| Saved Games | `saves/` | Configurable via `savesPath` |
 
-- If commands produce `Game is not defined` errors, create or join a game first using `new` or `join`.
-- To see the list of saved files (debug mode), start the CLI with `--debug` and run the `listgames` command.
-- If colors or prompt look odd on your terminal, edit `config/reversi-cli.properties` and set `PROMPT` and color entries
-  to values supported by your terminal.
-- Saved game files are human-readable; you can inspect them directly to debug persistence issues.
+## Troubleshooting
+
+**"Game is not defined" errors**
+- Create or join a game first: `new #` or `join <name>`
+
+**Can't find saved games**
+- Enable debug mode: `--debug` flag
+- Use `listgames` command to list all saved games
+
+**Colors or display issues**
+- Edit `config/reversi-cli.properties` to use terminal-compatible ANSI color names
+- Check [ANSI color documentation](https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit) for supported values
+
+**Corrupted save file**
+- Delete the problematic `.txt` file from the `saves/` folder
+- Start a new game or load a backup
+
+**Performance or I/O issues**  
+- Ensure write permissions in `config/` and `saves/` directories
+- Check available disk space
+- Try restarting the application

@@ -1,6 +1,7 @@
 package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
@@ -92,7 +93,9 @@ class LobbyViewModelTests {
     @AfterTest
     fun tearDown() {
         games.forEach {
-            service.delete(it.name)
+            runBlocking {
+                service.delete(it.name)
+            }
         }
     }
 

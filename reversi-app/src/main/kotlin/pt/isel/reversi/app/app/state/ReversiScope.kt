@@ -16,10 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Path
-import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -28,11 +25,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import org.jetbrains.compose.resources.Font
 import pt.isel.reversi.app.pages.menu.MAIN_MENU_AUTO_SIZE_BUTTON_TEXT
-import reversi.reversi_app.generated.resources.Montserrat_Bold
-import reversi.reversi_app.generated.resources.Montserrat_Regular
-import reversi.reversi_app.generated.resources.Res
 
 /**
  * Receiver scope class providing composition helper functions and access to app state.
@@ -40,9 +33,7 @@ import reversi.reversi_app.generated.resources.Res
  *
  * @property appState The current application state.
  */
-class ReversiScope(val appState: AppStateImpl) {
-    fun drawCrown(crownPath: androidx.compose.ui.graphics.Path, canvas: androidx.compose.ui.graphics.drawscope.DrawScope) {}
-}
+class ReversiScope(val appState: AppStateImpl)
 
 /**
  * Retrieves the current application state.
@@ -88,16 +79,11 @@ fun ReversiScope.ReversiText(
     textAlign: TextAlign = TextAlign.Start,
     overflow: TextOverflow = TextOverflow.Ellipsis,
 ) {
-    val font = FontFamily(
-        Font(resource = Res.font.Montserrat_Regular, weight = FontWeight.Normal),
-        Font(resource = Res.font.Montserrat_Bold, weight = FontWeight.Bold),
-    )
-
     Text(
         text = text,
         color = color,
         fontSize = fontSize,
-        fontFamily = font,
+        fontFamily = getTheme().fontFamily(),
         autoSize = autoSize,
         modifier = modifier,
         fontWeight = fontWeight,
@@ -106,6 +92,37 @@ fun ReversiScope.ReversiText(
         fontStyle = fontStyle,
         textAlign = textAlign,
         overflow = overflow,
+    )
+}
+
+/**
+ * Themed checkbox component following the application's design system.
+ *
+ * @param checked Whether the checkbox is currently checked.
+ * @param onCheckedChange Callback invoked when the checkbox state changes.
+ * @param modifier Composable modifier for layout adjustments.
+ * @param enabled Whether the checkbox is interactive.
+ */
+@Composable
+fun ReversiScope.ReversiCheckbox(
+    checked: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+) {
+    val theme = getTheme()
+    Checkbox(
+        checked = checked,
+        onCheckedChange = onCheckedChange,
+        modifier = modifier,
+        enabled = enabled,
+        colors = CheckboxDefaults.colors(
+            checkedColor = theme.primaryColor,
+            uncheckedColor = theme.textColor.copy(alpha = 0.6f),
+            checkmarkColor = theme.buttonTextColor,
+            disabledCheckedColor = theme.primaryColor.copy(alpha = 0.4f),
+            disabledUncheckedColor = theme.textColor.copy(alpha = 0.4f),
+        )
     )
 }
 
@@ -139,7 +156,7 @@ fun ReversiScope.ReversiButton(
         ),
         enabled = enabled,
         shape = shape,
-        border = if (border == null) BorderStroke(width = 1.dp, color = theme.buttonTextColor) else border,
+        border = border ?: BorderStroke(width = 1.dp, color = theme.buttonTextColor),
 
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp)
     ) {
@@ -248,6 +265,7 @@ fun ReversiScope.ReversiTextField(
         modifier = modifier,
         value = value,
         onValueChange = onValueChange,
+        textStyle = LocalTextStyle.current.copy(fontFamily = theme.fontFamily()),
         label = label,
         placeholder = placeholder,
         singleLine = singleLine,

@@ -1,13 +1,30 @@
 package pt.isel.reversi.app.app
 
+import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
-import reversi.reversi_app.generated.resources.Res
-import reversi.reversi_app.generated.resources.benfica_background
-import reversi.reversi_app.generated.resources.matrix_background
-import reversi.reversi_app.generated.resources.polish_cow_background
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
+import org.jetbrains.compose.resources.Font
+import reversi.reversi_app.generated.resources.*
+
+@Composable
+fun createMinecraftFontFamily() = FontFamily(
+    Font(Res.font.Monocraft, FontWeight.Normal, FontStyle.Normal),
+    Font(Res.font.Monocraft_Bold, FontWeight.Bold, FontStyle.Normal),
+    Font(Res.font.Monocraft_Italic, FontWeight.Normal, FontStyle.Italic),
+)
+
+@Composable
+fun createMontserratFontFamily() = FontFamily(
+    Font(Res.font.Montserrat_Regular, FontWeight.Normal, FontStyle.Normal),
+    Font(Res.font.Montserrat_Bold, FontWeight.Bold, FontStyle.Normal),
+    Font(Res.font.Montserrat_Italic, FontWeight.Normal, FontStyle.Italic),
+)
 
 private val darkTheme = AppTheme(
     name = "Dark Default",
+    fontFamily = { createMontserratFontFamily() },
     backgroundMusic = "WiiParty",
     gameMusic = "MEGALOVANIA",
     placePieceSound = "putPiece",
@@ -25,6 +42,7 @@ private val darkTheme = AppTheme(
 
 private val lightTheme = AppTheme(
     name = "Light Default",
+    fontFamily = { createMontserratFontFamily() },
     backgroundMusic = "WiiParty",
     gameMusic = "MEGALOVANIA",
     placePieceSound = "putPiece",
@@ -42,7 +60,8 @@ private val lightTheme = AppTheme(
 
 private val matrixTheme = AppTheme(
     name = "Matrix",
-    backgroundMusic = "matrix-background-music",
+    fontFamily = { createMontserratFontFamily() },
+    backgroundMusic = "matrix-game-music",
     gameMusic = "matrix-game-music",
     placePieceSound = "putPiece",
     textColor = Color(0xFF00FF00),
@@ -60,8 +79,9 @@ private val matrixTheme = AppTheme(
 
 private val cyberpunkTheme = AppTheme(
     name = "Cyberpunk",
-    backgroundMusic = "cyberpunk-background",
-    gameMusic = "cyberpunk-battle",
+    fontFamily = { createMinecraftFontFamily() },
+    backgroundMusic = "cyberpunk-game-music",
+    gameMusic = "cyberpunk-game-music",
     placePieceSound = "putPiece",
     textColor = Color(0xFF00F0FF),
     buttonTextColor = Color(0xFF000000),
@@ -77,6 +97,7 @@ private val cyberpunkTheme = AppTheme(
 
 private val benficaTheme = AppTheme(
     name = "Benfica",
+    fontFamily = { createMontserratFontFamily() },
     backgroundMusic = "benfica-background-music",
     gameMusic = "benfica-game-music",
     placePieceSound = "benfica-putPiece",
@@ -95,6 +116,7 @@ private val benficaTheme = AppTheme(
 
 private val nordTheme = AppTheme(
     name = "Nord Aurora",
+    fontFamily = { createMontserratFontFamily() },
     backgroundMusic = "WiiParty",
     gameMusic = "MEGALOVANIA",
     placePieceSound = "putPiece",
@@ -110,8 +132,10 @@ private val nordTheme = AppTheme(
     lightPieceColor = Color(0xFFD8DEE9)
 )
 
+/** Polish Cow meme-inspired theme with black and white colors and pixel font. */
 private val polishCowTheme = AppTheme(
     name = "Polish Cow",
+    fontFamily = { createMinecraftFontFamily() },
     backgroundMusic = "polish-cow",
     gameMusic = "polish-cow",
     placePieceSound = "putPiece",

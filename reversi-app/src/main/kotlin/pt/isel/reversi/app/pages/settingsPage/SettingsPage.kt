@@ -9,6 +9,7 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -19,23 +20,49 @@ import pt.isel.reversi.app.app.state.*
 import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.app.utils.PreviousPage
 import pt.isel.reversi.core.CoreConfig
+import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.storage.GameStorageType
 import pt.isel.reversi.utils.TRACKER
+
+// Test Tags for Settings Page
+fun testTagSettingsPage() = "settings_page"
+fun testTagGameSection() = "settings_game_section"
+fun testTagPlayerNameTextField() = "settings_player_name_textfield"
+fun testTagCoreConfigSection() = "settings_core_config_section"
+fun testTagStorageTypeButton() = "settings_storage_type_button"
+fun testTagStorageTypeDropdown() = "settings_storage_type_dropdown"
+fun testTagStorageTypeMenuItem(storageType: String) = "settings_storage_type_menuitem_$storageType"
+fun testTagSavesPathTextField() = "settings_saves_path_textfield"
+fun testTagDbURITextField() = "settings_db_uri_textfield"
+fun testTagDbPortTextField() = "settings_db_port_textfield"
+fun testTagDbNameTextField() = "settings_db_name_textfield"
+fun testTagDbUserTextField() = "settings_db_user_textfield"
+fun testTagDbPasswordTextField() = "settings_db_password_textfield"
+fun testTagAudioSection() = "settings_audio_section"
+fun testTagVolumeSlider() = "settings_volume_slider"
+fun testTagVolumeLabelText() = "settings_volume_label"
+fun testTagAppearanceSection() = "settings_appearance_section"
+fun testTagThemeButton() = "settings_theme_button"
+fun testTagThemeDropdown() = "settings_theme_dropdown"
+fun testTagThemeMenuItem(themeName: String) = "settings_theme_menuitem_$themeName"
+fun testTagApplyButton() = "settings_apply_button"
 
 /**
  * Section header composable for organizing settings into logical groups.
  * Displays a title and divider line with the section content below.
  *
  * @param title The section title/header.
+ * @param modifier Optional modifier for the section.
  * @param content Lambda for the section's content composables.
  */
 @Composable
 private fun ReversiScope.SettingsSection(
     title: String,
+    modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         ReversiText(
@@ -71,7 +98,10 @@ fun ReversiScope.SettingsPage(
     val currentVol = viewModel.uiState.value.currentVol
 
     ScaffoldView(
-        setError = { error, type -> viewModel.setError(error, type) },
+        setError = { error, type ->
+            viewModel.setError(error, type)
+            if (error == null && viewModel.error?.type != ErrorType.INFO) onLeave()
+        },
         error = viewModel.error,
         isLoading = viewModel.uiState.value.screenState.isLoading,
         title = "Definições",
@@ -82,7 +112,7 @@ fun ReversiScope.SettingsPage(
         val scrollState = rememberScrollState(0)
 
         Box(
-            modifier = Modifier.fillMaxSize().padding(padding),
+            modifier = Modifier.fillMaxSize().padding(padding).testTag(testTagSettingsPage()),
             contentAlignment = Alignment.TopCenter
         ) {
 
@@ -139,7 +169,8 @@ fun ReversiScope.SettingsPage(
                         newName = draftPlayerName?.ifEmpty { appState.playerName },
                         newTheme = draftTheme,
                         draftCoreConfig = draftCoreConfig,
-                        volume = currentVol
+                        volume = currentVol,
+                        endAction = onLeave
                     )
                 }
             }
@@ -149,12 +180,15 @@ fun ReversiScope.SettingsPage(
 
 @Composable
 private fun ReversiScope.GameSection(playerName: String?, onValueChange: (String) -> Unit) {
-    SettingsSection(title = "Jogo") {
+    SettingsSection(
+        title = "Jogo",
+        modifier = Modifier.testTag(testTagGameSection())
+    ) {
         ReversiTextField(
             value = playerName ?: "",
             onValueChange = { onValueChange(it) },
             label = { ReversiText("Nome do Jogador") },
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier.fillMaxWidth().testTag(testTagPlayerNameTextField())
         )
     }
 }
@@ -179,7 +213,10 @@ private fun ReversiScope.CoreConfigSection(
             },
         )
     } else {
-        SettingsSection(title = "Configuração do Jogo") {
+        SettingsSection(
+            title = "Configuração do Jogo",
+            modifier = Modifier.testTag(testTagCoreConfigSection())
+        ) {
             // Storage Type Dropdown
             Box(modifier = Modifier.fillMaxWidth()) {
                 OutlinedButton(
@@ -187,7 +224,7 @@ private fun ReversiScope.CoreConfigSection(
                         if (!didClick) didClick = true
                         else expanded = true
                     },
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier.fillMaxWidth().testTag(testTagStorageTypeButton()),
                     shape = RoundedCornerShape(12.dp)
                 ) {
                     Row(
@@ -200,7 +237,8 @@ private fun ReversiScope.CoreConfigSection(
 
                 ReversiDropDownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false }
+                    onDismissRequest = { expanded = false },
+                    modifier = Modifier.testTag(testTagStorageTypeDropdown())
                 ) {
                     GameStorageType.entries.forEach { storageType ->
                         ReversiDropdownMenuItem(
@@ -211,7 +249,8 @@ private fun ReversiScope.CoreConfigSection(
                                     onConfigChange(coreConfig.copy(gameStorageType = storageType))
                                     expanded = false
                                 }
-                            }
+                            },
+                            modifier = Modifier.testTag(testTagStorageTypeMenuItem(storageType.name))
                         )
                     }
                 }
@@ -226,7 +265,7 @@ private fun ReversiScope.CoreConfigSection(
                         else onConfigChange(coreConfig.copy(savesPath = it))
                     },
                     label = { ReversiText("Caminho das Gravações") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(testTagSavesPathTextField())
                 )
             }
 
@@ -239,7 +278,7 @@ private fun ReversiScope.CoreConfigSection(
                         else onConfigChange(coreConfig.copy(dbURI = it))
                     },
                     label = { ReversiText("URI do Banco de Dados") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(testTagDbURITextField())
                 )
 
                 ReversiTextField(
@@ -254,7 +293,7 @@ private fun ReversiScope.CoreConfigSection(
                         }
                     },
                     label = { ReversiText("Porta do Banco de Dados") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(testTagDbPortTextField())
                 )
 
                 ReversiTextField(
@@ -264,7 +303,7 @@ private fun ReversiScope.CoreConfigSection(
                         else onConfigChange(coreConfig.copy(dbName = it))
                     },
                     label = { ReversiText("Nome do Banco de Dados") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(testTagDbNameTextField())
                 )
 
                 ReversiTextField(
@@ -274,7 +313,7 @@ private fun ReversiScope.CoreConfigSection(
                         else onConfigChange(coreConfig.copy(dbUser = it))
                     },
                     label = { ReversiText("Usuário do Banco de Dados") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(testTagDbUserTextField())
                 )
 
                 ReversiTextField(
@@ -284,7 +323,7 @@ private fun ReversiScope.CoreConfigSection(
                         else onConfigChange(coreConfig.copy(dbPassword = it))
                     },
                     label = { ReversiText("Senha do Banco de Dados") },
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth().testTag(testTagDbPasswordTextField())
                 )
             }
         }
@@ -296,7 +335,10 @@ private fun ReversiScope.AudioSection(
     currentVol: Float,
     onVolumeChange: (Float) -> Unit
 ) {
-    SettingsSection(title = "Áudio") {
+    SettingsSection(
+        title = "Áudio",
+        modifier = Modifier.testTag(testTagAudioSection())
+    ) {
         val (minVol, maxVol) = appState.audioPool.getMasterVolumeRange() ?: (-20f to 0f)
         val percent = (((currentVol - minVol) / (maxVol - minVol)) * 100).toInt().coerceIn(0, 100)
         val volumeLabel = if (currentVol <= minVol) "Mudo" else "$percent%"
@@ -306,13 +348,14 @@ private fun ReversiScope.AudioSection(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             ReversiText("Volume Geral", fontSize = 16.sp)
-            ReversiText(volumeLabel, fontWeight = FontWeight.Bold)
+            ReversiText(volumeLabel, fontWeight = FontWeight.Bold, modifier = Modifier.testTag(testTagVolumeLabelText()))
         }
 
         Slider(
             value = currentVol,
             valueRange = minVol..maxVol,
             onValueChange = onVolumeChange,
+            modifier = Modifier.testTag(testTagVolumeSlider()),
             colors = SliderDefaults.colors(
                 thumbColor = appState.theme.primaryColor,
                 activeTrackColor = appState.theme.primaryColor,
@@ -330,11 +373,14 @@ private fun ReversiScope.AppearanceSection(
 ) {
     var expanded by remember { mutableStateOf(false) }
 
-    SettingsSection(title = "Aspeto Visual") {
+    SettingsSection(
+        title = "Aspeto Visual",
+        modifier = Modifier.testTag(testTagAppearanceSection())
+    ) {
         Box(modifier = Modifier.fillMaxWidth()) {
             OutlinedButton(
                 onClick = { expanded = true },
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier.fillMaxWidth().testTag(testTagThemeButton()),
                 shape = RoundedCornerShape(12.dp)
             ) {
                 Row(
@@ -348,7 +394,8 @@ private fun ReversiScope.AppearanceSection(
 
             ReversiDropDownMenu(
                 expanded = expanded,
-                onDismissRequest = { expanded = false }
+                onDismissRequest = { expanded = false },
+                modifier = Modifier.testTag(testTagThemeDropdown())
             ) {
                 AppThemes.entries.forEach { entry ->
                     ReversiDropdownMenuItem(
@@ -356,7 +403,8 @@ private fun ReversiScope.AppearanceSection(
                         onClick = {
                             onClick(entry.appTheme)
                             expanded = false
-                        }
+                        },
+                        modifier = Modifier.testTag(testTagThemeMenuItem(entry.appTheme.name))
                     )
                 }
             }
@@ -367,6 +415,6 @@ private fun ReversiScope.AppearanceSection(
 @Composable
 private fun ReversiScope.ApplyButton(onClick: () -> Unit) {
     Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.CenterEnd) {
-        ReversiButton(text = "Aplicar", onClick = onClick)
+        ReversiButton(text = "Aplicar", onClick = onClick, modifier = Modifier.testTag(testTagApplyButton()))
     }
 }

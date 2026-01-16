@@ -43,7 +43,21 @@ data class MovingPiece(
     val isWhite: Boolean,
     val spawnTime: Long,
     val isSpecial: Boolean = false
-)
+) {
+    companion object {
+        fun empty(isWhite: Boolean) = MovingPiece(
+            id = 0L,
+            xPercent = 0f,
+            yPercent = 0f,
+            radiusDp = 0f,
+            speed = 0f,
+            phase = 0f,
+            waveAmplitude = 0f,
+            isWhite = isWhite,
+            spawnTime = 0L
+        )
+    }
+}
 
 @Composable
 fun ReversiScope.AnimatedBackground() {
@@ -97,7 +111,7 @@ fun ReversiScope.AnimatedBackground() {
             drawPiece(piece, theme, x, y, radiusPx, edgeFade)
 
             if (piece.isSpecial) {
-                drawSpecialFeatures(x, y, radiusPx, edgeFade)
+                drawSpecialFeatures(piece.isWhite, theme, x, y, radiusPx, edgeFade)
             }
         }
     }
@@ -113,7 +127,7 @@ private fun createNewPiece(canAddSpecial: Boolean): MovingPiece {
     val waveAmplitude = (65f - size).coerceIn(10f, 35f)
 
     return MovingPiece(
-        id = UUID.randomUUID().mostSignificantBits, // ID mais seguro
+        id = UUID.randomUUID().mostSignificantBits, // ‘ID’ mais seguro
         xPercent = -FADE_EDGE_WIDTH,
         yPercent = Random.nextFloat(),
         radiusDp = size,
@@ -138,16 +152,17 @@ private fun calculateEdgeFade(xPercent: Float): Float {
     }.coerceIn(0f, 1f)
 }
 
-private fun DrawScope.drawPiece(
+fun DrawScope.drawPiece(
     piece: MovingPiece,
     theme: AppTheme,
     x: Float,
     y: Float,
     radiusPx: Float,
-    edgeFade: Float
+    edgeFade: Float,
+    baseAlpha: Float = BASE_ALPHA
 ) {
     val baseColor = if (piece.isWhite) theme.lightPieceColor else theme.darkPieceColor
-    val alpha = BASE_ALPHA * edgeFade
+    val alpha = baseAlpha * edgeFade
 
     // Main piece circle
     drawCircle(
@@ -165,22 +180,27 @@ private fun DrawScope.drawPiece(
     )
 }
 
-private fun DrawScope.drawSpecialFeatures(
+fun DrawScope.drawSpecialFeatures(
+    isWhite: Boolean,
+    theme: AppTheme,
     x: Float,
     y: Float,
     radiusPx: Float,
-    edgeFade: Float
+    edgeFade: Float,
+    baseAlpha: Float = BASE_ALPHA,
 ) {
-    val detailAlpha = (BASE_ALPHA * edgeFade * 3f).coerceAtMost(1f)
+    val detailAlpha = (baseAlpha * edgeFade * 3f).coerceAtMost(1f)
 
     // Eyes
-    drawEyes(x, y, radiusPx, detailAlpha)
+    drawEyes(isWhite, theme, x, y, radiusPx, detailAlpha)
 
     // Crown
     drawCrown(x, y, radiusPx, detailAlpha)
 }
 
-private fun DrawScope.drawEyes(
+fun DrawScope.drawEyes(
+    isWhite: Boolean,
+    theme: AppTheme,
     x: Float,
     y: Float,
     radiusPx: Float,
@@ -188,7 +208,7 @@ private fun DrawScope.drawEyes(
 ) {
     val eyeOffset = radiusPx * 0.3f
     val eyeSize = radiusPx * 0.12f
-    val eyeColor = Color.White
+    val eyeColor = if (isWhite) theme.darkPieceColor else theme.lightPieceColor
     val eyeY = y - eyeOffset * 0.1f
 
     // Left eye

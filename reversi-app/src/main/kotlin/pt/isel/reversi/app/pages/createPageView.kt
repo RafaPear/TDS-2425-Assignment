@@ -2,7 +2,6 @@ package pt.isel.reversi.app.pages
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.snapshots.Snapshot
 import pt.isel.reversi.app.app.state.*
 import pt.isel.reversi.app.pages.aboutPage.AboutPage
 import pt.isel.reversi.app.pages.aboutPage.AboutPageViewModel
@@ -52,8 +51,6 @@ private inline fun <reified T : ViewModel<out UiState>> createPageViewIfType(
  * @receiver The [Page] instance representing the current page to be displayed.
  * @param vm The ViewModel instance associated with the current page. Must match the expected
  *           ViewModel type for the page, otherwise an empty composable is returned.
- * @param game A mutable state holding the current game instance, updated when game state changes.
- * @param playerName A mutable state holding the current player's name, can be null if no player is set.
  * @param pagesState A mutable state holding the current page state, including the current page and back navigation.
  * @return A composable function with [ReversiScope] receiver that renders the appropriate page view.
  *         Returns an empty composable if the page type is [Page.NONE] or if the ViewModel type doesn't match.
@@ -75,12 +72,11 @@ fun Page.createPageView(
 
     Page.GAME -> createPageViewIfType<GamePageViewModel>(vm) {
         GamePage(viewModel = vm as GamePageViewModel) {
-            Snapshot.withMutableSnapshot {
+            
                 gameSession.setGame(it)
                 pagesState.setPage(Page.MAIN_MENU)
             }
         }
-    }
 
     Page.SETTINGS -> createPageViewIfType<SettingsViewModel>(vm) {
         SettingsPage(viewModel = vm as SettingsViewModel) {
@@ -105,6 +101,7 @@ fun Page.createPageView(
     Page.WINNER -> createPageViewIfType<WinnerPageViewModel>(vm) {
         WinnerPage(viewModel = vm as WinnerPageViewModel) {
             pagesState.setPage(Page.MAIN_MENU)
+            vm.deleteGame()
         }
     }
 

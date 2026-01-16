@@ -1,6 +1,5 @@
 package pt.isel.reversi.app.pages.game.utils
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -23,7 +22,6 @@ import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.app.state.ReversiText
 import pt.isel.reversi.app.app.state.getTheme
 import pt.isel.reversi.app.app.state.invert
-import pt.isel.reversi.app.pages.game.testTagPlayerScore
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.gameState.GameState
 import pt.isel.reversi.core.gameState.Player
@@ -77,19 +75,6 @@ fun ReversiScope.TextPlayersScore(
                 }
 
                 Spacer(Modifier.height(8.dp))
-            }
-
-            val winner = state.players.firstOrNull { it.type == state.winner?.type }
-            AnimatedVisibility(visible = winner != null) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Spacer(Modifier.height(16.dp))
-                    ReversiText(
-                        text = "Vencedor: ${winner?.name}",
-                        color = Color.Green,
-                        modifier = Modifier.padding(8.dp),
-                        fontWeight = FontWeight.Bold,
-                    )
-                }
             }
         }
     }

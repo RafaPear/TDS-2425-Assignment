@@ -85,6 +85,16 @@ fun initializeAppArgs(args: Array<String>): InitializedArgs? {
     return InitializedArgs(audioPool)
 }
 
+/**
+ * Runs a health check on the configured game storage backend.
+ * If remote (MongoDB) storage is configured, verifies connectivity and functionality.
+ * On failure, automatically falls back to local file storage if [save] is true.
+ *
+ * @param service The game service implementation to test.
+ * @param testConf Optional configuration to test (defaults to loading from file).
+ * @param save Whether to save the fallback configuration if remote storage fails.
+ * @return An exception if the health check failed, null if successful.
+ */
 suspend fun runStorageHealthCheck(
     service: GameServiceImpl,
     testConf: CoreConfig? = null,

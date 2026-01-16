@@ -7,7 +7,7 @@ import androidx.compose.ui.test.runComposeUiTest
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.game.TargetButton
-import pt.isel.reversi.app.pages.game.testTagTargetButtons
+import pt.isel.reversi.app.pages.game.utils.testTagTargetButtons
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File

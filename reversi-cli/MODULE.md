@@ -169,12 +169,26 @@ Commands are designed to be testable:
 
 #Package pt.isel.reversi.cli
 
-#Package pt.isel.reversi.cli
-
 ## Overview
 
 Hosts the CLI loop, command parsing and rendering utilities. The CLI is designed to be minimal and driven by plain
 standard input/output which makes it easy to script and test.
+
+### Key Components
+
+- `CLI` — Main CLI coordinator class managing the REPL loop
+- `CliConfig` — Configuration for CLI appearance (colors, prompts, messages)
+- `Environment` — Constants for CLI-specific paths and settings
+- `Main` — Entry point for the CLI application
+
+### Responsibilities
+
+- Providing an interactive command-line interface for the Reversi game
+- Managing the REPL (Read-Eval-Print Loop)
+- Parsing and dispatching commands
+- Maintaining game context across command executions
+- Rendering game state to the console
+- Loading CLI configuration from properties file
 
 #Package pt.isel.reversi.cli.commands
 
@@ -185,17 +199,95 @@ Contains concrete command handlers used by the CLI. Each command is implemented 
 
 ### Commands implemented
 
-- NewCmd — create a new game (specify first player and optional name)
-- JoinCmd — join an existing named game
-- PlayCmd — play a move at (row, col)
-- PassCmd — pass the current turn
-- ShowCmd — render the current board and scores
-- ExitCmd — terminate the application
+- `NewCmd` — create a new game (specify first player and optional name)
+    - Syntax: `new # [name]` or `new @ [name]`
+    - Creates a new Reversi game with the specified first player
+    - Optional name parameter saves the game to persistent storage
+    - Saves the previous game before creating a new one
+
+- `JoinCmd` — join an existing named game
+    - Syntax: `join <name> [#|@]`
+    - Loads a saved game by name from storage
+    - Optional piece type parameter specifies which player you control
+    - Useful for multiplayer or turn-based scenarios
+
+- `PlayCmd` — play a move at (row, col)
+    - Syntax: `play <row> <col>` or `play <rowcol>`
+    - Supports multiple coordinate formats:
+        - `play 3 4` (separate row and column)
+        - `play 3A` (row + letter column)
+        - `play 34` (row + digit column)
+    - Validates move legality before execution
+    - Updates board and displays result
+
+- `PassCmd` — pass the current turn
+    - Syntax: `pass`
+    - Only valid when no legal moves are available
+    - Counts consecutive passes; ends game after two consecutive passes
+    - Announces winner if game ends
+
+- `ShowCmd` — render the current board and scores
+    - Syntax: `show` or `s`
+    - Displays ASCII representation of the board
+    - Shows both players' scores
+    - Indicates current player's turn
+    - Shows game name if saved
+
+- `RefreshCmd` — reload game state from storage
+    - Syntax: `refresh` or `r`
+    - Reloads the current game from persistent storage
+    - Useful when another process/player has made moves
+    - Redisplays the updated board
+
+- `TargetCmd` — toggle target mode for visual feedback
+    - Syntax: `target [true|false|yes|no|1|0|on|off]`
+    - Enables/disables highlighting of legal moves
+    - Accepts various boolean representations
+    - Helps visualize available moves
+
+- `ExitCmd` — terminate the application
+    - Syntax: `exit`, `quit`, or `q`
+    - Prompts to save current game before exit
+    - Persists game state to storage
+    - Closes resources and exits cleanly
+
+- `DebugCmd` — display detailed internal state (debug mode only)
+    - Syntax: `debug` or `dbg`
+    - Shows board representation details
+    - Lists player information
+    - Displays configuration values
+    - Lists saved games in storage folder
+    - Only available when `--debug` flag is used
+
+- `ListGamesCmd` — list all saved games
+    - Syntax: `listgames` or `lg`
+    - Shows all game files in the saves directory
+    - Displays game names available for joining
+    - Helpful for discovering saved games
+
+### Responsibilities
+
+- Implementing game commands with validation and error handling
+- Parsing command arguments in various formats
+- Executing game logic through the core module
+- Providing user-friendly feedback messages
+- Coordinating with storage for persistence operations
 
 ## Example command structure
 
 The command objects define `CommandInfo` and implement an `execute` method that receives the parsed arguments and a
 `Game?` context. New commands can be added by defining an object and registering it with the `CLI` parser in
 `Main.kt`.
+
+### Command Result Flow
+
+1. User enters command with arguments
+2. CommandParser matches command and extracts arguments
+3. Command's `execute()` method is called with arguments and current Game
+4. Command validates inputs and checks game state
+5. Command executes business logic via core module
+6. Command returns `CommandResult` with success/failure and updated game
+7. CLI displays result message to user
+8. CLI updates its game context for next command
 
 > Note: The CLI uses `KtFlag` (https://github.com/rafapear/KtFlag) to reduce boilerplate for argument parsing.

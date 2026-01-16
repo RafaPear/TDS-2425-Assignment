@@ -13,7 +13,7 @@ buildscript { dependencies { classpath("org.jetbrains.dokka:dokka-base:2.0.0") }
 
 group = "pt.isel.reversi"
 
-version = "1.0.1"
+version = "2.0.0"
 
 allprojects {
     repositories {

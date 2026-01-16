@@ -256,6 +256,11 @@ data class Game(
      */
     suspend fun refresh(): Game = service.refresh(this)
 
+    suspend fun delete() {
+        if (currGameName == null) return
+        service.delete(currGameName)
+    }
+
     /**
      * Saves the current game state to storage.
      * Saves the player in storage if not already present (makes available this player for future loads).

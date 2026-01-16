@@ -1,5 +1,6 @@
 package pt.isel.reversi.app.utils
 
+import pt.isel.reversi.app.exceptions.ExitApp
 import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.generateUniqueTimestampedFileName
 import pt.isel.reversi.utils.makePathString
@@ -7,8 +8,10 @@ import java.io.File
 import java.time.Instant
 import java.util.logging.FileHandler
 
-fun installFatalCrashLogger() {
+fun installFatalCrashLogger(exitFunction: () -> Unit) {
     Thread.setDefaultUncaughtExceptionHandler { thread, throwable ->
+        try { exitFunction() } catch (_: Throwable) { }
+        if (throwable is ExitApp) return@setDefaultUncaughtExceptionHandler
 
         val randomFunMessages = listOf(
             "The ancient spirits of the code are displeased.",
@@ -73,9 +76,4 @@ ${throwable.stackTraceToString()}
             Runtime.getRuntime().halt(1)
         }
     }
-}
-
-// Ref: https://docs.oracle.com/javase/1.5.0/docs/api/java/lang/Runtime.html#addShutdownHook%28java.lang.Thread%29
-fun addShutdownHook(safeExitApplication: () -> Unit) {
-    Runtime.getRuntime().addShutdownHook(Thread { safeExitApplication() })
 }

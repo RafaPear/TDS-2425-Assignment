@@ -45,7 +45,6 @@ data class GameUiState(
  * @property scope Coroutine scope for launching async game operations.
  * @property setGame Callback function to persist updated game state.
  * @property audioPlayMove Callback function to play move sound effect.
- * @property navigateToWinner Callback invoked to navigate to the winner page when the game ends.
  * @property globalError Optional error to display on initial load.
  * @property setGlobalError Callback function to update global error state.
  */
@@ -78,6 +77,11 @@ class GamePageViewModel(
         setGame(_uiState.value.game)
     }
 
+    fun gotoWinnerPage(game: Game) {
+        setGame(game)
+        setPage(Page.WINNER)
+    }
+
 
     fun startPolling() {
         if (pollingJob != null) throw IllegalStateException("Polling already started")
@@ -87,12 +91,11 @@ class GamePageViewModel(
         scope.launch {
             try {
                 while (isActive) {
-                    if (_uiState.value.game.gameState?.winner != null) {
-                        setGame(_uiState.value.game)
-                        setPage(Page.WINNER)
-                    }
                     val game = _uiState.value.game
                     val gameState = game.gameState
+                    if (gameState?.winner != null) {
+                        gotoWinnerPage(game)
+                    }
                     val myPiece = game.myPiece ?: run {
                         _uiState.setError(GameNotStartedYet(), ErrorType.ERROR)
                         return@launch
@@ -150,10 +153,10 @@ class GamePageViewModel(
                 _uiState.value = _uiState.value.copy(
                     game = _uiState.value.game.play(coordinate)
                 )
-                setGame(uiState.value.game)
+                setGame(_uiState.value.game)
                 audioPlayMove()
             } catch (e: Exception) {
-                setGame(uiState.value.game)
+                setGame(_uiState.value.game)
                 _uiState.setError(e)
             }
         }
@@ -165,6 +168,9 @@ class GamePageViewModel(
         scope.launch {
             try {
                 _uiState.value = _uiState.value.copy(game = _uiState.value.game.pass())
+                if (_uiState.value.game.gameState?.winner != null) {
+                    gotoWinnerPage(_uiState.value.game)
+                }
             } catch (e: Exception) {
                 setGame(_uiState.value.game)
                 _uiState.setError(e)

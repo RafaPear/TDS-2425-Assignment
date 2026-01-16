@@ -7,8 +7,8 @@ import kotlinx.coroutines.runBlocking
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.game.GamePageView
-import pt.isel.reversi.app.pages.game.testTagGamePage
-import pt.isel.reversi.app.pages.game.testTagPlayerScore
+import pt.isel.reversi.app.pages.game.utils.testTagGamePage
+import pt.isel.reversi.app.pages.game.utils.testTagPlayerScore
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.game.startNewGame

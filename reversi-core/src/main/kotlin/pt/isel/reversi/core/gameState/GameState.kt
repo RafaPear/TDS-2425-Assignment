@@ -16,9 +16,19 @@ data class GameState(
     val board: Board,
     val winner: Player? = null,
 ) {
+    /**
+     * Refreshes the players' point counts based on the current board state.
+     * @return A new GameState with updated player points.
+     */
     fun refreshPlayers(): GameState =
         copy(players = players.refreshPlayers(board))
 
+    /**
+     * Changes a player's name in the game state.
+     * @param newName The new name for the player.
+     * @param pieceType The piece type of the player whose name should be changed.
+     * @return A new GameState with the player's name updated.
+     */
     fun changeName(newName: String, pieceType: PieceType): GameState {
         val player = players.getPlayerByType(pieceType) ?: return this
         return copy(

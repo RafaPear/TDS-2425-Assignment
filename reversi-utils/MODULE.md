@@ -241,35 +241,105 @@ making it safe to use anywhere without creating circular dependencies.
 
 ## Overview
 
-This package contains reusable utilities that support configuration handling.
+This package contains reusable utilities that support configuration handling, logging, and audio management.
 The central feature is a `ConfigLoader` class that automates the creation and loading of configuration files in
 `.properties` format, allowing each subsystem to define its own configuration model by implementing the `Config`
 interface.
 This ensures that each module can provide default configuration values while still allowing users to override them
 through editable files.
 
-- `ConfigLoader<U : Config>`
+### Key Components
+
+- `ConfigLoader<U : Config>` — Generic configuration loader
     - Reads a properties file from a provided path.
     - If the file does not exist, creates the directory/file; writes default entries obtained from
       `factory(emptyMap()).getDefaultConfigFileEntries()` and stores the file.
     - Converts the loaded properties to `Map<String, String>` and invokes `factory(configMap)` to build the concrete
       configuration.
-- `Config`
+- `Config` — Interface for configuration implementations
     - Contract that requires exposing `getDefaultConfigFileEntries(): Map<String, String>` with the default values to
       write when the file does not exist.
-- `Environment`
-    - Defines constants: `CONFIG_FOLDER`, `CORE_CONFIG_FILE`, `CLI_CONFIG_FILE`. The default directory is config and the
-      default files are `reversi-core.properties` and `reversi-cli.properties`.
+- `Environment` — Centralized constants
+    - Defines constants: `CONFIG_FOLDER`, `CORE_CONFIG_FILE`, `CLI_CONFIG_FILE`, `APP_CONFIG_FILE`. The default 
+      directory is config and the default files are `reversi-core.properties`, `reversi-cli.properties`, and 
+      `reversi-app.properties`.
+- `PlainFormatter` — Log message formatter for clean, readable console output
+- `StdOutConsoleHandler` — Console handler that writes to standard output
+- `Tracker` — Tracking and analytics utilities for monitoring application behavior
+- `Utils` — General utility functions and extension methods
 
 ### Responsibilities
 
 - Provide a simple and consistent mechanism to load/manage configuration files.
 - Ensure missing configuration files are created with default entries.
 - Expose reusable environment constants for other modules to locate configuration files.
+- Provide logging infrastructure with customizable formatters and handlers.
+- Supply utility functions used across multiple modules.
+- Manage audio playback and sound effects.
 
 ### Notes
 
-- Modules such as `reversi-core` and `reversi-cli` should provide an implementation of `Config` and pass a factory to
-  `ConfigLoader`.
+- Modules such as `reversi-core`, `reversi-cli`, and `reversi-app` should provide an implementation of `Config` and 
+  pass a factory to `ConfigLoader`.
 - The default configuration file is plain text in Java Properties format, as this facilitates manual editing and
   debugging.
+
+#Package pt.isel.reversi.utils.audio
+
+## Overview
+
+Audio playback system providing sound effects and music management for the application. Supports loading, modifying,
+and playing audio files with various controls.
+
+### Key Components
+
+- `AudioWrapper` — Wrapper around Java Sound API for playing audio files
+    - Loads audio from URLs
+    - Supports volume, pitch, and playback speed control
+    - Provides play, pause, stop, and loop functionality
+- `AudioModifier` — Fluent API for configuring audio properties
+    - Set loop count (including infinite looping)
+    - Configure volume levels
+    - Adjust playback speed and pitch
+- `AudioPool` — Collection manager for multiple audio tracks
+    - Stores and retrieves audio by name
+    - Provides builder pattern for pool construction
+    - Supports batch loading of audio resources
+- `BooleanControlWrapper` — Wrapper for on/off audio controls (mute, etc.)
+- `FloatControlWrapper` — Wrapper for continuous audio controls (volume, pan, etc.)
+
+### Responsibilities
+
+- Loading audio files from resources or URLs
+- Playing sound effects and background music
+- Managing audio playback state (play, pause, stop)
+- Controlling audio properties (volume, pitch, speed, looping)
+- Providing a simple API for game audio management
+- Handling audio control types (boolean and float controls)
+
+### Usage Examples
+
+```kotlin
+// Load a single audio file
+val audio = loadAudio("click", url)
+
+// Load audio with infinite looping
+val music = loadAudio("theme", url, AudioModifier().setToLoopInfinitely())
+
+// Build an audio pool
+val audioPool = buildAudioPool {
+    add(loadAudio("click", clickUrl))
+    add(loadAudio("move", moveUrl))
+    add(loadAudio("capture", captureUrl))
+}
+
+// Play audio from pool
+audioPool["click"]?.play()
+```
+
+### Notes
+
+- Uses Java Sound API (`javax.sound.sampled`) for audio playback
+- Supports common audio formats (WAV, AIFF, AU)
+- Audio controls depend on the underlying audio format and system capabilities
+- Gracefully handles missing controls with fallback behavior

@@ -215,18 +215,73 @@ The storage module integrates with:
 
 ## Overview
 
-Implements persistence using plain text files placed in a `saves` folder by default. The storage code is intentionally
-simple: domain objects are converted to a textual representation via `Serializer` implementations and written to files.
-This approach favors human-readable saves that are easy to debug and test.
+Implements persistence using plain text files placed in a `saves` folder by default, with optional MongoDB support
+for scalable storage. The storage code is intentionally simple: domain objects are converted to a textual 
+representation via `Serializer` implementations and written to files. This approach favors human-readable saves 
+that are easy to debug and test.
+
+### Key Components
+
+- `Storage<K, T, U>` — Generic synchronous storage interface
+    - `K` — Key type (typically String for game names)
+    - `T` — Domain type (e.g., GameState)
+    - `U` — Storage format (typically String)
+    - Operations: new, load, save, delete, lastModified, loadAllIds, close
+
+- `AsyncStorage<K, T, U>` — Generic asynchronous storage interface
+    - Same operations as Storage but with suspend functions
+    - Suitable for coroutine-based applications
+    - Prevents blocking UI during I/O operations
+
+- `FileStorage` — Synchronous file-based storage implementation
+    - Stores each game in a separate `.txt` file
+    - Uses provided Serializer for domain object conversion
+    - Creates directories and files as needed
+
+- `AsyncFileStorage` — Asynchronous file-based storage implementation
+    - Non-blocking version using Kotlin coroutines
+    - Same functionality as FileStorage with async I/O
+    - Preferred for interactive applications
+
+- `MongoDBStorage` — Synchronous MongoDB storage implementation
+    - Stores games in MongoDB collections
+    - Provides scalability for server deployments
+
+- `AsyncMongoDBStorage` — Asynchronous MongoDB storage implementation
+    - Non-blocking MongoDB operations with coroutines
+    - Suitable for high-concurrency scenarios
+
+- `MongoDBConnection` — MongoDB connection management
+    - Handles connection pooling and configuration
+
+- `Serializer<T, U>` — Interface for domain-to-storage conversion
+    - `serialize(obj: T): U` — Convert domain object to storage format
+    - `deserialize(obj: U): T` — Convert storage format back to domain
+    - Must preserve round-trip identity
 
 ### Responsibilities
 
-- Reading and writing game snapshots to local text files (FileStorage)
-- Providing `Serializer` implementations to (de)serialize domain types to strings
-- Validating file structure and reporting errors when the persisted data is malformed
+- Reading and writing game snapshots to local text files or MongoDB
+- Providing `Serializer` interface for domain type conversion
+- Managing file/database lifecycle (creation, deletion, updates)
+- Validating file structure and reporting errors when data is malformed
+- Supporting both synchronous and asynchronous I/O patterns
+
+### Storage Backends
+
+**File Storage** (default):
+- Human-readable text files
+- Easy to inspect and debug
+- Suitable for single-user applications
+
+**MongoDB Storage** (optional):
+- Document-based storage
+- Scalable for multiple users
+- Requires MongoDB server
 
 ### Notes
 
 - The concrete serializers for core types live in `reversi-core` under `core.storage.serializers` and are composed by
-  `FileStorage` through the `Storage` contract.
+  storage implementations through the `Storage` contract.
 - Default folder used by the project is `saves` (see `Environment.kt` in core).
+- File format is intentionally simple and human-readable for debugging.

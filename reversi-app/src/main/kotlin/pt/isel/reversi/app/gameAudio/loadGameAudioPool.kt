@@ -13,8 +13,14 @@ import pt.isel.reversi.utils.loadResourcesFromFolder
 
 
 /**
- * Loads the game's audio pool from the resources.
- * @return An AudioPool containing all loaded audio tracks.
+ * Loads the game's audio pool from resources based on the specified theme.
+ * Automatically configures music tracks to loop infinitely and loads sound effects normally.
+ * Handles missing or failed audio loads gracefully with warnings.
+ *
+ * @param theme The AppTheme containing audio resource names to load.
+ * @param mainFolder The folder path containing audio resources (defaults to "audios/").
+ * @param setErrorFun Callback to report non-fatal errors (missing/failed audio loads).
+ * @return An AudioPool containing all successfully loaded audio tracks.
  */
 fun loadGameAudioPool(
     theme: AppTheme,

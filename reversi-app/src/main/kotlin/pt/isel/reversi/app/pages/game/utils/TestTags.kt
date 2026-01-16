@@ -1,17 +1,8 @@
-package pt.isel.reversi.app.pages.game
+package pt.isel.reversi.app.pages.game.utils
 
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.gameState.Player
-
-/**
- * Creates a test tag for the game page title.
- *
- * @param gameName The name of the game, or null for unnamed games.
- * @return The test tag string.
- */
-fun testTagTitle(gameName: String?) =
-    "game_page_title_${gameName ?: "null"}"
 
 /**
  * Creates a test tag for the game board.

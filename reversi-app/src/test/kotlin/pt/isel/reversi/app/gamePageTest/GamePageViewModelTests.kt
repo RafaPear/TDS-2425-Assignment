@@ -73,7 +73,7 @@ class GamePageViewModelTests {
 
     @AfterTest
     fun tearDown() {
-        service.delete(id)
+        runBlocking{ service.delete(id) }
     }
 
     @Test

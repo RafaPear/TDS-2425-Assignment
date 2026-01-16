@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.unit.dp
 import pt.isel.reversi.app.ScaffoldView
 import pt.isel.reversi.app.app.state.ReversiScope
@@ -12,6 +13,8 @@ import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.app.utils.PreviousPage
 import pt.isel.reversi.utils.TRACKER
 
+// Test Tags for About Page
+fun testTagAboutPage() = "about_page"
 
 /**
  * Simple about page presenting project and authorship information.
@@ -33,18 +36,23 @@ fun ReversiScope.AboutPage(viewModel: AboutPageViewModel, modifier: Modifier = M
         }
     ) { padding ->
         Column(
-            modifier = modifier.fillMaxSize().padding(paddingValues = padding),
+            modifier = modifier.fillMaxSize().padding(paddingValues = padding).testTag(testTagAboutPage()),
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Spacer(Modifier.height(height = 24.dp))
-            ReversiText("Projeto Reversi desenvolvido no ISEL.", color = appState.theme.textColor)
-            ReversiText("Autores: ", color = appState.theme.textColor)
-            ReversiText(" - Rafael Pereira - 52880", color = appState.theme.textColor)
-            ReversiText(" - Ian Frunze - NUMERO", color = appState.theme.textColor)
-            ReversiText(" - Tito Silva - A53118", color = appState.theme.textColor)
-            ReversiText("Versão: DEV Build", color = appState.theme.textColor)
-
+            ReversiText("Projeto Reversi desenvolvido no ISEL.")
+            ReversiText("Autores: ")
+            ReversiText(" - Rafael Pereira - 52880")
+            ReversiText(" - Ian Frunze - 52867")
+            ReversiText(" - Tito Silva - A53118")
+            ReversiText("Versão: Release 2.0")
+            Spacer(Modifier.height(height = 24.dp))
+            // how to play
+            ReversiText("Como Jogar:")
+            ReversiText("Crie um jogo em \"Novo Jogo\" ou entre num já existente a partir do lobby.")
+            ReversiText("O objetivo do jogo é ter mais peças da sua cor no tabuleiro quando o jogo terminar.")
+            ReversiText("Os jogadores jogam alternadamente, colocando uma peça de sua cor no tabuleiro.")
         }
     }
 }

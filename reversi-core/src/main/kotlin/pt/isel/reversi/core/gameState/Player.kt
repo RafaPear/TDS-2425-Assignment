@@ -15,6 +15,13 @@ data class Player(
     val name: String = type.name,
     val points: Int = 0,
 ) {
+
+    init {
+        require(!(name.contains(',') || name.contains(';') || name.contains(':'))) {
+            "Player name cannot contain the following characters: , ; :"
+        }
+    }
+
     /**
      * Updates the player's points based on the current board state.
      *

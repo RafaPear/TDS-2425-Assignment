@@ -10,7 +10,10 @@ import org.jetbrains.compose.resources.painterResource
 import pt.isel.reversi.app.MakeMenuBar
 import pt.isel.reversi.app.app.state.*
 import pt.isel.reversi.app.pages.*
-import pt.isel.reversi.app.utils.*
+import pt.isel.reversi.app.utils.AppScreenSwitcher
+import pt.isel.reversi.app.utils.initializeAppArgs
+import pt.isel.reversi.app.utils.installFatalCrashLogger
+import pt.isel.reversi.app.utils.runStorageHealthCheck
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.gameServices.GameService
 import pt.isel.reversi.core.loadCoreConfig
@@ -21,7 +24,6 @@ import reversi.reversi_app.generated.resources.Res
 import reversi.reversi_app.generated.resources.reversi
 import java.awt.Dimension
 import java.lang.System.setProperty
-import kotlin.system.exitProcess
 
 class App(args: Array<String>) {
     private val initializedArgs =
@@ -37,7 +39,6 @@ class App(args: Array<String>) {
         setProperty("apple.awt.application.name", "Reversi-TDS-ISEL")
 
         // Initialize logging utilities
-        installFatalCrashLogger()
         TRACKER.setTrackerFilePath(autoSave = true)
         LOGGER.info("Development tracker initialized with auto-save enabled")
 
@@ -51,13 +52,17 @@ class App(args: Array<String>) {
         }
     }
 
+    /**
+     * Starts the Reversi application by creating the main window and initializing the UI.
+     * Sets up the window state, application state, and page navigation system.
+     * Installs crash logging and handles window close events gracefully.
+     */
     fun start() {
         application {
             val windowState = rememberWindowState(
                 placement = WindowPlacement.Floating,
                 position = WindowPosition.PlatformDefault
             )
-            val isShutdownHookAdded = remember { mutableStateOf(false) }
 
             val gameSession = remember {
                 mutableStateOf(
@@ -80,22 +85,14 @@ class App(args: Array<String>) {
                 audioThemeState = audioThemeState.value,
             )
 
-            if (!isShutdownHookAdded.value) {
-                addShutdownHook {
-                    LOGGER.info("SHUTDOWN HOOK TRIGGERED")
-                    for (type in ExportFormat.entries) TRACKER.saveToFile(type)
-
-                    for (handler in LOGGER.handlers) {
-                        handler.flush()
-                        handler.close()
-                    }
-                    safeExitApplication(appState, pagesState) { exitApplication() }
-                }
-                isShutdownHookAdded.value = true
+            fun exit() {
+                safeExitApplication(appState, pagesState) { exitApplication() }
             }
 
+            installFatalCrashLogger { exit() }
+
             Window(
-                onCloseRequest = { exitProcess(0) },
+                onCloseRequest = { exit() },
                 title = "Reversi-DEV",
                 icon = painterResource(Res.drawable.reversi),
                 state = windowState,
@@ -111,7 +108,7 @@ class App(args: Array<String>) {
                     setGlobalError = { it, type ->
                         pagesState.setGlobalError(it, type)
                     },
-                ) { exitProcess(0) }
+                ) { exit() }
 
 
                 // out [UiState] for allow ViewModel covariance
@@ -168,14 +165,13 @@ class App(args: Array<String>) {
             appJob.cancel()
             pagesState.setPage(Page.NONE)
             runBlocking {
-                LOGGER.info("Waiting for application coroutines to finish...")
                 appJob.join()
                 LOGGER.info("Application coroutines finished.")
                 LOGGER.info("Saving game state...")
-                initialGameService.saveEndGame(appState.game)
+                appState.game.saveEndGame()
                 LOGGER.info("Game state saved.")
                 LOGGER.info("Closing game storage...")
-                initialGameService.closeService()
+                appState.game.closeStorage()
                 LOGGER.info("Game storage closed.")
             }
             LOGGER.info("Destroying audio pool...")
@@ -184,6 +180,14 @@ class App(args: Array<String>) {
         } catch (e: Exception) {
             LOGGER.info("Did it blow up? ${e.message}")
         }
+
+        for (type in ExportFormat.entries) TRACKER.saveToFile(type)
+
+        for (handler in LOGGER.handlers) {
+            handler.flush()
+            handler.close()
+        }
+        System.out.flush()
         exitApplication()
     }
 }

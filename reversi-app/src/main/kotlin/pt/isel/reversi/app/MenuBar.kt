@@ -13,6 +13,7 @@ import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.utils.LOGGER
+import javax.swing.JOptionPane
 
 /**
  * Creates the application menu bar with File, View, Dev, and Help menus.
@@ -42,9 +43,6 @@ fun FrameWindowScope.MakeMenuBar(
             Item("Novo Jogo") {
                 setPage(Page.NEW_GAME)
             }
-//            Item("Guardar Jogo") {
-//                setPage(Page.SAVE_GAME)
-//            }
             Item("Definições") {
                 setPage(Page.SETTINGS)
             }
@@ -95,7 +93,29 @@ fun FrameWindowScope.MakeMenuBar(
                 }
             }
             Item("Trigger Error") {
-                setGlobalError(Exception("Erro de teste disparado a partir do menu Dev"), null)
+                val message = JOptionPane.showInputDialog(
+                    null,
+                    "Introduza a mensagem do erro",
+                    "Trigger Error",
+                    JOptionPane.QUESTION_MESSAGE
+                )
+
+                if (!message.isNullOrBlank()) {
+                    val options = ErrorType.entries.toTypedArray()
+                    val selectedIndex = JOptionPane.showOptionDialog(
+                        null,
+                        "Escolha o tipo de erro",
+                        "Trigger Error",
+                        JOptionPane.DEFAULT_OPTION,
+                        JOptionPane.QUESTION_MESSAGE,
+                        null,
+                        options,
+                        ErrorType.ERROR
+                    )
+
+                    val selectedType = options.getOrNull(selectedIndex) ?: ErrorType.ERROR
+                    setGlobalError(Exception(message), selectedType)
+                }
             }
             Item("Crash App") {
                 throw RuntimeException("App crash triggered from Dev menu")

@@ -9,6 +9,7 @@ import androidx.compose.ui.unit.dp
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.game.utils.DrawBoard
 import pt.isel.reversi.app.pages.game.utils.TextPlayersScore
+import pt.isel.reversi.app.pages.game.utils.testTagGamePage
 import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.game.Game
 

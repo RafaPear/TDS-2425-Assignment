@@ -3,6 +3,11 @@ package pt.isel.reversi.core.game.gameServices
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.gameState.GameState
 
+/**
+ * Empty implementation of GameServiceImpl that performs no storage operations.
+ * Used primarily for testing scenarios where storage interaction is not needed.
+ * All methods are no-ops and return default or dummy values.
+ */
 class EmptyGameService : GameServiceImpl {
     override fun getStorageTypeName(): String {
         return "FakeStorage"
@@ -35,6 +40,10 @@ class EmptyGameService : GameServiceImpl {
     }
 
     override suspend fun runStorageHealthCheck() {
+        // No-op
+    }
+
+    override suspend fun delete(gameName: String) {
         // No-op
     }
 

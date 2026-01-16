@@ -9,7 +9,12 @@ import pt.isel.reversi.app.app.state.GameSession
 import pt.isel.reversi.app.app.state.PagesState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.Page
-import pt.isel.reversi.app.pages.game.*
+import pt.isel.reversi.app.pages.game.GamePage
+import pt.isel.reversi.app.pages.game.GamePageViewModel
+import pt.isel.reversi.app.pages.game.utils.testTagBoard
+import pt.isel.reversi.app.pages.game.utils.testTagCellView
+import pt.isel.reversi.app.pages.game.utils.testTagPlayerScore
+import pt.isel.reversi.app.pages.game.utils.testTagTargetButtons
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.gameServices.EmptyGameService

@@ -17,6 +17,14 @@ import pt.isel.reversi.storage.AsyncStorage
 import pt.isel.reversi.utils.LOGGER
 import pt.isel.reversi.utils.TRACKER
 
+/**
+ * Primary implementation of the game service for managing game state persistence.
+ * Provides integration with various storage backends (file system, MongoDB) and handles
+ * game state synchronization, player management, and storage operations.
+ *
+ * @property storage The storage type to use (FILE_STORAGE or DATABASE_STORAGE).
+ * @property params Configuration parameters for the selected storage backend.
+ */
 class GameService(storage: GameStorageType? = null, params: StorageParams? = null) : GameServiceImpl {
     private val storage: AsyncStorage<String, GameState, String> by lazy {
         params?.let { storage?.storage(it) } ?: GameStorageType.setUpStorage(loadCoreConfig())
@@ -163,6 +171,11 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         storage.new(
             id = gameName, factory = gameStateProvider
         )
+    }
+
+    override suspend fun delete(gameName: String) {
+        TRACKER.trackFunctionCall(customName = "GameService.delete", category = "Core.GameService")
+        storage.delete(gameName)
     }
 
     override suspend fun runStorageHealthCheck() {

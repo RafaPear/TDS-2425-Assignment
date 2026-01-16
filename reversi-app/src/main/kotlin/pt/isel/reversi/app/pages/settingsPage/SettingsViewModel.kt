@@ -1,25 +1,24 @@
 package pt.isel.reversi.app.pages.settingsPage
 
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.snapshots.Snapshot
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import pt.isel.reversi.app.app.AppTheme
 import pt.isel.reversi.app.app.state.AppStateImpl
-import pt.isel.reversi.app.app.state.setError
 import pt.isel.reversi.app.app.state.setLoading
 import pt.isel.reversi.app.gameAudio.loadGameAudioPool
-import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.app.pages.ScreenState
 import pt.isel.reversi.app.pages.UiState
 import pt.isel.reversi.app.pages.ViewModel
 import pt.isel.reversi.app.utils.runStorageHealthCheck
 import pt.isel.reversi.core.CoreConfig
+import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.gameServices.GameService
+import pt.isel.reversi.core.gameState.Player
 import pt.isel.reversi.core.loadCoreConfig
 import pt.isel.reversi.core.saveCoreConfig
 import pt.isel.reversi.utils.LOGGER
@@ -95,10 +94,6 @@ class SettingsViewModel(
         )
     }
 
-    init {
-        TRACKER.trackViewModelCreated(this, category = Page.SETTINGS)
-    }
-
     fun setDraftPlayerName(name: String?) {
         _uiState.value = _uiState.value.copy(draftPlayerName = name)
     }
@@ -120,7 +115,8 @@ class SettingsViewModel(
         newName: String?,
         newTheme: AppTheme,
         draftCoreConfig: CoreConfig,
-        volume: Float
+        volume: Float,
+        endAction: () -> Unit
     ) {
         _uiState.setLoading(true)
         TRACKER.trackFunctionCall(details = "Apply settings clicked")
@@ -141,7 +137,7 @@ class SettingsViewModel(
                     }
                     val exception = runStorageHealthCheck(appState.service, testConf = draftCoreConfig, save = true)
                     if (exception != null) {
-                        _uiState.setError(exception, ErrorType.WARNING)
+                        setGlobalError(exception, ErrorType.WARNING)
                         LOGGER.severe("Storage type change failed: ${exception.message}")
                     } else {
                         saveCoreConfig(draftCoreConfig)
@@ -152,7 +148,7 @@ class SettingsViewModel(
                 val playingAudios = appState.audioPool.getPlayingAudios()
 
                 val loadedAudioPool = loadGameAudioPool(newTheme) { err ->
-                    _uiState.setError(err, ErrorType.WARNING)
+                    setGlobalError(err, ErrorType.WARNING)
                 }
 
                 appState.audioPool.merge(loadedAudioPool)
@@ -161,12 +157,17 @@ class SettingsViewModel(
                 parseVolume(volume, appState.audioPool)
 
                 // Apply theme and player name
-                Snapshot.withMutableSnapshot {
+
+                try {
+                    if (newName != null) Player(type = PieceType.BLACK, name = newName)
                     setPlayerName(newName)
-                    setDraftPlayerName(newName)
-                    setTheme(newTheme)
-                    if (resetGame) setGame(Game(service = GameService()))
+                } catch (ex: Exception) {
+                    setGlobalError(ex, ErrorType.INFO)
                 }
+                setDraftPlayerName(newName)
+                setTheme(newTheme)
+                if (resetGame) setGame(Game(service = GameService()))
+
 
                 // Resume previously playing theme-related audios
                 for (audio in playingAudios) {
@@ -190,6 +191,7 @@ class SettingsViewModel(
             } finally {
                 _uiState.setLoading(false)
             }
+            if (error == null) endAction()
         }
     }
 

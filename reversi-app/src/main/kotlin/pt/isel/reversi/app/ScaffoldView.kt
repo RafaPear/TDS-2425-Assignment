@@ -100,7 +100,7 @@ fun ReversiScope.ScaffoldView(
                         modifier = Modifier
                             .fillMaxSize()
                             .alpha(0.2f),
-                        contentScale = ContentScale.FillHeight
+                        contentScale = ContentScale.Crop
                     )
                 }
             }

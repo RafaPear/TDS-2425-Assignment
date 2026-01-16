@@ -271,6 +271,8 @@ logic and storage system while providing a rich user interface for playing Rever
 ### Key Classes
 
 - `Main` — Application entry point and window setup
+- `MenuBar` — Top menu bar for the application window
+- `ScaffoldView` — Main scaffold structure that hosts all pages
 - Game UI Components — Interactive board rendering and move handling
 - State Management — ViewModel-based state management for game session
 
@@ -280,3 +282,231 @@ logic and storage system while providing a rich user interface for playing Rever
 - Managing UI state and user interactions
 - Coordinating with the core game logic and storage modules
 - Handling player input and rendering the game board
+- Managing window structure and navigation between pages
+
+#Package pt.isel.reversi.app.app
+
+## Overview
+
+Contains the core application infrastructure, theme management, and global state management for the Reversi desktop app.
+
+### Key Components
+
+- `App` — Main application composable and setup
+- `AppTheme` — Theme configuration interface with color schemes, fonts, and resource definitions
+- `AppThemes` — Collection of predefined themes (default, dark, light themes)
+- `AppState` — Interface for managing global application state
+- `AppStateImpl` — Implementation of AppState with reactive state management
+- `AppStateUtils` — Helper utilities for state operations
+- `ReversiScope` — Coroutine scope management for async operations
+
+### Responsibilities
+
+- Initializing and managing application-wide state
+- Providing theme configurations and switching
+- Managing coroutine scopes for background operations
+- Coordinating between different pages and view models
+- Handling application lifecycle events
+
+#Package pt.isel.reversi.app.pages
+
+## Overview
+
+Contains all UI pages/screens of the application, their view models, and page navigation logic.
+
+### Key Components
+
+- `Page` — Sealed interface defining all possible pages in the app
+- `ViewModel` — Base interface for all page view models
+- `createPageView` — Factory function to create page composables
+- `createViewModel` — Factory function to create view models for pages
+
+### Sub-packages
+
+- `menu` — Main menu page with New Game, Load Game, Settings, Exit options
+- `newGamePage` — Game creation interface with player configuration
+- `lobby` — Game lobby for joining/managing multiplayer games
+- `game` — Active game page with board, controls, and game state display
+- `winnerPage` — End game screen showing winner and final scores
+- `aboutPage` — About/credits page
+- `settingsPage` — Application settings and configuration
+
+### Responsibilities
+
+- Defining the structure of each application screen
+- Managing page-specific state through ViewModels
+- Handling navigation between pages
+- Providing reusable page creation patterns
+
+#Package pt.isel.reversi.app.pages.menu
+
+## Overview
+
+Main menu screen where users can start a new game, load saved games, access settings, or exit the application.
+
+### Components
+
+- `MainMenu` — Main menu page composable
+- `MainMenuBg` — Background rendering for the menu
+- `MainMenuViewModel` — State management for menu interactions
+
+### Responsibilities
+
+- Displaying main menu options
+- Handling user navigation to other pages
+- Managing menu state and animations
+
+#Package pt.isel.reversi.app.pages.newGamePage
+
+## Overview
+
+Screen for creating a new game with player configuration options.
+
+### Components
+
+- `NewGamePage` — New game creation page composable
+- `NewGameViewModel` — State management for game creation
+
+### Responsibilities
+
+- Configuring game parameters (player names, types, board size)
+- Validating game creation inputs
+- Initiating new game sessions
+
+#Package pt.isel.reversi.app.pages.lobby
+
+## Overview
+
+Lobby interface for browsing, joining, and managing multiplayer games.
+
+### Components
+
+- `LobbyMenu` — Main lobby composable
+- `LobbyViewModel` — State management for lobby operations
+- `lobbyViews/` — Sub-components for displaying game lists and details
+
+### Responsibilities
+
+- Displaying available games
+- Allowing players to join existing games
+- Managing game lobby state
+- Refreshing game lists from storage
+
+#Package pt.isel.reversi.app.pages.game
+
+## Overview
+
+Active game screen with interactive board, move controls, and real-time game state display.
+
+### Components
+
+- `GamePage` — Main game page composable
+- `GamePageView` — Game board and controls view
+- `GamePageViewModel` — Game state management and move coordination
+- `utils/` — Helper utilities for game rendering and interactions
+
+### Responsibilities
+
+- Rendering the interactive game board
+- Handling player move input
+- Displaying current game state (scores, turn, available moves)
+- Managing game flow (play, pass, forfeit)
+- Providing visual feedback for moves and captures
+
+#Package pt.isel.reversi.app.pages.winnerPage
+
+## Overview
+
+End game screen displaying final results, winner announcement, and options to play again.
+
+### Responsibilities
+
+- Showing winner and final scores
+- Displaying game statistics
+- Offering options to return to menu or start a new game
+
+#Package pt.isel.reversi.app.pages.aboutPage
+
+## Overview
+
+About page with application information, credits, and version details.
+
+### Responsibilities
+
+- Displaying application information
+- Showing credits and acknowledgments
+- Providing version and build information
+
+#Package pt.isel.reversi.app.pages.settingsPage
+
+## Overview
+
+Settings screen for configuring application preferences and game options.
+
+### Responsibilities
+
+- Managing theme selection
+- Configuring audio settings
+- Adjusting game preferences
+- Persisting user settings
+
+#Package pt.isel.reversi.app.exceptions
+
+## Overview
+
+Application-specific exceptions for handling GUI-related errors and user-facing error states.
+
+### Exception Types
+
+- `CouldNotLoadAsset` — Thrown when audio/visual assets fail to load
+- `ErrorMessage` — Base exception for user-displayable error messages
+- `ExitApp` — Exception to signal application exit
+- `GameCorrupted` — Thrown when loaded game data is corrupted
+- `GameIsFull` — Thrown when attempting to join a full game
+- `GameNotStartedYet` — Thrown when operations require an active game
+- `NoPieceSelected` — Thrown when move requires piece selection
+
+### Responsibilities
+
+- Providing user-friendly error messages
+- Distinguishing recoverable from fatal errors
+- Supporting graceful error handling in the UI
+
+#Package pt.isel.reversi.app.gameAudio
+
+## Overview
+
+Audio system management for game sound effects and background music.
+
+### Components
+
+- `loadGameAudioPool` — Loads and configures the application's audio pool based on theme
+
+### Responsibilities
+
+- Loading audio assets from resources
+- Configuring music tracks to loop
+- Managing sound effects
+- Handling missing audio files gracefully
+- Integrating with theme-based audio configurations
+
+#Package pt.isel.reversi.app.utils
+
+## Overview
+
+Utility functions and helper components for the app UI layer.
+
+### Components
+
+- `ButtonPreviousPage` — Reusable back button component
+- `InitializationUtils` — Application initialization helpers
+- `Loading` — Loading indicator composable
+- `PageSwitcher` — Navigation helper for page transitions
+- `ProcessUtils` — Process and lifecycle management utilities
+
+### Responsibilities
+
+- Providing reusable UI components
+- Supporting app initialization
+- Managing page transitions
+- Handling loading states

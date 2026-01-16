@@ -4,6 +4,7 @@ package pt.isel.reversi.app.app.state
 
 import androidx.compose.runtime.MutableState
 import pt.isel.reversi.app.app.AppTheme
+import pt.isel.reversi.app.exceptions.ExitApp
 import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.app.pages.UiState
 import pt.isel.reversi.core.exceptions.ErrorType
@@ -115,4 +116,9 @@ fun MutableState<PagesState>.setGlobalError(error: Exception?, type: ErrorType? 
     LOGGER.info("Set global error: ${error?.message ?: "null"}")
     val newError = error as? ReversiException ?: error?.toReversiException(type ?: ErrorType.CRITICAL)
     value = value.copy(globalError = newError)
+}
+
+// Throw is handled by installFatalCrashLogger and will exit the app gracefully and save state
+fun safeKillApp() {
+    throw ExitApp()
 }

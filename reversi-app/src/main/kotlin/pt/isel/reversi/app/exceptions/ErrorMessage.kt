@@ -9,6 +9,7 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Error
 import androidx.compose.material.icons.filled.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -30,6 +31,7 @@ import androidx.compose.ui.unit.sp
 import kotlinx.coroutines.delay
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.app.state.ReversiText
+import pt.isel.reversi.app.app.state.safeKillApp
 import pt.isel.reversi.core.exceptions.ErrorType
 import pt.isel.reversi.core.exceptions.ReversiException
 import pt.isel.reversi.utils.LOGGER
@@ -60,8 +62,8 @@ fun ReversiScope.ErrorMessage(
     when (error?.type) {
         ErrorType.INFO -> ToastMessage(error, modifier, setError)
         ErrorType.WARNING -> WarningMessage(error, modifier, setError)
-        ErrorType.ERROR -> ToastMessage(error, modifier, setError)
-        ErrorType.CRITICAL -> ToastMessage(error, modifier, setError)
+        ErrorType.ERROR -> ErrorMessageDialog(error, modifier, setError)
+        ErrorType.CRITICAL -> CriticalMessageDialog(error, modifier, setError)
         null -> return
     }
 }
@@ -118,6 +120,143 @@ fun ReversiScope.WarningMessage(
 
             Button(
                 onClick = { setError(null, null) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonBackgroundColor,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                ReversiText(text = "OK", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+fun ReversiScope.ErrorMessageDialog(
+    error: ReversiException?,
+    modifier: Modifier = Modifier,
+    setError: (Exception?, ErrorType?) -> Unit
+) {
+    val errorMessage = error?.message ?: return
+
+    val overlayColor = Color.Black.copy(alpha = 0.6f)
+    val errorBackgroundColor = Color(0xFFFFCDD2)
+    val buttonBackgroundColor = Color(0xFFD32F2F)
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(overlayColor)
+            .clickable(enabled = false, onClick = {}),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .widthIn(max = 300.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .shadow(elevation = 8.dp, shape = RoundedCornerShape(12.dp))
+                .background(errorBackgroundColor)
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            Icon(
+                imageVector = Icons.Default.Warning,
+                contentDescription = "Error",
+                tint = Color(0xFFD32F2F),
+                modifier = Modifier.size(48.dp)
+            )
+
+            ReversiText(
+                text = errorMessage,
+                color = Color.Black,
+                fontSize = 18.sp,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Visible,
+                softWrap = true,
+                maxLines = Int.MAX_VALUE
+            )
+
+            Button(
+                onClick = { setError(null, null) },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = buttonBackgroundColor,
+                    contentColor = Color.White
+                ),
+                shape = RoundedCornerShape(8.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(48.dp)
+            ) {
+                ReversiText(text = "OK", fontSize = 16.sp, fontWeight = FontWeight.Bold)
+            }
+        }
+    }
+}
+
+@Composable
+fun ReversiScope.CriticalMessageDialog(
+    error: ReversiException?,
+    modifier: Modifier = Modifier,
+    setError: (Exception?, ErrorType?) -> Unit
+) {
+    val errorMessage = error?.message ?: return
+
+    val overlayColor = Color.Black.copy(alpha = 0.7f)
+    val criticalBackgroundColor = Color(0xFFFF3434)
+    val buttonBackgroundColor = Color(0xFFFFABAB)
+
+    Box(
+        modifier = modifier
+            .fillMaxSize()
+            .background(overlayColor)
+            .clickable(enabled = false, onClick = {}),
+        contentAlignment = Alignment.Center
+    ) {
+        Column(
+            modifier = Modifier
+                .widthIn(max = 300.dp)
+                .clip(RoundedCornerShape(12.dp))
+                .shadow(elevation = 10.dp, shape = RoundedCornerShape(12.dp))
+                .background(criticalBackgroundColor)
+                .verticalScroll(rememberScrollState())
+                .padding(24.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+
+            Icon(
+                imageVector = Icons.Default.Error,
+                contentDescription = "Critical",
+                tint = Color(0xFFB71C1C),
+                modifier = Modifier.size(56.dp)
+            )
+
+            ReversiText(
+                text = errorMessage,
+                color = Color.Black,
+                fontSize = 18.sp,
+                modifier = Modifier.fillMaxWidth(),
+                fontWeight = FontWeight.Medium,
+                textAlign = TextAlign.Center,
+                overflow = TextOverflow.Visible,
+                softWrap = true,
+                maxLines = Int.MAX_VALUE
+            )
+
+            Button(
+                onClick = {
+                    setError(null, null)
+                    safeKillApp()
+                },
                 colors = ButtonDefaults.buttonColors(
                     containerColor = buttonBackgroundColor,
                     contentColor = Color.White
