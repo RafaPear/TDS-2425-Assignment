@@ -14,6 +14,8 @@ import kotlinx.coroutines.launch
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.lobby.LobbyLoadedState
 import pt.isel.reversi.app.pages.lobby.LobbyViewModel
+import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.CardStatus
+import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard.getCardStatus
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.PageIndicators
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.Search
 import pt.isel.reversi.utils.LOGGER

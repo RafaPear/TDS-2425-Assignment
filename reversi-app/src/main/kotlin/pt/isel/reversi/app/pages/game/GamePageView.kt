@@ -69,7 +69,12 @@ fun ReversiScope.GamePageView(
 
                 val target = game.target
                 val lastPlayer = game.gameState?.lastPlayer
-                val canPass = getAvailablePlays().isEmpty() && lastPlayer != null && lastPlayer != game.myPiece
+                val canPass =
+                    if (game.currGameName == null ) {
+                        getAvailablePlays().isEmpty()
+                    } else {
+                        getAvailablePlays().isEmpty() && lastPlayer != null && lastPlayer != game.myPiece
+                    }
 
                 TargetButton(target, freeze = freeze) {
                     setTargetMode(!target)
