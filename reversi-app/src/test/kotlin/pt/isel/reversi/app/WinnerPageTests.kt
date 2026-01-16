@@ -11,10 +11,20 @@ import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.game.startNewGame
 import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class WinnerPageTests {
+
+    @BeforeTest
+    @AfterTest
+    fun cleanup() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
 
     val game = runBlocking {
         startNewGame(
@@ -33,6 +43,7 @@ class WinnerPageTests {
 
     @Test
     fun `check winner page shows correct winner`() = runComposeUiTest {
-
+        appState
+        assert(false)
     }
 }

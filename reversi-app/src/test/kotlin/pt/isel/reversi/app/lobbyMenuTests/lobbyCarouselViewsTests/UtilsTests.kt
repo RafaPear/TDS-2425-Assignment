@@ -1,4 +1,4 @@
-package lobbyMenuTest.lobbyCarouselTests.lobbyCarouselViewsTests
+package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons
@@ -11,11 +11,21 @@ import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils.*
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.ReversiScope
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class UtilsTests {
     val reversiScope = ReversiScope(AppState.empty(EmptyGameService()))
+
+    @BeforeTest
+    @AfterTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
 
     @Test
     fun `navButton executes onClick when clicked`() = runComposeUiTest {

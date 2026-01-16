@@ -1,4 +1,4 @@
-package lobbyMenuTest.lobbyCarouselTests
+package pt.isel.reversi.app.lobbyMenuTests
 
 import pt.isel.reversi.app.pages.lobby.LobbyLoadedState
 import pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.CardStatus
@@ -10,10 +10,21 @@ import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.gameState.GameState
 import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class CardStatusTests {
+
+    @BeforeTest
+    @AfterTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
+
     @Test
     fun `getCardStatus returns CURRENT_GAME for current game`() {
         val gameState = GameState(

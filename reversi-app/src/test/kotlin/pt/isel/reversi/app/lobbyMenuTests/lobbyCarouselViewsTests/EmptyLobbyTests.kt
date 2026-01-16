@@ -1,4 +1,4 @@
-package lobbyMenuTest.lobbyCarouselTests.lobbyCarouselViewsTests
+package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.assertTextEquals
@@ -8,11 +8,21 @@ import pt.isel.reversi.app.pages.lobby.lobbyViews.*
 import pt.isel.reversi.app.state.AppState
 import pt.isel.reversi.app.state.ReversiScope
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class EmptyLobbyTests {
     val reversiScope = ReversiScope(AppState.empty(EmptyGameService()))
+
+    @BeforeTest
+    @AfterTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
 
     @Test
     fun `test if empty lobby view is displayed correctly`() = runComposeUiTest {

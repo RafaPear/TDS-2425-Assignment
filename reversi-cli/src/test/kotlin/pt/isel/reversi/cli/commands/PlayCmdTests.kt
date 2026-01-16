@@ -6,6 +6,7 @@ import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.game.startNewGame
 import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
+import pt.isel.reversi.utils.BASE_FOLDER
 import pt.rafap.ktflag.cmd.CommandResultType
 import java.io.File
 import kotlin.test.*
@@ -13,14 +14,11 @@ import kotlin.test.*
 class PlayCmdTests {
 
     @BeforeTest
+    @AfterTest
     fun cleanup() {
-        File("data/saves").deleteRecursively()
+        File(BASE_FOLDER).deleteRecursively()
     }
 
-    @AfterTest
-    fun cleanupAfter() {
-        File("data/saves").deleteRecursively()
-    }
 
     @Test
     fun `parseCoordinateArgs accepts separated numbers`() {

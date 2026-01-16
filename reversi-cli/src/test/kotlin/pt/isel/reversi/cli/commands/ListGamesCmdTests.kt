@@ -4,6 +4,7 @@ import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.gameServices.GameService
 import pt.isel.reversi.core.storage.GameStorageType
 import pt.isel.reversi.core.storage.StorageParams
+import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
@@ -17,13 +18,9 @@ class ListGamesCmdTests {
     )
 
     @BeforeTest
-    fun cleanup() {
-        File("data/saves").deleteRecursively()
-    }
-
     @AfterTest
-    fun cleanupAfter() {
-        File("data/saves").deleteRecursively()
+    fun cleanup() {
+        File(BASE_FOLDER).deleteRecursively()
     }
 
 

@@ -7,10 +7,19 @@ import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.exceptions.InvalidPlay
 import pt.isel.reversi.core.game.GameLogic
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFailsWith
 
 class GameLogicTests {
+
+    @BeforeTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
+
     @Test
     fun `getCapturablePieces should return empty list when no capturable pieces are found`() {
         var board = Board(4).addPiece(Coordinate(1, 1), PieceType.BLACK)
@@ -40,7 +49,7 @@ class GameLogicTests {
         board = board.addPiece(Coordinate(3, 3), PieceType.WHITE)
         board = board.addPiece(Coordinate(3, 4), PieceType.BLACK)
 
-        val uut3 = GameLogic.getCapturablePieces(
+        GameLogic.getCapturablePieces(
             board,
             Piece(Coordinate(3, 1), PieceType.BLACK),
             Coordinate(0, 1)
@@ -114,7 +123,7 @@ class GameLogicTests {
         board = board.addPiece(Coordinate(1, 2), PieceType.BLACK)
 
         assertFailsWith<IllegalArgumentException> {
-            val uut = GameLogic.getCapturablePieces(
+            GameLogic.getCapturablePieces(
                 board,
                 Piece(Coordinate(0, 0), PieceType.BLACK),
                 Coordinate(0, 1)
@@ -386,8 +395,8 @@ class GameLogicTests {
 
 
         assertFailsWith<InvalidPlay> {
-            val uut = GameLogic.play(board, Piece(Coordinate(3, 3), PieceType.WHITE))
-            val uut2 = GameLogic.play(board, Piece(Coordinate(1, 4), PieceType.BLACK))
+            GameLogic.play(board, Piece(Coordinate(3, 3), PieceType.WHITE))
+            GameLogic.play(board, Piece(Coordinate(1, 4), PieceType.BLACK))
         }
     }
 
@@ -415,7 +424,7 @@ class GameLogicTests {
         board = board.addPiece(myPiece.coordinate, myPiece.value)
 
         assertFailsWith<InvalidPlay> {
-            val uut = GameLogic.play(board, myPiece)
+            GameLogic.play(board, myPiece)
         }
     }
 

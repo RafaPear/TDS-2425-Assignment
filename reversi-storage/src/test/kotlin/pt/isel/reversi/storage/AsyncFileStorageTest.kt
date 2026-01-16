@@ -1,9 +1,10 @@
 package pt.isel.reversi.storage
 
 import kotlinx.coroutines.runBlocking
-import org.junit.After
-import org.junit.Before
+import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFails
 
@@ -26,14 +27,11 @@ class AsyncFileStorageTest {
         serializer = TestSerializer()
     )
 
-    @Before
+    @BeforeTest
+    @AfterTest
     fun cleanup() {
         File("test-async-saves").deleteRecursively()
-    }
-
-    @After
-    fun cleanupAfter() {
-        File("test-async-saves").deleteRecursively()
+        File(BASE_FOLDER).deleteRecursively()
     }
 
     @Test

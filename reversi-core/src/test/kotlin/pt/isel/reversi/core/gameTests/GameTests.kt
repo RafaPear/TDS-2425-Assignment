@@ -14,6 +14,7 @@ import pt.isel.reversi.core.game.startNewGame
 import pt.isel.reversi.core.gameState.GameState
 import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
+import pt.isel.reversi.utils.BASE_FOLDER
 import pt.isel.reversi.utils.LOGGER
 import java.io.File
 import kotlin.test.*
@@ -24,6 +25,7 @@ class GameTests {
     @AfterTest
     fun cleanup() = runTest {
         File("test-game").deleteRecursively()
+        File(BASE_FOLDER).deleteRecursively()
     }
 
     @Test

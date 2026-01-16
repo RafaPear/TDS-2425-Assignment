@@ -10,6 +10,10 @@ import pt.isel.reversi.core.board.Coordinate
 import pt.isel.reversi.core.board.Piece
 import pt.isel.reversi.core.board.PieceType
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.fail
 
@@ -24,6 +28,12 @@ import kotlin.test.fail
 @OptIn(ExperimentalTestApi::class)
 class CellViewTeste {
     val reversiScope = ReversiScope(AppState.empty(EmptyGameService()))
+
+    @BeforeTest
+    @AfterTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
 
     @Test
     fun `cellView with piece null expect no piece view`() = runComposeUiTest {

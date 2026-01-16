@@ -13,6 +13,7 @@ import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
 import pt.isel.reversi.core.storage.GameStorageType
 import pt.isel.reversi.core.storage.StorageParams
+import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
 import kotlin.test.*
 
@@ -26,11 +27,12 @@ class GameAndServiceIntegrationTests {
     @AfterTest
     fun cleanup() {
         File("test-saves").deleteRecursively()
+        File(BASE_FOLDER).deleteRecursively()
     }
 
     @Test
     fun `play in not local game and not my turn fails`() = runTest {
-        val uutB = startNewGame(
+        startNewGame(
             side = 4,
             players = MatchPlayers(Player(PieceType.BLACK)),
             firstTurn = PieceType.BLACK,

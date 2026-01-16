@@ -1,7 +1,8 @@
 package pt.isel.reversi.storage
 
-import org.junit.Before
 import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertFails
 
@@ -24,7 +25,8 @@ class FileStorageTest {
         serializer = TestSerializer()
     )
 
-    @Before
+    @BeforeTest
+    @AfterTest
     fun cleanup() {
         File("test-saves").deleteRecursively()
     }

@@ -12,6 +12,7 @@ import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
 import pt.isel.reversi.core.storage.GameStorageType
 import pt.isel.reversi.core.storage.StorageParams
+import pt.isel.reversi.utils.BASE_FOLDER
 import pt.rafap.ktflag.cmd.CommandResultType
 import java.io.File
 import kotlin.test.AfterTest
@@ -27,14 +28,11 @@ class PassCmdTests {
     )
 
     @BeforeTest
+    @AfterTest
     fun cleanup() {
-        File("data/saves").deleteRecursively()
+        File(BASE_FOLDER).deleteRecursively()
     }
 
-    @AfterTest
-    fun cleanupAfter() {
-        File("data/saves").deleteRecursively()
-    }
 
 
     @Test

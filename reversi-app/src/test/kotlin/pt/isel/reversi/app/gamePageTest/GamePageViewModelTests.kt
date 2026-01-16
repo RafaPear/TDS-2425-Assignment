@@ -9,9 +9,9 @@ import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.game.startNewGame
 import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
-import kotlin.test.Test
-import kotlin.test.assertEquals
-import kotlin.test.assertNotNull
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.*
 
 class GamePageViewModelTests {
 
@@ -33,6 +33,12 @@ class GamePageViewModelTests {
             currGameName = null,
             service = EmptyGameService()
         )
+    }
+
+    @BeforeTest
+    @AfterTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
     }
 
     @Test

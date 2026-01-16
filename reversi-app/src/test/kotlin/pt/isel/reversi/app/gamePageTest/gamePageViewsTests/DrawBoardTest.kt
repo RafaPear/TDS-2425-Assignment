@@ -12,12 +12,22 @@ import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.game.startNewGame
 import pt.isel.reversi.core.gameState.MatchPlayers
 import pt.isel.reversi.core.gameState.Player
+import pt.isel.reversi.utils.BASE_FOLDER
+import java.io.File
+import kotlin.test.AfterTest
+import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.fail
 
 @OptIn(ExperimentalTestApi::class)
 class DrawBoardTest {
     val reversiScope = ReversiScope(AppState.empty(EmptyGameService()))
+
+    @BeforeTest
+    @AfterTest
+    fun cleanUp() {
+        File(BASE_FOLDER).deleteRecursively()
+    }
 
     @Test
     fun `DrawBoard test if all cells are displayed`() = runComposeUiTest {

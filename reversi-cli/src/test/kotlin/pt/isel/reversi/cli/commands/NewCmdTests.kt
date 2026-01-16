@@ -1,5 +1,6 @@
 package pt.isel.reversi.cli.commands
 
+import pt.isel.reversi.utils.BASE_FOLDER
 import pt.rafap.ktflag.cmd.CommandResultType
 import java.io.File
 import kotlin.test.AfterTest
@@ -9,13 +10,9 @@ import kotlin.test.Test
 class NewCmdTests {
 
     @BeforeTest
-    fun cleanup() {
-        File("data/saves").deleteRecursively()
-    }
-
     @AfterTest
-    fun cleanupAfter() {
-        File("data/saves").deleteRecursively()
+    fun cleanup() {
+        File(BASE_FOLDER).deleteRecursively()
     }
 
 
