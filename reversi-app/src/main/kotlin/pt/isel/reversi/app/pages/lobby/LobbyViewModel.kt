@@ -241,8 +241,8 @@ class LobbyViewModel(
         val name: String = game.name
         when {
             name == appState.game.currGameName -> {
-                val myPiece = appState.game.myPiece ?: return state
-                joinGame(game, myPiece)
+                pickGame(appState.game)
+                selectGame(null)
             }
 
             state.players.isFull() -> {

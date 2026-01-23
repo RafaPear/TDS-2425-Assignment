@@ -1,16 +1,19 @@
 package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests
 
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import pt.isel.reversi.app.app.state.AppState
+import pt.isel.reversi.app.app.state.GameSession
 import pt.isel.reversi.app.pages.lobby.LobbyLoadedState
 import pt.isel.reversi.app.pages.lobby.LobbyState
 import pt.isel.reversi.app.pages.lobby.LobbyViewModel
 import pt.isel.reversi.core.board.Board
 import pt.isel.reversi.core.board.PieceType
+import pt.isel.reversi.core.game.Game
 import pt.isel.reversi.core.game.gameServices.FakeGameService
 import pt.isel.reversi.core.gameState.GameState
 import pt.isel.reversi.core.gameState.MatchPlayers
@@ -22,6 +25,7 @@ import kotlin.test.BeforeTest
 import kotlin.test.Test
 import kotlin.test.assertEquals
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class LobbyViewModelTests {
     @BeforeTest
     @AfterTest
@@ -265,5 +269,37 @@ class LobbyViewModelTests {
         val refreshedGameState = uut.uiState.value.gameStates.find { it.name == targetGame.name }?.gameState
 
         assertEquals(updatedGameState, refreshedGameState)
+    }
+
+    @Test
+    fun `joinGameValidations in current game, verify if call pickGame`() = runTest {
+        val targetGame = gamesBase[0] // full game
+
+        var pickGameCalled = false
+
+        val uut = LobbyViewModel(
+            AppState.empty(service = service).copy(
+                gameSession = GameSession(
+                    game = Game(
+                        currGameName = games[0].name,
+                        myPiece = PieceType.BLACK,
+                        service = service,
+                    ),
+                    "BLACK"
+                ),
+            ),
+            scope = this,
+            pickGame = { pickGameCalled = true },
+            globalError = null,
+            setGlobalError = { _, _ -> },
+        )
+
+        uut.refreshAll()
+
+        uut.joinGameValidations(
+            targetGame,
+        )
+
+        assert(pickGameCalled)
     }
 }
