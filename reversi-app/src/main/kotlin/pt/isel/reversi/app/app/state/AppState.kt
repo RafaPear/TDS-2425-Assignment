@@ -9,16 +9,11 @@ import pt.isel.reversi.core.game.gameServices.GameServiceImpl
 import pt.isel.reversi.utils.audio.AudioPool
 
 /**
- * Central application state with each field as a mutable state.
- * This allows fine-grained reactivity: changing one field only invalidates
- * composables that read that specific field.
- *
- * @property game The current game instance.
- * @property pagesState The current page and navigation state.
- * @property audioPool The audio pool for managing game sounds.
- * @property globalError A global error that occurred in the application, if any.
- * @property theme The current application theme.
- * @property playerName The name of the current player, if set.
+ * Represents the overall state of the Reversi application.
+ * @property gameSession The current game session including game state and player identity.
+ * @property pagesState The current page navigation state and any global errors.
+ * @property audioThemeState The audio and theme configuration for the application.
+ * @property service The game service used for game operations.
  */
 data class AppState(
     override val gameSession: GameSession,

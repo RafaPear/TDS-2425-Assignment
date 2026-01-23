@@ -72,17 +72,19 @@ class GamePageViewModel(
         TRACKER.trackViewModelCreated(this, category = Page.GAME)
     }
 
-    fun save() {
-        if (_uiState.value == game) return
-        setGame(_uiState.value.game)
-    }
-
     fun gotoWinnerPage(game: Game) {
         setGame(game)
         setPage(Page.WINNER)
     }
 
-
+    /**
+     * Starts a coroutine that periodically polls the game state to refresh it.
+     * If the game has a winner, it navigates to the winner page.
+     * If the game has not started yet or is corrupted, it sets an appropriate error.
+     * The polling runs every 50 milliseconds until cancelled.
+     *
+     * @throws IllegalStateException if polling is already started.
+     */
     fun startPolling() {
         if (pollingJob != null) throw IllegalStateException("Polling already started")
 
@@ -147,6 +149,11 @@ class GamePageViewModel(
         _uiState.value = _uiState.value.copy(game = _uiState.value.game.setTargetMode(target))
     }
 
+    /*
+     * Plays a move at the given coordinate.
+     * Updates the UI state with the new game state after the move.
+     * Saves the updated game state using the setGame callback.
+     */
     fun playMove(coordinate: Coordinate) {
         scope.launch {
             try {
@@ -164,6 +171,11 @@ class GamePageViewModel(
 
     fun getAvailablePlays() = _uiState.value.game.getAvailablePlays()
 
+    /*
+        * Passes the current player's turn.
+        * Saves the updated game state using the setGame callback.
+        * If the game has a winner after passing, navigates to the winner page.
+     */
     fun pass() {
         scope.launch {
             try {

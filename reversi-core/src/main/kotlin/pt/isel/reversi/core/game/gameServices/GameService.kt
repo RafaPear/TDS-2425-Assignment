@@ -32,6 +32,10 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
 
     override fun getStorageTypeName(): String = storage.javaClass.simpleName
 
+    /*
+    * Checks if all player slots in the game are filled.
+    * @param game The game instance to check.
+     */
     override suspend fun hasAllPlayers(game: Game): Boolean {
         val gs = game.requireStartedGame()
         val name = game.currGameName ?: return (gs.players.isFull())
@@ -42,6 +46,12 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         return (loaded.players.isFull())
     }
 
+    /*
+    * Refreshes the game state from storage if it has been modified.
+    * Refresh counts a pass if the board is unchanged but the last player has changed.
+    * @param game The game instance to refresh.
+    * @return The updated game instance.
+     */
     override suspend fun refresh(game: Game): Game {
         TRACKER.trackFunctionCall(customName = "Game.refresh", category = "Core.Game")
         val gs = game.requireStartedGame()
@@ -61,6 +71,11 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         )
     }
 
+    /*
+    * Base method to refresh the game state from storage.
+    * @param game The game instance to refresh.
+    * @return The updated game state or null if no changes were detected.
+     */
     override suspend fun refreshBase(game: Game): GameState? {
         if (game.currGameName == null) return null
 
@@ -73,11 +88,25 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         )
     }
 
+    /*
+    * Loads the game state directly from storage without any additional processing.
+    * @param id The identifier of the game to load.
+    * @return The loaded game state.
+     */
     override suspend fun hardLoad(id: String) = storage.load(id)
 
+    /*
+    * Saves the game state directly to storage without any additional processing.
+    * @param id The identifier of the game to save.
+    * @param gameState The game state to save.
+     */
     override suspend fun hardSave(id: String, gameState: GameState) =
         storage.save(id, gameState)
 
+    /*
+    * Saves the end game state to storage, managing player data and cleanup.
+    * @param game The game instance to save.
+     */
     override suspend fun saveEndGame(game: Game) {
         TRACKER.trackFunctionCall(customName = "Game.saveEndGame", category = "Core.Game")
         val gs = game.requireStartedGame()
@@ -125,6 +154,11 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         )
     }
 
+    /*
+    * Saves only the board state to storage, updating player names if necessary.
+    * @param gameName The name of the game to save.
+    * @param gameState The game state to save.
+     */
     override suspend fun saveOnlyBoard(gameName: String?, gameState: GameState?) {
         val gs = gameState ?: throw InvalidGame(
             message = "Game is not started yet.", type = ErrorType.WARNING
@@ -166,6 +200,11 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         )
     }
 
+    /*
+    * Creates a new game entry in storage with the provided game state.
+    * @param gameName The name of the new game.
+    * @param gameStateProvider A function that provides the initial game state.
+     */
     override suspend fun new(gameName: String, gameStateProvider: () -> GameState) {
         TRACKER.trackFunctionCall(customName = "GameService.new", category = "Core.GameService")
         storage.new(
@@ -173,11 +212,19 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         )
     }
 
+    /*
+    * Deletes a game entry from storage.
+    * @param gameName The name of the game to delete.
+     */
     override suspend fun delete(gameName: String) {
         TRACKER.trackFunctionCall(customName = "GameService.delete", category = "Core.GameService")
         storage.delete(gameName)
     }
 
+    /*
+    * Runs a health check on the storage backend to ensure proper functionality.
+    * Throws BadStorage exception if any operation fails.
+     */
     override suspend fun runStorageHealthCheck() {
         val testId = "health_check_test_game"
         val testState = GameState(
@@ -212,6 +259,9 @@ class GameService(storage: GameStorageType? = null, params: StorageParams? = nul
         return storage.loadAllIds()
     }
 
+    /*
+    * Closes the storage service, releasing any held resources.
+     */
     override suspend fun closeService() {
         storage.close()
     }

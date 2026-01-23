@@ -19,12 +19,11 @@ import pt.isel.reversi.utils.TRACKER
  * The game has two modes: local and not local.
  *
  * #### Local Game
- * In a local game, both players are managed within the same game instance. No storage operations are performed.
+ * In a local game, if currGameName is null.
  *
  * #### Not Local Game
- * In a not local game, only one player is managed within the game instance. The game state is saved and loaded from storage.
+ * In a not local game, currGameName is not null. The game state is saved and loaded from storage.
  *
- * TODO: Test my piece and parameters
  *
  * @property target Indicates if the game is in target mode.
  * @property currGameName The name of the current game for storage purposes.

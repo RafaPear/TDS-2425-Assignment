@@ -16,6 +16,9 @@ import pt.isel.reversi.utils.LOGGER
 
 /**
  * Updates the current page in the application state.
+ * The backPage is auto-calculated if not provided.
+ * If there is a global error != null or INFO, the page will not be changed.
+ * IF the global error is of type INFO, it will be cleared.
  * @param page The new page to set.
  * @param backPage The new back page (auto-calculated if null).
  */

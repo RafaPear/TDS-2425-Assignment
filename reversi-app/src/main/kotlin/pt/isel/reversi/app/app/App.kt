@@ -25,6 +25,7 @@ import reversi.reversi_app.generated.resources.reversi
 import java.awt.Dimension
 import java.lang.System.setProperty
 
+
 class App(args: Array<String>) {
     private val initializedArgs =
         initializeAppArgs(args) ?: throw IllegalStateException("Failed to initialize application arguments")

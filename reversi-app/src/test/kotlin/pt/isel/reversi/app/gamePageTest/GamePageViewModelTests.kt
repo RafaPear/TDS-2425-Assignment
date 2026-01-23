@@ -107,15 +107,6 @@ class GamePageViewModelTests {
     }
 
     @Test
-    fun `verify that save preserves game state`() = runTest {
-        val uut = vmForTest(this)
-
-        uut.save()
-        // Verify save was called
-        assertNotNull(uut.uiState.value)
-    }
-
-    @Test
     fun `verify polling control methods work`() = runTest {
         val uut = vmForTest(this)
 

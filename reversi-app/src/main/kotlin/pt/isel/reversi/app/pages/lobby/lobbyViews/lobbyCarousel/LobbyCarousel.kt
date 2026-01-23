@@ -53,6 +53,7 @@ fun ColumnScope.LobbyCarousel(
 ) {
     var searchQuery by remember { mutableStateOf("") }
 
+    // Filter games based on the search query
     val gamesToShow: List<LobbyLoadedState> = remember(games, searchQuery) {
         if (searchQuery.isEmpty())
             games
@@ -64,8 +65,9 @@ fun ColumnScope.LobbyCarousel(
     }
 
     val pagerState = rememberPagerState(pageCount = { gamesToShow.size })
-    val scope = rememberCoroutineScope()
+    val scope = rememberCoroutineScope() // for animation
 
+    // Launched effect to refresh the current, left, and right game cards periodically
     LaunchedEffect(pagerState.currentPage, gamesToShow) {
         if (gamesToShow.isEmpty()) return@LaunchedEffect
         val game = gamesToShow.getOrNull(pagerState.currentPage) ?: return@LaunchedEffect

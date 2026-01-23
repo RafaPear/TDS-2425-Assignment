@@ -274,5 +274,4 @@ class LobbyCarouselTests {
         onNodeWithTag(testTagPageIndicators()).assertExists()
         onNodeWithTag(testTagPageIndicatorText()).assertTextEquals(textPageIndicator(0,0))
     }
-
 }

@@ -18,7 +18,7 @@ class FakeGameService : GameServiceImpl {
     /**
      * Provides read-only access to the in-memory game storage.
      */
-    val game get() = _game
+    val game get() = _game.toList()
 
     override fun getStorageTypeName(): String = "fake"
 

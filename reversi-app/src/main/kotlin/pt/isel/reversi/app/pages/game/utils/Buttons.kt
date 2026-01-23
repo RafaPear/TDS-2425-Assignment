@@ -1,11 +1,10 @@
-package pt.isel.reversi.app.pages.game
+package pt.isel.reversi.app.pages.game.utils
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import pt.isel.reversi.app.app.state.ReversiButton
 import pt.isel.reversi.app.app.state.ReversiScope
-import pt.isel.reversi.app.pages.game.utils.testTagTargetButtons
 
 /**
  * Toggle button for target mode, showing available moves on the board.
