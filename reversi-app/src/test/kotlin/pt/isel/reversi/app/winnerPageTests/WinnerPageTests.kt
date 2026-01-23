@@ -1,10 +1,10 @@
 package pt.isel.reversi.app.winnerPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.runComposeUiTest
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.GameSession
 import pt.isel.reversi.app.app.state.PagesState
@@ -37,7 +37,7 @@ class WinnerPageTests {
         File(BASE_FOLDER).deleteRecursively()
     }
 
-    val game: Game = runBlocking {
+    val game: Game = run {
         // Create a game with a winner by setting up a finished game state
         val gameState = GameState(
             players = MatchPlayers(
@@ -64,19 +64,20 @@ class WinnerPageTests {
         pagesState = PagesState(Page.GAME, Page.NONE, null)
     )
 
-    private val winnerPageViewModel: WinnerPageViewModel
-        get() = WinnerPageViewModel(
+    fun winnerPageViewModel(scope: CoroutineScope) =
+        WinnerPageViewModel(
             game = game,
-            scope = GlobalScope,
+            scope = scope,
             globalError = null,
             setGlobalError = { _, _ -> }
         )
 
     @Test
     fun `check if the Winner page displays the crown decoration`() = runComposeUiTest {
-        val viewModel = winnerPageViewModel
         val reversiScope = ReversiScope(appState)
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = winnerPageViewModel(scope)
             reversiScope.WinnerPage(
                 viewModel = viewModel,
                 onLeave = {}

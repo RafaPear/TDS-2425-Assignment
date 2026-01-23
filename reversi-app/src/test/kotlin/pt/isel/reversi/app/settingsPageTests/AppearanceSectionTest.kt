@@ -1,8 +1,10 @@
 package pt.isel.reversi.app.settingsPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.SettingsPage
@@ -21,9 +23,9 @@ class AppearanceSectionTest {
     val appState = AppState.empty(EmptyGameService())
     val reversiScope = ReversiScope(appState)
 
-    private val settingsViewModel: SettingsViewModel
-        get() = SettingsViewModel(
-            scope = kotlinx.coroutines.GlobalScope,
+    fun settingsViewModel(scope: CoroutineScope) =
+        SettingsViewModel(
+            scope = scope,
             appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
             setTheme = {},
             setPlayerName = {},
@@ -40,8 +42,9 @@ class AppearanceSectionTest {
 
     @Test
     fun `check if Appearance section exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -52,8 +55,9 @@ class AppearanceSectionTest {
 
     @Test
     fun `check if theme button exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -64,8 +68,9 @@ class AppearanceSectionTest {
 
     @Test
     fun `check if theme dropdown exists when menu is opened`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -78,12 +83,14 @@ class AppearanceSectionTest {
 
     @Test
     fun `verify theme can be changed in view model`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val initialTheme = viewModel.uiState.value.draftTheme
-        val newTheme = appState.theme
-        viewModel.setDraftTheme(newTheme)
 
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val initialTheme = viewModel.uiState.value.draftTheme
+            val newTheme = appState.theme
+            viewModel.setDraftTheme(newTheme)
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}

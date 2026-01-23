@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests
+package pt.isel.reversi.app.lobbyMenuTests
 
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi

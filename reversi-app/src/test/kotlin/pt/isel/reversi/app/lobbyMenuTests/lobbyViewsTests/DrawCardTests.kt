@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests.lobbyViewsTests
+package pt.isel.reversi.app.lobbyMenuTests.lobbyViewsTests
 
 import androidx.compose.ui.test.*
 import pt.isel.reversi.app.app.state.AppState

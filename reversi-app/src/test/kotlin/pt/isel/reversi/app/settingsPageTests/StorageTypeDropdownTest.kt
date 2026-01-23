@@ -1,8 +1,10 @@
 package pt.isel.reversi.app.settingsPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.SettingsPage
@@ -21,9 +23,9 @@ class StorageTypeDropdownTest {
     val appState = AppState.empty(EmptyGameService())
     val reversiScope = ReversiScope(appState)
 
-    private val settingsViewModel: SettingsViewModel
-        get() = SettingsViewModel(
-            scope = kotlinx.coroutines.GlobalScope,
+    fun settingsViewModel(scope: CoroutineScope) =
+        SettingsViewModel(
+            scope = scope,
             appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
             setTheme = {},
             setPlayerName = {},
@@ -40,8 +42,9 @@ class StorageTypeDropdownTest {
 
     @Test
     fun `check if storage type button exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -52,12 +55,13 @@ class StorageTypeDropdownTest {
 
     @Test
     fun `verify storage type can be changed in view model`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val initialConfig = viewModel.uiState.value.draftCoreConfig
-        val newConfig = initialConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE)
-        viewModel.setDraftCoreConfig(newConfig)
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val initialConfig = viewModel.uiState.value.draftCoreConfig
+            val newConfig = initialConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE)
+            viewModel.setDraftCoreConfig(newConfig)
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -68,8 +72,9 @@ class StorageTypeDropdownTest {
 
     @Test
     fun `check if FILE_STORAGE menu item can be tagged`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -81,8 +86,9 @@ class StorageTypeDropdownTest {
 
     @Test
     fun `check if DATABASE_STORAGE menu item can be tagged`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -94,10 +100,11 @@ class StorageTypeDropdownTest {
 
     @Test
     fun `verify storage type button displays current selected type`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val currentType = viewModel.uiState.value.draftCoreConfig.gameStorageType
 
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}

@@ -1,9 +1,11 @@
 package pt.isel.reversi.app.settingsPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performTextInput
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.SettingsPage
@@ -22,9 +24,9 @@ class GameSectionTest {
     val appState = AppState.empty(EmptyGameService())
     val reversiScope = ReversiScope(appState)
 
-    private val settingsViewModel: SettingsViewModel
-        get() = SettingsViewModel(
-            scope = kotlinx.coroutines.GlobalScope,
+    fun settingsViewModel(scope: CoroutineScope) =
+        SettingsViewModel(
+            scope = scope,
             appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
             setTheme = {},
             setPlayerName = {},
@@ -41,8 +43,9 @@ class GameSectionTest {
 
     @Test
     fun `check if Game section exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -53,8 +56,9 @@ class GameSectionTest {
 
     @Test
     fun `check if player name text field exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -65,9 +69,10 @@ class GameSectionTest {
 
     @Test
     fun `verify player name text field is empty initially`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        viewModel.setDraftPlayerName("")
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            viewModel.setDraftPlayerName("")
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -78,8 +83,9 @@ class GameSectionTest {
 
     @Test
     fun `verify player name can be changed in text field`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}

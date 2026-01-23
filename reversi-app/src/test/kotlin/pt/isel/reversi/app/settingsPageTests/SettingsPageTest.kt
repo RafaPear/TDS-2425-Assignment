@@ -1,8 +1,10 @@
 package pt.isel.reversi.app.settingsPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.*
@@ -18,9 +20,9 @@ class SettingsPageTest {
     val appState = AppState.empty(EmptyGameService())
     val reversiScope = ReversiScope(appState)
 
-    private val settingsViewModel: SettingsViewModel
-        get() = SettingsViewModel(
-            scope = kotlinx.coroutines.GlobalScope,
+    fun settingsViewModel(scope: CoroutineScope) =
+        SettingsViewModel(
+            scope = scope,
             appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
             setTheme = {},
             setPlayerName = {},
@@ -37,8 +39,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the Settings page is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -49,8 +52,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the Game section is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -61,8 +65,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the player name text field is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -73,8 +78,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the Core Config section is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -85,8 +91,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the Audio section is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -97,8 +104,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the Appearance section is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -109,8 +117,9 @@ class SettingsPageTest {
 
     @Test
     fun `check if the Apply button is displayed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}

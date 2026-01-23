@@ -2,9 +2,11 @@ package pt.isel.reversi.app.mainMenuTests
 
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
+import pt.isel.reversi.app.pages.Page
 import pt.isel.reversi.app.pages.menu.*
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.utils.BASE_FOLDER
@@ -95,5 +97,33 @@ class MainMenuTest {
             )
         }
         onNodeWithTag(testTagAboutButton()).assertExists()
+    }
+
+    @Test
+    fun `check if on click button call setPage`() = runComposeUiTest {
+        var newPage: Page? = null
+        val viewModel = MainMenuViewModel(
+            appState = appState,
+            setPage = { page -> newPage = page },
+            setGlobalError = { _, _ -> }
+        )
+        setContent {
+            reversiScope.MainMenu(
+                viewModel = viewModel,
+                onLeave = {},
+                isTestMode = true
+            )
+        }
+        onNodeWithTag(testTagNewGameButton()).performClick()
+        assert(newPage == Page.NEW_GAME)
+
+        onNodeWithTag(testTagLobbyButton()).performClick()
+        assert(newPage == Page.LOBBY)
+
+        onNodeWithTag(testTagSettingsButton()).performClick()
+        assert(newPage == Page.SETTINGS)
+
+        onNodeWithTag(testTagAboutButton()).performClick()
+        assert(newPage == Page.ABOUT)
     }
 }

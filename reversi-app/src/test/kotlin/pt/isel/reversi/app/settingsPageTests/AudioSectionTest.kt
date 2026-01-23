@@ -1,8 +1,10 @@
 package pt.isel.reversi.app.settingsPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.*
@@ -18,9 +20,9 @@ class AudioSectionTest {
     val appState = AppState.empty(EmptyGameService())
     val reversiScope = ReversiScope(appState)
 
-    private val settingsViewModel: SettingsViewModel
-        get() = SettingsViewModel(
-            scope = kotlinx.coroutines.GlobalScope,
+    fun settingsViewModel(scope: CoroutineScope) =
+        SettingsViewModel(
+            scope = scope,
             appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
             setTheme = {},
             setPlayerName = {},
@@ -37,8 +39,9 @@ class AudioSectionTest {
 
     @Test
     fun `check if Audio section exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -49,8 +52,9 @@ class AudioSectionTest {
 
     @Test
     fun `check if volume slider exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -61,8 +65,9 @@ class AudioSectionTest {
 
     @Test
     fun `check if volume label text exists`() = runComposeUiTest {
-        val viewModel = settingsViewModel
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -73,11 +78,12 @@ class AudioSectionTest {
 
     @Test
     fun `verify volume can be changed`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val initialVolume = viewModel.uiState.value.currentVol
-        viewModel.setCurrentVol(initialVolume + 2)
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val initialVolume = viewModel.uiState.value.currentVol
+            viewModel.setCurrentVol(initialVolume + 2)
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}

@@ -1,8 +1,10 @@
 package pt.isel.reversi.app.settingsPageTests
 
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.runComposeUiTest
+import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.*
@@ -19,9 +21,9 @@ class DatabaseConfigTest {
     val appState = AppState.empty(EmptyGameService())
     val reversiScope = ReversiScope(appState)
 
-    private val settingsViewModel: SettingsViewModel
-        get() = SettingsViewModel(
-            scope = kotlinx.coroutines.GlobalScope,
+    fun settingsViewModel(scope: CoroutineScope) =
+        SettingsViewModel(
+            scope = scope,
             appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
             setTheme = {},
             setPlayerName = {},
@@ -38,11 +40,12 @@ class DatabaseConfigTest {
 
     @Test
     fun `check if database URI text field appears for DATABASE_STORAGE`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val coreConfig = viewModel.uiState.value.draftCoreConfig
-        viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val coreConfig = viewModel.uiState.value.draftCoreConfig
+            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -53,11 +56,12 @@ class DatabaseConfigTest {
 
     @Test
     fun `check if database port text field appears for DATABASE_STORAGE`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val coreConfig = viewModel.uiState.value.draftCoreConfig
-        viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val coreConfig = viewModel.uiState.value.draftCoreConfig
+            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -68,11 +72,12 @@ class DatabaseConfigTest {
 
     @Test
     fun `check if database name text field appears for DATABASE_STORAGE`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val coreConfig = viewModel.uiState.value.draftCoreConfig
-        viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val coreConfig = viewModel.uiState.value.draftCoreConfig
+            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -83,11 +88,12 @@ class DatabaseConfigTest {
 
     @Test
     fun `check if database user text field appears for DATABASE_STORAGE`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val coreConfig = viewModel.uiState.value.draftCoreConfig
-        viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val coreConfig = viewModel.uiState.value.draftCoreConfig
+            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -98,11 +104,12 @@ class DatabaseConfigTest {
 
     @Test
     fun `check if database password text field appears for DATABASE_STORAGE`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val coreConfig = viewModel.uiState.value.draftCoreConfig
-        viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val coreConfig = viewModel.uiState.value.draftCoreConfig
+            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.DATABASE_STORAGE))
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
@@ -113,11 +120,12 @@ class DatabaseConfigTest {
 
     @Test
     fun `check that database fields do not appear for FILE_STORAGE`() = runComposeUiTest {
-        val viewModel = settingsViewModel
-        val coreConfig = viewModel.uiState.value.draftCoreConfig
-        viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.FILE_STORAGE))
-
         setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            val coreConfig = viewModel.uiState.value.draftCoreConfig
+            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.FILE_STORAGE))
+
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}

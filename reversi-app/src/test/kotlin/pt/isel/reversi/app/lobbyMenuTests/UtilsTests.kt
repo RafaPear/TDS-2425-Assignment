@@ -1,4 +1,4 @@
-package pt.isel.reversi.app.lobbyMenuTests.lobbyCarouselViewsTests
+package pt.isel.reversi.app.lobbyMenuTests
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.material.icons.Icons

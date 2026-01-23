@@ -26,7 +26,7 @@ class NewGamePageTest {
     private fun vmForTest(scope: CoroutineScope) =
         NewGameViewModel(
             scope = scope,
-            appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
+            appState = appState,
             createGame = { _: Game -> },
             setGlobalError = { _, _ -> }
         )
