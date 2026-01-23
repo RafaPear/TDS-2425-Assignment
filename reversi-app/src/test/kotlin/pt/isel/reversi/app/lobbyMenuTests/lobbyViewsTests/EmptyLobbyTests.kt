@@ -16,7 +16,7 @@ import kotlin.test.Test
 
 @OptIn(ExperimentalTestApi::class)
 class EmptyLobbyTests {
-    val reversiScope = ReversiScope(AppState.Companion.empty(EmptyGameService()))
+    val reversiScope = ReversiScope(AppState.empty(EmptyGameService()))
 
     @BeforeTest
     @AfterTest

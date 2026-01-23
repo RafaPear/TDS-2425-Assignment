@@ -3,14 +3,12 @@ package pt.isel.reversi.app.settingsPageTests
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
-import pt.isel.reversi.app.pages.settingsPage.SettingsPage
-import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
-import pt.isel.reversi.app.pages.settingsPage.testTagAppearanceSection
-import pt.isel.reversi.app.pages.settingsPage.testTagThemeButton
+import pt.isel.reversi.app.pages.settingsPage.*
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
@@ -76,26 +74,8 @@ class AppearanceSectionTest {
                 onLeave = {}
             )
         }
-        // The dropdown might not be visible until the button is clicked
-        // This test verifies the overall structure exists
-        onNodeWithTag(testTagAppearanceSection()).assertExists()
-    }
 
-    @Test
-    fun `verify theme can be changed in view model`() = runComposeUiTest {
-
-        setContent {
-            val scope = rememberCoroutineScope()
-            val viewModel = settingsViewModel(scope)
-            val initialTheme = viewModel.uiState.value.draftTheme
-            val newTheme = appState.theme
-            viewModel.setDraftTheme(newTheme)
-
-            reversiScope.SettingsPage(
-                viewModel = viewModel,
-                onLeave = {}
-            )
-        }
-        onNodeWithTag(testTagAppearanceSection()).assertExists()
+        onNodeWithTag(testTagThemeButton()).performClick()
+        onNodeWithTag(testTagThemeDropdown()).assertExists()
     }
 }

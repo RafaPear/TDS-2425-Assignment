@@ -38,21 +38,20 @@ class SettingsPageButtonsTest {
     }
 
     @Test
-    fun `check if Apply button is displayed and clickable`() = runComposeUiTest {
-        var clicked = false
+    fun `check if Apply button is displayed`() = runComposeUiTest {
         setContent {
             val scope = rememberCoroutineScope()
             val viewModel = settingsViewModel(scope)
             reversiScope.SettingsPage(
                 viewModel = viewModel,
-                onLeave = { clicked = true }
+                onLeave = {}
             )
         }
         onNodeWithTag(testTagApplyButton()).assertExists()
     }
 
     @Test
-    fun `check if Theme button is displayed and clickable`() = runComposeUiTest {
+    fun `check if Theme button is displayed`() = runComposeUiTest {
         setContent {
             val scope = rememberCoroutineScope()
             val viewModel = settingsViewModel(scope)
@@ -65,7 +64,7 @@ class SettingsPageButtonsTest {
     }
 
     @Test
-    fun `check if Storage Type button is displayed and clickable`() = runComposeUiTest {
+    fun `check if Storage Type button is displayed`() = runComposeUiTest {
         setContent {
             val scope = rememberCoroutineScope()
             val viewModel = settingsViewModel(scope)
@@ -75,21 +74,5 @@ class SettingsPageButtonsTest {
             )
         }
         onNodeWithTag(testTagStorageTypeButton()).assertExists()
-    }
-
-    @Test
-    fun `verify Apply button can be clicked`() = runComposeUiTest {
-        var onLeaveInvoked = false
-        setContent {
-            val scope = rememberCoroutineScope()
-            val viewModel = settingsViewModel(scope)
-            reversiScope.SettingsPage(
-                viewModel = viewModel,
-                onLeave = { onLeaveInvoked = true }
-            )
-        }
-        onNodeWithTag(testTagApplyButton()).assertExists()
-        // Note: The actual click behavior depends on the ViewModel implementation
-        // This test verifies the button exists and can be interacted with
     }
 }

@@ -39,7 +39,7 @@ class DrawCardTests {
         service = EmptyGameService()
     )
 
-    val reversiScope = ReversiScope(AppState.Companion.empty(EmptyGameService()))
+    val reversiScope = ReversiScope(AppState.empty(EmptyGameService()))
 
     @Test
     fun `verify if drawCard is displayed`() = runComposeUiTest {
