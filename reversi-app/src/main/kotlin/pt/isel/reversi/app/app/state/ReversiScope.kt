@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -292,7 +293,7 @@ fun ReversiScope.ReversiTextField(
     )
 }
 
-
+fun testTagButtonConfirm() = "PopUpConfirmButton"
 /**
  * Modal popup for confirming user actions.
  *
@@ -307,7 +308,8 @@ fun ReversiScope.ConfirmationPopUp(
     onConfirmText: String = "Confirm",
     onDismissText: String = "Cancel",
     onConfirm: (() -> Unit)? = null,
-    onDismiss: (() -> Unit)? = null
+    onDismiss: (() -> Unit)? = null,
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = Modifier
@@ -319,7 +321,7 @@ fun ReversiScope.ConfirmationPopUp(
             }
     ) {
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .align(Alignment.Center)
                 .pointerInput(Unit) {
                     detectTapGestures(onTap = { })
@@ -356,6 +358,7 @@ fun ReversiScope.ConfirmationPopUp(
                         ReversiButton(
                             text = onConfirmText,
                             onClick = onConfirm,
+                            modifier = Modifier.testTag(testTagButtonConfirm())
                         )
 
                     if (onDismiss != null)

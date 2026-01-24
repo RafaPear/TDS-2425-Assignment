@@ -10,14 +10,14 @@ import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
 import pt.isel.reversi.app.pages.settingsPage.SettingsPage
 import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
-import pt.isel.reversi.app.pages.settingsPage.testTagGameSection
-import pt.isel.reversi.app.pages.settingsPage.testTagPlayerNameTextField
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagPlayerNameSettings
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
 import kotlin.test.AfterTest
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertEquals
 
 @OptIn(ExperimentalTestApi::class)
 class GameSectionTest {
@@ -27,7 +27,7 @@ class GameSectionTest {
     fun settingsViewModel(scope: CoroutineScope) =
         SettingsViewModel(
             scope = scope,
-            appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
+            appState = appState,
             setTheme = {},
             setPlayerName = {},
             saveGame = {},
@@ -42,19 +42,6 @@ class GameSectionTest {
     }
 
     @Test
-    fun `check if Game section exists`() = runComposeUiTest {
-        setContent {
-            val scope = rememberCoroutineScope()
-            val viewModel = settingsViewModel(scope)
-            reversiScope.SettingsPage(
-                viewModel = viewModel,
-                onLeave = {}
-            )
-        }
-        onNodeWithTag(testTagGameSection()).assertExists()
-    }
-
-    @Test
     fun `check if player name text field exists`() = runComposeUiTest {
         setContent {
             val scope = rememberCoroutineScope()
@@ -64,7 +51,7 @@ class GameSectionTest {
                 onLeave = {}
             )
         }
-        onNodeWithTag(testTagPlayerNameTextField()).assertExists()
+        onNodeWithTag(testTagPlayerNameSettings()).assertExists()
     }
 
     @Test
@@ -72,17 +59,17 @@ class GameSectionTest {
         setContent {
             val scope = rememberCoroutineScope()
             val viewModel = settingsViewModel(scope)
-            viewModel.setDraftPlayerName("")
             reversiScope.SettingsPage(
                 viewModel = viewModel,
                 onLeave = {}
             )
         }
-        onNodeWithTag(testTagPlayerNameTextField()).assertExists()
+        onNodeWithTag(testTagPlayerNameSettings()).assertExists()
     }
 
     @Test
     fun `verify player name can be changed in text field`() = runComposeUiTest {
+        var vm: SettingsViewModel? = null
         setContent {
             val scope = rememberCoroutineScope()
             val viewModel = settingsViewModel(scope)
@@ -90,9 +77,12 @@ class GameSectionTest {
                 viewModel = viewModel,
                 onLeave = {}
             )
+            vm = viewModel
         }
-        val textFieldNode = onNodeWithTag(testTagPlayerNameTextField())
+        val newName = "TestPlayer"
+        val textFieldNode = onNodeWithTag(testTagPlayerNameSettings())
         textFieldNode.assertExists()
-        textFieldNode.performTextInput("TestPlayer")
+        textFieldNode.performTextInput(newName)
+        assertEquals(newName, vm!!.uiState.value.draftPlayerName)
     }
 }

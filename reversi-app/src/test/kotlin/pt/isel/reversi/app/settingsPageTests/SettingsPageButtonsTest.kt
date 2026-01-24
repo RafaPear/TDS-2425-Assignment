@@ -7,7 +7,11 @@ import androidx.compose.ui.test.runComposeUiTest
 import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
-import pt.isel.reversi.app.pages.settingsPage.*
+import pt.isel.reversi.app.pages.settingsPage.SettingsPage
+import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagStorageTypeButton
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagThemeButton
+import pt.isel.reversi.app.pages.settingsPage.testTagApplyButton
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
@@ -23,7 +27,7 @@ class SettingsPageButtonsTest {
     fun settingsViewModel(scope: CoroutineScope) =
         SettingsViewModel(
             scope = scope,
-            appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
+            appState = appState,
             setTheme = {},
             setPlayerName = {},
             saveGame = {},

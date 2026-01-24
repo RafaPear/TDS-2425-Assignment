@@ -1,14 +1,19 @@
 package pt.isel.reversi.app.settingsPageTests
 
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.test.ExperimentalTestApi
-import androidx.compose.ui.test.onNodeWithTag
-import androidx.compose.ui.test.runComposeUiTest
+import androidx.compose.ui.test.*
 import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
-import pt.isel.reversi.app.pages.settingsPage.*
+import pt.isel.reversi.app.app.state.testTagButtonConfirm
+import pt.isel.reversi.app.pages.settingsPage.SettingsPage
+import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
+import pt.isel.reversi.app.pages.settingsPage.sections.CoreConfigSection
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagPopUpConfirmButton
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagSavesPathTextField
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagStorageTypeButton
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
+import pt.isel.reversi.core.loadCoreConfig
 import pt.isel.reversi.core.storage.GameStorageType
 import pt.isel.reversi.utils.BASE_FOLDER
 import java.io.File
@@ -24,7 +29,7 @@ class CoreConfigSectionTest {
     fun settingsViewModel(scope: CoroutineScope) =
         SettingsViewModel(
             scope = scope,
-            appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
+            appState = appState,
             setTheme = {},
             setPlayerName = {},
             saveGame = {},
@@ -36,19 +41,6 @@ class CoreConfigSectionTest {
     @AfterTest
     fun cleanUp() {
         File(BASE_FOLDER).deleteRecursively()
-    }
-
-    @Test
-    fun `check if Core Config section exists`() = runComposeUiTest {
-        setContent {
-            val scope = rememberCoroutineScope()
-            val viewModel = settingsViewModel(scope)
-            reversiScope.SettingsPage(
-                viewModel = viewModel,
-                onLeave = {}
-            )
-        }
-        onNodeWithTag(testTagCoreConfigSection()).assertExists()
     }
 
     @Test
@@ -66,18 +58,36 @@ class CoreConfigSectionTest {
 
     @Test
     fun `check if saves path text field appears for FILE_STORAGE`() = runComposeUiTest {
+        val path = "test_configs/core_config.properties"
         setContent {
-            val scope = rememberCoroutineScope()
-            val viewModel = settingsViewModel(scope)
-            val coreConfig = viewModel.uiState.value.draftCoreConfig
-            viewModel.setDraftCoreConfig(coreConfig.copy(gameStorageType = GameStorageType.FILE_STORAGE))
-
-            reversiScope.SettingsPage(
-                viewModel = viewModel,
-                onLeave = {}
+            reversiScope.CoreConfigSection(
+                coreConfig = loadCoreConfig().copy(savesPath = path, gameStorageType = GameStorageType.FILE_STORAGE),
+                onConfigChange = {}
             )
         }
-        onNodeWithTag(testTagSavesPathTextField()).assertExists()
+        onNodeWithTag(testTagSavesPathTextField()).assertTextContains(path)
+    }
+
+    @Test
+    fun `verify when change path in saves path text field, first time, then popUp appears`() = runComposeUiTest {
+        val path = "test_configs/core_config.properties"
+        setContent {
+            reversiScope.CoreConfigSection(
+                coreConfig = loadCoreConfig().copy(savesPath = path, gameStorageType = GameStorageType.FILE_STORAGE),
+                onConfigChange = {}
+            )
+        }
+        val newPath = "new_test_configs/core_config.properties"
+        onNodeWithTag(testTagSavesPathTextField()).performTextInput(newPath)
+        onNodeWithTag(testTagPopUpConfirmButton()).assertExists()
+
+        // Confirm the pop-up to proceed
+        onNodeWithTag(testTagButtonConfirm()).performClick()
+
+        //second time changing the path, pop-up should not appear
+        val anotherPath = "another_test_configs/core_config.properties"
+        onNodeWithTag(testTagSavesPathTextField()).performTextInput(anotherPath)
+        onNodeWithTag(testTagPopUpConfirmButton()).assertDoesNotExist()
     }
 
     @Test

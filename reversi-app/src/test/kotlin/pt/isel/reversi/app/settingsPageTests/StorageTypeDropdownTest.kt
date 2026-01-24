@@ -3,13 +3,17 @@ package pt.isel.reversi.app.settingsPageTests
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.runComposeUiTest
 import kotlinx.coroutines.CoroutineScope
 import pt.isel.reversi.app.app.state.AppState
 import pt.isel.reversi.app.app.state.ReversiScope
+import pt.isel.reversi.app.app.state.testTagButtonConfirm
 import pt.isel.reversi.app.pages.settingsPage.SettingsPage
 import pt.isel.reversi.app.pages.settingsPage.SettingsViewModel
-import pt.isel.reversi.app.pages.settingsPage.testTagStorageTypeButton
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagPopUpConfirmButton
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagStorageTypeButton
+import pt.isel.reversi.app.pages.settingsPage.sections.testTagStorageTypeMenuItem
 import pt.isel.reversi.core.game.gameServices.EmptyGameService
 import pt.isel.reversi.core.storage.GameStorageType
 import pt.isel.reversi.utils.BASE_FOLDER
@@ -26,7 +30,7 @@ class StorageTypeDropdownTest {
     fun settingsViewModel(scope: CoroutineScope) =
         SettingsViewModel(
             scope = scope,
-            appState = appState as pt.isel.reversi.app.app.state.AppStateImpl,
+            appState = appState,
             setTheme = {},
             setPlayerName = {},
             saveGame = {},
@@ -71,6 +75,27 @@ class StorageTypeDropdownTest {
     }
 
     @Test
+    fun `Verify that the popup appears the first time when changing the storage type`() = runComposeUiTest {
+        setContent {
+            val scope = rememberCoroutineScope()
+            val viewModel = settingsViewModel(scope)
+            reversiScope.SettingsPage(
+                viewModel = viewModel,
+                onLeave = {}
+            )
+        }
+        // Open the dropdown menu
+        onNodeWithTag(testTagStorageTypeButton()).performClick()
+        onNodeWithTag(testTagPopUpConfirmButton()).assertExists()
+        onNodeWithTag(testTagButtonConfirm()).performClick()
+
+
+        // Open the dropdown menu again to verify it doesn't appear again
+        onNodeWithTag(testTagStorageTypeButton()).performClick()
+        onNodeWithTag(testTagPopUpConfirmButton()).assertDoesNotExist()
+    }
+
+    @Test
     fun `check if FILE_STORAGE menu item can be tagged`() = runComposeUiTest {
         setContent {
             val scope = rememberCoroutineScope()
@@ -80,8 +105,12 @@ class StorageTypeDropdownTest {
                 onLeave = {}
             )
         }
-        // Verify the button exists which displays the storage type
-        onNodeWithTag(testTagStorageTypeButton()).assertExists()
+        // Open the dropdown menu
+        onNodeWithTag(testTagStorageTypeButton()).performClick()
+        onNodeWithTag(testTagButtonConfirm()).performClick()
+        onNodeWithTag(testTagStorageTypeButton()).performClick()
+
+        onNodeWithTag(testTagStorageTypeMenuItem(GameStorageType.FILE_STORAGE.name)).assertExists()
     }
 
     @Test
@@ -94,8 +123,12 @@ class StorageTypeDropdownTest {
                 onLeave = {}
             )
         }
-        // Verify the button exists which displays the storage type
-        onNodeWithTag(testTagStorageTypeButton()).assertExists()
+        // Open the dropdown menu
+        onNodeWithTag(testTagStorageTypeButton()).performClick()
+        onNodeWithTag(testTagButtonConfirm()).performClick()
+        onNodeWithTag(testTagStorageTypeButton()).performClick()
+
+        onNodeWithTag(testTagStorageTypeMenuItem(GameStorageType.DATABASE_STORAGE.name)).assertExists()
     }
 
     @Test
