@@ -1,0 +1,278 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>reversi-core</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<link href="../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-core/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-core/main" data-filter=":reversi-core/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" id="content" pageids="reversi-core::////PointingToDeclaration//-935644378">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>reversi-core</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><h2 class="">Overview</h2><p class="paragraph">The core domain model and game logic for the Reversi game. This module is completely UI-agnostic and persistence-agnostic, exposing only pure Kotlin data types and functions that implement the Reversi game rules. It is designed to be used by any client (CLI, GUI, test code, etc.) without modification or dependency on any UI or storage framework.</p><p class="paragraph">The module follows clean architecture principles with explicit domain modeling, immutable data structures, and pure functions that return new instances rather than modifying state. This design makes it inherently testable and thread-safe.</p><p class="paragraph"><img alt="Reversi App Screenshot" src="../images/UML_Structure_core.png"></p><h2 class="">Architecture</h2><p class="paragraph">The module is organized into several focused packages:</p><ul><li><p class="paragraph"><strong>Core Package</strong> — Main game types and orchestration</p></li><li><p class="paragraph"><strong>Board Package</strong> — Board model and piece management</p></li><li><p class="paragraph"><strong>Storage Package</strong> — Data Transfer Objects (DTOs) for persistence</p></li><li><p class="paragraph"><strong>Exceptions Package</strong> — Domain-specific exceptions</p></li></ul><p class="paragraph">All transformations are deterministic and return new instances. The game state is immutable, making it easy to implement features like undo/redo, concurrent play, and state recovery.</p><h2 class="">Key Concepts</h2><h3 class="">Game</h3><p class="paragraph">The central type representing a Reversi game session. It is an immutable data class that carries:</p><ul><li><p class="paragraph">The current board state</p></li><li><p class="paragraph">Player information and points</p></li><li><p class="paragraph">Game metadata (name, player piece types)</p></li><li><p class="paragraph">Storage references for persistence</p></li><li><p class="paragraph">Game mode information (local vs networked)</p></li></ul><p class="paragraph">The Game type provides methods like <code class="lang-kotlin">play()</code>, <code class="lang-kotlin">pass()</code>, and <code class="lang-kotlin">refresh()</code> to transform the game state while handling all validation and rules enforcement.</p><h3 class="">GameLogic</h3><p class="paragraph">A singleton object containing pure game logic functions:</p><ul><li><p class="paragraph"><code class="lang-kotlin">play()</code> — Validates a move and returns the new board with captured pieces flipped</p></li><li><p class="paragraph"><code class="lang-kotlin">getAvailablePlays()</code> — Computes all legal moves for a player</p></li><li><p class="paragraph"><code class="lang-kotlin">isValidMove()</code> — Checks if a move is legal</p></li></ul><p class="paragraph">These functions never modify state; they compute and return new board instances.</p><h3 class="">Board</h3><p class="paragraph">An immutable representation of the 8x8 (or configurable) game grid:</p><ul><li><p class="paragraph">Stores pieces as a list with coordinates</p></li><li><p class="paragraph">Provides safe accessors to query pieces by coordinate or linear index</p></li><li><p class="paragraph">Offers transformation methods: <code class="lang-kotlin">addPiece()</code>, <code class="lang-kotlin">changePiece()</code>, <code class="lang-kotlin">startPieces()</code></p></li><li><p class="paragraph">Implements Iterable for easy traversal</p></li></ul><p class="paragraph">The board is designed to be efficient for both queries and transformations.</p><h3 class="">Coordinate</h3><p class="paragraph">Represents a position on the board with 1-based row and column indexing (1-8). Provides:</p><ul><li><p class="paragraph">Arithmetic operations (+ and -)</p></li><li><p class="paragraph">Boundary validation</p></li><li><p class="paragraph">Alternative column representation (letters A-H)</p></li><li><p class="paragraph">8 directional neighbors for move validation</p></li></ul><h3 class="">Player</h3><p class="paragraph">Represents a player with:</p><ul><li><p class="paragraph">Piece type (BLACK or WHITE)</p></li><li><p class="paragraph">Current points (piece count)</p></li><li><p class="paragraph">Methods to update points from the board state</p></li><li><p class="paragraph">Ability to swap to the opposite color</p></li></ul><h3 class="">Piece</h3><p class="paragraph">Represents a single piece on the board with:</p><ul><li><p class="paragraph">Coordinate (position)</p></li><li><p class="paragraph">Piece type (BLACK or WHITE)</p></li><li><p class="paragraph">Optional ghost piece flag (for UI highlighting available moves)</p></li></ul><h2 class="">Serialization</h2><p class="paragraph">The module provides serializers in the <code class="lang-kotlin">storage.serializers</code> subpackage for converting domain types to text:</p><ul><li><p class="paragraph"><code class="lang-kotlin">GameStateSerializer</code> — Converts entire game state to/from text</p></li><li><p class="paragraph"><code class="lang-kotlin">BoardSerializer</code> — Converts board to/from row/col/symbol format</p></li><li><p class="paragraph"><code class="lang-kotlin">PlayerSerializer</code> — Converts player data</p></li><li><p class="paragraph"><code class="lang-kotlin">PieceSerializer</code> — Converts individual pieces</p></li><li><p class="paragraph"><code class="lang-kotlin">PieceTypeSerializer</code> — Converts piece symbols</p></li></ul><p class="paragraph">This allows clean separation: the core module knows nothing about persistence, but provides the serializers that storage modules use to read/write games.</p><h2 class="">Configuration</h2><p class="paragraph">The module reads configuration from <code class="lang-kotlin">reversi-core.properties</code> via <code class="lang-kotlin">CoreConfig</code>:</p><ul><li><p class="paragraph"><code class="lang-kotlin">savesPath</code> — Directory where games are saved (default: "saves")</p></li><li><p class="paragraph">Board size and game parameters</p></li><li><p class="paragraph">Logging configuration</p></li></ul><h2 class="">Exception Handling</h2><p class="paragraph">Domain-specific exceptions with helpful messages:</p><ul><li><p class="paragraph"><code class="lang-kotlin">InvalidPlayException</code> — Attempted invalid move</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidGameException</code> — Operation on uninitialized game</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidPieceInFileException</code> — Malformed saved file</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidGameStateInFileException</code> — Corrupted game state file</p></li><li><p class="paragraph"><code class="lang-kotlin">EndGameException</code> — Game has ended</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidNameAlreadyExists</code> — Game name already used in storage</p></li></ul><p class="paragraph">These exceptions help clients distinguish between logic errors and data corruption.</p><h2 class="">Design Principles</h2><ol><li><p class="paragraph"><strong>Immutability</strong> — All domain types are immutable; transformations return new instances</p></li><li><p class="paragraph"><strong>Purity</strong> — Game logic functions have no side effects and always return the same result for the same input</p></li><li><p class="paragraph"><strong>Simplicity</strong> — Types are focused and single-purpose; no god objects</p></li><li><p class="paragraph"><strong>Testability</strong> — No external dependencies; easy to unit test every function</p></li><li><p class="paragraph"><strong>Persistence-Agnostic</strong> — No I/O or storage logic; serializers are external</p></li><li><p class="paragraph"><strong>UI-Agnostic</strong> — No UI dependencies; works with any client</p></li></ol><p class="paragraph">This design allows the core to be used in any context (CLI, GUI, mobile, server) without modification.</p></div></div>
+  </div>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="495849500%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core" id="495849500%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core/index.html">pt.isel.reversi.core</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="495849500%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="495849500%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core" id="495849500%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Provides the main game types and coordination layer. The module contains small, focused components that model the board, pieces, players and the game orchestration. It is intentionally free of any I/O concerns so it can be used by CLI, GUI or test code without modification.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-366071276%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.board" id="-366071276%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.board/index.html">pt.isel.reversi.core.board</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-366071276%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-366071276%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.board" id="-366071276%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Contains the board model and related primitives used to represent the game grid and pieces.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="980694938%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.exceptions" id="980694938%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.exceptions/index.html">pt.isel.reversi.core.exceptions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="980694938%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="980694938%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.exceptions" id="980694938%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Domain-specific exceptions that signal invalid operations or corrupted persisted files (for example: malformed board or piece entries). These exceptions are thrown by the core logic or by the serializers when encountering invalid data.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-1435700472%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.game" id="-1435700472%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.game/index.html">pt.isel.reversi.core.game</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1435700472%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-1435700472%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.game" id="-1435700472%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Core game logic and game orchestration components.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-222405478%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.game.gameServices" id="-222405478%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.game.gameServices/index.html">pt.isel.reversi.core.game.gameServices</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-222405478%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1449385901%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.gameState" id="1449385901%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.gameState/index.html">pt.isel.reversi.core.gameState</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1449385901%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="1449385901%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.gameState" id="1449385901%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Data Transfer Objects (DTOs) for representing and persisting game state.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="928137833%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.storage" id="928137833%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.storage/index.html">pt.isel.reversi.core.storage</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="928137833%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="928137833%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.storage" id="928137833%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Storage-related types and contracts used by the core module to define how games are persisted.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="584153692%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.storage.serializers" id="584153692%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.core.storage.serializers/index.html">pt.isel.reversi.core.storage.serializers</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="584153692%2FPackages%2F-935644378"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="584153692%2FPackages%2F-935644378" anchor-label="pt.isel.reversi.core.storage.serializers" id="584153692%2FPackages%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+            <p class="paragraph">Serializer implementations for converting core domain types to/from text format for persistence.</p>
+          </span></div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

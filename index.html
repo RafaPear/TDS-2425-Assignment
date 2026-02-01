@@ -1,0 +1,854 @@
+<!DOCTYPE html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>All modules</title>
+    <link href="images/logo-icon.svg" rel="icon" type="image/svg">
+        <script>var pathToRoot = "";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="scripts/sourceset_dependencies.js" async="async"></script>
+<link href="styles/style.css" rel="Stylesheet">
+<link href="styles/main.css" rel="Stylesheet">
+<link href="styles/prism.css" rel="Stylesheet">
+<link href="styles/logo-styles.css" rel="Stylesheet">
+<link href="ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="scripts/navigation-loader.js" async="async"></script>
+<script type="text/javascript" src="scripts/platform-content-handler.js" async="async"></script>
+<script type="text/javascript" src="scripts/main.js" defer="defer"></script>
+<script type="text/javascript" src="scripts/prism.js" async="async"></script>
+<script type="text/javascript" src="ui-kit/ui-kit.min.js" defer="defer"></script>
+<link href="images/UML_Structure.png">
+<link href="images/Reversi_App_NewGame.png">
+<link href="images/Reversi_Board_CLI.png">
+<link href="images/UML_Structure_APP.png">
+<link href="images/Reversi_Board_CLI_debug.png">
+<link href="images/UML_Structure_storage.png">
+<link href="images/Module_Structure.png">
+<link href="images/Reversi_App_Lobby.png">
+<link href="images/UML_Structure_CLI.png">
+<link href="images/Reversi_App_MainMenu.png">
+<link href="images/Reversi_App_Game.png">
+<link href="images/UML_Structure_utils.png">
+<link href="images/UML_Structure_core.png">
+</head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+            <a class="library-name--link" href="index.html" tabindex="1">
+                    reversi
+            </a>
+        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle"
+                type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">
+2.0.0        </div>
+        <div class="navigation-controls">
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button"
+                    type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config='{"defaultSize": 280, "minSize": 200, "maxSize": 400}'>
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list"
+                    data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" id="content" pageIds="reversi::.ext/allModules///PointingToDeclaration//0">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <div class="cover ">
+      <h1 class="">Reversi Board Game - Kotlin (JVM)</h1>
+      <p class="paragraph"><a href="https://github.com/isel-leic-tds/32d-2526i-g01-muyloco/actions/workflows/release-tests.yml"><img alt="Release Tests" src="https://github.com/isel-leic-tds/32d-2526i-g01-muyloco/actions/workflows/release-tests.yml/badge.svg"></a></p>
+      <p class="paragraph">A modular, test-friendly implementation of the Reversi board game written in Kotlin (JVM) targeting <strong>Java 21</strong>.  The project emphasizes clean separation of concerns, explicit domain modeling, and pluggable persistence.</p>
+      <p class="paragraph"><strong>Requirements:</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">Java 21 or later</p>
+        </li>
+        <li>
+          <p class="paragraph">Gradle 8.0 or later</p>
+        </li>
+      </ul>
+      <h2 class="">Made By</h2>
+      <div class="table--container">
+        <table>
+          <thead>
+            <tr>
+              <th>Ian Frunze</th>
+              <th>Rafael Pereira</th>
+              <th>Tito Silva</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><img src="https://github.com/IanFrunze.png" width="100" /></td>
+              <td><img src="https://github.com/RafaPear.png" width="100" /></td>
+              <td><img src="https://github.com/TitoSilva5000.png" width="100" /></td>
+            </tr>
+            <tr>
+              <td>52867</td>
+              <td>52880</td>
+              <td>53118</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2 class="">Technology Stack</h2>
+      <div class="table--container">
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Version</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Java</strong></td>
+              <td><strong>21</strong></td>
+            </tr>
+            <tr>
+              <td><strong>Kotlin</strong></td>
+              <td>2.2.20</td>
+            </tr>
+            <tr>
+              <td><strong>Gradle</strong></td>
+              <td>8.0+</td>
+            </tr>
+            <tr>
+              <td><strong>Compose (Desktop)</strong></td>
+              <td>1.9.1</td>
+            </tr>
+            <tr>
+              <td><strong>Coroutines</strong></td>
+              <td>1.10.2</td>
+            </tr>
+            <tr>
+              <td><strong>MongoDB Driver</strong> (optional)</td>
+              <td>5.6.1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2 class="">Pictures</h2>
+<table>
+<tr>
+<td width="50%" align="center">
+<img src="images/Reversi_App_MainMenu.png" alt="Reversi App MainMenu Screenshot">
+</td>
+<td width="50%" align="center">
+<img src="images/Reversi_App_Lobby.png" alt="Reversi App Lobby Screenshot">
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<img src="images/Reversi_App_NewGame.png" alt="Reversi App NewGame Diagram">
+</td>
+<td width="50%" align="center">
+<img src="images/Reversi_App_Game.png" alt="Reversi App Game Screenshot">
+</td>
+</tr>
+<tr>
+<td width="50%" align="center">
+<img src="images/Reversi_Board_CLI.png" alt="Reversi CLI Screenshot">
+</td>
+<td width="50%" align="center">
+<img src="images/Reversi_Board_CLI_debug.png" alt="Reversi Board UML Diagram">
+</td>
+</tr>
+</table>      <h2 class="">Project Modules</h2>
+      <p class="paragraph">The project is organized into five specialized, independently testable modules:</p>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-core</strong></code> — Immutable core domain model, game logic and serializers</p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Implements the Reversi game rules (move validation, piece capture, board management)</p>
+          </li>
+          <li>
+            <p class="paragraph">Pure functional domain logic with no I/O or UI concerns</p>
+          </li>
+          <li>
+            <p class="paragraph">Defines types and serializers for persistence</p>
+          </li>
+          <li>
+            <p class="paragraph">Comprehensive test coverage for all game rules</p>
+          </li>
+          <li>
+            <p class="paragraph">See reversi-core/MODULE.md for architecture details</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-storage</strong></code> — Simple local filesystem storage implementation</p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Provides file-based persistence for game snapshots using the generic <code class="lang-kotlin">Storage&lt;K,T,U&gt;</code> contract</p>
+          </li>
+          <li>
+            <p class="paragraph">Supports human-readable <code class="lang-kotlin">.txt</code> files for easy debugging and manual inspection</p>
+          </li>
+          <li>
+            <p class="paragraph">Optional MongoDB support for scalable server deployments</p>
+          </li>
+          <li>
+            <p class="paragraph">Fully decoupled from serialization logic</p>
+          </li>
+          <li>
+            <p class="paragraph">See reversi-storage/MODULE.md for architecture details</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-utils</strong></code> — Utility functions and extensions</p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Configuration loading and management via <code class="lang-kotlin">ConfigLoader</code> pattern</p>
+          </li>
+          <li>
+            <p class="paragraph">Environment constants and shared helper functions</p>
+          </li>
+          <li>
+            <p class="paragraph">Used by other modules for common concerns</p>
+          </li>
+          <li>
+            <p class="paragraph">See reversi-utils/MODULE.md for architecture details</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-cli</strong></code> — Interactive command-line interface client</p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">REPL-based gameplay with multiple command implementations</p>
+          </li>
+          <li>
+            <p class="paragraph">Command framework using KtFlag library for elegant parsing</p>
+          </li>
+          <li>
+            <p class="paragraph">Color-coded output and configurable prompts</p>
+          </li>
+          <li>
+            <p class="paragraph">Full game lifecycle: create, join, play, save, exit</p>
+          </li>
+          <li>
+            <p class="paragraph">Debug mode for developer testing</p>
+          </li>
+          <li>
+            <p class="paragraph">See reversi-cli/MODULE.md for architecture details</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-app</strong></code> — Desktop GUI application (Jetpack Compose for Desktop)</p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Modern, responsive user interface for gameplay</p>
+          </li>
+          <li>
+            <p class="paragraph">State management with ViewModel pattern</p>
+          </li>
+          <li>
+            <p class="paragraph">Rich visual feedback and interactive board rendering</p>
+          </li>
+          <li>
+            <p class="paragraph">Supports game persistence and multiple players</p>
+          </li>
+          <li>
+            <p class="paragraph">See reversi-app/MODULE.md for architecture details</p>
+          </li>
+        </ul>
+      </ul>
+      <h2 class="">Documentation Site</h2>
+      <p class="paragraph">A full HTML version of the generated documentation is available online:<br><a href="https://isel-leic-tds.github.io/32d-2526i-g01-muyloco/">Reversi Documentation</a></p>
+      <h2 class="">Module Structure</h2>
+      <p class="paragraph"><img alt="Module Structure" src="images/Module_Structure.png"></p>
+      <h2 class="">Quick Start</h2>
+      <h3 class="">Prerequisites</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>Java 21</strong> (verify with <code class="lang-kotlin">java -version</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph">Gradle 8.0+ (or use the included <code class="lang-kotlin">./gradlew</code>)</p>
+        </li>
+      </ul>
+      <h3 class="">Building and Running</h3>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">./gradlew build</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">Then, run the CLI module jar:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">java -jar build/libs/reversi-cli-2.0.0.jar</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">To use debug commands for testing, add the <code class="lang-kotlin">--debug</code> or <code class="lang-kotlin">-d</code> flag:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">java -jar build/libs/reversi-cli-2.0.0.jar --debug</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <blockquote class="quotation">
+        <p class="paragraph">Note: Replace version number <code class="lang-kotlin">2.0.0</code> with the actual version from the build output if different.</p>
+      </blockquote>
+      <h2 class="">Project Structure</h2>
+      <p class="paragraph">The project is split in four modules (core, utils, storage and cli). See the <code class="lang-kotlin">reversi-core</code>, <code class="lang-kotlin">reversi-utils</code>, <code class="lang-kotlin">reversi-storage</code> and <code class="lang-kotlin">reversi-cli</code> folders for implementation details and tests.</p>
+      <p class="paragraph"><img alt="Project Structure" src="images/UML_Structure.png"></p>
+      <h2 class="">Testing</h2>
+      <p class="paragraph">Run the complete test suite:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">./gradlew test</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">Run tests for a specific module:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">./gradlew :reversi-core:test</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">The project emphasizes comprehensive test coverage, particularly for the <code class="lang-kotlin">reversi-core</code> module which contains all game logic.</p>
+      <h2 class="">Documentation</h2>
+      <h3 class="">Generate Documentation</h3>
+      <p class="paragraph">Generate Dokka multi-module HTML documentation:</p>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">./gradlew dokkaHtmlMultiModule</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">Output: <code class="lang-kotlin">build/dokka/htmlMultiModule/index.html</code></p>
+      <h3 class="">Online Documentation</h3>
+      <p class="paragraph">A full HTML version of the generated documentation is available online:<br><a href="https://isel-leic-tds.github.io/32d-2526i-g01-muyloco/">Reversi Documentation</a></p>
+      <h3 class="">Module Documentation</h3>
+      <p class="paragraph">For module-level architecture and design details, see the <code class="lang-kotlin">MODULE.md</code> files inside each module folder. These are also included in the generated Dokka documentation.</p>
+      <h2 class="">How to Play (Rules)</h2>
+      <p class="paragraph">Reversi (also known as Othello) is a classic two-player board game played on an N × N board (traditionally 8×8).</p>
+      <h3 class="">Game Overview</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>Players</strong>: Two players using different colored pieces</p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph"><strong>Black</strong> (#) and <strong>White</strong> (@) pieces</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><strong>Board</strong>: N × N grid (default 8×8)</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Setup</strong>: Four pieces placed in the center in a diagonal pattern (two Black, two White)</p>
+        </li>
+      </ul>
+      <h3 class="">Game Rules</h3>
+      <ol>
+        <li>
+          <p class="paragraph"><strong>Placement</strong>: Players alternate turns, placing a piece of their color on an empty square</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Capture</strong>: A piece can only be placed if it flanks one or more opponent pieces in any of the eight directions (horizontal, vertical, diagonal) between the newly placed piece and another piece of the same color</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Flipping</strong>: All flanked opponent pieces are immediately flipped to the current player's color</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Passing</strong>: If a player has no legal moves, they must pass their turn</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Game End</strong>: When both players have no legal moves, the game ends</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>Winning</strong>: The player with more pieces of their color wins. Draws are possible.</p>
+        </li>
+      </ol>
+      <h3 class="">Implementation</h3>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-core</strong></code> module implements the complete Reversi game logic and rules validation</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-cli</strong></code> provides an interactive command-line interface for gameplay</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="strong lang-kotlin"><strong>reversi-storage</strong></code> handles saving and loading games to/from disk</p>
+        </li>
+      </ul>
+      <h2 class="">Playing with the CLI</h2>
+      <p class="paragraph">Start the CLI jar (after building with <code class="lang-kotlin">./gradlew build</code>):</p>
+      <div class="sample-container">
+        <pre><code class="block lang-bash" theme="idea">java -jar build/libs/reversi-cli-2.0.0.jar [--debug]</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">Optionally enable debug mode with <code class="lang-kotlin">--debug</code> or <code class="lang-kotlin">-d</code> flag to unlock additional developer commands.</p>
+      <h3 class="">CLI Interaction Model</h3>
+      <p class="paragraph">When the CLI starts you'll see a welcome message and a prompt (configurable). The game runs in an interactive read-eval-print loop: type commands and press Enter.</p>
+      <p class="paragraph"><strong>Context </strong>&<strong> Persistence:</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">The CLI maintains a current <code class="lang-kotlin">Game</code> context during your session</p>
+        </li>
+        <li>
+          <p class="paragraph">Creating or joining a named game automatically saves the previous game (if any)</p>
+        </li>
+        <li>
+          <p class="paragraph">Commands return human-readable messages and may update the in-memory state</p>
+        </li>
+        <li>
+          <p class="paragraph">All named games are persisted to disk in the <code class="lang-kotlin">saves/</code> folder</p>
+        </li>
+      </ul>
+      <h3 class="">Available Commands (Summary)</h3>
+      <h4 class="">Game Management Commands</h4>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>new (n)</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">new (#|@) [&lt;name&gt;]</code></p>
+          </li>
+          <li>
+            <p class="paragraph">Creates a new game. The argument is the first player symbol ('#' for Black or '@' for White). Optionally supply a       game name to use persistent storage. If no name is given, the game is ephemeral (in-memory only).</p>
+          </li>
+          <li>
+            <p class="paragraph">Examples:</p>
+          </li>
+          <ul>
+            <li>
+              <p class="paragraph"><code class="lang-kotlin">new #</code> — start a local game where Black (#) starts and the opponent is the opposite color (in-memory).</p>
+            </li>
+            <li>
+              <p class="paragraph"><code class="lang-kotlin">new @ mygame</code> — start a named game saved to disk as <code class="lang-kotlin">mygame</code> with White (@) starting.</p>
+            </li>
+          </ul>
+        </ul>
+        <li>
+          <p class="paragraph"><strong>join (j)</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">join &lt;name&gt; [#|@]</code></p>
+          </li>
+          <li>
+            <p class="paragraph">Loads a named saved game from storage. Optionally pass a player symbol to specify which side you control when       joining a saved game.</p>
+          </li>
+          <li>
+            <p class="paragraph">Example: <code class="lang-kotlin">join mygame @</code> — open saved game <code class="lang-kotlin">mygame</code> and set you as White (@) if applicable.</p>
+          </li>
+        </ul>
+      </ul>
+      <h4 class="">Gameplay Commands</h4>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>play (p)</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">play (row) (col)</code> or <code class="lang-kotlin">play (rowcol)</code> (both integer and letter column formats supported)</p>
+          </li>
+          <li>
+            <p class="paragraph">Makes a move at the given coordinate. The CLI accepts different coordinate formats:</p>
+          </li>
+          <ul>
+            <li>
+              <p class="paragraph">Separate row and column: <code class="lang-kotlin">play 3 4</code></p>
+            </li>
+            <li>
+              <p class="paragraph">Combined row+column with a letter: <code class="lang-kotlin">play 3A</code> or <code class="lang-kotlin">play 3a</code> (letter used as column)</p>
+            </li>
+            <li>
+              <p class="paragraph">Combined digits: <code class="lang-kotlin">play 34</code> (row=3, col=4) — only when both characters are digits.</p>
+            </li>
+          </ul>
+          <li>
+            <p class="paragraph">Rows and columns are 1-based.</p>
+          </li>
+          <li>
+            <p class="paragraph">Example: <code class="lang-kotlin">play 4 5</code> or <code class="lang-kotlin">play 4A</code></p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><strong>pass</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">pass</code></p>
+          </li>
+          <li>
+            <p class="paragraph">Skip your turn when you have no legal moves. If the game ends (no player can move), the winner will be reported.</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><strong>show (s)</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">show</code></p>
+          </li>
+          <li>
+            <p class="paragraph">Displays the current board, player scores, current player turn, and (when joined to a named game) the game name       and which player is &quot;You&quot;.</p>
+          </li>
+        </ul>
+        <li>
+          <p class="paragraph"><strong>refresh (r)</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">refresh</code></p>
+          </li>
+          <li>
+            <p class="paragraph">Re-reads the underlying game state (useful in multi-process scenarios) and prints the updated board.</p>
+          </li>
+        </ul>
+      </ul>
+      <h4 class="">Session Commands</h4>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>exit</strong></p>
+        </li>
+        <ul>
+          <li>
+            <p class="paragraph">Usage: <code class="lang-kotlin">exit</code></p>
+          </li>
+          <li>
+            <p class="paragraph">Exits the CLI. If the current game has a name it will be saved before exit.</p>
+          </li>
+        </ul>
+      </ul>
+      <h4 class="">Developer Commands (available with <code class="lang-kotlin">--debug</code>)</h4>
+      <ul>
+        <li>
+          <p class="paragraph"><strong>debug</strong> — Print internal state and extra diagnostics for troubleshooting</p>
+        </li>
+        <li>
+          <p class="paragraph"><strong>listgames</strong> — List all saved game files in the saves folder</p>
+        </li>
+      </ul>
+      <blockquote class="quotation">
+        <p class="paragraph"><strong>Note</strong>: Command aliases and colored help text are provided by the CLI parsing library. Use <code class="lang-kotlin">help &lt;command&gt;</code> for more details on any command.</p>
+      </blockquote>
+      <h2 class="">CLI Configuration</h2>
+      <p class="paragraph">Configuration files are stored in the <code class="lang-kotlin">config/</code> folder and are created automatically with sensible defaults if missing.</p>
+      <h3 class="">reversi-cli.properties</h3>
+      <p class="paragraph">Controls the CLI appearance and behavior:</p>
+      <p class="paragraph"><strong>Display Settings:</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">PROMPT</code> — Command prompt (default: <code class="lang-kotlin">&quot;&gt; &quot;</code>)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">WELCOME_MESSAGE</code> — Startup greeting (default: <code class="lang-kotlin">&quot;Welcome to Reversi!&quot;</code>)</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Color Settings</strong> — Uses standard ANSI color names</p>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">PROMPT_COLOR</code>, <code class="lang-kotlin">TEXT_COLOR</code>, <code class="lang-kotlin">ERROR_COLOR</code>, <code class="lang-kotlin">WARNING_COLOR</code>, <code class="lang-kotlin">INFO_COLOR</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">HELP_USAGE_COLOR</code>, <code class="lang-kotlin">HELP_ALIAS_COLOR</code>, <code class="lang-kotlin">HELP_DESC_COLOR</code></p>
+        </li>
+      </ul>
+      <p class="paragraph">You can safely edit the generated file to customize colors, prompts, and messages.</p>
+      <h3 class="">reversi-core.properties</h3>
+      <p class="paragraph">Contains core configuration affecting game logic and persistence:</p>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">savesPath</code> — Directory for saved games (default: <code class="lang-kotlin">&quot;saves&quot;</code>)</p>
+        </li>
+      </ul>
+      <p class="paragraph">See <code class="lang-kotlin">reversi-core/src/main/kotlin/pt/isel/reversi/core/CoreConfig.kt</code> for all available options.</p>
+      <h3 class="">Configuration System</h3>
+      <p class="paragraph">Configuration is managed by <code class="lang-kotlin">reversi-utils</code>'s <code class="lang-kotlin">ConfigLoader</code>, which:</p>
+      <ul>
+        <li>
+          <p class="paragraph">Creates files with default values if missing</p>
+        </li>
+        <li>
+          <p class="paragraph">Loads settings into typed <code class="lang-kotlin">Config</code> objects</p>
+        </li>
+        <li>
+          <p class="paragraph">Supports runtime configuration changes</p>
+        </li>
+      </ul>
+      <h2 class="">Game Save File Structure (Storage Format)</h2>
+      <p class="paragraph">Saved games are plain text files stored by <code class="lang-kotlin">reversi-storage</code>'s <code class="lang-kotlin">FileStorage</code> implementation. Each saved game uses a filename of the form <code class="lang-kotlin">&lt;name&gt;.txt</code> and by default is placed in the <code class="lang-kotlin">saves/</code> folder. The default folder can be changed via <code class="lang-kotlin">config/reversi-core.properties</code> using the key <code class="lang-kotlin">savesPath</code> (default: <code class="lang-kotlin">&quot;saves&quot;</code>).</p>
+      <p class="paragraph">The format is line-oriented and human-readable, produced by serializers in <code class="lang-kotlin">reversi-core</code>. A saved game file consists of:</p>
+      <p class="paragraph"><strong>Line 1 — Players</strong> </p>
+      <ul>
+        <li>
+          <p class="paragraph">Serialized players separated by <code class="lang-kotlin">;</code>, terminated with newline</p>
+        </li>
+        <li>
+          <p class="paragraph">Format: <code class="lang-kotlin">&lt;symbol&gt;,&lt;points&gt;</code> (e.g., <code class="lang-kotlin">#,12;@,5;</code>)</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Line 2 — Last Player</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">Single character: <code class="lang-kotlin">#</code> or <code class="lang-kotlin">@</code> indicating who played last</p>
+        </li>
+        <li>
+          <p class="paragraph">Next turn belongs to the opposite color</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Line 3 — Winner</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">If game ended: serialized winner in same format as players</p>
+        </li>
+        <li>
+          <p class="paragraph">If ongoing: empty line (just newline)</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Lines 4+ — Board</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">First board line: integer (board size, e.g., <code class="lang-kotlin">8</code> for 8×8)</p>
+        </li>
+        <li>
+          <p class="paragraph">Following lines: each piece as <code class="lang-kotlin">row,col,symbol</code> (1-based coordinates)</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Example saved game:</strong></p>
+      <div class="sample-container">
+        <pre><code class="block lang-text" theme="idea">#,2;@,2;<br>#<br><br>8<br>4,4,@<br>4,5,#<br>5,4,#<br>5,5,@</code></pre>
+<span class="copy-tooltip">
+          <div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div>
+<span class="copy-icon"></span></span></div>
+      <p class="paragraph">This represents a game where:</p>
+      <ul>
+        <li>
+          <p class="paragraph">Players are Black (#) and White (@), each with 2 points</p>
+        </li>
+        <li>
+          <p class="paragraph">Black played last; winner line is empty (game ongoing)</p>
+        </li>
+        <li>
+          <p class="paragraph">Board is 8×8 with the four central pieces shown</p>
+        </li>
+      </ul>
+      <h3 class="">Serializers</h3>
+      <p class="paragraph">Serialization logic lives in <code class="lang-kotlin">reversi-core/src/main/kotlin/pt/isel/reversi/core/storage/serializers/</code>:</p>
+      <ul>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">GameStateSerializer</code> — Entire game state (players, last player, winner, board)</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">BoardSerializer</code> — Board and all pieces  </p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">PlayerSerializer</code> — Individual player data</p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">PieceSerializer</code> — Individual pieces as <code class="lang-kotlin">row,col,symbol</code></p>
+        </li>
+        <li>
+          <p class="paragraph"><code class="lang-kotlin">PieceTypeSerializer</code> — Piece symbols (#, @) ↔ enum values</p>
+        </li>
+      </ul>
+      <h3 class="">Error Handling</h3>
+      <p class="paragraph">Malformed save files throw typed exceptions from the core (e.g., <code class="lang-kotlin">InvalidGameStateInFileException</code>) with helpful error messages.</p>
+      <h2 class="">File Locations</h2>
+      <div class="table--container">
+        <table>
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Location</th>
+              <th>Default</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>CLI Config</td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@389e613f lang-kotlin">config/reversi-cli.properties</code></td>
+              <td>Auto-created</td>
+            </tr>
+            <tr>
+              <td>Core Config</td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@389e613f lang-kotlin">config/reversi-core.properties</code></td>
+              <td>Auto-created</td>
+            </tr>
+            <tr>
+              <td>Saved Games</td>
+              <td><code class="org.jetbrains.dokka.pages.commenttable@389e613f lang-kotlin">saves/</code></td>
+              <td>Configurable via <code class="org.jetbrains.dokka.pages.commenttable@389e613f lang-kotlin">savesPath</code></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <h2 class="">Troubleshooting</h2>
+      <p class="paragraph"><strong>&quot;Game is not defined&quot; errors</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">Create or join a game first: <code class="lang-kotlin">new #</code> or <code class="lang-kotlin">join &lt;name&gt;</code></p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Can't find saved games</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">Enable debug mode: <code class="lang-kotlin">--debug</code> flag</p>
+        </li>
+        <li>
+          <p class="paragraph">Use <code class="lang-kotlin">listgames</code> command to list all saved games</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Colors or display issues</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">Edit <code class="lang-kotlin">config/reversi-cli.properties</code> to use terminal-compatible ANSI color names</p>
+        </li>
+        <li>
+          <p class="paragraph">Check <a href="https://en.wikipedia.org/wiki/ANSI_escape_code#8-bit">ANSI color documentation</a> for supported values</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Corrupted save file</strong></p>
+      <ul>
+        <li>
+          <p class="paragraph">Delete the problematic <code class="lang-kotlin">.txt</code> file from the <code class="lang-kotlin">saves/</code> folder</p>
+        </li>
+        <li>
+          <p class="paragraph">Start a new game or load a backup</p>
+        </li>
+      </ul>
+      <p class="paragraph"><strong>Performance or I/O issues</strong> </p>
+      <ul>
+        <li>
+          <p class="paragraph">Ensure write permissions in <code class="lang-kotlin">config/</code> and <code class="lang-kotlin">saves/</code> directories</p>
+        </li>
+        <li>
+          <p class="paragraph">Check available disk space</p>
+        </li>
+        <li>
+          <p class="paragraph">Try restarting the application</p>
+        </li>
+      </ul>
+    </div>
+    <h2 class="">All modules:</h2>
+    <div class="table"><a data-name="-1555262957%2FMain%2F0" anchor-label="reversi-app" id="-1555262957%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="reversi-app/index.html">reversi-app</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1555262957%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">A modern desktop GUI application for playing Reversi using Jetpack Compose for Desktop. This module provides a rich, interactive user experience while maintaining clean separation from the core game logic and storage systems. The app follows MVVM (Model-View-ViewModel) architecture with reactive state management for responsive, testable code.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-1833363468%2FMain%2F0" anchor-label="reversi-cli" id="-1833363468%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="reversi-cli/index.html">reversi-cli</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1833363468%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">A scriptable, interactive command-line interface for playing Reversi. The CLI is designed to be minimal, event-driven, and testable. It uses the KtFlag library for compact command parsing and provides a read-eval-print loop (REPL) that manages game context and command execution.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="2080261359%2FMain%2F0" anchor-label="reversi-core" id="2080261359%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="reversi-core/index.html">reversi-core</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2080261359%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">The core domain model and game logic for the Reversi game. This module is completely UI-agnostic and persistence-agnostic, exposing only pure Kotlin data types and functions that implement the Reversi game rules. It is designed to be used by any client (CLI, GUI, test code, etc.) without modification or dependency on any UI or storage framework.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-1012541063%2FMain%2F0" anchor-label="reversi-storage" id="-1012541063%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="reversi-storage/index.html">reversi-storage</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1012541063%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Provides persistent storage for game snapshots using the local filesystem. This module implements a simple, text-based storage system that favors human-readable saves for easy debugging and manual inspection. Games are stored as plain text files in a configurable <code class="lang-kotlin">saves</code> folder, allowing users to view and manually edit saved games if needed.</p>
+            </span></div>
+        </div>
+      </div>
+<a data-name="-209301309%2FMain%2F0" anchor-label="reversi-utils" id="-209301309%2FMain%2F0" data-filterable-set=""></a>
+      <div class="table-row table-row_multimodule">
+        <div class="main-subrow ">
+          <div class="w-100"><span class="inline-flex">
+              <div><a href="reversi-utils/index.html">reversi-utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-209301309%2FMain%2F0"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div><span class="brief-comment">
+              <p class="paragraph">Provides reusable utilities and shared infrastructure used by all other Reversi modules (core, cli, storage, app). This module contains configuration management, environment constants, logging setup, and helper functions that promote code reuse and consistency across the project.</p>
+            </span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

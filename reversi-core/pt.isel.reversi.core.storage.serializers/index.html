@@ -1,0 +1,202 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>pt.isel.reversi.core.storage.serializers</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-core/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-core/main" data-filter=":reversi-core/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="reversi-core::pt.isel.reversi.core.storage.serializers////PointingToDeclaration//-935644378">
+  <div class="breadcrumbs"><a href="../index.html">reversi-core</a><span class="delimiter">/</span><span class="current">pt.isel.reversi.core.storage.serializers</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><h2 class="">Overview</h2><p class="paragraph">Serializer implementations for converting core domain types to/from text format for persistence.</p><h3 class="">Serializers</h3><ul><li><p class="paragraph"><code class="lang-kotlin">GameStateSerializer</code> — Serializes complete game state to/from text</p></li><li><p class="paragraph"><code class="lang-kotlin">BoardSerializer</code> — Serializes board configuration (size and pieces)</p></li><li><p class="paragraph"><code class="lang-kotlin">PlayerSerializer</code> — Serializes player data (type and points)</p></li><li><p class="paragraph"><code class="lang-kotlin">PieceSerializer</code> — Serializes individual piece positions</p></li><li><p class="paragraph"><code class="lang-kotlin">PieceTypeSerializer</code> — Serializes piece type symbols (# for BLACK, @ for WHITE)</p></li></ul><h3 class="">Responsibilities</h3><ul><li><p class="paragraph">Converting immutable domain objects to text representation</p></li><li><p class="paragraph">Parsing text files back to domain objects</p></li><li><p class="paragraph">Ensuring round-trip serialization preserves data integrity</p></li><li><p class="paragraph">Providing human-readable save file format</p></li></ul><h3 class="">Format Example</h3><div class="sample-container"><pre><code class="block lang-kotlin" theme="idea">#,12;@,5;<br>#<br><br>8<br>4,4,@<br>4,5,#<br>5,4,#<br>5,5,@</code></pre><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></div><p class="paragraph">First line: Players (symbol, points)<br>Second line: Last player<br>Third line: Winner (if any)<br>Fourth line: Board size<br>Remaining lines: Pieces (row, col, symbol)</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="965831854%2FClasslikes%2F-935644378" anchor-label="BoardSerializer" id="965831854%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-board-serializer/index.html"><span>Board</span><wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="965831854%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">internal </span><span class="token keyword">class </span><a href="-board-serializer/index.html">BoardSerializer</a> : <a href="../../reversi-storage/pt.isel.reversi.storage/-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="../pt.isel.reversi.core.board/-board/index.html">Board</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Serializer for the Board class, converting it to and from a String representation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1729649995%2FClasslikes%2F-935644378" anchor-label="GameStateSerializer" id="-1729649995%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-game-state-serializer/index.html"><span>Game</span><wbr><span>State</span><wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1729649995%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">internal </span><span class="token keyword">class </span><a href="-game-state-serializer/index.html">GameStateSerializer</a> : <a href="../../reversi-storage/pt.isel.reversi.storage/-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="../pt.isel.reversi.core.gameState/-game-state/index.html">GameState</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Serializer for the GameState class, converting it to and from a String representation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="434312102%2FClasslikes%2F-935644378" anchor-label="PieceSerializer" id="434312102%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-piece-serializer/index.html"><span>Piece</span><wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="434312102%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">internal </span><span class="token keyword">class </span><a href="-piece-serializer/index.html">PieceSerializer</a> : <a href="../../reversi-storage/pt.isel.reversi.storage/-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="../pt.isel.reversi.core.board/-piece/index.html">Piece</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Serializer for the Piece class, converting it to and from a String representation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="435435148%2FClasslikes%2F-935644378" anchor-label="PieceTypeSerializer" id="435435148%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-piece-type-serializer/index.html"><span>Piece</span><wbr><span>Type</span><wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="435435148%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">internal </span><span class="token keyword">class </span><a href="-piece-type-serializer/index.html">PieceTypeSerializer</a> : <a href="../../reversi-storage/pt.isel.reversi.storage/-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="../pt.isel.reversi.core.board/-piece-type/index.html">PieceType</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-char/index.html">Char</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Serializer for the PieceType enum, converting it to and from a Char representation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-68964279%2FClasslikes%2F-935644378" anchor-label="PlayerSerializer" id="-68964279%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-player-serializer/index.html"><span>Player</span><wbr><span><span>Serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-68964279%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">internal </span><span class="token keyword">class </span><a href="-player-serializer/index.html">PlayerSerializer</a> : <a href="../../reversi-storage/pt.isel.reversi.storage/-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="../pt.isel.reversi.core.gameState/-player/index.html">Player</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Serializer for <a href="../pt.isel.reversi.core.gameState/-player/index.html">Player</a>. Format: "<symbol>,<points>" where <symbol> is the piece symbol (e.g. 'B' or 'W') and <points> is the integer number of points the player has.</points></symbol></points></symbol></p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

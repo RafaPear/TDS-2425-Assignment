@@ -1,0 +1,277 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>pt.isel.reversi.cli.commands</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-cli/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-cli/main" data-filter=":reversi-cli/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="reversi-cli::pt.isel.reversi.cli.commands////PointingToDeclaration//968266343">
+  <div class="breadcrumbs"><a href="../index.html">reversi-cli</a><span class="delimiter">/</span><span class="current">pt.isel.reversi.cli.commands</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><h2 class="">Overview</h2><p class="paragraph">Contains concrete command handlers used by the CLI. Each command is implemented as an object extending the <code class="lang-kotlin">CommandImpl&lt;Game&gt;</code> contract provided by <code class="lang-kotlin">KtFlag</code>.</p><h3 class="">Commands implemented</h3><ul><li><p class="paragraph"><code class="lang-kotlin">NewCmd</code> — create a new game (specify first player and optional name)</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">new # [name]</code> or <code class="lang-kotlin">new @ [name]</code></p></li><li><p class="paragraph">Creates a new Reversi game with the specified first player</p></li><li><p class="paragraph">Optional name parameter saves the game to persistent storage</p></li><li><p class="paragraph">Saves the previous game before creating a new one</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">JoinCmd</code> — join an existing named game</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">join &lt;name&gt; [#|@]</code></p></li><li><p class="paragraph">Loads a saved game by name from storage</p></li><li><p class="paragraph">Optional piece type parameter specifies which player you control</p></li><li><p class="paragraph">Useful for multiplayer or turn-based scenarios</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">PlayCmd</code> — play a move at (row, col)</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">play &lt;row&gt; &lt;col&gt;</code> or <code class="lang-kotlin">play &lt;rowcol&gt;</code></p></li><li><p class="paragraph">Supports multiple coordinate formats:</p></li><ul><li><p class="paragraph"><code class="lang-kotlin">play 3 4</code> (separate row and column)</p></li><li><p class="paragraph"><code class="lang-kotlin">play 3A</code> (row + letter column)</p></li><li><p class="paragraph"><code class="lang-kotlin">play 34</code> (row + digit column)</p></li></ul><li><p class="paragraph">Validates move legality before execution</p></li><li><p class="paragraph">Updates board and displays result</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">PassCmd</code> — pass the current turn</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">pass</code></p></li><li><p class="paragraph">Only valid when no legal moves are available</p></li><li><p class="paragraph">Counts consecutive passes; ends game after two consecutive passes</p></li><li><p class="paragraph">Announces winner if game ends</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">ShowCmd</code> — render the current board and scores</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">show</code> or <code class="lang-kotlin">s</code></p></li><li><p class="paragraph">Displays ASCII representation of the board</p></li><li><p class="paragraph">Shows both players' scores</p></li><li><p class="paragraph">Indicates current player's turn</p></li><li><p class="paragraph">Shows game name if saved</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">RefreshCmd</code> — reload game state from storage</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">refresh</code> or <code class="lang-kotlin">r</code></p></li><li><p class="paragraph">Reloads the current game from persistent storage</p></li><li><p class="paragraph">Useful when another process/player has made moves</p></li><li><p class="paragraph">Redisplays the updated board</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">TargetCmd</code> — toggle target mode for visual feedback</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">target [true|false|yes|no|1|0|on|off]</code></p></li><li><p class="paragraph">Enables/disables highlighting of legal moves</p></li><li><p class="paragraph">Accepts various boolean representations</p></li><li><p class="paragraph">Helps visualize available moves</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">ExitCmd</code> — terminate the application</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">exit</code>, <code class="lang-kotlin">quit</code>, or <code class="lang-kotlin">q</code></p></li><li><p class="paragraph">Prompts to save current game before exit</p></li><li><p class="paragraph">Persists game state to storage</p></li><li><p class="paragraph">Closes resources and exits cleanly</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">DebugCmd</code> — display detailed internal state (debug mode only)</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">debug</code> or <code class="lang-kotlin">dbg</code></p></li><li><p class="paragraph">Shows board representation details</p></li><li><p class="paragraph">Lists player information</p></li><li><p class="paragraph">Displays configuration values</p></li><li><p class="paragraph">Lists saved games in storage folder</p></li><li><p class="paragraph">Only available when <code class="lang-kotlin">--debug</code> flag is used</p></li></ul><li><p class="paragraph"><code class="lang-kotlin">ListGamesCmd</code> — list all saved games</p></li><ul><li><p class="paragraph">Syntax: <code class="lang-kotlin">listgames</code> or <code class="lang-kotlin">lg</code></p></li><li><p class="paragraph">Shows all game files in the saves directory</p></li><li><p class="paragraph">Displays game names available for joining</p></li><li><p class="paragraph">Helpful for discovering saved games</p></li></ul></ul><h3 class="">Responsibilities</h3><ul><li><p class="paragraph">Implementing game commands with validation and error handling</p></li><li><p class="paragraph">Parsing command arguments in various formats</p></li><li><p class="paragraph">Executing game logic through the core module</p></li><li><p class="paragraph">Providing user-friendly feedback messages</p></li><li><p class="paragraph">Coordinating with storage for persistence operations</p></li></ul><h2 class="">Example command structure</h2><p class="paragraph">The command objects define <code class="lang-kotlin">CommandInfo</code> and implement an <code class="lang-kotlin">execute</code> method that receives the parsed arguments and a <code class="lang-kotlin">Game?</code> context. New commands can be added by defining an object and registering it with the <code class="lang-kotlin">CLI</code> parser in <code class="lang-kotlin">Main.kt</code>.</p><h3 class="">Command Result Flow</h3><ol><li><p class="paragraph">User enters command with arguments</p></li><li><p class="paragraph">CommandParser matches command and extracts arguments</p></li><li><p class="paragraph">Command's <code class="lang-kotlin">execute()</code> method is called with arguments and current Game</p></li><li><p class="paragraph">Command validates inputs and checks game state</p></li><li><p class="paragraph">Command executes business logic via core module</p></li><li><p class="paragraph">Command returns <code class="lang-kotlin">CommandResult</code> with success/failure and updated game</p></li><li><p class="paragraph">CLI displays result message to user</p></li><li><p class="paragraph">CLI updates its game context for next command</p></li></ol><blockquote class="quotation"><p class="paragraph">Note: The CLI uses <code class="lang-kotlin">KtFlag</code> (https://github.com/rafapear/KtFlag) to reduce boilerplate for argument parsing.</p></blockquote></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="-423333844%2FClasslikes%2F968266343" anchor-label="DebugCmd" id="-423333844%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-debug-cmd/index.html"><span>Debug</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-423333844%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-debug-cmd/index.html">DebugCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Debug command to display detailed internal game state information.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-570609613%2FClasslikes%2F968266343" anchor-label="ExitCmd" id="-570609613%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-exit-cmd/index.html"><span>Exit</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-570609613%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-exit-cmd/index.html">ExitCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to exit the Reversi CLI application.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-757069249%2FClasslikes%2F968266343" anchor-label="JoinCmd" id="-757069249%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-join-cmd/index.html"><span>Join</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-757069249%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-join-cmd/index.html">JoinCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to join an existing Reversi game from persistent storage.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1321158044%2FClasslikes%2F968266343" anchor-label="ListGamesCmd" id="1321158044%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-list-games-cmd/index.html"><span>List</span><wbr><span>Games</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1321158044%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-list-games-cmd/index.html">ListGamesCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Debug command to list all available saved games.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1267181959%2FClasslikes%2F968266343" anchor-label="NewCmd" id="-1267181959%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-new-cmd/index.html"><span>New</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1267181959%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-new-cmd/index.html">NewCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to create a new Reversi game.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1265319770%2FClasslikes%2F968266343" anchor-label="PassCmd" id="-1265319770%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-pass-cmd/index.html"><span>Pass</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1265319770%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-pass-cmd/index.html">PassCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to pass the current player's turn.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2041535159%2FClasslikes%2F968266343" anchor-label="PlayCmd" id="-2041535159%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-play-cmd/index.html"><span>Play</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2041535159%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-play-cmd/index.html">PlayCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to execute a move at the specified board coordinates.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1422153780%2FClasslikes%2F968266343" anchor-label="RefreshCmd" id="1422153780%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-refresh-cmd/index.html"><span>Refresh</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1422153780%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-refresh-cmd/index.html">RefreshCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to refresh and display the current game state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2112889454%2FClasslikes%2F968266343" anchor-label="ShowCmd" id="-2112889454%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-show-cmd/index.html"><span>Show</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2112889454%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-show-cmd/index.html">ShowCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">ShowCmd prints the current game state: board layout and player scores. It expects a <code class="lang-kotlin">Game</code> context and returns an error when the game or board is not initialized.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1922963110%2FClasslikes%2F968266343" anchor-label="TargetCmd" id="1922963110%2FClasslikes%2F968266343" data-filterable-set=":reversi-cli/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-cli/main" data-filterable-set=":reversi-cli/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-target-cmd/index.html"><span>Target</span><wbr><span><span>Cmd</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1922963110%2FClasslikes%2F968266343"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-cli/main"><div class="symbol monospace"><span class="token keyword">object </span><a href="-target-cmd/index.html">TargetCmd</a> : <span data-unresolved-link="pt.rafap.ktflag.cmd/CommandImpl///PointingToDeclaration/">CommandImpl</span><span class="token operator">&lt;</span><a href="../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Command to toggle target mode for visual feedback during gameplay.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

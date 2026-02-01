@@ -1,0 +1,405 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>MongoDBStorage</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-storage/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-storage/main" data-filter=":reversi-storage/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="reversi-storage::pt.isel.reversi.storage/MongoDBStorage///PointingToDeclaration//1640675266">
+  <div class="breadcrumbs"><a href="../../index.html">reversi-storage</a><span class="delimiter">/</span><a href="../index.html">pt.isel.reversi.storage</a><span class="delimiter">/</span><span class="current">MongoDBStorage</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Mongo</span><wbr><span><span>DBStorage</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">MongoDBStorage</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token operator">&gt;</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>mongoDBConnection<span class="token operator">: </span><a href="../-mongo-d-b-connection/index.html">MongoDBConnection</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>databaseName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>collectionName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>serializer<span class="token operator">: </span><a href="../-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span> : <a href="../-storage/index.html">Storage</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="index.html">T</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt; </span></div><p class="paragraph"><a href="../-storage/index.html">Storage</a> implementation via MongoDB + text strings.</p><p class="paragraph">This method was based from <a href="https://github.com/roby2014/uni-projects/tree/master/TDS">roby2014 - uni-projects/TDS</a></p><h4 class="tableheader">Parameters</h4><div class="table"><div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main"><div class="main-subrow keyValue "><div class=""><span class="inline-flex"><div><u><span><span>T</span></span></u></div></span></div><div><div class="title"><p class="paragraph">Type of the domain entity</p></div></div></div></div></div></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1380296146%2FConstructors%2F1640675266" anchor-label="MongoDBStorage" id="-1380296146%2FConstructors%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-mongo-d-b-storage.html"><span>Mongo</span><wbr><span><span>DBStorage</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1380296146%2FConstructors%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">mongoDBConnection<span class="token operator">: </span><a href="../-mongo-d-b-connection/index.html">MongoDBConnection</a><span class="token punctuation">, </span></span><span class="parameter ">databaseName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">collectionName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">serializer<span class="token operator">: </span><a href="../-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="-1501508728%2FProperties%2F1640675266" anchor-label="collection" id="-1501508728%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="collection.html"><span><span>collection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1501508728%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="collection.html">collection</a><span class="token operator">: </span><span data-unresolved-link="com.mongodb.kotlin.client/MongoCollection///PointingToDeclaration/">MongoCollection</span><span class="token operator">&lt;</span><span data-unresolved-link="org.bson/Document///PointingToDeclaration/">Document</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1385121213%2FProperties%2F1640675266" anchor-label="collectionName" id="1385121213%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="collection-name.html"><span>collection</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1385121213%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="collection-name.html">collectionName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1260879477%2FProperties%2F1640675266" anchor-label="database" id="-1260879477%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="database.html"><span><span>database</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1260879477%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="database.html">database</a><span class="token operator">: </span><span data-unresolved-link="com.mongodb.kotlin.client/MongoDatabase///PointingToDeclaration/">MongoDatabase</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1648771648%2FProperties%2F1640675266" anchor-label="databaseName" id="1648771648%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="database-name.html"><span>database</span><wbr><span><span>Name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1648771648%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="database-name.html">databaseName</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1602748213%2FProperties%2F1640675266" anchor-label="mongoClient" id="1602748213%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mongo-client.html"><span>mongo</span><wbr><span><span>Client</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1602748213%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="mongo-client.html">mongoClient</a><span class="token operator">: </span><span data-unresolved-link="com.mongodb.kotlin.client/MongoClient///PointingToDeclaration/">MongoClient</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1815037948%2FProperties%2F1640675266" anchor-label="mongoDBConnection" id="-1815037948%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="mongo-d-b-connection.html"><span>mongo</span><wbr><span><span>DBConnection</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1815037948%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="mongo-d-b-connection.html">mongoDBConnection</a><span class="token operator">: </span><a href="../-mongo-d-b-connection/index.html">MongoDBConnection</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1083637996%2FProperties%2F1640675266" anchor-label="serializer" id="-1083637996%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="serializer.html"><span><span>serializer</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1083637996%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">val </span><a href="serializer.html">serializer</a><span class="token operator">: </span><a href="../-serializer/index.html">Serializer</a><span class="token operator">&lt;</span><a href="index.html">T</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">The serializer responsible for converting entities to/from the storage format.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1229669192%2FProperties%2F1640675266" anchor-label="uri" id="1229669192%2FProperties%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="uri.html"><span><span>uri</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1229669192%2FProperties%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="uri.html">uri</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1441570428%2FFunctions%2F1640675266" anchor-label="close" id="1441570428%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="close.html"><span><span>close</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1441570428%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="close.html"><span class="token function">close</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Closes the storage, releasing any held resources.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-744359095%2FFunctions%2F1640675266" anchor-label="delete" id="-744359095%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="delete.html"><span><span>delete</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-744359095%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="delete.html"><span class="token function">delete</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Deletes an entity from storage by its identifier.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="939338833%2FFunctions%2F1640675266" anchor-label="ensureIdExists" id="939338833%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="ensure-id-exists.html"><span>ensure</span><wbr><span>Id</span><wbr><span><span>Exists</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="939338833%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="ensure-id-exists.html"><span class="token function">ensureIdExists</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">shouldExist<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1129071837%2FFunctions%2F1640675266" anchor-label="lastModified" id="1129071837%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="last-modified.html"><span>last</span><wbr><span><span>Modified</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1129071837%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="last-modified.html"><span class="token function">lastModified</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Gets the last modification timestamp for an entity.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2031675396%2FFunctions%2F1640675266" anchor-label="load" id="2031675396%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load.html"><span><span>load</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2031675396%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="load.html"><span class="token function">load</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Retrieves an entity from storage by its identifier.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-573493975%2FFunctions%2F1640675266" anchor-label="loadAllIds" id="-573493975%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="load-all-ids.html"><span>load</span><wbr><span>All</span><wbr><span><span>Ids</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-573493975%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="load-all-ids.html"><span class="token function">loadAllIds</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Loads all identifiers currently stored in this storage.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="880049695%2FFunctions%2F1640675266" anchor-label="makeDoc" id="880049695%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="make-doc.html"><span>make</span><wbr><span><span>Doc</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="880049695%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="make-doc.html"><span class="token function">makeDoc</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">obj<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><span data-unresolved-link="org.bson/Document///PointingToDeclaration/">Document</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-471363350%2FFunctions%2F1640675266" anchor-label="new" id="-471363350%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="new.html"><span><span>new</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-471363350%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="new.html"><span class="token function">new</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">factory<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="index.html">T</a></div><div class="brief "><p class="paragraph">Creates a new entity in storage with the given identifier.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1198971142%2FFunctions%2F1640675266" anchor-label="save" id="-1198971142%2FFunctions%2F1640675266" data-filterable-set=":reversi-storage/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-storage/main" data-filterable-set=":reversi-storage/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="save.html"><span><span>save</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1198971142%2FFunctions%2F1640675266"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-storage/main"><div class="symbol monospace"><span class="token keyword">open </span><span class="token keyword">override </span><span class="token keyword">fun </span><a href="save.html"><span class="token function">save</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">id<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">obj<span class="token operator">: </span><a href="index.html">T</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Saves (persists) an entity in storage under the given identifier.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

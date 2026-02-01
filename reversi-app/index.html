@@ -1,0 +1,542 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>reversi-app</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<link href="../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-app/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-app/main" data-filter=":reversi-app/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" id="content" pageids="reversi-app::////PointingToDeclaration//-781564056">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>reversi-app</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><h2 class="">Overview</h2><p class="paragraph">A modern desktop GUI application for playing Reversi using Jetpack Compose for Desktop. This module provides a rich, interactive user experience while maintaining clean separation from the core game logic and storage systems. The app follows MVVM (Model-View-ViewModel) architecture with reactive state management for responsive, testable code.</p><p class="paragraph">The module builds upon the immutable core domain model and storage layer, providing a layer of UI logic and user interaction management. All game rules and state are delegated to the core module, keeping the app lightweight and focused on presentation.</p><p class="paragraph"><img alt="Reversi App Structure" src="../images/UML_Structure_APP.png"></p><h2 class="">Architecture</h2><p class="paragraph">The app is organized into layers:</p><ul><li><p class="paragraph"><strong>Main Entry Point</strong> — Application initialization and window setup</p></li><li><p class="paragraph"><strong>UI Pages/Screens</strong> — Individual game screens and menus</p></li><li><p class="paragraph"><strong>ViewModels</strong> — State management and business logic coordination</p></li><li><p class="paragraph"><strong>UI Components</strong> — Reusable Compose components</p></li><li><p class="paragraph"><strong>Configuration</strong> — App-specific settings and theming</p></li></ul><h3 class="">MVVM Pattern</h3><p class="paragraph"><strong>ViewModel Layer:</strong></p><ul><li><p class="paragraph">Manages state for each screen</p></li><li><p class="paragraph">Coordinates between UI and core logic</p></li><li><p class="paragraph">Handles user input (moves, commands)</p></li><li><p class="paragraph">Manages coroutines for async operations</p></li><li><p class="paragraph">Exposes state as observable flows</p></li></ul><p class="paragraph"><strong>View Layer (Compose):</strong></p><ul><li><p class="paragraph">Renders UI based on ViewModel state</p></li><li><p class="paragraph">Sends user events to ViewModel</p></li><li><p class="paragraph">Handles animations and transitions</p></li><li><p class="paragraph">Provides visual feedback</p></li></ul><p class="paragraph"><strong>Model Layer (Core):</strong></p><ul><li><p class="paragraph">Immutable Game and GameState objects</p></li><li><p class="paragraph">Pure game logic (via core module)</p></li><li><p class="paragraph">Persistence (via storage module)</p></li></ul><h2 class="">Key Components</h2><h3 class="">Main Application</h3><p class="paragraph">The entry point that:</p><ol><li><p class="paragraph">Initializes configuration</p></li><li><p class="paragraph">Creates the main window</p></li><li><p class="paragraph">Sets up theming and styling</p></li><li><p class="paragraph">Launches the root composable</p></li><li><p class="paragraph">Manages application lifecycle</p></li></ol><h3 class="">Pages/Screens</h3><h4 class="">Menu Screen</h4><ul><li><p class="paragraph">New Game creation</p></li><li><p class="paragraph">Load Game selection</p></li><li><p class="paragraph">Settings</p></li><li><p class="paragraph">Exit</p></li></ul><h4 class="">Game Screen</h4><ul><li><p class="paragraph">Interactive board display</p></li><li><p class="paragraph">Piece rendering with colors</p></li><li><p class="paragraph">Legal move highlighting</p></li><li><p class="paragraph">Player scores</p></li><li><p class="paragraph">Game state display</p></li><li><p class="paragraph">Move submission</p></li><li><p class="paragraph">Pass button</p></li><li><p class="paragraph">Game menu</p></li></ul><h4 class="">Game Over Screen</h4><ul><li><p class="paragraph">Winner announcement</p></li><li><p class="paragraph">Final scores</p></li><li><p class="paragraph">Play Again option</p></li><li><p class="paragraph">Menu option</p></li></ul><h3 class="">ViewModels</h3><p class="paragraph">Each screen has a corresponding ViewModel:</p><p class="paragraph"><strong>MenuViewModel:</strong></p><ul><li><p class="paragraph">Available games list</p></li><li><p class="paragraph">New game parameters</p></li><li><p class="paragraph">Navigation state</p></li></ul><p class="paragraph"><strong>GameViewModel:</strong></p><ul><li><p class="paragraph">Current game state</p></li><li><p class="paragraph">Board representation</p></li><li><p class="paragraph">Available moves</p></li><li><p class="paragraph">Player information</p></li><li><p class="paragraph">Move execution coordination</p></li></ul><p class="paragraph"><strong>GameOverViewModel:</strong></p><ul><li><p class="paragraph">Winner determination</p></li><li><p class="paragraph">Final statistics</p></li><li><p class="paragraph">Return to menu</p></li></ul><h3 class="">Composable Components</h3><p class="paragraph"><strong>Board Display:</strong></p><ul><li><p class="paragraph">Grid layout for 8x8 board</p></li><li><p class="paragraph">Piece rendering with symbols/colors</p></li><li><p class="paragraph">Legal move highlighting</p></li><li><p class="paragraph">Clickable squares for move input</p></li><li><p class="paragraph">Animations for piece placement</p></li></ul><p class="paragraph"><strong>Player Info:</strong></p><ul><li><p class="paragraph">Current player indicator</p></li><li><p class="paragraph">Score display</p></li><li><p class="paragraph">Piece color indicators</p></li><li><p class="paragraph">Turn status</p></li></ul><p class="paragraph"><strong>Buttons and Controls:</strong></p><ul><li><p class="paragraph">Move buttons</p></li><li><p class="paragraph">Pass button</p></li><li><p class="paragraph">Game menu button</p></li><li><p class="paragraph">New Game button</p></li><li><p class="paragraph">Load Game button</p></li></ul><h2 class="">User Experience</h2><h3 class="">Visual Feedback</h3><ul><li><p class="paragraph">Board highlights legal moves</p></li><li><p class="paragraph">Pieces animated when placed</p></li><li><p class="paragraph">Colors distinguish Black and White</p></li><li><p class="paragraph">Turn indicator shows who plays next</p></li><li><p class="paragraph">Score updates in real-time</p></li></ul><h3 class="">Game Flow</h3><ol><li><p class="paragraph">Start app → See main menu</p></li><li><p class="paragraph">Create new game or load saved game</p></li><li><p class="paragraph">View board with current player highlighted</p></li><li><p class="paragraph">Click square to play move</p></li><li><p class="paragraph">Move executes with animation</p></li><li><p class="paragraph">Board updates with captured pieces</p></li><li><p class="paragraph">Turn passes to other player</p></li><li><p class="paragraph">Repeat until game ends</p></li><li><p class="paragraph">See final score and results</p></li><li><p class="paragraph">Return to menu to play again</p></li></ol><h3 class="">Save/Load</h3><ul><li><p class="paragraph">Current game auto-saves to storage</p></li><li><p class="paragraph">Can resume interrupted games</p></li><li><p class="paragraph">Load screen shows all saved games</p></li><li><p class="paragraph">Delete games from UI</p></li></ul><h2 class="">Reactive State Management</h2><p class="paragraph">Uses Kotlin Flow for reactive updates:</p><ul><li><p class="paragraph">Board state flows to UI</p></li><li><p class="paragraph">Player scores flow to UI</p></li><li><p class="paragraph">Available moves flow to UI</p></li><li><p class="paragraph">Game over state flows to UI</p></li><li><p class="paragraph">All updates are immutable and predictable</p></li></ul><p class="paragraph">Benefits:</p><ul><li><p class="paragraph">UI automatically updates when state changes</p></li><li><p class="paragraph">Testable state transformations</p></li><li><p class="paragraph">No callback hell</p></li><li><p class="paragraph">Easy to implement undo/redo</p></li><li><p class="paragraph">Easy to implement multiplayer</p></li></ul><h2 class="">Configuration</h2><p class="paragraph">Reads from <code class="lang-kotlin">reversi-app.properties</code>:</p><ul><li><p class="paragraph">Theme settings (colors, fonts)</p></li><li><p class="paragraph">Animation speeds</p></li><li><p class="paragraph">Board display options</p></li><li><p class="paragraph">Default game parameters</p></li><li><p class="paragraph">Audio settings</p></li><li><p class="paragraph">Accessibility options</p></li></ul><h2 class="">Integration</h2><p class="paragraph">The app integrates with:</p><ul><li><p class="paragraph"><strong>reversi-core</strong> — Game logic and types</p></li><li><p class="paragraph"><strong>reversi-storage</strong> — Save/load functionality</p></li><li><p class="paragraph"><strong>reversi-utils</strong> — Configuration and logging</p></li><li><p class="paragraph"><strong>Jetpack Compose</strong> — UI framework</p></li><li><p class="paragraph"><strong>Kotlin Coroutines</strong> — Async operations</p></li></ul><h2 class="">Advantages Over CLI</h2><ul><li><p class="paragraph"><strong>Visual Board</strong> — Much easier to understand board state</p></li><li><p class="paragraph"><strong>Click Interface</strong> — Faster than typing coordinates</p></li><li><p class="paragraph"><strong>Live Feedback</strong> — Immediate visual response</p></li><li><p class="paragraph"><strong>Animation</strong> — Shows piece captures visually</p></li><li><p class="paragraph"><strong>Save/Load UI</strong> — Browse saved games</p></li><li><p class="paragraph"><strong>Multi-player Friendly</strong> — Can rotate device for hotseat play</p></li><li><p class="paragraph"><strong>Modern Look</strong> — Attractive, native desktop appearance</p></li></ul><h2 class="">Design Principles</h2><ol><li><p class="paragraph"><strong>Separation of Concerns</strong> — UI, logic, and persistence are separate</p></li><li><p class="paragraph"><strong>Immutability</strong> — State is immutable; changes create new objects</p></li><li><p class="paragraph"><strong>Reactivity</strong> — UI automatically responds to state changes</p></li><li><p class="paragraph"><strong>Testability</strong> — ViewModels can be tested without UI</p></li><li><p class="paragraph"><strong>Responsiveness</strong> — Heavy operations run in background coroutines</p></li><li><p class="paragraph"><strong>Reusability</strong> — Components can be used in multiple screens</p></li><li><p class="paragraph"><strong>Composability</strong> — Large screens built from small components</p></li></ol><h2 class="">Testing</h2><p class="paragraph"><strong>Unit Tests:</strong></p><ul><li><p class="paragraph">ViewModel logic without UI</p></li><li><p class="paragraph">State transitions</p></li><li><p class="paragraph">Move validation</p></li><li><p class="paragraph">Configuration loading</p></li></ul><p class="paragraph"><strong>UI Tests (Future):</strong></p><ul><li><p class="paragraph">Component rendering</p></li><li><p class="paragraph">User interaction</p></li><li><p class="paragraph">Visual regression</p></li><li><p class="paragraph">Accessibility</p></li></ul><p class="paragraph"><strong>Integration Tests:</strong></p><ul><li><p class="paragraph">Full game flow</p></li><li><p class="paragraph">Save/load round-trips</p></li><li><p class="paragraph">Config persistence</p></li></ul><h2 class="">Future Enhancements</h2><p class="paragraph">Potential improvements:</p><ul><li><p class="paragraph">Network multiplayer (play against remote opponent)</p></li><li><p class="paragraph">AI opponent using minimax or neural network</p></li><li><p class="paragraph">Game statistics and analytics</p></li><li><p class="paragraph">Elo rating system</p></li><li><p class="paragraph">Game replay and analysis tools</p></li><li><p class="paragraph">Custom board sizes</p></li><li><p class="paragraph">Themes and customization</p></li><li><p class="paragraph">Sound effects and music</p></li><li><p class="paragraph">Undo/redo during gameplay</p></li><li><p class="paragraph">Move suggestions/hints</p></li></ul></div></div>
+  </div>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="-1273256952%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app" id="-1273256952%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app/index.html">pt.isel.reversi.app</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1273256952%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-1273256952%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app" id="-1273256952%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Hosts the main application entry point and desktop GUI components. The application integrates with the core game logic and storage system while providing a rich user interface for playing Reversi.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-387147141%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.app" id="-387147141%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.app/index.html">pt.isel.reversi.app.app</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-387147141%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-387147141%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.app" id="-387147141%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Contains the core application infrastructure, theme management, and global state management for the Reversi desktop app.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="1983184670%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.app.state" id="1983184670%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.app.state/index.html">pt.isel.reversi.app.app.state</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1983184670%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="327235630%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.exceptions" id="327235630%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.exceptions/index.html">pt.isel.reversi.app.exceptions</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="327235630%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="327235630%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.exceptions" id="327235630%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Application-specific exceptions for handling GUI-related errors and user-facing error states.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="1587025822%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.gameAudio" id="1587025822%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.gameAudio/index.html">pt.isel.reversi.app.gameAudio</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1587025822%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="1587025822%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.gameAudio" id="1587025822%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Audio system management for game sound effects and background music.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-812929954%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages" id="-812929954%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages/index.html">pt.isel.reversi.app.pages</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-812929954%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-812929954%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages" id="-812929954%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Contains all UI pages/screens of the application, their view models, and page navigation logic.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-505439444%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.aboutPage" id="-505439444%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.aboutPage/index.html">pt.isel.reversi.app.pages.aboutPage</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-505439444%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-505439444%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.aboutPage" id="-505439444%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">About page with application information, credits, and version details.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="1395699718%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.game" id="1395699718%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.game/index.html">pt.isel.reversi.app.pages.game</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1395699718%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="1395699718%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.game" id="1395699718%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Active game screen with interactive board, move controls, and real-time game state display.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-913382263%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.game.utils" id="-913382263%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.game.utils/index.html">pt.isel.reversi.app.pages.game.utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-913382263%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-86002234%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby" id="-86002234%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.lobby/index.html">pt.isel.reversi.app.pages.lobby</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-86002234%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-86002234%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby" id="-86002234%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Lobby interface for browsing, joining, and managing multiplayer games.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="908801252%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby.lobbyViews" id="908801252%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.lobby.lobbyViews/index.html">pt.isel.reversi.app.pages.lobby.lobbyViews</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="908801252%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-174809780%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel" id="-174809780%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel/index.html">pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-174809780%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1311092262%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard" id="-1311092262%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/index.html">pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1311092262%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="1904297295%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils" id="1904297295%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils/index.html">pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1904297295%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1623340313%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.lobby.lobbyViews.utils" id="-1623340313%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.lobby.lobbyViews.utils/index.html">pt.isel.reversi.app.pages.lobby.lobbyViews.utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1623340313%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-2107745485%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.menu" id="-2107745485%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.menu/index.html">pt.isel.reversi.app.pages.menu</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2107745485%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-2107745485%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.menu" id="-2107745485%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Main menu screen where users can start a new game, load saved games, access settings, or exit the application.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-1478076655%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.newGamePage" id="-1478076655%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.newGamePage/index.html">pt.isel.reversi.app.pages.newGamePage</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1478076655%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-1478076655%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.newGamePage" id="-1478076655%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Screen for creating a new game with player configuration options.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-1195613338%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.settingsPage" id="-1195613338%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.settingsPage/index.html">pt.isel.reversi.app.pages.settingsPage</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1195613338%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-1195613338%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.settingsPage" id="-1195613338%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Settings screen for configuring application preferences and game options.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="512800826%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.settingsPage.sections" id="512800826%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.settingsPage.sections/index.html">pt.isel.reversi.app.pages.settingsPage.sections</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="512800826%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+<a data-name="-1202334974%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.winnerPage" id="-1202334974%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.pages.winnerPage/index.html">pt.isel.reversi.app.pages.winnerPage</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1202334974%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-1202334974%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.pages.winnerPage" id="-1202334974%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">End game screen displaying final results, winner announcement, and options to play again.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="759123723%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.utils" id="759123723%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.app.utils/index.html">pt.isel.reversi.app.utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="759123723%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="759123723%2FPackages%2F-781564056" anchor-label="pt.isel.reversi.app.utils" id="759123723%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+            <p class="paragraph">Utility functions and helper components for the app UI layer.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="1060249274%2FPackages%2F-781564056" anchor-label="reversi.reversi_app.generated.resources" id="1060249274%2FPackages%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="reversi.reversi_app.generated.resources/index.html">reversi.reversi_app.generated.resources</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1060249274%2FPackages%2F-781564056"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

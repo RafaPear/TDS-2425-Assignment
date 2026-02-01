@@ -1,0 +1,178 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>reversi-utils</title>
+<link href="../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../scripts/sourceset_dependencies.js" async></script>
+<link href="../styles/style.css" rel="Stylesheet">
+<link href="../styles/main.css" rel="Stylesheet">
+<link href="../styles/prism.css" rel="Stylesheet">
+<link href="../styles/logo-styles.css" rel="Stylesheet">
+<link href="../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../scripts/main.js" defer></script>
+<script type="text/javascript" src="../scripts/prism.js" async></script>
+<script type="text/javascript" src="../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-utils/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-utils/main" data-filter=":reversi-utils/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" id="content" pageids="reversi-utils::////PointingToDeclaration//1186424312">
+  <div class="breadcrumbs"></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>reversi-utils</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><h2 class="">Overview</h2><p class="paragraph">Provides reusable utilities and shared infrastructure used by all other Reversi modules (core, cli, storage, app). This module contains configuration management, environment constants, logging setup, and helper functions that promote code reuse and consistency across the project.</p><p class="paragraph">The module is intentionally minimal to avoid dependencies that would couple other modules. It provides only the essential cross-cutting concerns that multiple modules need.</p><p class="paragraph"><img alt="Reversi App Screenshot" src="../images/UML_Structure_utils.png"></p><h2 class="">Architecture</h2><p class="paragraph">The module is organized into:</p><ul><li><p class="paragraph"><strong>Configuration Management</strong> — ConfigLoader and Config interface</p></li><li><p class="paragraph"><strong>Environment Constants</strong> — Centralized path and folder definitions</p></li><li><p class="paragraph"><strong>Logging Infrastructure</strong> — Global logger setup</p></li><li><p class="paragraph"><strong>Audio Utilities</strong> — Sound system for game feedback (optional)</p></li><li><p class="paragraph"><strong>Helper Functions</strong> — Extension functions and utilities</p></li></ul><h2 class="">Configuration Management</h2><h3 class="">ConfigLoader<u : config></u></h3><p class="paragraph"><u : config>A generic configuration loader that:</u></p><ol><li><p class="paragraph"><u : config>Reads Java properties files</u></p></li><li><p class="paragraph"><u : config>Auto-creates missing files with default values</u></p></li><li><p class="paragraph"><u : config>Adds missing keys on each run</u></p></li><li><p class="paragraph"><u : config>Converts properties to typed Config objects</u></p></li><li><p class="paragraph"><u : config>Persists configuration back to disk</u></p></li></ol><p class="paragraph"><u : config><strong>Process:</strong></u></p><ul><li><p class="paragraph"><u : config>On first run: Creates file and writes default values from <code class="lang-kotlin">getDefaultConfigFileEntries()</code></u></p></li><li><p class="paragraph"><u : config>On subsequent runs: Reads file, adds any missing keys with defaults, updates file</u></p></li><li><p class="paragraph"><u : config>Returns a fully populated Config object</u></p></li></ul><p class="paragraph"><u : config><strong>Example:</strong></u></p><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">val loader = ConfigLoader("config/myapp.properties") { props -&gt;<br>    MyConfig(props)<br>}<br>val config = loader.loadConfig()</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><h3 class=""><u : config>Config Interface</u></h3><p class="paragraph"><u : config>Implemented by modules to define their configuration:</u></p><ul><li><p class="paragraph"><u : config><code class="lang-kotlin">map: Map&lt;String, String&gt;</code> — All configuration properties</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">getDefaultConfigFileEntries(): Map&lt;String, String&gt;</code> — Default values to use when keys are missing</u></p></li></ul><p class="paragraph"><u : config><strong>Examples:</strong></u></p><ul><li><p class="paragraph"><u : config><code class="lang-kotlin">CoreConfig</code> (reversi-core) — Game logic configuration</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">CliConfig</code> (reversi-cli) — CLI appearance (colors, prompt)</u></p></li></ul><p class="paragraph"><u : config>Each module can independently define and manage its configuration.</u></p><h2 class=""><u : config>Environment Constants</u></h2><h3 class=""><u : config>Directory Structure</u></h3><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">data/<br>├── config/<br>│   ├── reversi-core.properties<br>│   ├── reversi-cli.properties<br>│   └── reversi-app.properties<br>├── crash/<br>│   └── REVERSI-CRASH-{date}.log<br>├── logs/<br>│   └── reversi-app-{date}.log<br>└── saves/<br>    ├── game1.txt<br>    ├── game2.txt<br>    └── ...</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><h3 class=""><u : config>Constants</u></h3><ul><li><p class="paragraph"><u : config><code class="lang-kotlin">BASE_FOLDER = "data"</code> — Root directory for application data</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">CONFIG_FOLDER = "data/config"</code> — All configuration files</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">CORE_CONFIG_FILE = "data/config/reversi-core.properties"</code> — Core configuration</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">CLI_CONFIG_FILE = "data/config/reversi-cli.properties"</code> — CLI configuration</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">APP_CONFIG_FILE = "data/config/reversi-app.properties"</code> — App configuration</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">BASE_LOG_FILE_NAME = "logs/reversi-app"</code> — Log file prefix</u></p></li></ul><p class="paragraph"><u : config>These centralized constants prevent hardcoding paths throughout the codebase.</u></p><h2 class=""><u : config>Logging Infrastructure</u></h2><h3 class=""><u : config>Global Logger</u></h3><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">val LOGGER: Logger = Logger.getGlobal().apply {<br>    useParentHandlers = false<br>    level = Level.ALL<br>    addHandler(StdOutConsoleHandler().apply {<br>        level = Level.ALL<br>        formatter = PlainFormatter()<br>    })<br>}</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><p class="paragraph"><u : config><strong>Features:</strong></u></p><ul><li><p class="paragraph"><u : config>Configured with <code class="lang-kotlin">StdOutConsoleHandler</code> for console output</u></p></li><li><p class="paragraph"><u : config>Uses <code class="lang-kotlin">PlainFormatter</code> for simple, readable format</u></p></li><li><p class="paragraph"><u : config>All log levels are captured (Level.ALL)</u></p></li><li><p class="paragraph"><u : config>Used throughout the application for consistent logging</u></p></li></ul><p class="paragraph"><u : config><strong>Usage:</strong></u></p><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">LOGGER.info("Game started: $gameName")<br>LOGGER.warning("Invalid move attempted")<br>LOGGER.severe("Failed to load configuration")</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><h2 class=""><u : config>Logging Components</u></h2><h3 class=""><u : config>PlainFormatter</u></h3><p class="paragraph"><u : config>Formats log messages in plain text:</u></p><ul><li><p class="paragraph"><u : config>No complex metadata</u></p></li><li><p class="paragraph"><u : config>Human-readable timestamps</u></p></li><li><p class="paragraph"><u : config>Clear level indicators</u></p></li><li><p class="paragraph"><u : config>Compact output suitable for console</u></p></li></ul><h3 class=""><u : config>StdOutConsoleHandler</u></h3><p class="paragraph"><u : config>Outputs log records to standard output:</u></p><ul><li><p class="paragraph"><u : config>Writes to System.out</u></p></li><li><p class="paragraph"><u : config>Captures all levels from configured logger</u></p></li></ul><h2 class=""><u : config>Audio System (Optional)</u></h2><h3 class=""><u : config>AudioWrapper</u></h3><p class="paragraph"><u : config>Manages sound playback:</u></p><ul><li><p class="paragraph"><u : config>Loads audio files</u></p></li><li><p class="paragraph"><u : config>Controls volume</u></p></li><li><p class="paragraph"><u : config>Plays sounds during gameplay</u></p></li></ul><h3 class=""><u : config>AudioModifier</u></h3><p class="paragraph"><u : config>Modifies audio properties:</u></p><ul><li><p class="paragraph"><u : config>Pitch adjustment</u></p></li><li><p class="paragraph"><u : config>Volume control</u></p></li><li><p class="paragraph"><u : config>Playback speed</u></p></li></ul><h3 class=""><u : config>Audio Controls</u></h3><ul><li><p class="paragraph"><u : config><code class="lang-kotlin">BooleanControlWrapper</code> — On/off controls</u></p></li><li><p class="paragraph"><u : config><code class="lang-kotlin">FloatControlWrapper</code> — Continuous controls (volume, pitch)</u></p></li></ul><p class="paragraph"><u : config>These allow the application to provide audio feedback without forcing the feature on users.</u></p><h2 class=""><u : config>Helper Functions and Extensions</u></h2><h3 class=""><u : config>Utility Functions</u></h3><ul><li><p class="paragraph"><u : config><code class="lang-kotlin">makePathString()</code> — Constructs file paths with proper separators</u></p></li><li><p class="paragraph"><u : config>Extension functions for common operations</u></p></li><li><p class="paragraph"><u : config>String formatting utilities</u></p></li></ul><p class="paragraph"><u : config>These small helpers promote consistency and reduce boilerplate.</u></p><h2 class=""><u : config>Design Principles</u></h2><ol><li><p class="paragraph"><u : config><strong>Minimal Dependencies</strong> — Only essential cross-cutting concerns</u></p></li><li><p class="paragraph"><u : config><strong>No Dependency Cycles</strong> — Can be used without importing other modules</u></p></li><li><p class="paragraph"><u : config><strong>Convention Over Configuration</strong> — Sensible defaults for standard paths</u></p></li><li><p class="paragraph"><u : config><strong>Extensible</strong> — New modules can provide their own Config implementations</u></p></li><li><p class="paragraph"><u : config><strong>Separation of Concerns</strong> — Configuration, logging, and utilities are independent</u></p></li><li><p class="paragraph"><u : config><strong>Type Safety</strong> — Strongly typed Config implementations</u></p></li></ol><h2 class=""><u : config>Usage Patterns</u></h2><h3 class=""><u : config>Using Configuration in a Module</u></h3><ol><li><p class="paragraph"><u : config>Create Config implementation:</u></p></li></ol><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">class MyModuleConfig(override val map: Map&lt;String, String&gt;) : Config {<br>    val myValue = map["myKey"] ?: "default"<br>    <br>    override fun getDefaultConfigFileEntries() = mapOf(<br>        "myKey" to "default"<br>    )<br>}</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><ol><li><p class="paragraph"><u : config>Load configuration:</u></p></li></ol><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">val loader = ConfigLoader("data/config/mymodule.properties") { props -&gt;<br>    MyModuleConfig(props)<br>}<br>val config = loader.loadConfig()</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><h3 class=""><u : config>Logging from Any Module</u></h3><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">LOGGER.info("Something happened")<br>LOGGER.warning("Watch out!")<br>LOGGER.severe("Error occurred")</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><h3 class=""><u : config>Using Constants</u></h3><div class="sample-container"><pre><u : config><code class="block lang-kotlin" theme="idea">val configPath = File(CONFIG_FOLDER)<br>val logFile = File(BASE_LOG_FILE_NAME)</code></u></pre><u : config><span class="copy-tooltip"><div class="copy-popup-wrapper popup-to-left"><span class="copy-popup-icon"></span><span>Content copied to clipboard</span></div><span class="copy-icon"></span></span></u></div><h2 class=""><u : config>Integration</u></h2><p class="paragraph"><u : config>The utils module is used by:</u></p><ul><li><p class="paragraph"><u : config><strong>reversi-core</strong> — Configuration loading for game logic</u></p></li><li><p class="paragraph"><u : config><strong>reversi-cli</strong> — CLI configuration and logging</u></p></li><li><p class="paragraph"><u : config><strong>reversi-storage</strong> — Path constants and utilities</u></p></li><li><p class="paragraph"><u : config><strong>reversi-app</strong> — All utilities and configuration</u></p></li></ul><p class="paragraph"><u : config>The utils module has NO dependencies on other modules (except Kotlin stdlib), making it safe to use anywhere without creating circular dependencies.</u></p></div></div><u : config>
+  </u></div><u : config>
+  <h2 class="">Packages</h2>
+  <div class="table"><a data-name="-388880040%2FPackages%2F1186424312" anchor-label="pt.isel.reversi.utils" id="-388880040%2FPackages%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.utils/index.html">pt.isel.reversi.utils</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-388880040%2FPackages%2F1186424312"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="-388880040%2FPackages%2F1186424312" anchor-label="pt.isel.reversi.utils" id="-388880040%2FPackages%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+            <p class="paragraph">This package contains reusable utilities that support configuration handling, logging, and audio management. The central feature is a <code class="lang-kotlin">ConfigLoader</code> class that automates the creation and loading of configuration files in <code class="lang-kotlin">.properties</code> format, allowing each subsystem to define its own configuration model by implementing the <code class="lang-kotlin">Config</code> interface. This ensures that each module can provide default configuration values while still allowing users to override them through editable files.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="2120666944%2FPackages%2F1186424312" anchor-label="pt.isel.reversi.utils.audio" id="2120666944%2FPackages%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.utils.audio/index.html">pt.isel.reversi.utils.audio</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2120666944%2FPackages%2F1186424312"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div><span class="brief-comment"><a data-name="2120666944%2FPackages%2F1186424312" anchor-label="pt.isel.reversi.utils.audio" id="2120666944%2FPackages%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+            <p class="paragraph">Audio playback system providing sound effects and music management for the application. Supports loading, modifying, and playing audio files with various controls.</p>
+          </span></div>
+      </div>
+    </div>
+<a data-name="-403910616%2FPackages%2F1186424312" anchor-label="pt.isel.reversi.utils.audio.controls" id="-403910616%2FPackages%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+    <div class="table-row table-row_platform-tagged" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+      <div>
+        <div class="main-subrow ">
+          <div class=""><span class="inline-flex">
+              <div><a href="pt.isel.reversi.utils.audio.controls/index.html">pt.isel.reversi.utils.audio.controls</a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-403910616%2FPackages%2F1186424312"></span>
+                <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+              </span></span></div>
+          <div class="pull-right platform-tags--wrapper">
+            <div class="platform-tags no-gutters">
+              <div class="platform-tag jvm-like">jvm</div>
+            </div>
+          </div>
+        </div>
+        <div></div>
+      </div>
+    </div>
+  </div>
+</u></div><u : config>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </u></div><u : config>
+    </u></div><u : config>
+</u></div><u : config>
+</u></body>
+</html>

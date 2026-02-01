@@ -1,0 +1,1 @@
+sourceset_dependencies = '{":reversi-storage/main":[],":reversi-utils/main":[],":reversi-cli/main":[],":reversi-app/main":[],":reversi-core/main":[]}'

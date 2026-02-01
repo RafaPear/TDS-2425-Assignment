@@ -1,0 +1,960 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>ReversiScope</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-app/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-app/main" data-filter=":reversi-app/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="reversi-app::pt.isel.reversi.app.app.state/ReversiScope///PointingToDeclaration//-781564056">
+  <div class="breadcrumbs"><a href="../../index.html">reversi-app</a><span class="delimiter">/</span><a href="../index.html">pt.isel.reversi.app.app.state</a><span class="delimiter">/</span><span class="current">ReversiScope</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Reversi</span><wbr><span><span>Scope</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">ReversiScope</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>appState<span class="token operator">: </span><a href="../-app-state-impl/index.html">AppStateImpl</a></span></span><span class="token punctuation">)</span></div><p class="paragraph">Receiver scope class providing composition helper functions and access to app state. Used as a receiver for composable lambdas to provide themed UI components.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button><button class="section-tab" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION,EXTENSION_PROPERTY,EXTENSION_FUNCTION">Members &amp; Extensions</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="-1799675169%2FConstructors%2F-781564056" anchor-label="ReversiScope" id="-1799675169%2FConstructors%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-reversi-scope.html"><span>Reversi</span><wbr><span><span>Scope</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1799675169%2FConstructors%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">appState<span class="token operator">: </span><a href="../-app-state-impl/index.html">AppStateImpl</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="209243487%2FProperties%2F-781564056" anchor-label="appState" id="209243487%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="app-state.html"><span>app</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="209243487%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="app-state.html">appState</a><span class="token operator">: </span><a href="../-app-state-impl/index.html">AppStateImpl</a></div><div class="brief "><p class="paragraph">The current application state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="EXTENSION_FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="56165527%2FFunctions%2F-781564056" anchor-label="AboutPage" id="56165527%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.aboutPage/-about-page.html"><span>About</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="56165527%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.aboutPage/-about-page.html"><span class="token function">AboutPage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.aboutPage/-about-page-view-model/index.html">AboutPageViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Simple about page presenting project and authorship information.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-214899685%2FFunctions%2F-781564056" anchor-label="AnimatedBackground" id="-214899685%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.menu/-animated-background.html"><span>Animated</span><wbr><span><span>Background</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-214899685%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.menu/-animated-background.html"><span class="token function">AnimatedBackground</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1789376888%2FFunctions%2F-781564056" anchor-label="AppearanceSection" id="-1789376888%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-appearance-section.html"><span>Appearance</span><wbr><span><span>Section</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1789376888%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-appearance-section.html"><span class="token function">AppearanceSection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">theme<span class="token operator">: </span><a href="../../pt.isel.reversi.app.app/-app-theme/index.html">AppTheme</a><span class="token punctuation">, </span></span><span class="parameter ">appTheme<span class="token operator">: </span><a href="../../pt.isel.reversi.app.app/-app-theme/index.html">AppTheme</a><span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../pt.isel.reversi.app.app/-app-theme/index.html">AppTheme</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2125847931%2FFunctions%2F-781564056" anchor-label="ApplyButton" id="-2125847931%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage/-apply-button.html"><span>Apply</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2125847931%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage/-apply-button.html"><span class="token function">ApplyButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1006024962%2FFunctions%2F-781564056" anchor-label="AudioSection" id="-1006024962%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-audio-section.html"><span>Audio</span><wbr><span><span>Section</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1006024962%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-audio-section.html"><span class="token function">AudioSection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">currentVol<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">, </span></span><span class="parameter ">onVolumeChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-243637424%2FFunctions%2F-781564056" anchor-label="cellView" id="-243637424%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/cell-view.html"><span>cell</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-243637424%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/cell-view.html"><span class="token function">cellView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coordinate<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token punctuation">, </span></span><span class="parameter ">piece<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-piece/index.html">Piece</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">radiusModifier<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">1.0f</span><span class="token punctuation">, </span></span><span class="parameter ">alphaModifier<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-float/index.html">Float</a><span class="token operator"> = </span><span class="token constant">1.0f</span><span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span>coordinate<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-281061922%2FFunctions%2F-781564056" anchor-label="ConfirmationPopUp" id="-281061922%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-confirmation-pop-up.html"><span>Confirmation</span><wbr><span>Pop</span><wbr><span><span>Up</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-281061922%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-confirmation-pop-up.html"><span class="token function">ConfirmationPopUp</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">onConfirmText<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"Confirm"</span><span class="token punctuation">, </span></span><span class="parameter ">onDismissText<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"Cancel"</span><span class="token punctuation">, </span></span><span class="parameter ">onConfirm<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">onDismiss<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Modal popup for confirming user actions.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="750228461%2FFunctions%2F-781564056" anchor-label="CoreConfigSection" id="750228461%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-core-config-section.html"><span>Core</span><wbr><span>Config</span><wbr><span><span>Section</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="750228461%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-core-config-section.html"><span class="token function">CoreConfigSection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">coreConfig<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core/-core-config/index.html">CoreConfig</a><span class="token punctuation">, </span></span><span class="parameter ">onConfigChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../../reversi-core/pt.isel.reversi.core/-core-config/index.html">CoreConfig</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1425471262%2FFunctions%2F-781564056" anchor-label="CriticalMessageDialog" id="1425471262%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.exceptions/-critical-message-dialog.html"><span>Critical</span><wbr><span>Message</span><wbr><span><span>Dialog</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1425471262%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.exceptions/-critical-message-dialog.html"><span class="token function">CriticalMessageDialog</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-reversi-exception/index.html">ReversiException</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">setError<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-error-type/index.html">ErrorType</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="99849553%2FFunctions%2F-781564056" anchor-label="DrawBoard" id="99849553%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-draw-board.html"><span>Draw</span><wbr><span><span>Board</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="99849553%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-draw-board.html"><span class="token function">DrawBoard</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">gameState<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-game-state/index.html">GameState</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">getAvailablePlays<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">onCellClick<span class="token operator">: </span><span class="token punctuation">(</span>coordinate<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Composable rendering the interactive Reversi game board. Displays the grid, pieces, and available moves (if target mode is enabled). Handles user clicks for piece placement with click blocking during animations.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2024622196%2FFunctions%2F-781564056" anchor-label="DrawPlayerInfo" id="2024622196%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.winnerPage/-draw-player-info.html"><span>Draw</span><wbr><span>Player</span><wbr><span><span>Info</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2024622196%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.winnerPage/-draw-player-info.html"><span class="token function">DrawPlayerInfo</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-player/index.html">Player</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1643517996%2FFunctions%2F-781564056" anchor-label="Empty" id="-1643517996%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews/-empty.html"><span><span>Empty</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1643517996%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews/-empty.html"><span class="token function">Empty</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">buttonRefresh<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Composable displaying an empty state for the lobby when no saved games are available. Shows a game icon and prompts the user to create a new game.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-411839209%2FFunctions%2F-781564056" anchor-label="ErrorMessage" id="-411839209%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.exceptions/-error-message.html"><span>Error</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-411839209%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.exceptions/-error-message.html"><span class="token function">ErrorMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-reversi-exception/index.html">ReversiException</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">setError<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-error-type/index.html">ErrorType</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Composable that displays an error message based on the error type.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="863920879%2FFunctions%2F-781564056" anchor-label="ErrorMessageDialog" id="863920879%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.exceptions/-error-message-dialog.html"><span>Error</span><wbr><span>Message</span><wbr><span><span>Dialog</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="863920879%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.exceptions/-error-message-dialog.html"><span class="token function">ErrorMessageDialog</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-reversi-exception/index.html">ReversiException</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">setError<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-error-type/index.html">ErrorType</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1318193808%2FFunctions%2F-781564056" anchor-label="GameCard" id="-1318193808%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-game-card.html"><span>Game</span><wbr><span><span>Card</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1318193808%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-game-card.html"><span class="token function">GameCard</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">game<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.lobby/-lobby-loaded-state/index.html">LobbyLoadedState</a><span class="token punctuation">, </span></span><span class="parameter ">enabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">cardData<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-card-status/index.html">CardStatus</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1681777988%2FFunctions%2F-781564056" anchor-label="GamePage" id="-1681777988%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game/-game-page.html"><span>Game</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1681777988%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game/-game-page.html"><span class="token function">GamePage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.game/-game-page-view-model/index.html">GamePageViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Main game page displaying the Reversi board, player scores, and game controls. Manages game music playback and periodic game state refreshes for multiplayer games.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1799563048%2FFunctions%2F-781564056" anchor-label="GamePageView" id="-1799563048%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game/-game-page-view.html"><span>Game</span><wbr><span>Page</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1799563048%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game/-game-page-view.html"><span class="token function">GamePageView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">game<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">getAvailablePlays<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">onCellClick<span class="token operator">: </span><span class="token punctuation">(</span>coordinate<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">setTargetMode<span class="token operator">: </span><span class="token punctuation">(</span>target<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">pass<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Main game view composable displaying the board and player information side-by-side. Combines the game board on the left with player scores and controls on the right.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1824040923%2FFunctions%2F-781564056" anchor-label="GameSection" id="1824040923%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-game-section.html"><span>Game</span><wbr><span><span>Section</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1824040923%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage.sections/-game-section.html"><span class="token function">GameSection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">playerName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">onValueChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="588483819%2FFunctions%2F-781564056" anchor-label="getCurrentState" id="588483819%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../get-current-state.html"><span>get</span><wbr><span>Current</span><wbr><span><span>State</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="588483819%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../get-current-state.html"><span class="token function">getCurrentState</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-app-state-impl/index.html">AppStateImpl</a></div><div class="brief "><p class="paragraph">Retrieves the current application state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1513459982%2FFunctions%2F-781564056" anchor-label="getTheme" id="1513459982%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../get-theme.html"><span>get</span><wbr><span><span>Theme</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1513459982%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../get-theme.html"><span class="token function">getTheme</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../../pt.isel.reversi.app.app/-app-theme/index.html">AppTheme</a></div><div class="brief "><p class="paragraph">Retrieves the current application theme.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-932978465%2FFunctions%2F-781564056" anchor-label="Grid" id="-932978465%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-grid.html"><span><span>Grid</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-932978465%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-grid.html"><span class="token function">Grid</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">gameState<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-game-state/index.html">GameState</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">getAvailablePlays<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">onCellClick<span class="token operator">: </span><span class="token punctuation">(</span>coordinate<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-coordinate/index.html">Coordinate</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Renders the board grid with cells, pieces, and animated indicators for valid moves. Supports animation feedback for available moves in target mode.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-387472730%2FFunctions%2F-781564056" anchor-label="HeaderBadge" id="-387472730%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-header-badge.html"><span>Header</span><wbr><span><span>Badge</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-387472730%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-header-badge.html"><span class="token function">HeaderBadge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">statusText<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">statusColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token punctuation">, </span></span><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1595280870%2FFunctions%2F-781564056" anchor-label="Loading" id="-1595280870%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.utils/-loading.html"><span><span>Loading</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1595280870%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.utils/-loading.html"><span class="token function">Loading</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Loading overlay composable displaying a circular progress indicator with loading message. Covers the entire screen with a semi-transparent overlay and prevents user interaction.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1780029253%2FFunctions%2F-781564056" anchor-label="LobbyMenu" id="-1780029253%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby/-lobby-menu.html"><span>Lobby</span><wbr><span><span>Menu</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1780029253%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby/-lobby-menu.html"><span class="token function">LobbyMenu</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.lobby/-lobby-view-model/index.html">LobbyViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Lobby menu screen for browsing and joining saved multiplayer games. Displays available games in a carousel and handles game selection and joining.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="130826611%2FFunctions%2F-781564056" anchor-label="MainMenu" id="130826611%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.menu/-main-menu.html"><span>Main</span><wbr><span><span>Menu</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="130826611%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.menu/-main-menu.html"><span class="token function">MainMenu</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.menu/-main-menu-view-model/index.html">MainMenuViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">isTestMode<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Main menu screen showing navigation options. Handles menu audio playback and navigation callbacks to other pages.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-639271465%2FFunctions%2F-781564056" anchor-label="MissingPlayerRow" id="-639271465%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-missing-player-row.html"><span>Missing</span><wbr><span>Player</span><wbr><span><span>Row</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-639271465%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-missing-player-row.html"><span class="token function">MissingPlayerRow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-piece-type/index.html">PieceType</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1960578981%2FFunctions%2F-781564056" anchor-label="NewGamePage" id="-1960578981%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.newGamePage/-new-game-page.html"><span>New</span><wbr><span>Game</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1960578981%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.newGamePage/-new-game-page.html"><span class="token function">NewGamePage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.newGamePage/-new-game-view-model/index.html">NewGameViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">playerNameChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">New game page for creating a local game with piece selection. Allows the user to choose their piece color and start a new game.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1550796951%2FFunctions%2F-781564056" anchor-label="NewGamePageView" id="1550796951%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.newGamePage/-new-game-page-view.html"><span>New</span><wbr><span>Game</span><wbr><span>Page</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1550796951%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.newGamePage/-new-game-page-view.html"><span class="token function">NewGamePageView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../../reversi-core/pt.isel.reversi.core.game/-game/index.html">Game</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Shared UI for new game page with piece selection and game initiation. Provides input fields for game name, player name, board size, and a dropdown menu for piece selection.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-675122078%2FFunctions%2F-781564056" anchor-label="PageIndicators" id="-675122078%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils/-page-indicators.html"><span>Page</span><wbr><span><span>Indicators</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-675122078%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils/-page-indicators.html"><span class="token function">PageIndicators</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">total<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">current<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-371817654%2FFunctions%2F-781564056" anchor-label="PassButton" id="-371817654%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-pass-button.html"><span>Pass</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-371817654%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-pass-button.html"><span class="token function">PassButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">canPass<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Button to pass the current player's turn.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1586049586%2FFunctions%2F-781564056" anchor-label="PlayerNamesInGameBadge" id="1586049586%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-player-names-in-game-badge.html"><span>Player</span><wbr><span>Names</span><wbr><span>In</span><wbr><span>Game</span><wbr><span><span>Badge</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1586049586%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-player-names-in-game-badge.html"><span class="token function">PlayerNamesInGameBadge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">players<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-match-players/index.html">MatchPlayers</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2111364864%2FFunctions%2F-781564056" anchor-label="PlayerResultColumn" id="-2111364864%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.winnerPage/-player-result-column.html"><span>Player</span><wbr><span>Result</span><wbr><span><span>Column</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2111364864%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.winnerPage/-player-result-column.html"><span class="token function">PlayerResultColumn</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-player/index.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">isWinner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1782664029%2FFunctions%2F-781564056" anchor-label="PlayerScoreRow" id="-1782664029%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-player-score-row.html"><span>Player</span><wbr><span>Score</span><wbr><span><span>Row</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1782664029%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-player-score-row.html"><span class="token function">PlayerScoreRow</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">player<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-player/index.html">Player</a><span class="token punctuation">, </span></span><span class="parameter ">points<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">isTurn<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">isWinner<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="94819049%2FFunctions%2F-781564056" anchor-label="PopupPickAPiece" id="94819049%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.utils/-popup-pick-a-piece.html"><span>Popup</span><wbr><span>Pick</span><wbr><span><span>APiece</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="94819049%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.utils/-popup-pick-a-piece.html"><span class="token function">PopupPickAPiece</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">pieces<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../../../reversi-core/pt.isel.reversi.core.board/-piece-type/index.html">PieceType</a><span class="token operator">&gt;</span><span class="token punctuation">, </span></span><span class="parameter ">onPick<span class="token operator">: </span><span class="token punctuation">(</span><a href="../../../reversi-core/pt.isel.reversi.core.board/-piece-type/index.html">PieceType</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">onDismiss<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Modal popup for selecting a piece color before joining a multiplayer game. Displays available pieces as interactive circular buttons with visual feedback.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-289193704%2FFunctions%2F-781564056" anchor-label="PreviousPage" id="-289193704%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.utils/-previous-page.html"><span>Previous</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-289193704%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.utils/-previous-page.html"><span class="token function">PreviousPage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">onBack<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Back navigation button with hover animation and scaling effects. Includes smooth transitions for scale and offset when hovering.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1680387958%2FFunctions%2F-781564056" anchor-label="ReversiButton" id="-1680387958%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-reversi-button.html"><span>Reversi</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1680387958%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-reversi-button.html"><span class="token function">ReversiButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">enabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">shape<span class="token operator">: </span><span data-unresolved-link="androidx.compose.foundation.shape/RoundedCornerShape///PointingToDeclaration/">RoundedCornerShape</span><span class="token operator"> = </span>RoundedCornerShape(20.dp)<span class="token punctuation">, </span></span><span class="parameter ">border<span class="token operator">: </span><span data-unresolved-link="androidx.compose.foundation/BorderStroke///PointingToDeclaration/">BorderStroke</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Themed button component using the application's primary color. Supports custom shapes, borders, and disabled state styling.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-609418447%2FFunctions%2F-781564056" anchor-label="ReversiCheckbox" id="-609418447%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-reversi-checkbox.html"><span>Reversi</span><wbr><span><span>Checkbox</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-609418447%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-reversi-checkbox.html"><span class="token function">ReversiCheckbox</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">checked<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">onCheckedChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">enabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Themed checkbox component following the application's design system.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1235124266%2FFunctions%2F-781564056" anchor-label="ReversiDropDownMenu" id="-1235124266%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-reversi-drop-down-menu.html"><span>Reversi</span><wbr><span>Drop</span><wbr><span>Down</span><wbr><span><span>Menu</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1235124266%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-reversi-drop-down-menu.html"><span class="token function">ReversiDropDownMenu</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">expanded<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">onDismissRequest<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">content<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Themed dropdown menu with application color scheme. Provides a container for dropdown menu items with consistent styling.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-441369200%2FFunctions%2F-781564056" anchor-label="ReversiDropdownMenuItem" id="-441369200%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-reversi-dropdown-menu-item.html"><span>Reversi</span><wbr><span>Dropdown</span><wbr><span>Menu</span><wbr><span><span>Item</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-441369200%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-reversi-dropdown-menu-item.html"><span class="token function">ReversiDropdownMenuItem</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">enabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Themed dropdown menu item for use within ReversiDropDownMenu. Provides consistent styling for menu options.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1454270824%2FFunctions%2F-781564056" anchor-label="ReversiText" id="1454270824%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-reversi-text.html"><span>Reversi</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1454270824%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-reversi-text.html"><span class="token function">ReversiText</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>getTheme().textColor<span class="token punctuation">, </span></span><span class="parameter ">autoSize<span class="token operator">: </span><span data-unresolved-link="androidx.compose.foundation.text/TextAutoSize///PointingToDeclaration/">TextAutoSize</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">fontSize<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.unit/TextUnit///PointingToDeclaration/">TextUnit</span><span class="token operator"> = </span>TextUnit.Unspecified<span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">fontWeight<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.text.font/FontWeight///PointingToDeclaration/">FontWeight</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">maxLines<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token operator"> = </span><span class="token constant">1</span><span class="token punctuation">, </span></span><span class="parameter ">softWrap<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">fontStyle<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.text.font/FontStyle///PointingToDeclaration/">FontStyle</span><span class="token operator"> = </span>FontStyle.Normal<span class="token punctuation">, </span></span><span class="parameter ">textAlign<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.text.style/TextAlign///PointingToDeclaration/">TextAlign</span><span class="token operator"> = </span>TextAlign.Start<span class="token punctuation">, </span></span><span class="parameter ">overflow<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.text.style/TextOverflow///PointingToDeclaration/">TextOverflow</span><span class="token operator"> = </span>TextOverflow.Ellipsis</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Themed text composable following the application's color scheme. Supports auto-sizing and various text styling options.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1994851712%2FFunctions%2F-781564056" anchor-label="ReversiTextField" id="-1994851712%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../-reversi-text-field.html"><span>Reversi</span><wbr><span>Text</span><wbr><span><span>Field</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1994851712%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../-reversi-text-field.html"><span class="token function">ReversiTextField</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">""</span><span class="token punctuation">, </span></span><span class="parameter ">onValueChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">placeholder<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">label<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">singleLine<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">onDone<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token operator"> = </span>{}<span class="token punctuation">, </span></span><span class="parameter ">enabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">true</span></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Themed text input field following the application's design system. Supports placeholder, label, and single/multi-line modes.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-122120748%2FFunctions%2F-781564056" anchor-label="ScaffoldView" id="-122120748%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app/-scaffold-view.html"><span>Scaffold</span><wbr><span><span>View</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-122120748%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app/-scaffold-view.html"><span class="token function">ScaffoldView</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">setError<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-error-type/index.html">ErrorType</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">backgroundTopBar<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color.Transparent<span class="token punctuation">, </span></span><span class="parameter ">error<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-reversi-exception/index.html">ReversiException</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">isLoading<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span><span class="token punctuation">, </span></span><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">""</span><span class="token punctuation">, </span></span><span class="parameter ">loadingModifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">previousPageContent<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a><span class="token punctuation">, </span></span><span class="parameter ">content<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><span class="token punctuation">(</span>paddingValues<span class="token operator">: </span><span data-unresolved-link="androidx.compose.foundation.layout/PaddingValues///PointingToDeclaration/">PaddingValues</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Main scaffold composable providing consistent layout structure for pages. Includes top app bar with title and navigation, content area, and error handling.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1430899107%2FFunctions%2F-781564056" anchor-label="ScoreItem" id="1430899107%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-score-item.html"><span>Score</span><wbr><span><span>Item</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1430899107%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-score-item.html"><span class="token function">ScoreItem</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">type<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-piece-type/index.html">PieceType</a><span class="token punctuation">, </span></span><span class="parameter ">score<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-int/index.html">Int</a><span class="token punctuation">, </span></span><span class="parameter ">pieceTestTag<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">scoreTestTag<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="579781079%2FFunctions%2F-781564056" anchor-label="ScorePanel" id="579781079%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-score-panel.html"><span>Score</span><wbr><span><span>Panel</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="579781079%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-score-panel.html"><span class="token function">ScorePanel</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">board<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.board/-board/index.html">Board</a><span class="token punctuation">, </span></span><span class="parameter ">scorePainelTestTag<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1374679254%2FFunctions%2F-781564056" anchor-label="Search" id="1374679254%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils/-search.html"><span><span>Search</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1374679254%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.utils/-search.html"><span class="token function">Search</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">search<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">onValueChange<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1510084809%2FFunctions%2F-781564056" anchor-label="SettingsPage" id="-1510084809%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage/-settings-page.html"><span>Settings</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1510084809%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage/-settings-page.html"><span class="token function">SettingsPage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.settingsPage/-settings-view-model/index.html">SettingsViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Settings page displaying configuration options including player name, storage, audio, and theme. Provides apply action to persist changes and navigate back.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1580686432%2FFunctions%2F-781564056" anchor-label="SettingsSection" id="-1580686432%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.settingsPage/-settings-section.html"><span>Settings</span><wbr><span><span>Section</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1580686432%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.settingsPage/-settings-section.html"><span class="token function">SettingsSection</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">title<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">content<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span data-unresolved-link="androidx.compose.foundation.layout/ColumnScope///PointingToDeclaration/">ColumnScope</span><span class="token punctuation">.</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Section header composable for organizing settings into logical groups. Displays a title and divider line with the section content below.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2048918999%2FFunctions%2F-781564056" anchor-label="StatusBadge" id="-2048918999%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-status-badge.html"><span>Status</span><wbr><span><span>Badge</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2048918999%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">private </span><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.lobby.lobbyViews.lobbyCarousel.drawCard/-status-badge.html"><span class="token function">StatusBadge</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">text<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">color<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2021175124%2FFunctions%2F-781564056" anchor-label="TargetButton" id="2021175124%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-target-button.html"><span>Target</span><wbr><span><span>Button</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2021175124%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-target-button.html"><span class="token function">TargetButton</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">target<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">freeze<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token punctuation">, </span></span><span class="parameter ">onClick<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Toggle button for target mode, showing available moves on the board. Displays "Target ON" or "Target OFF" based on the current state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-916172970%2FFunctions%2F-781564056" anchor-label="TextPlayersScore" id="-916172970%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.game.utils/-text-players-score.html"><span>Text</span><wbr><span>Players</span><wbr><span><span>Score</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-916172970%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.game.utils/-text-players-score.html"><span class="token function">TextPlayersScore</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">state<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.game-state/-game-state/index.html">GameState</a><span class="token operator">?</span></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="898466806%2FFunctions%2F-781564056" anchor-label="ToastMessage" id="898466806%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.exceptions/-toast-message.html"><span>Toast</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="898466806%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.exceptions/-toast-message.html"><span class="token function">ToastMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-reversi-exception/index.html">ReversiException</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">setError<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-error-type/index.html">ErrorType</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Composable that shows a toast message for errors. The message is displayed for 2 seconds before being cleared.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="811228843%2FFunctions%2F-781564056" anchor-label="WarningMessage" id="811228843%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.exceptions/-warning-message.html"><span>Warning</span><wbr><span><span>Message</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="811228843%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.exceptions/-warning-message.html"><span class="token function">WarningMessage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">error<span class="token operator">: </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-reversi-exception/index.html">ReversiException</a><span class="token operator">?</span><span class="token punctuation">, </span></span><span class="parameter ">modifier<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui/Modifier///PointingToDeclaration/">Modifier</span><span class="token operator"> = </span>Modifier<span class="token punctuation">, </span></span><span class="parameter ">setError<span class="token operator">: </span><span class="token punctuation">(</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-exception/index.html">Exception</a><span class="token operator">?</span><span class="token punctuation">, </span><a href="../../../reversi-core/pt.isel.reversi.core.exceptions/-error-type/index.html">ErrorType</a><span class="token operator">?</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1864490258%2FFunctions%2F-781564056" anchor-label="WinnerPage" id="-1864490258%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="../../pt.isel.reversi.app.pages.winnerPage/-winner-page.html"><span>Winner</span><wbr><span><span>Page</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1864490258%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span></div></div><span class="token keyword">fun </span><a href="index.html">ReversiScope</a><span class="token punctuation">.</span><a href="../../pt.isel.reversi.app.pages.winnerPage/-winner-page.html"><span class="token function">WinnerPage</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="../../pt.isel.reversi.app.pages.winnerPage/-winner-page-view-model/index.html">WinnerPageViewModel</a><span class="token punctuation">, </span></span><span class="parameter ">onLeave<span class="token operator">: </span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-unit/index.html">Unit</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

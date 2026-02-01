@@ -1,0 +1,795 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>DevTracker</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-utils/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-utils/main" data-filter=":reversi-utils/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="reversi-utils::pt.isel.reversi.utils/DevTracker///PointingToDeclaration//1186424312">
+  <div class="breadcrumbs"><a href="../../index.html">reversi-utils</a><span class="delimiter">/</span><a href="../index.html">pt.isel.reversi.utils</a><span class="delimiter">/</span><span class="current">DevTracker</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>Dev</span><wbr><span><span>Tracker</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="index.html">DevTracker</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">var </span>config<span class="token operator">: </span><a href="../-tracker-config/index.html">TrackerConfig</a><span class="token operator"> = </span>TrackerConfig()</span></span><span class="token punctuation">)</span></div><p class="paragraph">Development tracker for monitoring application behavior.</p><p class="paragraph">Provides comprehensive tracking of page entries, view model creations, recompositions, function calls, and custom events with thread-safe operations.</p><p class="paragraph">References:</p><ul><li><p class="paragraph"><a href="https://medium.com/@AlexanderObregon/javas-concurrenthashmap-compute-method-explained-ddec7cfd44f4">Java’s ConcurrentHashMap.compute() Method Explained</a></p></li><li><p class="paragraph"><a href="https://www.geeksforgeeks.org/java/concurrenthashmap-in-java/">ConcurrentHashMap in Java</a></p></li><li><p class="paragraph"><a href="https://stackoverflow.com/questions/1069066/how-can-i-get-the-current-stack-trace-in-java">How can I get the current stack trace in Java?</a></p></li></ul></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="867044697%2FConstructors%2F1186424312" anchor-label="DevTracker" id="867044697%2FConstructors%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-dev-tracker.html"><span>Dev</span><wbr><span><span>Tracker</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="867044697%2FConstructors%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">config<span class="token operator">: </span><a href="../-tracker-config/index.html">TrackerConfig</a><span class="token operator"> = </span>TrackerConfig()</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="1633839867%2FProperties%2F1186424312" anchor-label="autoSaveEnabled" id="1633839867%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="auto-save-enabled.html"><span>auto</span><wbr><span>Save</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1633839867%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-volatile/index.html"><span class="token annotation builtin">Volatile</span></a></div></div><span class="token keyword">private </span><span class="token keyword">var </span><a href="auto-save-enabled.html">autoSaveEnabled</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2021865654%2FProperties%2F1186424312" anchor-label="categorizedStats" id="2021865654%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="categorized-stats.html"><span>categorized</span><wbr><span><span>Stats</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2021865654%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="categorized-stats.html">categorizedStats</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html">ConcurrentHashMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="../-tracking-stats/index.html">TrackingStats</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1806553576%2FProperties%2F1186424312" anchor-label="config" id="1806553576%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="config.html"><span><span>config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1806553576%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">var </span><a href="config.html">config</a><span class="token operator">: </span><a href="../-tracker-config/index.html">TrackerConfig</a></div><div class="brief "><p class="paragraph">Configuration for the tracker.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-318362956%2FProperties%2F1186424312" anchor-label="dateFormatter" id="-318362956%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="date-formatter.html"><span>date</span><wbr><span><span>Formatter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-318362956%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="date-formatter.html">dateFormatter</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="966583281%2FProperties%2F1186424312" anchor-label="events" id="966583281%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="events.html"><span><span>events</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="966583281%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="events.html">events</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html">ConcurrentHashMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-mutable-list/index.html">MutableList</a><span class="token operator">&lt;</span><a href="../-tracking-event/index.html">TrackingEvent</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1413348189%2FProperties%2F1186424312" anchor-label="fullDateFormatter" id="-1413348189%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="full-date-formatter.html"><span>full</span><wbr><span>Date</span><wbr><span><span>Formatter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1413348189%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="full-date-formatter.html">fullDateFormatter</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/time/format/DateTimeFormatter.html">DateTimeFormatter</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1492615985%2FProperties%2F1186424312" anchor-label="stats" id="1492615985%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="stats.html"><span><span>stats</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1492615985%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="stats.html">stats</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/ConcurrentHashMap.html">ConcurrentHashMap</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../-tracking-stats/index.html">TrackingStats</a><span class="token operator">&gt;</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-986395363%2FProperties%2F1186424312" anchor-label="totalEventsTracked" id="-986395363%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="total-events-tracked.html"><span>total</span><wbr><span>Events</span><wbr><span><span>Tracked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-986395363%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">val </span><a href="total-events-tracked.html">totalEventsTracked</a><span class="token operator">: </span><a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/util/concurrent/atomic/AtomicLong.html">AtomicLong</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-894213614%2FProperties%2F1186424312" anchor-label="trackingFilePath" id="-894213614%2FProperties%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="tracking-file-path.html"><span>tracking</span><wbr><span>File</span><wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-894213614%2FProperties%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><div class="block"><div class="block"><span class="token annotation builtin">@</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.jvm/-volatile/index.html"><span class="token annotation builtin">Volatile</span></a></div></div><span class="token keyword">private </span><span class="token keyword">var </span><a href="tracking-file-path.html">trackingFilePath</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="-152426306%2FFunctions%2F1186424312" anchor-label="appendEventToFile" id="-152426306%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="append-event-to-file.html"><span>append</span><wbr><span>Event</span><wbr><span>To</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-152426306%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="append-event-to-file.html"><span class="token function">appendEventToFile</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">event<span class="token operator">: </span><a href="../-tracking-event/index.html">TrackingEvent</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Appends a single event to the tracking file (useful for large datasets).</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="985405815%2FFunctions%2F1186424312" anchor-label="asyncSave" id="985405815%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="async-save.html"><span>async</span><wbr><span><span>Save</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="985405815%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="async-save.html"><span class="token function">asyncSave</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Saves tracking data asynchronously in a separate thread.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2079051453%2FFunctions%2F1186424312" anchor-label="clear" id="-2079051453%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="clear.html"><span><span>clear</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2079051453%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="clear.html"><span class="token function">clear</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Clears all tracked data and resets counters.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-304223369%2FFunctions%2F1186424312" anchor-label="detectCallingFunction" id="-304223369%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="detect-calling-function.html"><span>detect</span><wbr><span>Calling</span><wbr><span><span>Function</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-304223369%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="detect-calling-function.html"><span class="token function">detectCallingFunction</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Automatically detects the calling function name from the call stack.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="306173840%2FFunctions%2F1186424312" anchor-label="exportAsCSV" id="306173840%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="export-as-c-s-v.html"><span>export</span><wbr><span>As</span><wbr><span><span>CSV</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="306173840%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="export-as-c-s-v.html"><span class="token function">exportAsCSV</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-559609860%2FFunctions%2F1186424312" anchor-label="exportAsJSON" id="-559609860%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="export-as-j-s-o-n.html"><span>export</span><wbr><span>As</span><wbr><span><span>JSON</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-559609860%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="export-as-j-s-o-n.html"><span class="token function">exportAsJSON</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-558596297%2FFunctions%2F1186424312" anchor-label="exportAsText" id="-558596297%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="export-as-text.html"><span>export</span><wbr><span>As</span><wbr><span><span>Text</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-558596297%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="export-as-text.html"><span class="token function">exportAsText</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="421371600%2FFunctions%2F1186424312" anchor-label="exportStatistics" id="421371600%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="export-statistics.html"><span>export</span><wbr><span><span>Statistics</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="421371600%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="export-statistics.html"><span class="token function">exportStatistics</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">format<span class="token operator">: </span><a href="../-export-format/index.html">ExportFormat</a><span class="token operator"> = </span>ExportFormat.TEXT</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Exports statistics in various formats.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1956859462%2FFunctions%2F1186424312" anchor-label="getAllEvents" id="1956859462%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-all-events.html"><span>get</span><wbr><span>All</span><wbr><span><span>Events</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1956859462%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-all-events.html"><span class="token function">getAllEvents</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-tracking-event/index.html">TrackingEvent</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Gets all recorded events as an immutable map.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-553649604%2FFunctions%2F1186424312" anchor-label="getAllStats" id="-553649604%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-all-stats.html"><span>get</span><wbr><span>All</span><wbr><span><span>Stats</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-553649604%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-all-stats.html"><span class="token function">getAllStats</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span><a href="../-tracking-stats/index.html">TrackingStats</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Gets all recorded statistics as an immutable map.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1133568262%2FFunctions%2F1186424312" anchor-label="getCategorizedStats" id="1133568262%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-categorized-stats.html"><span>get</span><wbr><span>Categorized</span><wbr><span><span>Stats</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1133568262%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-categorized-stats.html"><span class="token function">getCategorizedStats</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-map/index.html">Map</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token punctuation">, </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-tracking-stats/index.html">TrackingStats</a><span class="token operator">&gt;</span><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Gets statistics grouped by category.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1326935453%2FFunctions%2F1186424312" anchor-label="getEvents" id="-1326935453%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-events.html"><span>get</span><wbr><span><span>Events</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1326935453%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-events.html"><span class="token function">getEvents</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="../-tracking-event/index.html">TrackingEvent</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Gets all recorded events for a specific context.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1083582013%2FFunctions%2F1186424312" anchor-label="getStats" id="-1083582013%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-stats.html"><span>get</span><wbr><span><span>Stats</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1083582013%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-stats.html"><span class="token function">getStats</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="../-tracking-stats/index.html">TrackingStats</a><span class="token operator">?</span></div><div class="brief "><p class="paragraph">Gets statistics for a specific context.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="58302829%2FFunctions%2F1186424312" anchor-label="getTotalEventsTracked" id="58302829%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-total-events-tracked.html"><span>get</span><wbr><span>Total</span><wbr><span>Events</span><wbr><span><span>Tracked</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="58302829%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-total-events-tracked.html"><span class="token function">getTotalEventsTracked</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-long/index.html">Long</a></div><div class="brief "><p class="paragraph">Gets the total number of events tracked across all contexts.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1844730855%2FFunctions%2F1186424312" anchor-label="getTrackerFilePath" id="1844730855%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-tracker-file-path.html"><span>get</span><wbr><span>Tracker</span><wbr><span>File</span><wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1844730855%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-tracker-file-path.html"><span class="token function">getTrackerFilePath</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-88057467%2FFunctions%2F1186424312" anchor-label="isAutoSaveEnabled" id="-88057467%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-auto-save-enabled.html"><span>is</span><wbr><span>Auto</span><wbr><span>Save</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-88057467%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-auto-save-enabled.html"><span class="token function">isAutoSaveEnabled</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1828859545%2FFunctions%2F1186424312" anchor-label="isEnabled" id="1828859545%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="is-enabled.html"><span>is</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1828859545%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="is-enabled.html"><span class="token function">isEnabled</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Gets the current enabled state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1382313684%2FFunctions%2F1186424312" anchor-label="logTrackingEvent" id="-1382313684%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="log-tracking-event.html"><span>log</span><wbr><span>Tracking</span><wbr><span><span>Event</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1382313684%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="log-tracking-event.html"><span class="token function">logTrackingEvent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">event<span class="token operator">: </span><a href="../-tracking-event/index.html">TrackingEvent</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Logs a tracking event in a structured format.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1879600367%2FFunctions%2F1186424312" anchor-label="printSummary" id="-1879600367%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="print-summary.html"><span>print</span><wbr><span><span>Summary</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1879600367%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="print-summary.html"><span class="token function">printSummary</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Prints a comprehensive summary of all tracked data.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="525290992%2FFunctions%2F1186424312" anchor-label="recordEvent" id="525290992%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="record-event.html"><span>record</span><wbr><span><span>Event</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="525290992%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="record-event.html"><span class="token function">recordEvent</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">event<span class="token operator">: </span><a href="../-tracking-event/index.html">TrackingEvent</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Records a tracking event with improved performance and memory management.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2039503885%2FFunctions%2F1186424312" anchor-label="saveToFile" id="-2039503885%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="save-to-file.html"><span>save</span><wbr><span>To</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2039503885%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="save-to-file.html"><span class="token function">saveToFile</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">format<span class="token operator">: </span><a href="../-export-format/index.html">ExportFormat</a><span class="token operator"> = </span>ExportFormat.TEXT</span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></div><div class="brief "><p class="paragraph">Saves tracking data to file synchronously. Keeps signature intact. Ensures single, correct extension.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="479249596%2FFunctions%2F1186424312" anchor-label="setAutoSaveEnabled" id="479249596%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-auto-save-enabled.html"><span>set</span><wbr><span>Auto</span><wbr><span>Save</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="479249596%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="set-auto-save-enabled.html"><span class="token function">setAutoSaveEnabled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">enabled<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1643448112%2FFunctions%2F1186424312" anchor-label="setEnabled" id="-1643448112%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-enabled.html"><span>set</span><wbr><span><span>Enabled</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1643448112%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="set-enabled.html"><span class="token function">setEnabled</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">value<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Enables or disables tracking globally.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1838305016%2FFunctions%2F1186424312" anchor-label="setTrackerFilePath" id="1838305016%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="set-tracker-file-path.html"><span>set</span><wbr><span>Tracker</span><wbr><span>File</span><wbr><span><span>Path</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1838305016%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="set-tracker-file-path.html"><span class="token function">setTrackerFilePath</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">autoSave<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-boolean/index.html">Boolean</a><span class="token operator"> = </span><span class="token boolean">false</span></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Sets up file tracking with optional auto-save. Keeps signature intact. Generates a default .log file initially.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="205974720%2FFunctions%2F1186424312" anchor-label="trackClassCreated" id="205974720%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-class-created.html"><span>track</span><wbr><span>Class</span><wbr><span><span>Created</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="205974720%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="track-class-created.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="track-class-created.html"><span class="token function">trackClassCreated</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">classInstance<span class="token operator">: </span><a href="track-class-created.html">T</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">className<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Tracks a class creation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-451154056%2FFunctions%2F1186424312" anchor-label="trackCustom" id="-451154056%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-custom.html"><span>track</span><wbr><span><span>Custom</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-451154056%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="track-custom.html"><span class="token function">trackCustom</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">context<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">details<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">""</span><span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Tracks a custom event.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1432785615%2FFunctions%2F1186424312" anchor-label="trackEffectStart" id="1432785615%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-effect-start.html"><span>track</span><wbr><span>Effect</span><wbr><span><span>Start</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1432785615%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="track-effect-start.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="track-effect-start.html"><span class="token function">trackEffectStart</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">effectInstance<span class="token operator">: </span><a href="track-effect-start.html">T</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">effectName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-2019846403%2FFunctions%2F1186424312" anchor-label="trackEffectStop" id="-2019846403%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-effect-stop.html"><span>track</span><wbr><span>Effect</span><wbr><span><span>Stop</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-2019846403%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="track-effect-stop.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="track-effect-stop.html"><span class="token function">trackEffectStop</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">effectInstance<span class="token operator">: </span><a href="track-effect-stop.html">T</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">effectName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1004700042%2FFunctions%2F1186424312" anchor-label="trackFunctionCall" id="-1004700042%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-function-call.html"><span>track</span><wbr><span>Function</span><wbr><span><span>Call</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1004700042%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="track-function-call.html"><span class="token function">trackFunctionCall</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">details<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">""</span><span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Tracks a function call with optional details.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="71785518%2FFunctions%2F1186424312" anchor-label="trackPageEnter" id="71785518%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-page-enter.html"><span>track</span><wbr><span>Page</span><wbr><span><span>Enter</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="71785518%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="track-page-enter.html"><span class="token function">trackPageEnter</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Tracks a page entry with automatic caller detection.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-212375200%2FFunctions%2F1186424312" anchor-label="trackRecomposition" id="-212375200%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-recomposition.html"><span>track</span><wbr><span><span>Recomposition</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-212375200%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="track-recomposition.html"><span class="token function">trackRecomposition</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">customName<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Tracks a recomposition with automatic caller detection.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1457424332%2FFunctions%2F1186424312" anchor-label="trackViewModelCreated" id="1457424332%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="track-view-model-created.html"><span>track</span><wbr><span>View</span><wbr><span>Model</span><wbr><span><span>Created</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1457424332%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><span class="token operator">&lt;</span><a href="track-view-model-created.html">T</a><span class="token operator"> : </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">&gt; </span><a href="track-view-model-created.html"><span class="token function">trackViewModelCreated</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">viewModel<span class="token operator">: </span><a href="track-view-model-created.html">T</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">className<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">category<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-any/index.html">Any</a><span class="token operator">?</span><span class="token operator"> = </span>null</span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Tracks a view model creation.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2076702849%2FFunctions%2F1186424312" anchor-label="updateConfig" id="2076702849%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="update-config.html"><span>update</span><wbr><span><span>Config</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2076702849%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="update-config.html"><span class="token function">updateConfig</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">newConfig<span class="token operator">: </span><a href="../-tracker-config/index.html">TrackerConfig</a></span></span><span class="token punctuation">)</span></div><div class="brief "><p class="paragraph">Updates the tracker configuration.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="967115444%2FFunctions%2F1186424312" anchor-label="withExt" id="967115444%2FFunctions%2F1186424312" data-filterable-set=":reversi-utils/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-utils/main" data-filterable-set=":reversi-utils/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="with-ext.html"><span>with</span><wbr><span><span>Ext</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="967115444%2FFunctions%2F1186424312"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-utils/main"><div class="symbol monospace"><span class="token keyword">private </span><span class="token keyword">fun </span><a href="with-ext.html"><span class="token function">withExt</span></a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">path<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">ext<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Returns a path with the given extension, replacing any existing one.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

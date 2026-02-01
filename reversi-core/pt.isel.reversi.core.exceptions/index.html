@@ -1,0 +1,322 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>pt.isel.reversi.core.exceptions</title>
+<link href="../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../styles/style.css" rel="Stylesheet">
+<link href="../../styles/main.css" rel="Stylesheet">
+<link href="../../styles/prism.css" rel="Stylesheet">
+<link href="../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-core/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-core/main" data-filter=":reversi-core/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="package" id="content" pageids="reversi-core::pt.isel.reversi.core.exceptions////PointingToDeclaration//-935644378">
+  <div class="breadcrumbs"><a href="../index.html">reversi-core</a><span class="delimiter">/</span><span class="current">pt.isel.reversi.core.exceptions</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span><span>Package-level</span></span> <span><span>declarations</span></span></h1>
+    <div class="platform-hinted UnderCoverText" data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><h2 class="">Overview</h2><p class="paragraph">Domain-specific exceptions that signal invalid operations or corrupted persisted files (for example: malformed board or piece entries). These exceptions are thrown by the core logic or by the serializers when encountering invalid data.</p><h3 class="">Exception Types</h3><ul><li><p class="paragraph"><code class="lang-kotlin">ReversiException</code> — Base exception for all Reversi-specific errors</p></li><li><p class="paragraph"><code class="lang-kotlin">ErrorType</code> — Enum categorizing error severity (INFO, WARNING, ERROR, FATAL)</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidPlayException</code> — Thrown when attempting to play an invalid move</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidGameException</code> — Thrown when game operations are invoked on an unstarted game</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidPieceInFileException</code> — Thrown when a persisted file contains malformed piece data</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidPieceTypeInFileException</code> — Thrown when an invalid piece type is encountered in a file</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidPlayerInFileException</code> — Thrown when player data in a file is malformed</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidGameStateInFileException</code> — Thrown when the overall game state file is corrupted</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidBoardInFile</code> — Thrown when board data in a file is invalid</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidFile</code> — General exception for file parsing errors</p></li><li><p class="paragraph"><code class="lang-kotlin">InvalidNameAlreadyExists</code> — Thrown when attempting to create a game with a name that already exists</p></li><li><p class="paragraph"><code class="lang-kotlin">EndGame</code> — Thrown when the game has ended (not an error, but a state signal)</p></li><li><p class="paragraph"><code class="lang-kotlin">BadStorage</code> — Thrown when storage operations fail</p></li></ul><h3 class="">Responsibilities</h3><ul><li><p class="paragraph">Providing clear, user-friendly error messages</p></li><li><p class="paragraph">Distinguishing between user errors and system errors</p></li><li><p class="paragraph">Supporting graceful error handling throughout the application</p></li><li><p class="paragraph">Enabling specific error handling for different failure scenarios</p></li></ul></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="TYPE">Types</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="TYPE">
+        <h2 class="tableheader">Types</h2>
+        <div class="table"><a data-name="644704836%2FClasslikes%2F-935644378" anchor-label="BadStorage" id="644704836%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-bad-storage/index.html"><span>Bad</span><wbr><span><span>Storage</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="644704836%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-bad-storage/index.html">BadStorage</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when the storage system fails a health check or encounters a critical error. Indicates that the storage backend is not functioning correctly and may require attention.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="2082808315%2FClasslikes%2F-935644378" anchor-label="EndGame" id="2082808315%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-end-game/index.html"><span>End</span><wbr><span><span>Game</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="2082808315%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-end-game/index.html">EndGame</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The game has ended"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when the game has ended, either due to a winner being determined or both players passing consecutively.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="674682854%2FClasslikes%2F-935644378" anchor-label="ErrorType" id="674682854%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-error-type/index.html"><span>Error</span><wbr><span><span>Type</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="674682854%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">enum </span><a href="-error-type/index.html">ErrorType</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>level<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></span></span><span class="token punctuation">)</span> : <a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-enum/index.html">Enum</a><span class="token operator">&lt;</span><a href="-error-type/index.html">ErrorType</a><span class="token operator">&gt; </span></div><div class="brief "><p class="paragraph">Enum representing different types of error levels for exceptions in the Reversi game.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1669424918%2FClasslikes%2F-935644378" anchor-label="InvalidBoardInFile" id="-1669424918%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-board-in-file/index.html"><span>Invalid</span><wbr><span>Board</span><wbr><span>In</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1669424918%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-board-in-file/index.html">InvalidBoardInFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The board in the file is invalid"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when the board representation in the persisted game file is malformed or contains values that cannot be converted into a valid <a href="../pt.isel.reversi.core.board/-board/index.html">pt.isel.reversi.core.board.Board</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1817198741%2FClasslikes%2F-935644378" anchor-label="InvalidFile" id="1817198741%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-file/index.html"><span>Invalid</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1817198741%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-file/index.html">InvalidFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The provided file is invalid or corrupted"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when an operation on a file or storage entity fails. This can occur when loading, saving, or deleting game states from persistent storage.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1214839519%2FClasslikes%2F-935644378" anchor-label="InvalidGame" id="1214839519%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-game/index.html"><span>Invalid</span><wbr><span><span>Game</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1214839519%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-game/index.html">InvalidGame</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The game is invalid or uninitialized"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when an operation is invoked on an invalid or uninitialized game. Examples: calling <code class="lang-kotlin">play</code> or <code class="lang-kotlin">pass</code> when the game has not been started.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="956148977%2FClasslikes%2F-935644378" anchor-label="InvalidGameStateInFile" id="956148977%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-game-state-in-file/index.html"><span>Invalid</span><wbr><span>Game</span><wbr><span>State</span><wbr><span>In</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="956148977%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-game-state-in-file/index.html">InvalidGameStateInFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The game state in the file is invalid"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when a game state in the persisted game file is malformed or contains values that cannot be converted into a valid game state.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-820132888%2FClasslikes%2F-935644378" anchor-label="InvalidNameAlreadyExists" id="-820132888%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-name-already-exists/index.html"><span>Invalid</span><wbr><span>Name</span><wbr><span>Already</span><wbr><span><span>Exists</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-820132888%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-name-already-exists/index.html">InvalidNameAlreadyExists</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The provided name already exists"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a><span class="token operator"> = </span>ErrorType.WARNING</span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when attempting to create a game with a name that already exists in storage.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1410696222%2FClasslikes%2F-935644378" anchor-label="InvalidPieceInFile" id="-1410696222%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-piece-in-file/index.html"><span>Invalid</span><wbr><span>Piece</span><wbr><span>In</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1410696222%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-piece-in-file/index.html">InvalidPieceInFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The piece in the file is invalid"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when a piece line in the persisted game file is malformed or contains values that cannot be converted into a valid <a href="../pt.isel.reversi.core.board/-piece/index.html">pt.isel.reversi.core.board.Piece</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1948501064%2FClasslikes%2F-935644378" anchor-label="InvalidPieceTypeInFile" id="1948501064%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-piece-type-in-file/index.html"><span>Invalid</span><wbr><span>Piece</span><wbr><span>Type</span><wbr><span>In</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1948501064%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-piece-type-in-file/index.html">InvalidPieceTypeInFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The piece type in the file is invalid"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when a pieceType line in the persisted game file is malformed or contains values that cannot be converted into a valid <a href="../pt.isel.reversi.core.board/-piece-type/index.html">pt.isel.reversi.core.board.PieceType</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1973351971%2FClasslikes%2F-935644378" anchor-label="InvalidPlay" id="-1973351971%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-play/index.html"><span>Invalid</span><wbr><span><span>Play</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1973351971%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-play/index.html">InvalidPlay</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when an attempted play is invalid according to Reversi rules. Reasons include: position already occupied, play does not capture any opponent pieces, or the coordinate is out of bounds.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1297452465%2FClasslikes%2F-935644378" anchor-label="InvalidPlayerInFile" id="-1297452465%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-invalid-player-in-file/index.html"><span>Invalid</span><wbr><span>Player</span><wbr><span>In</span><wbr><span><span>File</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1297452465%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">class </span><a href="-invalid-player-in-file/index.html">InvalidPlayerInFile</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"The player in the file is invalid"</span><span class="token punctuation">, </span></span><span class="parameter ">type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a><span class="token operator"> = </span>ErrorType.ERROR</span></span><span class="token punctuation">)</span> : <a href="-reversi-exception/index.html">ReversiException</a></div><div class="brief "><p class="paragraph">Thrown when a player line in the persisted game file is malformed or contains values that cannot be converted into a valid <a href="../pt.isel.reversi.core.gameState/-player/index.html">pt.isel.reversi.core.gameState.Player</a>.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-660516463%2FClasslikes%2F-935644378" anchor-label="ReversiException" id="-660516463%2FClasslikes%2F-935644378" data-filterable-set=":reversi-core/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-core/main" data-filterable-set=":reversi-core/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-reversi-exception/index.html"><span>Reversi</span><wbr><span><span>Exception</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-660516463%2FClasslikes%2F-935644378"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-core/main"><div class="symbol monospace"><span class="token keyword">abstract </span><span class="token keyword">class </span><a href="-reversi-exception/index.html">ReversiException</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">message<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>type<span class="token operator">: </span><a href="-error-type/index.html">ErrorType</a></span></span><span class="token punctuation">)</span> : <a href="https://docs.oracle.com/en/java/javase/11/docs/api/java.base/java/lang/Exception.html">Exception</a></div><div class="brief "><p class="paragraph">Base exception class for Reversi game-related errors.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

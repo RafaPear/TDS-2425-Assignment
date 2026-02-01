@@ -1,0 +1,420 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" charset="UTF-8">
+    <title>AppTheme</title>
+<link href="../../../images/logo-icon.svg" rel="icon" type="image/svg"><script>var pathToRoot = "../../../";</script>
+    <script>document.documentElement.classList.replace("no-js", "js");</script>
+    <script>const storage = localStorage.getItem("dokka-dark-mode")
+      if (storage == null) {
+        const osDarkSchemePreferred = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+        if (osDarkSchemePreferred === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      } else {
+        const savedDarkMode = JSON.parse(storage)
+        if (savedDarkMode === true) {
+          document.getElementsByTagName("html")[0].classList.add("theme-dark")
+        }
+      }
+    </script>
+<script type="text/javascript" src="https://unpkg.com/kotlin-playground@1/dist/playground.min.js" async></script>
+<script type="text/javascript" src="../../../scripts/sourceset_dependencies.js" async></script>
+<link href="../../../styles/style.css" rel="Stylesheet">
+<link href="../../../styles/main.css" rel="Stylesheet">
+<link href="../../../styles/prism.css" rel="Stylesheet">
+<link href="../../../styles/logo-styles.css" rel="Stylesheet">
+<link href="../../../ui-kit/ui-kit.min.css" rel="Stylesheet">
+<script type="text/javascript" src="../../../scripts/safe-local-storage_blocking.js"></script>
+<script type="text/javascript" src="../../../scripts/navigation-loader.js" async></script>
+<script type="text/javascript" src="../../../scripts/platform-content-handler.js" async></script>
+<script type="text/javascript" src="../../../scripts/main.js" defer></script>
+<script type="text/javascript" src="../../../scripts/prism.js" async></script>
+<script type="text/javascript" src="../../../ui-kit/ui-kit.min.js" defer></script></head>
+<body>
+<div class="root">
+    <header class="navigation theme-dark" id="navigation-wrapper" role="banner">
+<a class="library-name--link" href="../../../index.html" tabindex="1">
+                    reversi
+            </a>        <button class="navigation-controls--btn navigation-controls--btn_toc ui-kit_mobile-only" id="toc-toggle" type="button">Toggle table of contents
+        </button>
+        <div class="navigation-controls--break ui-kit_mobile-only"></div>
+        <div class="library-version" id="library-version">2.0.0
+        </div>
+        <div class="navigation-controls">
+        <ul class="filter-section filter-section_loading" id="filter-section" aria-label="Target filter">
+                <button class="platform-tag platform-selector jvm-like" data-active="" aria-pressed="true" data-filter=":reversi-app/main">jvm</button>
+            <div class="dropdown filter-section--dropdown" data-role="dropdown" id="filter-section-dropdown">
+                <button class="button button_dropdown filter-section--dropdown-toggle" role="combobox" data-role="dropdown-toggle" aria-controls="platform-tags-listbox" aria-haspopup="listbox" aria-expanded="false" aria-label="Toggle source sets"></button>
+                <ul role="listbox" id="platform-tags-listbox" class="dropdown--list" data-role="dropdown-listbox" aria-label="Target filter">
+                    <div class="dropdown--header"><span>Target filter</span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close target filter">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                        <li role="option" class="dropdown--option platform-selector-option jvm-like" tabindex="0">
+                            <label class="checkbox">
+                                <input type="checkbox" class="checkbox--input" id=":reversi-app/main" data-filter=":reversi-app/main">
+                                <span class="checkbox--icon"></span>
+                                jvm
+                            </label>
+                        </li>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </ul>
+            <button class="navigation-controls--btn navigation-controls--btn_theme" id="theme-toggle-button" type="button">Switch theme
+            </button>
+            <div class="navigation-controls--btn navigation-controls--btn_search" id="searchBar" role="button">Search in
+                API
+            </div>
+        </div>
+    </header>
+    <div id="container">
+        <nav id="leftColumn" class="sidebar" data-item-type="SECTION" data-item-config="{&quot;defaultSize&quot;: 280, &quot;minSize&quot;: 200, &quot;maxSize&quot;: 400}">
+            <a class="toc--skip-link" href="#main">Skip to content</a>
+            <div class="dropdown theme-dark_mobile" data-role="dropdown" id="toc-dropdown">
+                <ul role="listbox" id="toc-listbox" class="dropdown--list dropdown--list_toc-list" data-role="dropdown-listbox" aria-label="Table of contents">
+                    <div class="dropdown--header">
+                            <span>
+                                    reversi
+                            </span>
+                        <button class="button" data-role="dropdown-toggle" aria-label="Close table of contents">
+                            <i class="ui-kit-icon ui-kit-icon_cross"></i>
+                        </button>
+                    </div>
+                    <div class="sidebar--inner" id="sideMenu"></div>
+                </ul>
+                <div class="dropdown--overlay"></div>
+            </div>
+        </nav>
+        <div id="resizer" class="resizer" data-item-type="BAR"></div>
+        <div id="main" data-item-type="SECTION" role="main">
+<div class="main-content" data-page-type="classlike" id="content" pageids="reversi-app::pt.isel.reversi.app.app/AppTheme///PointingToDeclaration//-781564056">
+  <div class="breadcrumbs"><a href="../../index.html">reversi-app</a><span class="delimiter">/</span><a href="../index.html">pt.isel.reversi.app.app</a><span class="delimiter">/</span><span class="current">AppTheme</span></div>
+  <div class="cover ">
+    <h1 class="cover"><span>App</span><wbr><span><span>Theme</span></span></h1>
+    <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">data </span><span class="token keyword">class </span><a href="index.html">AppTheme</a><span class="token punctuation">(</span><span class="parameters "><span class="parameter "><span class="token keyword">val </span>name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>fontFamily<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span data-unresolved-link="androidx.compose.ui.text.font/FontFamily///PointingToDeclaration/">FontFamily</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>backgroundMusic<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"background-music"</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>gameMusic<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"MEGALOVANIA"</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>placePieceSound<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"putPiece"</span><span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>textColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF000000)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>backgroundImage<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.compose.resources/DrawableResource///PointingToDeclaration/">DrawableResource</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>backgroundColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFFFFFF)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>buttonTextColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFFFFFF)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>primaryColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF1976D2)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>secondaryColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFE4E4E)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>boardColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF009000)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>boardBgColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF006400)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>boardSideColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF000000)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>darkPieceColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF000000)<span class="token punctuation">, </span></span><span class="parameter "><span class="token keyword">val </span>lightPieceColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFFFFFF)</span></span><span class="token punctuation">)</span></div><p class="paragraph">Data class representing a theme configuration for the Reversi application. Contains colors for UI elements and audio resources for different game states.</p></div></div>
+  </div>
+  <div class="tabbedcontent">
+    <div class="tabs-section" tabs-section="tabs-section"><button class="section-tab" data-active="" data-togglable="CONSTRUCTOR,TYPE,PROPERTY,FUNCTION">Members</button></div>
+    <div class="tabs-section-body">
+      <div data-togglable="CONSTRUCTOR">
+        <h2 class="tableheader">Constructors</h2>
+        <div class="table"><a data-name="246477364%2FConstructors%2F-781564056" anchor-label="AppTheme" id="246477364%2FConstructors%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-togglable="CONSTRUCTOR" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="-app-theme.html"><span>App</span><wbr><span><span>Theme</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="246477364%2FConstructors%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">constructor</span><span class="token punctuation">(</span><span class="parameters "><span class="parameter ">name<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token punctuation">, </span></span><span class="parameter ">fontFamily<span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span data-unresolved-link="androidx.compose.ui.text.font/FontFamily///PointingToDeclaration/">FontFamily</span><span class="token punctuation">, </span></span><span class="parameter ">backgroundMusic<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"background-music"</span><span class="token punctuation">, </span></span><span class="parameter ">gameMusic<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"MEGALOVANIA"</span><span class="token punctuation">, </span></span><span class="parameter ">placePieceSound<span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator"> = </span><span class="token string">"putPiece"</span><span class="token punctuation">, </span></span><span class="parameter ">textColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF000000)<span class="token punctuation">, </span></span><span class="parameter ">backgroundImage<span class="token operator">: </span><span data-unresolved-link="org.jetbrains.compose.resources/DrawableResource///PointingToDeclaration/">DrawableResource</span><span class="token operator">?</span><span class="token operator"> = </span>null<span class="token punctuation">, </span></span><span class="parameter ">backgroundColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFFFFFF)<span class="token punctuation">, </span></span><span class="parameter ">buttonTextColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFFFFFF)<span class="token punctuation">, </span></span><span class="parameter ">primaryColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF1976D2)<span class="token punctuation">, </span></span><span class="parameter ">secondaryColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFE4E4E)<span class="token punctuation">, </span></span><span class="parameter ">boardColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF009000)<span class="token punctuation">, </span></span><span class="parameter ">boardBgColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF006400)<span class="token punctuation">, </span></span><span class="parameter ">boardSideColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF000000)<span class="token punctuation">, </span></span><span class="parameter ">darkPieceColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFF000000)<span class="token punctuation">, </span></span><span class="parameter ">lightPieceColor<span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span><span class="token operator"> = </span>Color(0xFFFFFFFF)</span></span><span class="token punctuation">)</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="PROPERTY">
+        <h2 class="tableheader">Properties</h2>
+        <div class="table"><a data-name="958912185%2FProperties%2F-781564056" anchor-label="backgroundColor" id="958912185%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="background-color.html"><span>background</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="958912185%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="background-color.html">backgroundColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Primary background color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1358494783%2FProperties%2F-781564056" anchor-label="backgroundImage" id="-1358494783%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="background-image.html"><span>background</span><wbr><span><span>Image</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1358494783%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="background-image.html">backgroundImage</a><span class="token operator">: </span><span data-unresolved-link="org.jetbrains.compose.resources/DrawableResource///PointingToDeclaration/">DrawableResource</span><span class="token operator">?</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1507513911%2FProperties%2F-781564056" anchor-label="backgroundMusic" id="1507513911%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="background-music.html"><span>background</span><wbr><span><span>Music</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1507513911%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="background-music.html">backgroundMusic</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Resource name for background music.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="247397332%2FProperties%2F-781564056" anchor-label="boardBgColor" id="247397332%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="board-bg-color.html"><span>board</span><wbr><span>Bg</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="247397332%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="board-bg-color.html">boardBgColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Background color of the game board.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="170853231%2FProperties%2F-781564056" anchor-label="boardColor" id="170853231%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="board-color.html"><span>board</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="170853231%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="board-color.html">boardColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Color of the game board.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="647288870%2FProperties%2F-781564056" anchor-label="boardSideColor" id="647288870%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="board-side-color.html"><span>board</span><wbr><span>Side</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="647288870%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="board-side-color.html">boardSideColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Color of the board's sides/borders.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1808684362%2FProperties%2F-781564056" anchor-label="buttonTextColor" id="1808684362%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="button-text-color.html"><span>button</span><wbr><span>Text</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1808684362%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="button-text-color.html">buttonTextColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Color used for button text.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1052337825%2FProperties%2F-781564056" anchor-label="darkPieceColor" id="1052337825%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="dark-piece-color.html"><span>dark</span><wbr><span>Piece</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1052337825%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="dark-piece-color.html">darkPieceColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Color for dark-colored pieces.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-154736711%2FProperties%2F-781564056" anchor-label="fontFamily" id="-154736711%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="font-family.html"><span>font</span><wbr><span><span>Family</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-154736711%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="font-family.html">fontFamily</a><span class="token operator">: </span><span><span class="token annotation builtin">@</span><span data-unresolved-link="androidx.compose.runtime/Composable///PointingToDeclaration/"><span class="token annotation builtin">Composable</span></span>&nbsp;</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator"> -&gt; </span><span data-unresolved-link="androidx.compose.ui.text.font/FontFamily///PointingToDeclaration/">FontFamily</span></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1978280261%2FProperties%2F-781564056" anchor-label="gameMusic" id="-1978280261%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="game-music.html"><span>game</span><wbr><span><span>Music</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1978280261%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="game-music.html">gameMusic</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Resource name for gameplay music.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="1605764995%2FProperties%2F-781564056" anchor-label="lightPieceColor" id="1605764995%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="light-piece-color.html"><span>light</span><wbr><span>Piece</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1605764995%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="light-piece-color.html">lightPieceColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Color for light-colored pieces.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1261273087%2FProperties%2F-781564056" anchor-label="name" id="-1261273087%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="name.html"><span><span>name</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1261273087%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="name.html">name</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">The name of the theme.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-868878906%2FProperties%2F-781564056" anchor-label="placePieceSound" id="-868878906%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="place-piece-sound.html"><span>place</span><wbr><span>Piece</span><wbr><span><span>Sound</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-868878906%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="place-piece-sound.html">placePieceSound</a><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a></div><div class="brief "><p class="paragraph">Resource name for the piece placement sound effect.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="196360651%2FProperties%2F-781564056" anchor-label="primaryColor" id="196360651%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="primary-color.html"><span>primary</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="196360651%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="primary-color.html">primaryColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Primary accent color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1230640643%2FProperties%2F-781564056" anchor-label="secondaryColor" id="-1230640643%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="secondary-color.html"><span>secondary</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1230640643%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="secondary-color.html">secondaryColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Secondary accent color.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="-1894435016%2FProperties%2F-781564056" anchor-label="textColor" id="-1894435016%2FProperties%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="text-color.html"><span>text</span><wbr><span><span>Color</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="-1894435016%2FProperties%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">val </span><a href="text-color.html">textColor</a><span class="token operator">: </span><span data-unresolved-link="androidx.compose.ui.graphics/Color///PointingToDeclaration/">Color</span></div><div class="brief "><p class="paragraph">Color used for text elements.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-togglable="FUNCTION">
+        <h2 class="tableheader">Functions</h2>
+        <div class="table"><a data-name="1573032169%2FFunctions%2F-781564056" anchor-label="getAudioMusicNames" id="1573032169%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-audio-music-names.html"><span>get</span><wbr><span>Audio</span><wbr><span>Music</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="1573032169%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-audio-music-names.html"><span class="token function">getAudioMusicNames</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Gets the list of music resource names (excluding sound effects) for this theme.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+<a data-name="7601190%2FFunctions%2F-781564056" anchor-label="getAudioNames" id="7601190%2FFunctions%2F-781564056" data-filterable-set=":reversi-app/main"></a>
+          <div class="table-row table-row_content" data-filterable-current=":reversi-app/main" data-filterable-set=":reversi-app/main">
+            <div class="main-subrow keyValue ">
+              <div class=""><span class="inline-flex">
+                  <div><a href="get-audio-names.html"><span>get</span><wbr><span>Audio</span><wbr><span><span>Names</span></span></a></div>
+<span class="anchor-wrapper"><span class="anchor-icon" pointing-to="7601190%2FFunctions%2F-781564056"></span>
+                    <div class="copy-popup-wrapper "><span class="copy-popup-icon"></span><span>Link copied to clipboard</span></div>
+                  </span></span></div>
+              <div>
+                <div class="title">
+                  <div class="platform-hinted " data-platform-hinted="data-platform-hinted"><div class="content sourceset-dependent-content" data-active="" data-togglable=":reversi-app/main"><div class="symbol monospace"><span class="token keyword">fun </span><a href="get-audio-names.html"><span class="token function">getAudioNames</span></a><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">: </span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin.collections/-list/index.html">List</a><span class="token operator">&lt;</span><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-string/index.html">String</a><span class="token operator">&gt;</span></div><div class="brief "><p class="paragraph">Gets the list of all audio resource names for this theme.</p></div></div></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+    <div class="footer">
+        <div class="footer--container">
+            <a href="#content" id="go-to-top-link" class="footer--button footer--button_go-to-top"></a>
+            <div class="footer--content">
+                <div>
+                    <span>Generated by </span>
+                    <a class="footer--link footer--link_external" href="https://github.com/Kotlin/dokka">
+                        Dokka
+                    </a>
+                    <div>2025 ISEL - TDS</div>
+                </div>
+            </div>
+        </div>
+    </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
